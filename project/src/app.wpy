@@ -1,0 +1,85 @@
+<style lang="css">
+@import '/zanui/helper.wxss';
+
+.container {
+  background: #f9f9f9;
+  overflow: hidden;
+  min-height: 100vh;
+  box-sizing: border-box;
+  padding: 15px 0;
+}
+.container::before {
+  position: fixed;
+  top: 0;
+  left: 0;
+  content: ' ';
+  width: 100%;
+  height: 1rpx;
+  background-color: #e2e2e2;
+  z-index: 5;
+}
+.doc-title {
+  position: relative;
+  padding: 15px 0;
+  margin: 10px 15px;
+  line-height: 25px;
+  font-size: 25px;
+  color: #666;
+}
+.doc-description {
+  margin: 14px 0;
+  padding: 0 15px;
+  font-size: 14px;
+  line-height: 20px;
+  color: #666;
+}
+</style>
+
+<script>
+import wepy from 'wepy'
+import 'wepy-async-function'
+
+export default class extends wepy.app {
+  config = {
+    pages: [
+      'example/dashboard',
+      'example/actionsheet',
+      'example/btn',
+      'example/badge',
+      'example/capsule',
+      'example/card',
+      'example/cell',
+      'example/dialog',
+      'example/field',
+      'example/helper',
+      'example/icon',
+      'example/layout',
+      'example/loadmore',
+      'example/noticebar',
+      'example/panel',
+      'example/popup',
+      'example/select',
+      'example/stepper',
+      'example/steps',
+      'example/switch',
+      'example/tab',
+      'example/tag',
+      'example/toptips',
+      'example/toast'
+    ],
+    window: {
+      navigationBarBackgroundColor: '#FAFAFA',
+      navigationBarTitleText: 'ZanUI-Wepy',
+      navigationBarTextStyle: 'black',
+      backgroundTextStyle: 'dark',
+      backgroundColor: '#f9f9f9'
+    },
+    debug: true
+  }
+
+  constructor() {
+    super()
+    this.use('promisify')
+  }
+}
+</script>
