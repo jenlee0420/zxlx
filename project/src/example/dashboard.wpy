@@ -1,6 +1,6 @@
 <style lang='css'>
-@import '/zanui/panel.wxss';
-@import '/zanui/cell.wxss';
+@import '/styles/zanui/panel.wxss';
+@import '/styles/zanui/cell.wxss';
 
 .logo {
   display: block;

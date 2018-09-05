@@ -1,6 +1,6 @@
 <style lang="scss">
-@import '../zanui/btn.scss';
-@import '../zanui/common';
+@import '../styles/zanui/btn.scss';
+@import '../styles/zanui/common';
 
 .zan-actionsheet {
   background-color: #f8f8f8;

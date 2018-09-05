@@ -1,5 +1,5 @@
 <style lang="css">
-@import '/zanui/helper.wxss';
+@import '/styles/zanui/helper.wxss';
 
 .container {
   background: #f9f9f9;
@@ -36,36 +36,14 @@
 </style>
 
 <script>
+// let aldstat = require('./untils/ald-stat.js')
 import wepy from 'wepy'
-import 'wepy-async-function'
+// import 'wepy-async-function'
 
 export default class extends wepy.app {
   config = {
     pages: [
-      'example/dashboard',
-      'example/actionsheet',
-      'example/btn',
-      'example/badge',
-      'example/capsule',
-      'example/card',
-      'example/cell',
-      'example/dialog',
-      'example/field',
-      'example/helper',
-      'example/icon',
-      'example/layout',
-      'example/loadmore',
-      'example/noticebar',
-      'example/panel',
-      'example/popup',
-      'example/select',
-      'example/stepper',
-      'example/steps',
-      'example/switch',
-      'example/tab',
-      'example/tag',
-      'example/toptips',
-      'example/toast'
+      'pages/index'
     ],
     window: {
       navigationBarBackgroundColor: '#FAFAFA',
@@ -79,7 +57,7 @@ export default class extends wepy.app {
 
   constructor() {
     super()
-    this.use('promisify')
+    // this.use('promisify')
   }
 }
 </script>

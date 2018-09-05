@@ -1,5 +1,5 @@
 <style lang="css">
-@import '/zanui/btn.wxss';
+@import '/styles/zanui/btn.wxss';
 </style>
 
 <template>
@@ -24,8 +24,8 @@
 
 <script>
 import wepy from 'wepy'
-import zanActionsheet from '../components/zan-actionsheet'
-import zanToptips from '../components/zan-toptips'
+import zanActionsheet from '@/components/zan-actionsheet'
+import zanToptips from '@/components/zan-toptips'
 
 export default class Actionsheet extends wepy.page {
   config = {
