@@ -4,16 +4,16 @@
   "description": "zxlx",
   "main": "dist/app.js",
   "scripts": {
-    "dev": "wepy build -w",
+    "dev": "wepy build --watch",
     "build": "cross-env NODE_ENV=production wepy build --no-cache",
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "jenlee",
-  "license": "ISC",
+  "license": "MIT",
   "dependencies": {
     "qs": "^6.5.1",
-    "wepy": "^1.7.2",
-    "wepy-async-function": "^1.4.6",
+    "wepy": "1.6.0",
+    "wepy-async-function": "1.4.4",
     "wepy-com-toast": "^1.0.3",
     "yarn": "^1.9.4"
   },
