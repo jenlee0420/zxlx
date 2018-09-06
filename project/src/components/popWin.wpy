@@ -1,0 +1,76 @@
+<style lang="less">
+    .winpop {
+        width: 80%;
+        border-radius: 20rpx;
+        background-color: #fff;
+        position: fixed;
+        z-index: 10;
+        top: 10%;
+        left: 10%;
+        padding: 20rpx;
+        box-sizing: border-box;
+        display: inline-block;
+        .Topcorner {
+            top: -18rpx;
+            right: -10rpx;
+        }
+    }
+    .title{
+        width: 100%;
+        font-size: 26rpx;
+        text-align: center;
+        line-height: 40rpx;
+        display:inline-block;
+        margin-bottom: 20rpx;
+    }
+    .mask {
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100vh;
+        background-color: rgba(0, 0, 0, .5);
+        z-index: 0;
+    }
+</style>
+
+<template>
+    <view wx:if="{{showPopup}}">
+        <view class="winpop" style="{{'height:' + popObj.winh}}">
+            <view class="Topcorner" @tap="togglePopup"><span class="zan-icon zan-icon-close"></span></view>
+            <text class="title">{{popObj.title}}</text>
+            <slot name="content"></slot>
+        </view>
+        <div class="mask"></div>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class PopWin extends wepy.component {
+        config = {}
+        components = {}
+        props = {
+            popObj: {
+                type: Object,
+                default: {
+                    title: 'title',
+                    winh: '60%',
+                    show: true
+                }
+            }
+        }
+        mixins = [Mixin]
+        data = {
+            showPopup:false
+        }
+        methods = {
+            togglePopup() {
+                this.showPopup = !this.showPopup
+                this.$apply()
+            }
+        }
+        onLoad() {}
+    }
+</script>

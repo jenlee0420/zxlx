@@ -1,5 +1,6 @@
 <style lang="less">
   @import 'styles/reset';
+  @import 'styles/icon';
   @import "styles/common";
   page {
         height: 100%;
@@ -16,6 +17,8 @@ import wepy from 'wepy'
 export default class extends wepy.app {
   config = {
     pages: [
+      // 'example/popup',
+      'pages/test',
       'pages/index'
     ],
     window: {
