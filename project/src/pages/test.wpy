@@ -1,0 +1,37 @@
+<style lang="less">
+
+</style>
+
+<template>
+  <view class="container">
+    <popwin :popObj="popObj">
+      <div slot="content">ddfdfsdf</div>
+    </popwin>
+    <zanpopup direction="top">
+      <div>dsfffff</div>
+    </zanpopup>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+import popwin from '@@/popWin'
+import zanpopup from '@@/zan-popup'
+export default class Index extends wepy.page {
+  config = {
+  }
+  components = {popwin,zanpopup}
+  mixins = [Mixin]
+  data = {
+    popObj: {
+      title: '标题',
+      winh: '60%'
+    }
+  }
+  methods = {}
+  onLoad() {
+    this.$invoke('popwin', 'togglePopup')
+  }
+}
+</script>

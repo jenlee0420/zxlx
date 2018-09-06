@@ -1,21 +1,73 @@
 <style lang="less">
-
+  #homepage{
+    // display: flex;
+    // flex-direction: column;
+    .topSwiper,.navTab{
+      height: 200rpx;
+    }
+    .navTablist{
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: space-between;
+      span{
+        width: 20%;
+        display:inline-block;
+        text-align: center;
+      }
+    }
+    .navDots{
+      width: 100%;
+      display:flex;
+      justify-content: center;
+      .dot{
+        display: inline-block;
+        height: 10rpx;
+        width: 24rpx;
+        margin-right: 15rpx;
+        background-color: #ccc;
+        border-radius: 15rpx;
+        transition: all .3s;
+        &.current{
+          border-radius: 25rpx;
+          width: 32rpx;
+          background-color: rgb(246,17,17);
+        }
+      }
+    }
+  }
 </style>
 
 <template>
-  <view class="container">
-  
+  <view class="container" id="homepage">
+  <!-- 头部轮播图片 -->
     <div class="topSwiper">
-      <swiper :indicator-dots="true"
-        :autoplay="true">
-        <block wx:for="{{imgUrls}}">
+      <swiper indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
+        <block wx:for="{{imgUrls}}" wx:key="{{index}}">
           <swiper-item>
             <image src="{{item}}" class="slide-image" width="355" height="150"/>
           </swiper-item>
         </block>
       </swiper>
     </div>
-
+    <!-- 导航图标 -->
+    <div class="navTab">
+      <swiper @change="changenav" indicator-dots="{{false}}" autoplay="{{false}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
+          <swiper-item>
+            <div class="navTablist">
+              <span wx:for="{{10}}" wx:key="{{index}}">{{item}}</span>
+            </div>
+          </swiper-item>
+          <swiper-item>
+            <div class="navTablist">
+              <span wx:for="{{10}}" wx:key="{{index}}">{{item}}=</span>
+            </div>
+          </swiper-item>
+      </swiper>
+      <div class="navDots">
+        <span class="dot {{navIndex == 0?'current':''}}"></span>
+        <span class="dot {{navIndex == 1?'current':''}}"></span>
+      </div>
+    </div>
   </view>
 </template>
 
@@ -28,9 +80,15 @@ export default class Index extends wepy.page {
   components = {}
   mixins = [Mixin]
   data = {
-    imgUrls: []
+    imgUrls: [],
+    navIndex: 0
   }
-  methods = {}
+  methods = {
+    changenav(index) {
+      // console.log(index)
+      this.navIndex = index.detail.current
+    }
+  }
   onLoad() {
   }
 }

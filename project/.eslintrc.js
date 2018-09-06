@@ -33,7 +33,7 @@ module.exports = {
     'padded-blocks': 0,
     'one-var': 0,
     'no-return-assign': 0,
-    'indent': ['error', 2],
+    'indent': ['error', 4],
     // allow debugger during development
     'no-debugger': process.env.NODE_ENV === 'production' ? 2 : 0,
     'space-before-function-paren': 0
