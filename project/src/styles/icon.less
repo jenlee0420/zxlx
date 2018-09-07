@@ -1,1 +1,14 @@
 @import '/zanui/icon.scss';
+
+.public_icon1{
+    background-image: url('@{imgbaseUrl}/icon1.png');
+    background-repeat: no-repeat;
+    background-size: 200rpx;
+    width: 22rpx;
+    height: 22rpx;
+}
+/*  */
+.service{
+    &:extend(.public_icon1);
+    background-position: -240rpx -0rpx ;
+}

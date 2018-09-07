@@ -12,12 +12,12 @@
 <script>
 // let aldstat = require('./untils/ald-stat.js')
 import wepy from 'wepy'
-// import 'wepy-async-function'
+import 'wepy-async-function'
 
 export default class extends wepy.app {
   config = {
     pages: [
-      // 'example/popup',
+      // 'example/select',
       'pages/test',
       'pages/index'
     ],

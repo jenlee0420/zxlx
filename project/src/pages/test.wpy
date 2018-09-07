@@ -4,34 +4,47 @@
 
 <template>
   <view class="container">
+    <span class=""></span>
     <popwin :popObj="popObj">
       <div slot="content">ddfdfsdf</div>
     </popwin>
     <zanpopup direction="top">
       <div>dsfffff</div>
     </zanpopup>
+    <picker mode="region" @change="bindRegionChange" value="{{region}}">
+      <view class="picker">
+      当前选择：{{region[0]}}，{{region[1]}}，{{region[2]}}
+    </view>
+    </picker>
   </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-import popwin from '@@/popWin'
-import zanpopup from '@@/zan-popup'
-export default class Index extends wepy.page {
-  config = {
-  }
-  components = {popwin,zanpopup}
-  mixins = [Mixin]
-  data = {
-    popObj: {
-      title: '标题',
-      winh: '60%'
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  import popwin from '@@/popWin'
+  import zanpopup from '@@/zan-popup'
+  export default class Index extends wepy.page {
+    config = {}
+    components = {
+      popwin,
+      zanpopup
+    }
+    mixins = [Mixin]
+    data = {
+      popObj: {
+        title: '标题',
+        winh: '60%'
+      },
+      region: ['广东省', '广州市', '海珠区'],
+      customItem: '全部'
+    }
+    methods = {
+      bindRegionChange() {
+      }
+    }
+    onLoad() {
+      this.$invoke('popwin', 'togglePopup')
     }
   }
-  methods = {}
-  onLoad() {
-    this.$invoke('popwin', 'togglePopup')
-  }
-}
 </script>
