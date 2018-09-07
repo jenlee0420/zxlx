@@ -1,5 +1,5 @@
 @import '/zanui/icon.scss';
-
+@imgbaseUrl:"https://zxlx-web.oss-cn-beijing.aliyuncs.com"; /*样式文件中的图片地址前缀*/
 .public_icon1{
     background-image: url('@{imgbaseUrl}/icon1.png');
     background-repeat: no-repeat;
@@ -8,7 +8,390 @@
     height: 22rpx;
 }
 /*  */
-.service{
-    &:extend(.public_icon1);
-    background-position: -240rpx -0rpx ;
+.public_icon1_to_top{
+  &:extend(.public_icon1);
+  background-position: 0rpx -9rpx ;
+  width: 95rpx;
+  height: 95rpx;
+}
+
+.public_icon1_wait_pin{
+  &:extend(.public_icon1);
+  background-position: 0rpx -110rpx ;
+  width: 101rpx;
+  height: 101rpx;
+}
+
+.public_icon1_to_home{
+  &:extend(.public_icon1);
+  background-position: 0rpx -219rpx ;
+  width: 184rpx;
+  height: 70rpx;
+}
+
+.public_icon1_pin_host{
+  &:extend(.public_icon1);
+  background-position: 0rpx -295rpx ;
+  width: 78rpx;
+  height: 45rpx;
+}
+
+.public_icon1_hot_sale{
+  &:extend(.public_icon1);
+  background-position: 0rpx -347rpx ;
+  width: 116rpx;
+  height: 80rpx;
+}
+
+.public_icon1_play_day{
+  &:extend(.public_icon1);
+  background-position: 0rpx -437rpx ;
+  width: 195rpx;
+  height: 57rpx;
+}
+
+.public_icon1_pin_full{
+  &:extend(.public_icon1);
+  background-position: 0rpx -504rpx ;
+  width: 49rpx;
+  height: 49rpx;
+}
+
+.public_icon1_white_weixin{
+  &:extend(.public_icon1);
+  background-position: 0rpx -571rpx ;
+  width: 58rpx;
+  height: 48rpx;
+}
+
+.public_icon1_share{
+  &:extend(.public_icon1);
+  background-position: 0rpx -638rpx ;
+  width: 42rpx;
+  height: 42rpx;
+}
+
+.public_icon1_time{
+  &:extend(.public_icon1);
+  background-position: 0rpx -696rpx ;
+  width: 53rpx;
+  height: 42rpx;
+}
+
+.public_icon1_custom{
+  &:extend(.public_icon1);
+  background-position: 0rpx -743rpx ;
+  width: 52rpx;
+  height: 50rpx;
+}
+
+.public_icon1_collection{
+  &:extend(.public_icon1);
+  background-position: 0rpx -794rpx ;
+  width: 48rpx;
+  height: 46rpx;
+}
+
+.public_icon1_to_home2{
+  &:extend(.public_icon1);
+  background-position: 0rpx -838rpx ;
+  width: 49rpx;
+  height: 50rpx;
+}
+
+.public_icon2{
+  background-image: url('@{imgbaseUrl}/icon2.png');
+  background-repeat: no-repeat;
+  background-size: 200rpx;
+  width: 22rpx;
+  height: 22rpx;
+}
+
+.public_icon2_location{
+  &:extend(.public_icon2);
+  background-position: 0rpx -9rpx ;
+  width: 28rpx;
+  height: 35rpx;
+}
+
+.public_icon2_star{
+  &:extend(.public_icon2);
+  background-position: 0rpx -50rpx ;
+  width: 197rpx;
+  height: 42rpx;
+}
+
+.public_icon2_cancle{
+  &:extend(.public_icon2);
+  background-position: 0rpx -100rpx ;
+  width: 55rpx;
+  height: 55rpx;
+}
+
+.public_icon2_cancle2{
+  &:extend(.public_icon2);
+  background-position: 0rpx -163rpx ;
+  width: 58rpx;
+  height: 58rpx;
+}
+
+.public_icon2_cancle3{
+  &:extend(.public_icon2);
+  background-position: 0rpx -237rpx ;
+  width: 39rpx;
+  height: 39rpx;
+}
+
+.public_icon2_weixin{
+  &:extend(.public_icon2);
+  background-position: 0rpx -289rpx ;
+  width: 53rpx;
+  height: 53rpx;
+}
+
+.public_icon2_weixin_pay{
+  &:extend(.public_icon2);
+  background-position: 0rpx -356rpx ;
+  width: 54rpx;
+  height: 49rpx;
+}
+
+.public_icon2_other_pay{
+  &:extend(.public_icon2);
+  background-position: 0rpx -413rpx ;
+  width: 51rpx;
+  height: 51rpx;
+}
+
+.public_icon2_readed{
+  &:extend(.public_icon2);
+  background-position: 0rpx -475rpx ;
+  width: 43rpx;
+  height: 43rpx;
+}
+
+.public_icon2_select_pay{
+  &:extend(.public_icon2);
+  background-position: 0rpx -535rpx ;
+  width: 44rpx;
+  height: 33rpx;
+}
+
+.public_icon2_location2{
+  &:extend(.public_icon2);
+  background-position: 0rpx -572rpx ;
+  width: 36rpx;
+  height: 43rpx;
+}
+
+.public_icon2_pin_success{
+  &:extend(.public_icon2);
+  background-position: 0rpx -627rpx ;
+  width: 50rpx;
+  height: 51rpx;
+}
+
+.public_icon2_search{
+  &:extend(.public_icon2);
+  background-position: 0rpx -685rpx ;
+  width: 46rpx;
+  height: 46rpx;
+}
+
+.public_icon2_doyoulike{
+  &:extend(.public_icon2);
+  background-position: 0rpx -744rpx ;
+  width: 38rpx;
+  height: 34rpx;
+}
+
+.public_icon2_pin_fail{
+  &:extend(.public_icon2);
+  background-position: 0rpx -773rpx ;
+  width: 183rpx;
+  height: 124rpx;
+}
+
+.public_icon3{
+  background-image: url('@{imgbaseUrl}/icon3.png');
+  background-repeat: no-repeat;
+  background-size: 200rpx;
+  width: 22rpx;
+  height: 22rpx;
+}
+
+.public_icon3_addr_list{
+  &:extend(.public_icon3);
+  background-position: 0rpx -13rpx ;
+  width: 64rpx;
+  height: 43rpx;
+}
+
+.public_icon3_weixin{
+  &:extend(.public_icon3);
+  background-position: 0rpx -74rpx ;
+  width: 71rpx;
+  height: 41rpx;
+}
+
+.public_icon3_choise{
+  &:extend(.public_icon3);
+  background-position: 0rpx -121rpx ;
+  width: 63rpx;
+  height: 40rpx;
+}
+
+.public_icon3_not_choise{
+  &:extend(.public_icon3);
+  background-position: 0rpx -167rpx ;
+  width: 63rpx;
+  height: 40rpx;
+}
+
+.public_icon3_waite_pay{
+  &:extend(.public_icon3);
+  background-position: 0rpx -219rpx ;
+  width: 85rpx;
+  height: 69rpx;
+}
+
+.public_icon3_not_use{
+  &:extend(.public_icon3);
+  background-position: 0rpx -298rpx ;
+  width: 90rpx;
+  height: 67rpx;
+}
+
+.public_icon3_complete{
+  &:extend(.public_icon3);
+  background-position: 0rpx -371rpx ;
+  width: 72rpx;
+  height: 64rpx;
+}
+
+.public_icon3_not_complete{
+  &:extend(.public_icon3);
+  background-position: 0rpx -443rpx ;
+  width: 104rpx;
+  height: 63rpx;
+}
+
+.public_icon3_collection{
+  &:extend(.public_icon3);
+  background-position: 0rpx -520rpx ;
+  width: 101rpx;
+  height: 67rpx;
+}
+
+.public_icon3_invite_friend{
+  &:extend(.public_icon3);
+  background-position: 0rpx -596rpx ;
+  width: 93rpx;
+  height: 69rpx;
+}
+
+.public_icon3_contact_info{
+  &:extend(.public_icon3);
+  background-position: 0rpx -674rpx ;
+  width: 78rpx;
+  height: 65rpx;
+}
+
+.public_icon3_cooprate{
+  &:extend(.public_icon3);
+  background-position: 0rpx -759rpx ;
+  width: 88rpx;
+  height: 61rpx;
+}
+
+.public_icon4{
+  background-image: url('@{imgbaseUrl}/icon4.png');
+  background-repeat: no-repeat;
+  background-size: 200rpx;
+  width: 22rpx;
+  height: 22rpx;
+}
+
+.public_icon4_upload_picture{
+  &:extend(.public_icon4);
+  background-position: 0rpx -6rpx ;
+  width: 79rpx;
+  height: 66rpx;
+}
+
+.public_icon4_feedback{
+  &:extend(.public_icon4);
+  background-position: 0rpx -72rpx ;
+  width: 55rpx;
+  height: 52rpx;
+}
+
+.public_icon4_hot_line{
+  &:extend(.public_icon4);
+  background-position: 0rpx -119rpx ;
+  width: 46rpx;
+  height: 48rpx;
+}
+
+.public_icon4_about_me{
+  &:extend(.public_icon4);
+  background-position: 0rpx -165rpx ;
+  width: 52rpx;
+  height: 52rpx;
+}
+
+.public_icon4_cancel_upload{
+  &:extend(.public_icon4);
+  background-position: 0rpx -216rpx ;
+  width: 43rpx;
+  height: 43rpx;
+}
+
+.public_icon4_contact{
+  &:extend(.public_icon4);
+  background-position: 0rpx -254rpx ;
+  width: 75rpx;
+  height: 59rpx;
+}
+
+.public_icon4_defalt{
+  &:extend(.public_icon4);
+  background-position: 0rpx -304rpx ;
+  width: 49rpx;
+  height: 47rpx;
+}
+
+.public_icon4_edit_addrss{
+  &:extend(.public_icon4);
+  background-position: 0rpx -358rpx ;
+  width: 46rpx;
+  height: 46rpx;
+}
+
+.public_icon4_del_addrss{
+  &:extend(.public_icon4);
+  background-position: 0rpx -414rpx ;
+  width: 49rpx;
+  height: 51rpx;
+}
+
+.public_icon4_complete_buy{
+  &:extend(.public_icon4);
+  background-position: 0rpx -453rpx ;
+  width: 155rpx;
+  height: 162rpx;
+}
+
+.public_icon4_not_assess {
+  &:extend(.public_icon4);
+  background-position: 0rpx -625rpx ;
+  width: 112rpx;
+  height: 114rpx;
+}
+
+.public_icon4_cancle_goods {
+  &:extend(.public_icon4);
+  background-position: 0rpx -734rpx ;
+  width: 129rpx;
+  height: 124rpx;
 }
