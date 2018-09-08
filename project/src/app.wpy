@@ -20,8 +20,10 @@ export default class extends wepy.app {
   config = {
     pages: [
       // 'example/select',
+      'pages/my',
       'pages/test',
       'pages/index'
+
     ],
     window: {
       navigationBarBackgroundColor: '#FAFAFA',

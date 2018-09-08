@@ -1,0 +1,138 @@
+<style lang="less">
+  .my_view{
+    height: 95rpx;
+    border-top:1rpx solid #d8d6d6;
+    line-height:95rpx;
+    font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 30rpx;
+  }
+
+  .my_view_view{
+    display: flex;
+    align-items: center;
+  }
+  /*.my_name_text{*/
+    /*width: 110rpx;*/
+  /*}*/
+  .my_input{
+    height: 95rpx;
+  }
+
+  .my_view_text{
+    width: 237rpx;
+    margin-left: 80rpx;
+  }
+
+  .my_name_view{
+    &:extend(.my_view);
+  }
+
+  .my_type_view{
+    &:extend(.my_view);
+  }
+</style>
+<template>
+  <view class="my_view">
+    <view class="my_view_view">
+      <text class="my_view_text">类别:</text>
+      <radio-group class="my_picker" >
+        <label wx:for="{{my_type}}" wx:key="{{index}}">
+          <radio value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
+        </label>
+      </radio-group>
+    </view>
+  </view>
+
+  <view class="my_view">
+    <view class="my_view_view">
+      <text  class="my_view_text">姓名:</text>
+      <input class="my_input" focus/>
+    </view>
+
+  </view>
+
+  <view class="my_view">
+    <view class="my_view_view">
+      <text  class="my_view_text">身份证号:</text>
+      <input class="my_input" placeholder="18位身份证号码"/>
+    </view>
+  </view>
+
+  <view class="my_view">
+    <view class="my_view_view">
+      <text  class="my_view_text">出生年月:</text>
+      <picker class="my_picker" mode="date"start="2015-09-01" end="2017-09-01">
+        <view class="picker">
+          如：2008-09-10
+        </view>
+      </picker>
+    </view>
+
+  </view>
+
+  <view class="my_view">
+    <view class="my_view_view">
+      <text  class="my_view_text">性别:</text>
+      <radio-group class="my_picker" >
+        <label wx:for="{{my_sex}}" wx:key="{{index}}">
+          <radio value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
+        </label>
+      </radio-group>
+    </view>
+  </view>
+
+  <view class="my_view">
+    <view class="my_view_view">
+      <text  class="my_view_text">选择地区:</text>
+      <picker class="my_picker"  mode="region">
+        <view class="picker">
+          当前选择：
+        </view>
+      </picker>
+    </view>
+  </view>
+
+  <view class="my_view">
+    <view class="my_view_view">
+      <text  class="my_view_text">详细地址:</text>
+      <input class="my_input" placeholder="输入地址或点击地图选择"/>
+      <icon @tap="toMap" class="public_icon2_location2"/>
+    </view>
+  </view>
+
+  <view>
+    <button class="fullbtn btn">保存</button>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  export default class Index extends wepy.page {
+    config = {
+    }
+    components = {}
+    mixins = [Mixin]
+    data = {
+      imgUrls: [],
+      navIndex: 0,
+      my_type: [
+        {name: 'kid', value: '儿童'},
+        {name: 'adult', value: '成人', checked: 'true'},
+      ],
+      my_sex: [
+        {name: 'man', value: '男', checked: 'true'},
+        {name: 'women', value: '女'},
+      ]
+    }
+    methods = {
+      toMap(){
+//        wx.chooseLocation(){
+//
+//        }
+        console.log("1");
+      }
+    }
+    onLoad() {
+    }
+  }
+</script>
