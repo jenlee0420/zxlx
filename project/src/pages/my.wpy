@@ -11,6 +11,7 @@
     display: flex;
     align-items: center;
   }
+
   /*.my_name_text{*/
     /*width: 110rpx;*/
   /*}*/
@@ -19,7 +20,7 @@
   }
 
   .my_view_text{
-    width: 237rpx;
+    width: 165rpx;
     margin-left: 80rpx;
   }
 
@@ -29,6 +30,18 @@
 
   .my_type_view{
     &:extend(.my_view);
+  }
+
+  .my_btn_view{
+    margin-top: 88rpx;
+    width: 100%;
+    display:flex;
+    justify-content:center;
+
+  }
+
+  .my_btn{
+    width: 587rpx;
   }
 </style>
 <template>
@@ -63,7 +76,7 @@
       <text  class="my_view_text">出生年月:</text>
       <picker class="my_picker" mode="date"start="2015-09-01" end="2017-09-01">
         <view class="picker">
-          如：2008-09-10
+          <input class="my_input" placeholder="如：2008-09-10" disabled/>
         </view>
       </picker>
     </view>
@@ -86,7 +99,7 @@
       <text  class="my_view_text">选择地区:</text>
       <picker class="my_picker"  mode="region">
         <view class="picker">
-          当前选择：
+          <input class="my_input" placeholder="选择地区" disabled/>
         </view>
       </picker>
     </view>
@@ -100,8 +113,8 @@
     </view>
   </view>
 
-  <view>
-    <button class="fullbtn btn">保存</button>
+  <view class="my_btn_view">
+    <button class="btn my_btn">保存</button>
   </view>
 </template>
 <script>
