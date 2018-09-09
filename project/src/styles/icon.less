@@ -235,18 +235,38 @@
   height: 41rpx;
 }
 
-.public_icon3_choise{
-  &:extend(.public_icon3);
-  background-position: 0rpx -121rpx ;
-  width: 63rpx;
-  height: 40rpx;
-}
-
 .public_icon3_not_choise{
   &:extend(.public_icon3);
   background-position: 0rpx -167rpx ;
   width: 63rpx;
   height: 40rpx;
+}
+.public_icon3_choise{
+    &:extend(.public_icon3);
+    background-position: 0rpx -121rpx ;
+    width: 63rpx;
+    height: 40rpx;
+}
+
+.my_picker {
+    radio {
+        opacity: 0;
+    }
+    radio[checked=""] + label{
+        &:extend(.public_icon3);
+        background-position: 0rpx -121rpx ;
+        width: 63rpx;
+        height: 40rpx;
+    }
+    >label{
+        position: relative;
+        >label{
+            position: absolute;
+            display: inline-block;
+            left: 3rpx;
+            top:4rpx;
+        }
+    }
 }
 
 .public_icon3_waite_pay{
@@ -281,28 +301,28 @@
   &:extend(.public_icon3);
   background-position: 0rpx -520rpx ;
   width: 101rpx;
-  height: 67rpx;
+  height: 69rpx;
 }
 
 .public_icon3_invite_friend{
   &:extend(.public_icon3);
   background-position: 0rpx -596rpx ;
-  width: 93rpx;
+  width: 97rpx;
   height: 69rpx;
 }
 
 .public_icon3_contact_info{
   &:extend(.public_icon3);
-  background-position: 0rpx -674rpx ;
+  background-position: 10rpx -674rpx ;
   width: 78rpx;
-  height: 65rpx;
+  height: 69rpx;
 }
 
 .public_icon3_cooprate{
   &:extend(.public_icon3);
-  background-position: 0rpx -759rpx ;
+  background-position: 0rpx -750rpx ;
   width: 88rpx;
-  height: 61rpx;
+  height: 69rpx;
 }
 
 .public_icon4{

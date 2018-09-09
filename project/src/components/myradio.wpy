@@ -1,0 +1,47 @@
+<style lang="less">
+
+</style>
+
+<template>
+  <view class="container">
+    <radio-group class="my_picker" bindchange="getpicker">
+        <label wx:for="{{syncList}}" wx:key="{{index}}">
+            <radio value="{{item.name}}" checked="{{item.checked}}"/>
+            <label class="public_icon3_not_choise"></label>{{item.value}}
+        </label>
+    </radio-group>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+export default class myradio extends wepy.component {
+  config = {
+  }
+  props = {
+        syncList: {
+            type: Object,
+            default: ''
+        },
+        vbind:{
+            type:String,
+            default: ''
+        }
+    } 
+  components = {}
+  mixins = [Mixin]
+  data = {
+  }
+  methods = {
+      getpicker(e){
+          if(this.vbind){
+            this.$emit(this.vbind, e.detail.value)
+          }
+      },
+
+  }
+  onLoad() {
+  }
+}
+</script>

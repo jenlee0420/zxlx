@@ -17,7 +17,8 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        'pages/my',
+        'pages/goodsDetail',
+        'pages/addmember',
         'pages/mycenter/index',
         'pages/custom',
         'pages/index',

@@ -17,7 +17,6 @@ export default class Index extends wepy.page {
   components = {}
   mixins = [Mixin]
   data = {
-    imgUrls:[]
   }
   methods = {}
   onLoad() {
