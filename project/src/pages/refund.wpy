@@ -1,0 +1,104 @@
+<style lang="less">
+  .refund_view{
+    /*height: 95rpx;*/
+    /*border-top:1rpx solid #d8d6d6;*/
+    /*line-height:95rpx;*/
+    font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 30rpx;
+    /*display: flex;*/
+  }
+
+  .refund_view_view{
+    display: flex;
+    border-top:1rpx solid #d8d6d6;
+    height: 95rpx;
+    line-height:95rpx;
+
+  }
+
+  .refund_view_view_radio{
+    height: 401rpx;
+    line-height:72rpx;
+  }
+
+  .refund_view_view_radio_group{
+    margin-left: 31rpx;
+  }
+
+  .refund_input{
+    height: 95rpx;
+    margin-left: 31rpx;
+  }
+
+  .refund_view_text{
+    margin-left: 79rpx;
+  }
+
+  textarea{
+    height: 324rpx;
+    width: 100%;
+  }
+</style>
+
+<template>
+  <view   class="refund_view">
+    <view class="refund_view_view refund_view_view_radio">
+      <text class="refund_view_text">退款原因</text>
+      <radio-group class="refund_view_view_radio_group">
+        <label wx:for="{{refund_reson}}" wx:key="{{index}}">
+          <view>
+            <radio value="{{item.name}}" checked="{{item.checked}}"/>{{item.value}}
+          </view>
+        </label>
+      </radio-group>
+    </view>
+
+
+      <view class="refund_view_view">
+        <text class="refund_view_text">申请金额</text>
+        <input class="refund_input" placeholder="按照须知需求处理" disabled/>
+      </view>
+
+    <view>
+      <text class="refund_view_text">退款说明</text>
+      <textarea placeholder="请您详细填写退款说明（最多500字）" />
+    </view>
+
+    <view class="refund_view_view">
+      <text class="refund_view_text">联系电话</text>
+      <input class="refund_input" placeholder="电话号码"/>
+    </view>
+
+    <view>
+      <text class="refund_view_text">上传证据</text>
+      <view>
+        <icon class="public_icon4_upload_picture"></icon>
+      </view>
+    </view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  export default class Index extends wepy.page {
+    config = {
+    }
+    components = {}
+    mixins = [Mixin]
+    data = {
+      imgUrls:[],
+      refund_reson: [
+        {name: '1', value: '多拍、错拍、不想要', checked: 'true'},
+        {name: '2', value: '档期冲突'},
+        {name: '3', value: '临时改变主意'},
+        {name: '4', value: '不可抗力因素'},
+        {name: '5', value: '其他'},
+      ],
+    }
+    methods = {}
+    onLoad() {
+    }
+  }
+</script>
