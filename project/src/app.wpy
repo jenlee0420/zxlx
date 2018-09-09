@@ -17,6 +17,7 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
+        'pages/refund',
         'pages/my',
         'pages/mycenter/index',
         'pages/custom',
