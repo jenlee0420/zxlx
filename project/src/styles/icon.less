@@ -237,34 +237,39 @@
 
 .public_icon3_not_choise{
   &:extend(.public_icon3);
-  background-position: 0rpx -167rpx ;
-  width: 63rpx;
+  background-position: -12rpx -167rpx ;
+  width: 40rpx;
   height: 40rpx;
 }
 .public_icon3_choise{
     &:extend(.public_icon3);
-    background-position: 0rpx -121rpx ;
-    width: 63rpx;
+    background-position: -12rpx -121rpx ;
+    width: 40rpx;
     height: 40rpx;
 }
 
 .my_picker {
+    display:flex;
     radio {
         opacity: 0;
+        width: 52rpx;
     }
     radio[checked=""] + label{
         &:extend(.public_icon3);
-        background-position: 0rpx -121rpx ;
-        width: 63rpx;
+        background-position: -12rpx -121rpx ;
+        width: 40rpx;
         height: 40rpx;
     }
     >label{
         position: relative;
+        margin-right: 20rpx;
         >label{
             position: absolute;
             display: inline-block;
             left: 3rpx;
-            top:4rpx;
+            top:0;
+            margin:auto 0;
+            bottom:0;
         }
     }
 }
@@ -339,6 +344,8 @@
   background-position: 0rpx -6rpx ;
   width: 79rpx;
   height: 66rpx;
+  border:1rpx solid #eee;
+
 }
 
 .public_icon4_feedback{

@@ -3,7 +3,7 @@
 </style>
 
 <template>
-  <view class="container">
+  <view>
     <radio-group class="my_picker" bindchange="getpicker">
         <label wx:for="{{syncList}}" wx:key="{{index}}">
             <radio value="{{item.name}}" checked="{{item.checked}}"/>
