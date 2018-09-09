@@ -391,6 +391,7 @@
             height: 58rpx;
             border-radius: 8rpx;
             background: #efefef;
+            min-width:200rpx;
             &.picked {
               background: @btn-primary;
             }
@@ -436,6 +437,7 @@
             color: #8e8d8d;
             background: #eff0f0;
             margin: 0 24rpx;
+            text-align: center;
           }
         }
       }
@@ -570,35 +572,22 @@
           <view class="pick-block">
             <text>游学组合</text>
             <view class="btn-box">
-              <view class="btn picked">八一军营期第一期发嘎嘎是</view>
-              <view class="btn">八一军营期第一期发嘎嘎是</view>
-              <view class="btn">八一军营期第一期发嘎嘎是</view>
-              <view class="btn">八一军营期第一期发嘎嘎是</view>
+              <block  wx:for="{{goods_detal}}" wx:key="{{index}}">
+                <view class="btn {{item.pick ? 'picked' : ''}}" @tap="goods_detal_tip({{index}})">{{item.name}}</view>
+              </block>
+              <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+              <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+              <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
             </view>
           </view>
           <view class="count-block">
             <view class="title">数量</view>
             <view class="counter">
-              <view class="sub disable">-</view>
-              <view class="num">1</view>
-              <view class="plus">+</view>
+              <view class="sub {{sub_min? 'disable' : ''}}" @tap="good_sub">-</view>
+              <input class="num" value="{{good_number}}" type="number" @input="good_num"></input>
+              <view class="plus {{plus_max? 'disable' : ''}}" @tap="good_plus">+</view>
             </view>
           </view>
-          <view class="count-block">
-            <view class="title">数量</view>
-            <view class="counter">
-              <view class="sub disable">-</view>
-              <view class="num">1</view>
-              <view class="plus">+</view>
-            </view>
-          </view>
-          <view class="count-block">
-            <view class="title">数量</view>
-            <view class="counter">
-              <view class="sub disable">-</view>
-              <view class="num">1</view>
-              <view class="plus">+</view>
-            </view>
           </view>
         </scroll-view>
         <view class="btn-ok">确定</view>
@@ -613,11 +602,92 @@
 
   export default class goodsDetail extends wepy.page {
     data = {
-      modalIsShow: true
+      modalIsShow: true,
+
+      goods_detal:[
+        {"name":"商品1","pick":true},
+        {"name":"商品2","pick":false},
+        {"name":"商品3","pick":false},
+        {"name":"商品4","pick":false},
+      ],
+
+      good_number:1,
+      max_good_number:9,
+      min_good_number:1,
+      plus_max:false,
+      sub_min:true,
     };
 
     components = {
       TopNav
+    };
+
+    methods={
+      goods_detal_tip(index){
+        for(var i=0;i<this.goods_detal.length;i++){
+          if(i==index){
+            this.goods_detal[i].pick=true;
+          }else{
+            this.goods_detal[i].pick=false;
+          };
+        }
+        this.$apply();
+      },
+
+      good_plus(){
+        if(this.good_number+1>this.max_good_number){
+          this.plus_max=true;
+          this.$apply();
+          return;
+        };
+        if(this.good_number+1==this.max_good_number){
+          this.plus_max=true;
+        }else{
+          this.plus_max=false;
+        };
+        this.sub_min=false;
+        this.good_number=this.good_number+1;
+        this.$apply();
+      },
+
+      good_sub(){
+        if(this.good_number-1<this.min_good_number){
+          this.sub_min=true;
+          this.$apply();
+          return;
+        };
+        if(this.good_number-1==this.min_good_number){
+          this.sub_min=true;
+        }else{
+          this.sub_min=false;
+        };
+        this.plus_max=false;
+        this.good_number=this.good_number-1;
+        this.$apply();
+      },
+    }
+
+    good_num(e){
+      console.log(e)
+      this.good_number= e.detail.value;
+
+      if(this.good_number>=this.max_good_number){
+        setTimeout(() => {
+          this.good_number=this.max_good_number;
+        this.$apply();
+      }, 200);
+
+        this.plus_max=true;
+        this.sub_min=false;
+      }else if(this.good_number<=this.min_good_number){
+        this.good_number=this.min_good_number;
+        this.sub_min=true;
+        this.plus_max=false;
+      }else{
+        this.plus_max=false;
+        this.sub_min=false;
+      };
+      this.$apply();
     }
   }
 </script>
