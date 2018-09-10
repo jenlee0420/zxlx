@@ -1,0 +1,693 @@
+<style lang="less">
+
+  @primary-color: #d74a45;
+  @primary-mcolor: #dd3412;
+  @primary-lightColor: #f71414;
+  @btn-primary: #e02e24;
+  @default-Fcolor: #2d2d2d;
+  @des-color: #adaaaa;
+  @bg-orange: #ee8151;
+  @bg-green: #91c46c;
+  @nav-bottom-h: 108rpx;
+  @nav-top-h: 80rpx;
+  @price-color: #ba0000;
+
+  page {
+    background: #f4f4f4;
+    padding-bottom: @nav-bottom-h;
+  }
+
+  .des { font-size: 22rpx; color: @des-color; }
+  .v-space { margin-bottom: 12rpx; }
+  .bg-primary {}
+
+
+  .video-container {
+    width: 100%;
+    height: 572rpx;
+    background: @primary-color;
+    color: #fff;
+    text-align: center;
+    line-height: 572rpx;
+  }
+
+  .des-container {
+    display: flex;
+    flex-direction: column;
+    padding: 28rpx;
+    .price-row {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 18rpx;
+      .price {
+        font-size: 30rpx;
+        color: @primary-lightColor;
+      }
+      .des {
+        .des;
+      }
+    }
+    .shop-name {
+      font-size: 26rpx;
+      letter-spacing: 2rpx;
+      .v-space;
+    }
+    .content-des {
+      -webkit-box-orient: vertical;
+      display: -webkit-box;
+      word-break: break-all;
+      -webkit-line-clamp:2;
+      overflow: hidden;
+      text-overflow:ellipsis;
+      width: 100%;
+      height: 72rpx;
+      overflow: hidden;
+      line-height: 36rpx;
+      text-overflow: ellipsis;
+      .des;
+      .v-space;
+    }
+    .tag-container {
+      display: flex;
+      flex-direction: row;
+      align-items: center;
+      .tag {
+        font-size: 20rpx;
+        border-radius: 5rpx;
+        color: #fff;
+        padding: 5rpx 10rpx;
+        height: 32rpx;
+        margin-right: 10rpx;
+        &.bg-orange {
+          background: @bg-orange;
+        }
+        &.bg-green {
+          background: @bg-green;
+        }
+      }
+    }
+  }
+
+  .pin-card {
+    padding: 0 20rpx;
+    .header {
+      width: 100%;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      height: 80rpx;
+      border-bottom: 1rpx solid #f6f6f6;
+      text {
+        font-size: 25rpx;
+      }
+      view {
+        display: flex;
+        flex-direction: row;
+        align-items: center;
+        font-size: 25rpx;
+        color: @des-color;
+        image {
+          width: 18rpx;
+          height: 26rpx;
+          margin-left: 12rpx;
+        }
+      }
+    }
+    .pin-row {
+      padding: 17rpx 0;
+      border-bottom: 1rpx solid #f6f6f6;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: stretch;
+      .left {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .avator {
+          border-radius: 50%;
+          height: 88rpx;
+          width: 88rpx;
+          background: #49afc6;
+        }
+        .name {
+          margin-left: 20rpx;
+          font-size: 30rpx;
+        }
+      }
+      .right {
+        display: flex;
+        justify-content: flex-start;
+        align-items: center;
+        .status {
+          margin-right: 20rpx;
+          display: flex;
+          flex-direction: column;
+          align-items: flex-end;
+          .t-nums {
+            font-size: 26rpx;
+          }
+          .m-nums {
+            .t-nums;
+            margin-bottom: 14rpx;
+            text {
+              color: @primary-mcolor;
+            }
+          }
+        }
+        .btn {
+          line-height: 56rpx;
+          font-size: 26rpx;
+          height: 58rpx;
+          border-radius: 8rpx;
+          color: #fff;
+          padding: 0 25rpx;
+          &.bg-primary {
+            background: @btn-primary;
+          }
+        }
+      }
+    }
+
+  }
+
+  .nav-bottom {
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    display: flex;
+    flex-direction: row;
+    align-items: stretch;
+    height: @nav-bottom-h;
+    .layout() {
+      display: flex;
+      flex-direction: column;
+      justify-content: center;
+      align-items: center;
+    }
+    .flex1 {
+      .layout;
+      flex: 1;
+      background: #fff;
+      .icon {
+        width: 40rpx;
+        height: 40rpx;
+      }
+      text {
+        font-size: 18rpx;
+        margin-top: 8rpx;
+      }
+    }
+    .flex2 {
+      .layout;
+      flex: 2;
+      background: #f4aba7;
+      text {
+        font-size: 26rpx;
+        color: #fff;
+      }
+    }
+    .flex3 {
+      .layout;
+      flex: 3.5;
+      background: @btn-primary;
+      text {
+        font-size: 26rpx;
+        color: #fff;
+      }
+    }
+    .flex5 {
+      .layout;
+      flex: 5.5;
+      background: #adadad;
+      text {
+        font-size: 30rpx;
+        color: #fff;
+      }
+    }
+  }
+
+  .backTop {
+    position: fixed;
+    width: 82rpx;
+    height: 82rpx;
+    bottom: 26rpx + @nav-bottom-h;
+    right: 27rpx;
+    image {
+      width: 100%;
+      height: 100%;
+    }
+  }
+
+  .share-box {
+    position: fixed;
+    z-index: 99;
+    height: 328rpx;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: #e9e8fb;
+    display: flex;
+    justify-content: flex-start;
+    flex-direction: column;
+    align-items: center;
+    .close {
+      align-self: flex-end;
+      width: 45rpx;
+      height: 45rpx;
+      margin-top: 10rpx;
+      margin-right: 18rpx;
+      margin-bottom: 10rpx;
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .qipao {
+      width: 652rpx;
+      height: 132rpx;
+      margin-bottom: 16rpx;
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .btn {
+      width: 626rpx;
+      height: 90rpx;
+      border-radius: 45rpx;
+      font-size: 26rpx;
+      color: #fff;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background: @btn-primary;
+      image {
+        width: 45rpx;
+        height: 35rpx;
+        margin-right: 18rpx;
+      }
+    }
+  }
+
+  .modal {
+    z-index: 999;
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    background: rgba(0,0,0,0.7);
+    @body-h: 875rpx;
+    @intro-h: 166rpx;
+    @btn-ok-h: 95rpx;
+    @scroll-h: @body-h - @intro-h - @btn-ok-h + 2rpx;
+    .scroll-h {
+      height: @scroll-h;
+    }
+    .m-body {
+      position: relative;
+      width: 100%;
+      height: @body-h;
+      background: #fff;
+      .close-btn {
+        width: 35rpx;
+        height: 35rpx;
+        position: absolute;
+        right: 25rpx;
+        top: 25rpx;
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .intro {
+        height: @intro-h;
+        border-bottom: 1rpx solid #ededed;
+        display: flex;
+        flex-direction: row;
+        .goods-img {
+          width: 198rpx;
+          height: 198rpx;
+          border: 1rpx solid #c2c2c2;
+          border-radius: 10rpx;
+          margin: 0 20rpx;
+          display: flex;
+          justify-content: center;
+          align-items: center;
+          position: relative;
+          bottom: 80rpx;
+          background:#fff;
+          image {
+            width: 190rpx;
+            height: 190rpx;
+          }
+        }
+        .goods-picked {
+          align-self: center;
+          display: flex;
+          flex-direction: column;
+          height: 75rpx;
+          .price {
+            font-size: 32rpx;
+            letter-spacing: 2rpx;
+            color: @price-color;
+          }
+          .picked-text {
+            font-size: 22rpx;
+            letter-spacing: 1rpx;
+          }
+        }
+      }
+      .Bpadding() {
+        padding: 25rpx 30rpx;
+      }
+      .Bline() {
+        border-bottom: 1rpx solid #ededed;
+      }
+      .pick-block {
+        .Bline;
+        .Bpadding;
+        text {
+          font-size: 25rpx;
+        }
+        .btn-box {
+          margin-top: 30rpx;
+          display: flex;
+          flex-direction: column;
+          justify-content: flex-start;
+          align-items: flex-start;
+          .btn {
+            flex-grow: 0;
+            padding: 0 18rpx;
+            margin-bottom: 30rpx;
+            font-size: 22rpx;
+            line-height: 56rpx;
+            height: 58rpx;
+            border-radius: 8rpx;
+            background: #efefef;
+            min-width:200rpx;
+            &.picked {
+              background: @btn-primary;
+            }
+          }
+        }
+      }
+      .count-block {
+        .Bline;
+        padding: 0 30rpx;
+        height: 110rpx;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        .title {
+          font-size: 26rpx;
+        }
+        .counter {
+          height: 54rpx;
+          display: flex;
+          .plus {
+            height: 100%;
+            width: 75rpx;
+            text-align: center;
+            line-height: 50rpx;
+            font-size: 36rpx;
+            font-weight: bold;
+            color: #8e8d8d;
+            background: #ddd;
+            &.disable {
+              background: #eff0f0;
+            }
+          }
+          .sub {
+            .plus;
+          }
+          .num {
+            width: 102rpx;
+            height: 100%;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            font-size: 30rpx;
+            color: #8e8d8d;
+            background: #eff0f0;
+            margin: 0 24rpx;
+            text-align: center;
+          }
+        }
+      }
+      .btn-ok {
+        height: 95rpx;
+        background: @btn-primary;
+        color: #fff;
+        font-size: 32rpx;
+        text-align: center;
+        line-height: @btn-ok-h;
+      }
+    }
+  }
+  /* 防止page滚动 */
+  .modalShow {
+    top:0px;
+    left: 0px;
+    width: 100%;
+    height: 100%;
+    overflow: hidden;
+    position: fixed;
+    z-index: 0;
+  }
+</style>
+<template>
+  <view class="{{modalIsShow ? 'modalShow' : ''}}">
+    <TopNav activeIndex="0"></TopNav>
+    <!-- 介绍卡部分 S -->
+    <view class="content">
+      <view class="video-container">图片或视频</view>
+      <view class="des-container">
+        <view class="price-row">
+          <text class="price">￥3000.00起</text>
+          <text class="des">已拼3500人次 · 3人拼单</text>
+        </view>
+        <text class="shop-name">20天军事特训营打算方法嘎达范德大股东【北京】</text>
+        <text class="content-des">知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文知兮乐兮大语文游知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文游</text>
+        <view class="tag-container">
+          <view class="tag bg-orange">知兮乐兮自营</view>
+          <view class="tag bg-orange">红色经典</view>
+          <view class="tag bg-green">武术</view>
+          <view class="tag bg-green">军事迷</view>
+          <view class="tag bg-green">不限年龄</view>
+        </view>
+      </view>
+    </view>
+    <!-- 介绍卡部分 E -->
+    <!-- 去拼单部分 S -->
+    <view class="content">
+      <view class="pin-card">
+        <view class="header">
+          <text>10人在拼单，直接参与</text>
+          <view>更多<image src="../resource/img/right_arrow.png"></image></view>
+        </view>
+        <view class="pin-row">
+          <view class="left">
+            <image src="../resource/img/avatar.png" class="avator"></image>
+            <text class="name">张杨文</text>
+          </view>
+          <view class="right">
+            <view class="status">
+              <view class="m-nums">还差<text>1人</text>拼成</view>
+              <text class="t-nums">剩余5天23:53:18.1</text>
+            </view>
+            <view class="btn bg-primary">
+              去拼单
+            </view>
+          </view>
+        </view>
+        <view class="pin-row">
+          <view class="left">
+            <image src="../resource/img/avatar.png" class="avator"></image>
+            <text class="name">张杨文</text>
+          </view>
+          <view class="right">
+            <view class="status">
+              <view class="m-nums">还差<text>1人</text>拼成</view>
+              <text class="t-nums">剩余5天23:53:18.1</text>
+            </view>
+            <view class="btn bg-primary">
+              去拼单
+            </view>
+          </view>
+        </view>
+      </view>
+    </view>
+    <!-- 去拼单部分 E -->
+    <!-- 详情部分 -->
+    <view id="">
+
+    </view>
+    <!-- 须知 -->
+    <view class="">
+
+    </view>
+    <!-- 底部导航 S -->
+    <view class="nav-bottom">
+      <view class="flex1"><image src="../resource/img/home.png" class="icon"></image><text>首页</text></view>
+      <view class="flex1"><image src="../resource/img/aixin.png" class="icon"></image><text>收藏</text></view>
+      <view class="flex1"><image src="../resource/img/kefu.png" class="icon"></image><text>客服</text></view>
+      <view class="flex2"><text>￥10</text><text>单独购买</text></view>
+      <view class="flex3"><text>￥9</text><text>发起拼单</text></view>
+      <!-- <view class="flex5"><text>报名已满</text></view> -->
+    </view>
+    <!-- 底部导航 E -->
+    <!-- 返回顶部 S -->
+    <!-- <view class="backTop">
+      <image src="../resource/img/backTop.png"></image>
+    </view> -->
+    <!-- 返回顶部 E -->
+    <!-- 邀请分享 S -->
+    <!-- <view class="share-box">
+      <view class="close"><image src="../resource/img/close.png"></image></view>
+      <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
+      <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
+    </view> -->
+    <!-- 邀请分享 E -->
+    <!-- 购买选择 S -->
+    <view class="modal">
+      <view class="m-body">
+        <view class="close-btn"><image src="../resource/img/close2.png"></image></view>
+        <view class="intro">
+          <view class="goods-img"><image src="../resource/img/goods_img.png"></image></view>
+          <view class="goods-picked">
+            <text class="price">￥3000</text>
+            <text class="picked-text">请选择 游学组合</text>
+          </view>
+        </view>
+        <scroll-view
+          scroll-y="{{true}}"
+          class="scroll-h">
+          <view class="pick-block">
+            <text>游学组合</text>
+            <view class="btn-box">
+              <block  wx:for="{{goods_detal}}" wx:key="{{index}}">
+                <view class="btn {{item.pick ? 'picked' : ''}}" @tap="goods_detal_tip({{index}})">{{item.name}}</view>
+              </block>
+              <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+              <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+              <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+            </view>
+          </view>
+          <view class="count-block">
+            <view class="title">数量</view>
+            <view class="counter">
+              <view class="sub {{sub_min? 'disable' : ''}}" @tap="good_sub">-</view>
+              <input class="num" value="{{good_number}}" type="number" @input="good_num"></input>
+              <view class="plus {{plus_max? 'disable' : ''}}" @tap="good_plus">+</view>
+            </view>
+          </view>
+          </view>
+        </scroll-view>
+        <view class="btn-ok">确定</view>
+      </view>
+    </view>
+    <!-- 购买选择 E -->
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import TopNav from '@/components/TopNav'
+
+  export default class goodsDetail extends wepy.page {
+    data = {
+      modalIsShow: true,
+
+      goods_detal:[
+        {"name":"商品1","pick":true},
+        {"name":"商品2","pick":false},
+        {"name":"商品3","pick":false},
+        {"name":"商品4","pick":false},
+      ],
+
+      good_number:1,
+      max_good_number:9,
+      min_good_number:1,
+      plus_max:false,
+      sub_min:true,
+    };
+
+    components = {
+      TopNav
+    };
+
+    methods={
+      goods_detal_tip(index){
+        for(var i=0;i<this.goods_detal.length;i++){
+          if(i==index){
+            this.goods_detal[i].pick=true;
+          }else{
+            this.goods_detal[i].pick=false;
+          };
+        }
+        this.$apply();
+      },
+
+      good_plus(){
+        if(this.good_number+1>this.max_good_number){
+          this.plus_max=true;
+          this.$apply();
+          return;
+        };
+        if(this.good_number+1==this.max_good_number){
+          this.plus_max=true;
+        }else{
+          this.plus_max=false;
+        };
+        this.sub_min=false;
+        this.good_number=this.good_number+1;
+        this.$apply();
+      },
+
+      good_sub(){
+        if(this.good_number-1<this.min_good_number){
+          this.sub_min=true;
+          this.$apply();
+          return;
+        };
+        if(this.good_number-1==this.min_good_number){
+          this.sub_min=true;
+        }else{
+          this.sub_min=false;
+        };
+        this.plus_max=false;
+        this.good_number=this.good_number-1;
+        this.$apply();
+      },
+    }
+
+    good_num(e){
+      console.log(e)
+      this.good_number= e.detail.value;
+
+      if(this.good_number>=this.max_good_number){
+        setTimeout(() => {
+          this.good_number=this.max_good_number;
+        this.$apply();
+      }, 200);
+
+        this.plus_max=true;
+        this.sub_min=false;
+      }else if(this.good_number<=this.min_good_number){
+        this.good_number=this.min_good_number;
+        this.sub_min=true;
+        this.plus_max=false;
+      }else{
+        this.plus_max=false;
+        this.sub_min=false;
+      };
+      this.$apply();
+    }
+  }
+</script>

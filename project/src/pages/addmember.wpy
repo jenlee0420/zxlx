@@ -1,0 +1,165 @@
+<style lang="less">
+    .my_view {
+        height: 95rpx;
+        border-top: 1rpx solid #d8d6d6;
+        line-height: 95rpx;
+        font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+        font-size: 30rpx;
+    }
+    .my_view_view {
+        display: flex;
+        align-items: center;
+    }
+    /*.my_name_text{*/
+    /*width: 110rpx;*/
+    /*}*/
+    .my_input {
+        height: 95rpx;
+    }
+    .my_view_text {
+        width: 165rpx;
+        margin-left: 80rpx;
+    }
+    .my_name_view {
+        &:extend(.my_view);
+    }
+    .my_type_view {
+        &:extend(.my_view);
+    }
+    .my_btn_view {
+        margin-top: 88rpx;
+        width: 100%;
+        display: flex;
+        justify-content: center;
+    }
+    .my_btn {
+        width: 587rpx;
+    }
+    .public_icon3{
+  background-image: url('@{imgbaseUrl}/icon3.png');
+  background-repeat: no-repeat;
+  background-size: 200rpx;
+  width: 22rpx;
+  height: 22rpx;
+}
+
+    
+</style>
+<template>
+    <view class="container">
+        <view class="my_view">
+            <view class="my_view_view">
+                <text class="my_view_text">类别:</text>
+                <myradio :syncList.sync="my_type" vbind="getradiodata"></myradio>
+            </view>
+        </view>
+        <view class="my_view">
+            <view class="my_view_view">
+                <text class="my_view_text">姓名:</text>
+                <input class="my_input" focus/>
+            </view>
+        </view>
+        <view class="my_view">
+            <view class="my_view_view">
+                <text class="my_view_text">身份证号:</text>
+                <input class="my_input" placeholder="18位身份证号码" />
+            </view>
+        </view>
+        <view class="my_view">
+            <view class="my_view_view">
+                <text class="my_view_text">出生年月:</text>
+                <picker class="my_picker" mode="date" start="2015-09-01" end="2017-09-01">
+                    <view class="picker">
+                        <input class="my_input" placeholder="如：2008-09-10" disabled/>
+                    </view>
+                </picker>
+            </view>
+        </view>
+        <view class="my_view">
+            <view class="my_view_view">
+                <text class="my_view_text">性别:</text>
+                <radio-group class="my_picker">
+                    <label wx:for="{{my_sex}}" wx:key="{{index}}">
+                        <radio value="{{item.name}}" checked="{{item.checked}}"/>
+                        <label class="public_icon3_not_choise"></label>{{item.value}}
+                    </label>
+                </radio-group>
+            </view>
+        </view>
+        <view class="my_view">
+            <view class="my_view_view">
+                <text class="my_view_text">选择地区:</text>
+                <picker class="my_picker" mode="region">
+                    <view class="picker">
+                        <input class="my_input" placeholder="选择地区" disabled/>
+                    </view>
+                </picker>
+            </view>
+        </view>
+        <view class="my_view">
+            <view class="my_view_view">
+                <text class="my_view_text">详细地址:</text>
+                <input class="my_input mr20" placeholder="输入地址或点击地图选择" />
+                <icon @tap="toMap" class="public_icon2_location2" />
+            </view>
+        </view>
+        <view class="my_btn_view">
+            <button class="btn my_btn" @tap="saveContact">保存</button>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import myradio from '@@/myradio'
+    export default class addmember extends wepy.page {
+        config = {}
+        components = {
+            myradio:myradio,
+            myradio1:myradio,
+            myradio2:myradio,
+        }
+        mixins = [Mixin]
+        data = {
+            imgUrls: [],
+            navIndex: 0,
+            my_type: [{
+                    name: 'kid',
+                    value: '儿童'
+                },
+                {
+                    name: 'adult',
+                    value: '成人',
+                    checked: 'true'
+                },
+            ],
+            contacttype:{},
+            my_sex: [{
+                    name: 'man',
+                    value: '男',
+                    checked: 'true'
+                },
+                {
+                    name: 'women',
+                    value: '女'
+                },
+            ]
+        }
+        events = {
+            getradiodata(key, value) {
+                console.log(key, value)
+            }
+        }
+        methods = {
+            toMap() {
+                console.log("1");
+            },
+            saveContact() {
+                // this.$invoke('myradio', 'getvalue')
+            }
+        }
+        onLoad() {
+            
+        }
+    }
+</script>

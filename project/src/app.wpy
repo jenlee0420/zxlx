@@ -3,37 +3,67 @@
   @import 'styles/icon';
   @import "styles/common";
   page {
-        height: 100%;
-        background-color: #f2f5fa;
-        font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    height: 100%;
+    background-color: #fff;
+    font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
   }
 </style>
-
 <script>
-// let aldstat = require('./untils/ald-stat.js')
-import wepy from 'wepy'
-import 'wepy-async-function'
-
-export default class extends wepy.app {
-  config = {
-    pages: [
-      // 'example/select',
-      // 'pages/test',
-      'pages/index'
-    ],
-    window: {
-      navigationBarBackgroundColor: '#FAFAFA',
-      navigationBarTitleText: '知兮乐兮',
-      navigationBarTextStyle: 'black',
-      backgroundTextStyle: 'dark',
-      backgroundColor: '#fff'
-    },
-    debug: true
+  // let aldstat = require('./untils/ald-stat.js')
+  import wepy from 'wepy'
+  import 'wepy-async-function' 
+  export default class extends wepy.app {
+    config = {
+      pages: [
+        // 'pages/icon',
+        // 'pages/test',
+        'pages/refund',
+        // 'pages/goodsDetail',
+        'pages/addmember',
+        'pages/mycenter/index',
+        'pages/custom',
+        'pages/index',
+        'pages/seacrhpage'
+      ],
+      tabBar: {
+        color: '#949393',
+        selectedColor: '#db3e41',
+        backgroundColor: '#ffffff',
+        borderStyle: 'black',
+        list: [{
+          'pagePath': 'pages/index',
+          'text': '首页',
+          'iconPath': 'images/home.png',
+          'selectedIconPath': 'images/home_act.png'
+        }, {
+          'pagePath': 'pages/custom',
+          'text': '定制',
+          'iconPath': 'images/custom.png',
+          'selectedIconPath': 'images/custom_act.png'
+        },{
+          'pagePath': 'pages/seacrhpage',
+          'text': '搜索',
+          'iconPath': 'images/search.png',
+          'selectedIconPath': 'images/search_act.png'
+        }, {
+          'pagePath': 'pages/mycenter/index',
+          'text': '我的',
+          'iconPath': 'images/mycenter.png',
+          'selectedIconPath': 'images/mycenter_act.png'
+        }]
+      },
+      window: {
+        navigationBarBackgroundColor: '#fff',
+        navigationBarTitleText: '知兮乐兮',
+        navigationBarTextStyle: 'black',
+        backgroundTextStyle: 'dark',
+        // backgroundColor: '#fff'
+      },
+      debug: true
+    }
+    constructor() {
+      super()
+      this.use('promisify')
+    }
   }
-
-  constructor() {
-    super()
-    this.use('promisify')
-  }
-}
 </script>

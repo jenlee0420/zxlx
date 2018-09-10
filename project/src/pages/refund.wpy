@@ -1,0 +1,109 @@
+<style lang="less">
+  .refund_view{
+    /*height: 95rpx;*/
+    /*border-top:1rpx solid #d8d6d6;*/
+    /*line-height:95rpx;*/
+    font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    font-size: 30rpx;
+    /*display: flex;*/
+  }
+
+  .refund_view_view{
+    display: flex;
+    border-top:1rpx solid #d8d6d6;
+    height: 95rpx;
+    line-height:95rpx;
+  }
+
+  .refund_view_view_radio{
+    height: 401rpx;
+    line-height:72rpx;
+  }
+
+  .refund_view_view_radio_group{
+    margin-left: 31rpx;
+    >.my_picker{
+        display: flex;
+        flex-direction: column;
+    }
+  }
+
+  .refund_input{
+    height: 95rpx;
+    margin-left: 31rpx;
+    font-size: 25rpx;
+  }
+
+  .refund_view_text{
+    margin-left: 79rpx;
+    margin-right: 30rpx;
+    font-size: 30rpx;
+  }
+  .ml79{
+      margin-left: 79rpx;
+  }
+  textarea{
+    height: 324rpx;
+  }
+</style>
+
+<template>
+  <view   class="refund_view">
+    <view class="refund_view_view refund_view_view_radio">
+      <text class="refund_view_text">退款原因</text>
+      <myradio class="refund_view_view_radio_group" :syncList.sync="refund_reson" vbind="getradiodata"></myradio>
+    </view>
+
+
+      <view class="refund_view_view flex flex-between mr30">
+        <text class="refund_view_text">申请金额</text>
+        <input class="refund_input" placeholder="按照须知需求处理"/>
+        <text class="c929292">最高￥300</text>
+      </view>
+
+    <view>
+      <text class="refund_view_text">退款说明</text>
+      <view class="ml79 mt30">
+        <textarea class="fs25" placeholder="请您详细填写退款说明（最多500字）" />
+      </view>
+    </view>
+
+    <view class="refund_view_view">
+      <text class="refund_view_text">联系电话</text>
+      <input class="refund_input" placeholder="电话号码"/>
+    </view>
+
+    <view>
+      <view class="refund_view_text flex flex-between"><text>上传证据</text><text class="c929292">(最多3张)</text></view>
+      <view class="ml79 mt30">
+        <icon class="public_icon4_upload_picture"></icon>
+      </view>
+    </view>
+  </view>
+
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  import myradio from '@@/myradio'
+  export default class Index extends wepy.page {
+    config = {
+    }
+    components = {myradio}
+    mixins = [Mixin]
+    data = {
+      imgUrls:[],
+      refund_reson: [
+        {name: '1', value: '多拍、错拍、不想要', checked: 'true'},
+        {name: '2', value: '档期冲突'},
+        {name: '3', value: '临时改变主意'},
+        {name: '4', value: '不可抗力因素'},
+        {name: '5', value: '其他'},
+      ],
+    }
+    methods = {}
+    onLoad() {
+    }
+  }
+</script>

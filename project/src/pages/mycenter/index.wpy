@@ -1,0 +1,147 @@
+<style lang="less">
+#mycenter{
+    background-color: #f4f4f4;
+    .tophead{
+        width: 100%;
+        background-color: #f9fbfc;
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        height: 180rpx;
+        .pinkbtn{
+            width:131rpx;
+            height: 36rpx;
+            line-height: 36rpx;
+            color:#fff;
+            font-size: 24rpx;
+            background-color: #f7c1be;
+            border-radius: 20rpx;
+            text-align: center;
+        }
+        image{
+            width: 130rpx;
+            height: 130rpx;
+            border-radius: 50%;
+            margin-right: 38rpx;
+        }
+    }
+    .panel{
+        padding: 33rpx;
+        // min-height: 180rpx;
+        background-color: #fff;
+        margin-bottom: 15rpx;
+        
+    }
+    .ordertype{
+        display: flex;
+        font-size: 24rpx;
+        color: #555545;
+        padding: 0 30rpx;
+        justify-content: space-between;
+        text-align: center;
+        margin-top: 50rpx;
+        box-sizing: border-box;
+        >span{
+            position: relative;
+            >span{
+                margin-bottom: 20rpx;
+            }
+        }
+        .zan-badge__count{
+            right: 15rpx;
+        }
+    }
+}
+</style>
+
+<template>
+    <view class="container" id="mycenter">
+        <view class="tophead">
+            <view class="flex flex-algin-center">
+                <image src="{{ baseHeadImg }}" mode="aspectFit" />
+                <view class="flex-column">
+                    <text class="fs30 c333 mb10">xxx</text>
+                    <text class="pinkbtn">更新资料</text>
+                </view>
+            </view>
+        </view>
+        <view class="panel">
+            <view class="flex flex-between"><text class="fs30 c333">我的订单</text><view class="fs24 c888">查看全部 <span class="c999 zan-icon zan-icon-arrow"></span></view></view>
+            <view class="ordertype">
+                <span class="flex-column">
+                    <span class="public_icon3_waite_pay"><span class="zan-badge__count">9</span></span>
+                    待付款
+                </span>
+                <span class="flex-column">
+                    <span class="public_icon3_not_use"></span>
+                    未使用
+                </span>
+                <span class="flex-column">
+                    <span class="public_icon3_complete"></span>
+                    已完成
+                </span>
+                <span class="flex-column">
+                    <span class="public_icon3_not_complete"></span>
+                    已取消
+                </span>
+            </view>
+        </view>
+        <view class="panel">
+            <view class="ordertype m0">
+            <span class="flex-column">
+                <span class="public_icon3_collection"></span>
+                我的收藏
+            </span>
+            <span class="flex-column">
+                <span class="public_icon3_invite_friend"></span>
+                邀请好友
+            </span>
+            <span class="flex-column">
+                <span class="public_icon3_contact_info"></span>
+                联系信息
+            </span>
+            <span class="flex-column">
+                <span class="public_icon3_cooprate"></span>
+                我要合作
+            </span>
+            </view>
+        </view>
+        <cellbox :syncList="celllist"></cellbox>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import cellbox from '@@/cellbox'
+    export default class Index extends wepy.page {
+        config = {}
+        components = {cellbox}
+        mixins = [Mixin]
+        data = {
+            celllist: [
+                {
+                    name: '意见反馈',
+                    img: 'public_icon4_feedback',
+                    navTo: '/pages/mycenter/billindex'
+                },
+                {
+                    name: '客服热线',
+                    img: 'public_icon4_hot_line',
+                    navTo: '/pages/mycenter/schedule'
+                },
+                {
+                    name: '关于我们',
+                    img: 'public_icon4_about_me',
+                    navTo: '/pages/mycenter/family'
+                }
+            ]
+        }
+        methods = {
+        }
+        onLoad() {
+            console.log(this.baseHeadImg)
+            // this.showSuccess('需求已成功提交')
+        }
+    }
+</script>

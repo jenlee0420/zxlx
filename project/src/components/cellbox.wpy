@@ -1,0 +1,82 @@
+<style lang="less">
+    .cellgroup {
+        width: 100%;
+        font-size: 25rpx;
+        .item {
+            display: flex;
+            height: 80rpx;
+            line-height: 80rpx;
+            background-color: #fff;
+        }
+        .noboder {
+            .bottomline {
+                border-bottom: none;
+            }
+        }
+        .bottomline {
+            border-bottom: 1rpx solid @bColor;
+        }
+        .img {
+            width: 100rpx;
+            align-items: center;
+            justify-content: center;
+            box-sizing: content-box;
+            display: flex;
+            box-sizing: content-box;
+            span {
+                display: block;
+                // zoom:1.1;
+            }
+        }
+    }
+</style>
+<template>
+    <view class="cellgroup">
+        <repeat for="{{syncList}}" item="item">
+            <view class="item {{item.class}} bottomline">
+                <view class="img">
+                    <span class="{{item.img}}"></span>
+                    <!-- <image src="{{item.img}}"></image> -->
+                </view>
+                <view class="flex-1">
+                    <button class="nromal-btn" open-type="contact" wx:if="{{item.navTo=='contact'}}">{{item.name}}</button>
+                    <text wx:else>{{item.name}}</text>
+                </view>
+                <view class="p-0-32"><text class="c999" wx:if="{{item.navTo=='tel400'}}">{{tel400}}</text><text class="c999 zan-icon zan-icon-arrow"></text></view>
+            </view>
+        </repeat>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Cellbox extends wepy.component {
+        props = {
+            syncList: {
+                type: Object,
+                default: ''
+            }
+        }
+        mixins = [Mixin]
+        methods = {
+            showDetail(navTo) {
+                if (navTo === 'tel400') {
+                    this.call400()
+                } else if (navTo === 'contact') {
+                    return 
+                } else {
+                    wepy.navigateTo({url: navTo})
+                }
+            }
+        }
+        call400() {
+            if (this.tel400) {
+                wepy.makePhoneCall({
+                    phoneNumber: this.tel400
+                })
+            }
+        }
+        onLoad() {
+        }
+    }
+</script>
