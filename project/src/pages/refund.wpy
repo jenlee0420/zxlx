@@ -15,6 +15,11 @@
     line-height:95rpx;
   }
 
+  .refund_view_border{
+    border-top:1rpx solid #d8d6d6;
+    padding-top:30rpx;
+  }
+
   .refund_view_view_radio{
     height: 401rpx;
     line-height:72rpx;
@@ -61,7 +66,7 @@
         <text class="c929292">最高￥300</text>
       </view>
 
-    <view>
+    <view class="refund_view_border">
       <text class="refund_view_text">退款说明</text>
       <view class="ml79 mt30">
         <textarea class="fs25" placeholder="请您详细填写退款说明（最多500字）" />
@@ -73,10 +78,15 @@
       <input class="refund_input" placeholder="电话号码"/>
     </view>
 
-    <view>
+    <view class="refund_view_border">
       <view class="refund_view_text flex flex-between"><text>上传证据</text><text class="c929292">(最多3张)</text></view>
       <view class="ml79 mt30">
-        <icon class="public_icon4_upload_picture"></icon>
+        <icon class="public_icon4_upload_picture" @tap="choice_pic"></icon>
+        <block wx:for="{{image_data}}" wx:key="{{index}}">
+          <image src="{{item.url}}" hidden="{{item.have}}"></image>
+        </block>
+
+
       </view>
     </view>
   </view>
@@ -101,9 +111,32 @@
         {name: '4', value: '不可抗力因素'},
         {name: '5', value: '其他'},
       ],
+
+      image_data:[
+        {url:"",have:true},{url:"",have:true},{url:"",have:true}
+      ],
+      image_index:0,
     }
-    methods = {}
+    methods = {
+      choice_pic(e){
+        var that=this;
+        wx.chooseImage({
+          count: 3,
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+          success: function (res) {
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            console.log(that.image_data)
+            that.image_data[that.image_index].url=res.tempFilePaths;
+            that.image_data[that.image_index].have=false;
+            that.image_index++;
+            that.$apply();
+          }
+        })
+      }
+    }
     onLoad() {
+
     }
   }
 </script>
