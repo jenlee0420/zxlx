@@ -186,10 +186,7 @@
     height: @nav-bottom-h;
     border-top:1rpx solid @border-color;
     >view{
-        &:first-child{
-            border-right: 1rpx solid @border-color;
-        }
-        &:nth-child(2){
+        &:first-child,&:nth-child(2){
             border-right: 1rpx solid @border-color;
         }
     }
