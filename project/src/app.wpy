@@ -17,8 +17,8 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        'pages/refund',
-        // 'pages/goodsDetail',
+        // 'pages/refund',
+        'pages/goodsDetail',
         'pages/addmember',
         'pages/mycenter/index',
         'pages/custom',
