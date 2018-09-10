@@ -1,0 +1,53 @@
+<style lang="less">
+  .starContainer {
+    display: flex;
+    flex-direction: row;
+    justify-content: flex-start;
+    align-items: center;
+    image {
+      width: 32rpx;
+      height: 32rpx;
+    }
+    image + image {
+      margin-left: 6rpx;
+    }
+  }
+</style>
+<template>
+  <view class="starContainer" style="{{containerStyle ? containerStyle : ''}}">
+    <repeat for="{{Star}}" key="1-{{index}}" index="index" item="item">
+      <image wx:if="{{item}}" src="../../resource/img/star1.png"></image>
+      <image wx:else src="../../resource/img/star0.png"></image>
+    </repeat>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class StarRating extends wepy.component {
+    components = {};
+
+    data = {
+
+    };
+
+    props = {
+      total: String,
+      num: String,
+      containerStyle: String
+    };
+
+    computed = {
+      Star() {
+        const arr = []
+        for (let i = 0; i < parseInt(this.num); i++) { // 实心数
+          arr.push(1)
+        }
+        for (let i = 0; i < parseInt(this.total) - parseInt(this.num); i++) { // 空心数
+          arr.push(0)
+        }
+        return arr
+      }
+    }
+  }
+</script>
