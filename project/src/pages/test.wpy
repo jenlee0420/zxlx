@@ -16,6 +16,8 @@
       当前选择：{{region[0]}}，{{region[1]}}，{{region[2]}}
     </view>
     </picker>
+    <!-- <button @tap="addressinfo">收货地址</button> -->
+    <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"> eee</button>
   </view>
 </template>
 
@@ -41,8 +43,17 @@
     }
     methods = {
       bindRegionChange() {
+      },
+      
+      getPhoneNumber(e){
+        console.log(e)
+        this.addressinfo()
       }
+      
     }
+    addressinfo(){
+        wepy.chooseAddress()
+      }
     onLoad() {
       this.$invoke('popwin', 'togglePopup')
     }
