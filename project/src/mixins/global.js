@@ -2,7 +2,7 @@ import wepy from 'wepy'
 
 export default class Global extends wepy.mixin {
   data = {
-    imgBaseUrl: 'http://weiapp-assets.oss-cn-hangzhou.aliyuncs.com/',
+    imgBaseUrl: 'https://zxlx-web.oss-cn-beijing.aliyuncs.com/',
     baseHeadImg: 'http://weiapp-assets.oss-cn-hangzhou.aliyuncs.com/default_head.png',
     baseServerImg: 'http://weiapp-assets.oss-cn-hangzhou.aliyuncs.com/default_pic.png',
     TenOral: '/pages/goods/index?id=55',
