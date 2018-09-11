@@ -36,14 +36,12 @@
         width: 587rpx;
     }
     .public_icon3{
-  background-image: url('@{imgbaseUrl}/icon3.png');
-  background-repeat: no-repeat;
-  background-size: 200rpx;
-  width: 22rpx;
-  height: 22rpx;
-}
-
-    
+      background-image: url('@{imgbaseUrl}/icon3.png');
+      background-repeat: no-repeat;
+      background-size: 200rpx;
+      width: 22rpx;
+      height: 22rpx;
+    }
 </style>
 <template>
     <view class="container">
@@ -68,9 +66,9 @@
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">出生年月:</text>
-                <picker class="my_picker" mode="date" start="2015-09-01" end="2017-09-01">
+                <picker class="my_picker" mode="date" start="2015-09-01" end="2017-09-01" @change="pick_date">
                     <view class="picker">
-                        <input class="my_input" placeholder="如：2008-09-10" disabled/>
+                        <input class="my_input" placeholder="如：2008-09-10" value="{{bir_date}}" disabled/>
                     </view>
                 </picker>
             </view>
@@ -89,9 +87,9 @@
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">选择地区:</text>
-                <picker class="my_picker" mode="region">
+                <picker class="my_picker" mode="region" @change="pick_place">
                     <view class="picker">
-                        <input class="my_input" placeholder="选择地区" disabled/>
+                        <input class="my_input" placeholder="选择地区" value="{{place}}" disabled/>
                     </view>
                 </picker>
             </view>
@@ -99,7 +97,7 @@
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">详细地址:</text>
-                <input class="my_input mr20" placeholder="输入地址或点击地图选择" />
+                <input class="my_input mr20" placeholder="输入地址或点击地图选择" value="{{address}}"/>
                 <icon @tap="toMap" class="public_icon2_location2" />
             </view>
         </view>
@@ -143,7 +141,13 @@
                     name: 'women',
                     value: '女'
                 },
-            ]
+            ],
+
+            bir_date:"",
+
+            address:"",
+
+            place:"",
         }
         events = {
             getradiodata(key, value) {
@@ -152,14 +156,54 @@
         }
         methods = {
             toMap() {
-                console.log("1");
+                var that=this;
+                wx.getLocation({
+                  type: 'gcj02', //返回可以用于wx.openLocation的经纬度
+                  success: function(res) {
+                      var latitude = res.latitude;
+                      var longitude = res.longitude;
+
+                      var that2=that;
+                      wx.chooseLocation({
+                        latitude: latitude,
+                        longitude: longitude,
+                        scale: 28,
+                        success:function (res) {
+                          that2.address=res.address;
+                          that2.$apply();
+                        },
+                        // fail:function(err){
+                        //
+                        // }
+                      })
+                  },
+                  fail:function(err){
+                    // wx.openSetting({
+                    //     success:function(res){
+                    //       console.log(res);
+                    //     },
+                    //     fail:function(err){
+                    //       console.log(err);
+                    //     }
+                    //
+                    // })
+                  }
+                })
             },
             saveContact() {
                 // this.$invoke('myradio', 'getvalue')
-            }
+            },
+            pick_date(e){
+              this.bir_date=e.detail.value;
+            },
+
+            pick_place(e){
+              console.log(e)
+              this.place=e.detail.value;
+            },
         }
         onLoad() {
-            
+
         }
     }
 </script>

@@ -17,11 +17,11 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        // 'pages/refund',
         'pages/goodsDetail',
-        'pages/addmember',
-        'pages/mycenter/index',
         'pages/custom',
+        'pages/addmember',
+        'pages/refund',
+        'pages/mycenter/index',
         'pages/index',
         'pages/seacrhpage'
       ],
