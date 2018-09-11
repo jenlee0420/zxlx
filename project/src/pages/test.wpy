@@ -3,6 +3,7 @@
 
 <template>
   <view class="container">
+    <gooditem></gooditem> 
     <view class="public_icon4_cancle_goods"></view>
     <span class=""></span>
     <popwin :popObj="popObj">
@@ -25,12 +26,14 @@
   import wepy from 'wepy'
   import Mixin from '@/mixins/global'
   import popwin from '@@/popWin'
+  import gooditem from '@@/gooditem'
   import zanpopup from '@@/zan-popup'
   export default class Index extends wepy.page {
     config = {}
     components = {
       popwin,
-      zanpopup
+      zanpopup,
+      gooditem
     }
     mixins = [Mixin]
     data = {

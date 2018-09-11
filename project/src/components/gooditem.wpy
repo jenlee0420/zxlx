@@ -1,0 +1,78 @@
+<style lang="less">
+  #proditem{
+    padding: 20rpx;
+    background-color: #fff;
+    border-radius: 20rpx;
+    .photoview{
+       width: 100%;
+       height: 370rpx;
+       position: relative;
+       
+       .toptext{
+         color:#fff;
+         font-size: 22rpx;
+         left:10rpx;
+       }
+       .public_icon1_hot_sale{
+         left:10rpx;
+         bottom:55rpx
+       }
+       .bottomtext{
+         left:0;bottom:0;
+         font-size: 24rpx;
+         color: #fff;
+         line-height: 57rpx;
+         >span{display: inline-block;}
+        }
+    }
+    .itemcontent{
+      .itemprice{letter-spacing: 2rpx;}
+      .itemlabel{
+        >text{font-size: 20rpx; color: #fff; line-height: 32rpx;height: 32rpx; padding:5rpx 10rpx; border-radius: 5rpx; margin-right: 20rpx;}
+      }
+      .redlabel{background-color: #ee8151}
+      .greenlabel{background-color: #91c46c}
+    }
+  }
+</style>
+
+<template>
+  <view id="proditem">
+    <view class="photoview">
+        <text class="toptext abs">广西桂林20天19</text>
+        <span class="public_icon1_hot_sale abs"></span>
+        <view class="bottomtext abs">
+          <span class="public_icon1_play_day1"></span>
+          <span class="public_icon1_play_day3">纯玩11天</span>
+          <span class="public_icon1_play_day2"></span></view>
+        <div class="photo"><image src="{{imgBaseUrl}}tmpimg.png" mode="aspectFill"/></div>
+    </view>
+    <view class="itemcontent">
+        <text class="itemtitle fs26 c333">20天军事特训</text>
+        <view class="itemprice"><span class="fs30 cf71414 mr20">￥3000起</span><span class="fs22 cb4b4b4">已拼3500人次</span></view>
+        <text class="itemdesc fs22 cb4b4b4">知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文游</text>
+        <text class="itemdesc fs22 cb4b4b4">供应商：奥德曼</text>
+        <view class="itemlabel">
+            <text class="redlabel">知兮乐兮自营</text>
+            <text class="greenlabel">不限年龄</text>
+        </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+export default class gooditem extends wepy.component {
+  config = {
+  }
+  components = {}
+  mixins = [Mixin]
+  data = {
+  }
+  methods = {}
+  onLoad() {
+    console.log(this.imgBaseUrl)
+  }
+}
+</script>
