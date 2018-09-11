@@ -11,16 +11,19 @@
   @nav-bottom-h: 108rpx;
   @nav-top-h: 80rpx;
   @price-color: #ba0000;
+  @border-color:#e3e3e3;
 
   page {
     background: #f4f4f4;
     padding-bottom: @nav-bottom-h;
   }
-
   .des { font-size: 22rpx; color: @des-color; }
   .v-space { margin-bottom: 12rpx; }
   .bg-primary {}
-
+  .content{
+      background-color: #fff;
+      margin-bottom: 20rpx;
+  }
 
   .video-container {
     width: 100%;
@@ -181,6 +184,12 @@
     flex-direction: row;
     align-items: stretch;
     height: @nav-bottom-h;
+    border-top:1rpx solid @border-color;
+    >view{
+        &:first-child,&:nth-child(2){
+            border-right: 1rpx solid @border-color;
+        }
+    }
     .layout() {
       display: flex;
       flex-direction: column;
@@ -465,6 +474,7 @@
 <template>
   <view class="{{modalIsShow ? 'modalShow' : ''}}">
     <TopNav activeIndex="0"></TopNav>
+    <scroll-view scroll-y style="height: calc(100% - 108rpx);">
     <!-- 介绍卡部分 S -->
     <view class="content">
       <view class="video-container">图片或视频</view>
@@ -533,6 +543,8 @@
     <view class="">
 
     </view>
+    <comments></comments>
+     </scroll-view>
     <!-- 底部导航 S -->
     <view class="nav-bottom">
       <view class="flex1"><image src="../resource/img/home.png" class="icon"></image><text>首页</text></view>
@@ -556,7 +568,7 @@
     </view> -->
     <!-- 邀请分享 E -->
     <!-- 购买选择 S -->
-    <view class="modal">
+    <view class="modal" wx:if="{{false}}">
       <view class="m-body">
         <view class="close-btn"><image src="../resource/img/close2.png"></image></view>
         <view class="intro">
@@ -588,7 +600,7 @@
               <view class="plus {{plus_max? 'disable' : ''}}" @tap="good_plus">+</view>
             </view>
           </view>
-          </view>
+          
         </scroll-view>
         <view class="btn-ok">确定</view>
       </view>
@@ -599,10 +611,11 @@
 <script>
   import wepy from 'wepy'
   import TopNav from '@/components/TopNav'
+  import comments from '@/components/comments'
 
   export default class goodsDetail extends wepy.page {
     data = {
-      modalIsShow: true,
+      modalIsShow: false,
 
       goods_detal:[
         {"name":"商品1","pick":true},
@@ -619,7 +632,8 @@
     };
 
     components = {
-      TopNav
+      TopNav,
+      comments
     };
 
     methods={

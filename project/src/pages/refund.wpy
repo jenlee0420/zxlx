@@ -15,6 +15,11 @@
     line-height:95rpx;
   }
 
+  .refund_view_border{
+    border-top:1rpx solid #d8d6d6;
+    padding-top:30rpx;
+  }
+
   .refund_view_view_radio{
     height: 401rpx;
     line-height:72rpx;
@@ -45,6 +50,34 @@
   textarea{
     height: 324rpx;
   }
+
+  .refund_view_image{
+    width: 110rpx;
+    height: 110rpx;
+    padding-left: 10%;
+    position: relative;
+    //width: 100%;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+  }
+
+  .refund_image{
+    line-height:100%;
+    width: 55%;
+    height: 55%;
+  }
+
+  .refund_btn_view {
+    margin-top: 88rpx;
+    width: 100%;
+    display: flex;
+    justify-content: center;
+  }
+
+  .refund_btn{
+    width: 587rpx;
+  }
 </style>
 
 <template>
@@ -57,27 +90,37 @@
 
       <view class="refund_view_view flex flex-between mr30">
         <text class="refund_view_text">申请金额</text>
-        <input class="refund_input" placeholder="按照须知需求处理"/>
+        <input class="refund_input" placeholder="按照须知需求处理" type="number" value="{{money}}"/>
         <text class="c929292">最高￥300</text>
       </view>
 
-    <view>
+    <view class="refund_view_border">
       <text class="refund_view_text">退款说明</text>
       <view class="ml79 mt30">
-        <textarea class="fs25" placeholder="请您详细填写退款说明（最多500字）" />
+        <textarea class="fs25" placeholder="请您详细填写退款说明（最多500字）" value="{{desc}}" />
       </view>
     </view>
 
     <view class="refund_view_view">
       <text class="refund_view_text">联系电话</text>
-      <input class="refund_input" placeholder="电话号码"/>
+      <input class="refund_input" placeholder="电话号码" type="number" vale="{{phone}}"/>
     </view>
 
-    <view>
+    <view class="refund_view_border">
       <view class="refund_view_text flex flex-between"><text>上传证据</text><text class="c929292">(最多3张)</text></view>
-      <view class="ml79 mt30">
-        <icon class="public_icon4_upload_picture"></icon>
+      <view class="ml79 mt30  flex">
+        <icon class="public_icon4_upload_picture" @tap="choice_pic" hidden="{{image_index >= image_index_max}}"></icon>
+        <block wx:for="{{image_data}}" wx:key="{{index}}">
+          <view  class="refund_view_image">
+            <icon class="public_icon4_cancel_upload Topcorner" hidden="{{!item.have}}" @tap="cancle_upload({{index}})"></icon>
+            <image class="refund_image" src="{{item.url}}" hidden="{{!item.have}}"></image>
+          </view>
+        </block>
       </view>
+    </view>
+
+    <view class="refund_btn_view">
+      <button class="btn refund_btn" @tap="save">保存</button>
     </view>
   </view>
 
@@ -101,9 +144,59 @@
         {name: '4', value: '不可抗力因素'},
         {name: '5', value: '其他'},
       ],
+
+      phone:"",
+      money:"",
+      desc:"",
+
+      image_data:[
+        // {url:"",have:false},{url:"",have:false},{url:"",have:false}
+      ],
+      image_index:0,
+      image_index_max:3,
     }
-    methods = {}
+    methods = {
+      choice_pic(e){
+        var that=this;
+        console.log(that.image_data)
+        wx.chooseImage({
+          count: 3,
+          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+          success: function (res) {
+            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+            if(that.image_index>=that.image_index_max){
+              return
+            }
+
+            that.image_data.push({url:res.tempFilePaths,have:true});
+            that.image_index++;
+            that.$apply();
+          }
+        })
+      },
+
+      cancle_upload(i){
+        console.log(i);
+        var tmp=[];
+        for (var n=0;n<this.image_data.length;n++){
+          if (n!=i){
+            tmp.push(this.image_data[n]);
+          }
+        }
+        this.image_data=tmp;
+        this.image_index--;
+        this.$apply();
+      },
+
+      save(e){
+        var req={};
+
+      },
+
+    }
     onLoad() {
+
     }
   }
 </script>

@@ -55,7 +55,7 @@
                 font-size: 26rpx;
                 color: #333
             }
-            
+
         }
     }
 </style>
@@ -70,17 +70,18 @@
         </view>
         <view class="inputview">
             <span>出发日期</span>
-            <picker mode="date" value="{{sdate}}" start="2015-09-01" end="2019-09-01">
+            <picker mode="date" start="2015-09-01" end="2022-09-01" @change="bindStartTimeChange">
                 <view class="picker">
-                dddd{{sdate}}
+                  <input value="{{sdate}}" disabled/>
                 </view>
             </picker>
         </view>
         <view class="inputview m0">
             <span>返回日期</span>
-            <picker mode="date" value="{{edate}}" start="{{limitdate1}}" end="{{limitdate2}}" @change="bindTimeChange">
-
-                {{sdate}}
+            <picker mode="date"  start="{{sdate}}" end="2022-09-01" @change="bindEndTimeChange">
+              <view class="picker">
+                <input value="{{edate}}" disabled/>
+              </view>
             </picker>
         </view>
         <view class="itemlable"><text>人数及往返时间</text></view>
@@ -106,12 +107,14 @@
         data = {
             sdate: '',
             edate: '',
-            limitdate1: '2018-09-08',
-            limitdate2: '2019-09-08'
         }
         methods = {
-            bindTimeChange() {
+            bindStartTimeChange(e) {
+              this.sdate=e.detail.value;
+            },
 
+            bindEndTimeChange(e){
+              this.edate=e.detail.value;
             }
         }
         onLoad() {}

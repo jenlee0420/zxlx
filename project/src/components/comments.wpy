@@ -1,0 +1,226 @@
+<style lang="less">
+  @color-orange: #ee8151;
+  @color-green: #91c46c;
+  @color-purple: #9c44ee;
+  @color-line: #e6e6e6;
+  @color-line2: #e9eae7;
+
+  .totalPin {
+    // border-top: 2rpx solid @color-line;
+    height: 204rpx;
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    .layout {
+      display: flex;
+      flex-direction: row;
+      justify-content: center;
+      align-items: center;
+    }
+    .total-num {
+      .layout;
+      font-size: 26rpx;
+      text {
+        color: @color-green;
+        font-size: 36rpx;
+        margin-right: 16rpx;
+        letter-spacing: 2rpx;
+      }
+      margin-bottom: 35rpx;
+    }
+    .rating {
+      .layout;
+      font-size: 26rpx;
+    }
+  }
+
+  .ping-card {
+    border-top: 1rpx solid @color-line2;
+    padding: 40rpx 26rpx 48rpx 135rpx;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+
+    .head {
+      position: relative;
+      height: 90rpx;
+      width: 100%;
+      display: flex;
+      flex-direction: row;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 24rpx;
+      .avatar {
+        width: 86rpx;
+        height: 86rpx;
+        position: absolute;
+        top: 2rpx;
+        left: -100rpx;
+        image {
+          width: 100%;
+          height: 100%;
+        }
+      }
+      .info {
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        align-items: flex-start;
+        .name {
+          font-size: 30rpx;
+          display: flex;
+          flex-direction: row;
+          align-items: center;
+          margin-bottom: 20rpx;
+          text {
+            height: 30rpx;
+            font-size: 24rpx;
+            line-height: 28rpx;
+            margin-left: 8rpx;
+            padding: 0 15rpx;
+            border-radius: 15rpx;
+            color: #fff;
+            &.bg-orange {
+              background: @color-orange;
+            }
+            &.bg-purple {
+              background: @color-purple;
+            }
+          }
+        }
+        text {
+          font-size: 24rpx;
+          color: #7f807c;
+        }
+      }
+      .star {
+        align-self: flex-start;
+      }
+    }
+
+    .content {
+      display: flex;
+      flex-direction: row;
+      justify-content: flex-start;
+      align-items: center;
+      flex-wrap: wrap;
+      text {
+        width: 100%;
+        font-size: 24rpx;
+        line-height: 34rpx;
+        letter-spacing: 1rpx;
+        margin-bottom: 14rpx;
+      }
+      image {
+        width: 168rpx;
+        height: 168rpx;
+        margin-right: 14rpx;
+        margin-bottom: 14rpx;
+      }
+      .extra-text {
+        width: 100%;
+        color: @color-green;
+        font-size: 24rpx;
+      }
+    }
+
+  }
+</style>
+<template>
+  <view class="bg_fff">
+    <!-- 总评分 S -->
+    <view class="totalPin">
+      <view class="total-num"><text>299</text>条评价</view>
+      <view class="rating">
+        整体评分
+        <Star4 containerStyle="margin: 0 20rpx 4rpx 10rpx;"></Star4>4</view>
+    </view>
+    <!-- 总评分 E -->
+    <!-- 评价块 S -->
+    <view class="ping-card">
+      <view class="head">
+        <view class="avatar"><image src="../resource/img/avatar.png"></image></view>
+        <view class="info">
+          <view class="name">张扬文<text class="bg-orange">辣妈</text></view>
+          <text>2018-08-22</text>
+        </view>
+        <view class="star">
+          <Star5></Star5>
+        </view>
+      </view>
+      <view class="content">
+        <text>九岁女儿参加第一次夏利九岁女儿参加第一次夏利
+九岁女儿参加第一次夏利九岁女儿参加第一次夏利
+九岁女儿参加第一次夏利
+九岁女儿参加第一次夏利</text>
+        <image src='../resource/img/photo1.png'></image>
+        <image src='../resource/img/photo1.png'></image>
+        <view class="extra-text">全英语系列+中文国学夏令营8期加床</view>
+      </view>
+    </view>
+    <!-- 评价块 E -->
+    <!-- 评价块 S -->
+    <view class="ping-card">
+      <view class="head">
+        <view class="avatar"><image src="../resource/img/avatar.png"></image></view>
+        <view class="info">
+          <view class="name">张扬文<text class="bg-purple">潮爸</text></view>
+          <text>2018-08-22</text>
+        </view>
+        <view class="star">
+          <Star total="5" num="4" ></Star>
+        </view>
+      </view>
+      <view class="content">
+        <text>九岁女儿参加第一次夏利九岁女儿参加第一次夏利
+九岁女儿参加第一次夏利九岁女儿参加第一次夏利
+九岁女儿参加第一次夏利
+九岁女儿参加第一次夏利</text>
+        <image src='../resource/img/photo1.png'></image>
+        <image src='../resource/img/photo1.png'></image>
+        <view class="extra-text">全英语系列+中文国学夏令营8期加床</view>
+      </view>
+    </view>
+    <!-- 评价块 E -->
+    <!-- 评价块 S -->
+    <view class="ping-card">
+      <view class="head">
+        <view class="avatar"><image src="../resource/img/avatar.png"></image></view>
+        <view class="info">
+          <view class="name">张扬文<text class="bg-purple">潮爸</text></view>
+          <text>2018-08-22</text>
+        </view>
+        <view class="star">
+          <Star total="5" num="5" ></Star>
+        </view>
+      </view>
+      <view class="content">
+        <text>九岁女儿参加第一次夏利九岁女儿参加第一次夏利
+九岁女儿参加第一次夏利九岁女儿参加第一次夏利
+九岁女儿参加第一次夏利
+九岁女儿参加第一次夏利</text>
+        <image src='../resource/img/photo1.png'></image>
+        <image src='../resource/img/photo1.png'></image>
+        <view class="extra-text">全英语系列+中文国学夏令营8期加床</view>
+      </view>
+    </view>
+    <!-- 评价块 E -->
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  import Star from '@/components/StarRatine'
+
+  export default class comments extends wepy.component {
+    components = {
+      Star:Star,
+    };
+
+    data = {
+
+    };
+  }
+</script>
