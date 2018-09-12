@@ -22,6 +22,7 @@
         'pages/goodsDetail',
         'pages/custom',
         'pages/member/add_member',
+
         'pages/refund',
 
         'pages/index',
@@ -43,7 +44,7 @@
           'iconPath': 'images/custom.png',
           'selectedIconPath': 'images/custom_act.png'
         },{
-          'pagePath': 'pages/seacrhpage',
+          'pagePath': 'pages/seacrh_page',
           'text': '搜索',
           'iconPath': 'images/search.png',
           'selectedIconPath': 'images/search_act.png'

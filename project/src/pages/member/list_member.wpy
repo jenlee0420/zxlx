@@ -1,0 +1,101 @@
+<style lang="less">
+.list_menber_view_view_btn{
+  border: 1rpx solid #c0dff4;
+  border-radius: 20rpx;
+  width: 335rpx;
+  height: 78rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list_menber_view_view{
+  margin-top: 54rpx;
+  display: flex;
+  font-size: 30rpx;
+  font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  color: #1ba0f0;
+  justify-content: space-between;
+  padding: 0 16rpx;
+}
+
+.list_menber_view_list{
+  font-size: 26rpx;
+
+  margin-top: 32rpx;
+
+  padding-left: 75rpx;
+  padding-bottom: 30rpx;
+  padding-top: 10rpx;
+}
+
+.list_menber_view_list_text{
+  margin-top: 22rpx;
+}
+
+.list_menber_view_list_name{
+  &:extend(.list_menber_view_list_text);
+  color: #181818;
+}
+
+.list_menber_view_list_other{
+  &:extend(.list_menber_view_list_text);
+  color: #bdc0c1;
+}
+
+.list_menber_view_list_wd{
+  width: 110rpx;
+}
+
+.list_menber_view_list_mg{
+  margin-left: 35rpx;
+}
+
+
+</style>
+
+<template>
+  <view class="container">
+  <view class="list_menber_view_view">
+    <view class="list_menber_view_view_btn">
+      <icon class="public_icon_add_menber"></icon>
+      <text>新增出行人</text>
+    </view>
+
+    <view class="list_menber_view_view_btn">
+      <icon class="public_icon3_weixin"></icon>
+      <text>邀请好友填写</text>
+    </view>
+  </view>
+
+  <view class="list_menber_view_list">
+    <view class="list_menber_view_list_name"><text>李佳</text></view>
+    <view class="list_menber_view_list_other">
+      <text class="list_menber_view_list_wd">123</text>
+      <text class="list_menber_view_list_mg">123</text>
+    </view>
+    <view class="list_menber_view_list_other">
+      <text class="list_menber_view_list_wd">123123131</text>
+      <text class="list_menber_view_list_mg">123</text>
+    </view>
+  </view>
+
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  export default class Index extends wepy.page {
+    config = {
+    }
+    components = {}
+    mixins = [Mixin]
+    data = {
+    }
+    methods = {}
+    onLoad() {
+    }
+  }
+</script>
