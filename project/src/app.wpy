@@ -17,13 +17,15 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
+        'pages/member/list_member',
+        'pages/mycenter/index',
         'pages/goodsDetail',
         'pages/custom',
-        'pages/addmember',
+        'pages/member/add_member',
         'pages/refund',
-        'pages/mycenter/index',
+
         'pages/index',
-        'pages/seacrhpage'
+        'pages/seacrh_page'
       ],
       tabBar: {
         color: '#949393',
