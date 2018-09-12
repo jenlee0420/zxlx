@@ -1,5 +1,4 @@
 <style lang="less">
-
   @primary-color: #d74a45;
   @primary-mcolor: #dd3412;
   @primary-lightColor: #f71414;
@@ -11,20 +10,23 @@
   @nav-bottom-h: 108rpx;
   @nav-top-h: 80rpx;
   @price-color: #ba0000;
-  @border-color:#e3e3e3;
-
+  @border-color: #e3e3e3;
   page {
     background: #f4f4f4;
     padding-bottom: @nav-bottom-h;
   }
-  .des { font-size: 22rpx; color: @des-color; }
-  .v-space { margin-bottom: 12rpx; }
-  .bg-primary {}
-  .content{
-      background-color: #fff;
-      margin-bottom: 20rpx;
+  .des {
+    font-size: 22rpx;
+    color: @des-color;
   }
-
+  .v-space {
+    margin-bottom: 12rpx;
+  }
+  .bg-primary {}
+  .content {
+    background-color: #fff;
+    margin-bottom: 20rpx;
+  }
   .video-container {
     width: 100%;
     height: 572rpx;
@@ -33,7 +35,6 @@
     text-align: center;
     line-height: 572rpx;
   }
-
   .des-container {
     display: flex;
     flex-direction: column;
@@ -60,9 +61,9 @@
       -webkit-box-orient: vertical;
       display: -webkit-box;
       word-break: break-all;
-      -webkit-line-clamp:2;
+      -webkit-line-clamp: 2;
       overflow: hidden;
-      text-overflow:ellipsis;
+      text-overflow: ellipsis;
       width: 100%;
       height: 72rpx;
       overflow: hidden;
@@ -91,7 +92,6 @@
       }
     }
   }
-
   .pin-card {
     padding: 0 20rpx;
     .header {
@@ -172,9 +172,7 @@
         }
       }
     }
-
   }
-
   .nav-bottom {
     position: fixed;
     bottom: 0;
@@ -184,11 +182,12 @@
     flex-direction: row;
     align-items: stretch;
     height: @nav-bottom-h;
-    border-top:1rpx solid @border-color;
-    >view{
-        &:first-child,&:nth-child(2){
-            border-right: 1rpx solid @border-color;
-        }
+    border-top: 1rpx solid @border-color;
+    >view {
+      &:first-child,
+      &:nth-child(2) {
+        border-right: 1rpx solid @border-color;
+      }
     }
     .layout() {
       display: flex;
@@ -237,7 +236,6 @@
       }
     }
   }
-
   .backTop {
     position: fixed;
     width: 82rpx;
@@ -249,7 +247,6 @@
       height: 100%;
     }
   }
-
   .share-box {
     position: fixed;
     z-index: 99;
@@ -300,7 +297,6 @@
       }
     }
   }
-
   .modal {
     z-index: 999;
     position: fixed;
@@ -311,11 +307,11 @@
     display: flex;
     flex-direction: column;
     justify-content: flex-end;
-    background: rgba(0,0,0,0.7);
+    background: rgba(0, 0, 0, 0.7);
     @body-h: 875rpx;
     @intro-h: 166rpx;
     @btn-ok-h: 95rpx;
-    @scroll-h: @body-h - @intro-h - @btn-ok-h + 2rpx;
+    @scroll-h: @body-h - @intro-h - @btn-ok-h +2rpx;
     .scroll-h {
       height: @scroll-h;
     }
@@ -351,7 +347,7 @@
           align-items: center;
           position: relative;
           bottom: 80rpx;
-          background:#fff;
+          background: #fff;
           image {
             width: 190rpx;
             height: 190rpx;
@@ -400,7 +396,7 @@
             height: 58rpx;
             border-radius: 8rpx;
             background: #efefef;
-            min-width:200rpx;
+            min-width: 200rpx;
             &.picked {
               background: @btn-primary;
             }
@@ -462,7 +458,7 @@
   }
   /* 防止page滚动 */
   .modalShow {
-    top:0px;
+    top: 0px;
     left: 0px;
     width: 100%;
     height: 100%;
@@ -475,81 +471,84 @@
   <view class="{{modalIsShow ? 'modalShow' : ''}}">
     <TopNav activeIndex="0"></TopNav>
     <scroll-view scroll-y style="height: calc(100% - 108rpx);">
-    <!-- 介绍卡部分 S -->
-    <view class="content">
-      <view class="video-container">图片或视频</view>
-      <view class="des-container">
-        <view class="price-row">
-          <text class="price">￥3000.00起</text>
-          <text class="des">已拼3500人次 · 3人拼单</text>
-        </view>
-        <text class="shop-name">20天军事特训营打算方法嘎达范德大股东【北京】</text>
-        <text class="content-des">知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文知兮乐兮大语文游知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文游</text>
-        <view class="tag-container">
-          <view class="tag bg-orange">知兮乐兮自营</view>
-          <view class="tag bg-orange">红色经典</view>
-          <view class="tag bg-green">武术</view>
-          <view class="tag bg-green">军事迷</view>
-          <view class="tag bg-green">不限年龄</view>
-        </view>
-      </view>
-    </view>
-    <!-- 介绍卡部分 E -->
-    <!-- 去拼单部分 S -->
-    <view class="content">
-      <view class="pin-card">
-        <view class="header">
-          <text>10人在拼单，直接参与</text>
-          <view>更多<image src="../resource/img/right_arrow.png"></image></view>
-        </view>
-        <view class="pin-row">
-          <view class="left">
-            <image src="../resource/img/avatar.png" class="avator"></image>
-            <text class="name">张杨文</text>
+      <!-- 介绍卡部分 S -->
+      <view class="content">
+        <view class="video-container">图片或视频</view>
+        <view class="des-container">
+          <view class="price-row">
+            <text class="price">￥3000.00起</text>
+            <text class="des">已拼3500人次 · 3人拼单</text>
           </view>
-          <view class="right">
-            <view class="status">
-              <view class="m-nums">还差<text>1人</text>拼成</view>
-              <text class="t-nums">剩余5天23:53:18.1</text>
-            </view>
-            <view class="btn bg-primary">
-              去拼单
-            </view>
-          </view>
-        </view>
-        <view class="pin-row">
-          <view class="left">
-            <image src="../resource/img/avatar.png" class="avator"></image>
-            <text class="name">张杨文</text>
-          </view>
-          <view class="right">
-            <view class="status">
-              <view class="m-nums">还差<text>1人</text>拼成</view>
-              <text class="t-nums">剩余5天23:53:18.1</text>
-            </view>
-            <view class="btn bg-primary">
-              去拼单
-            </view>
+          <text class="shop-name">20天军事特训营打算方法嘎达范德大股东【北京】</text>
+          <text class="content-des">知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文知兮乐兮大语文游知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文游</text>
+          <view class="tag-container">
+            <view class="tag bg-orange">知兮乐兮自营</view>
+            <view class="tag bg-orange">红色经典</view>
+            <view class="tag bg-green">武术</view>
+            <view class="tag bg-green">军事迷</view>
+            <view class="tag bg-green">不限年龄</view>
           </view>
         </view>
       </view>
-    </view>
-    <!-- 去拼单部分 E -->
-    <!-- 详情部分 -->
-    <view id="">
-
-    </view>
-    <!-- 须知 -->
-    <view class="">
-
-    </view>
-    <comments></comments>
-     </scroll-view>
+      <!-- 介绍卡部分 E -->
+      <!-- 去拼单部分 S -->
+      <view class="content">
+        <view class="pin-card">
+          <view class="header">
+            <text>10人在拼单，直接参与</text>
+            <view>更多
+              <image src="../resource/img/right_arrow.png"></image>
+            </view>
+          </view>
+          <view class="pin-row">
+            <view class="left">
+              <image src="../resource/img/avatar.png" class="avator"></image>
+              <text class="name">张杨文</text>
+            </view>
+            <view class="right">
+              <view class="status">
+                <view class="m-nums">还差<text>1人</text>拼成</view>
+                <text class="t-nums">剩余5天23:53:18.1</text>
+              </view>
+              <view class="btn bg-primary">
+                去拼单
+              </view>
+            </view>
+          </view>
+          <view class="pin-row">
+            <view class="left">
+              <image src="../resource/img/avatar.png" class="avator"></image>
+              <text class="name">张杨文</text>
+            </view>
+            <view class="right">
+              <view class="status">
+                <view class="m-nums">还差<text>1人</text>拼成</view>
+                <text class="t-nums">剩余5天23:53:18.1</text>
+              </view>
+              <view class="btn bg-primary">
+                去拼单
+              </view>
+            </view>
+          </view>
+        </view>
+      </view>
+      <!-- 去拼单部分 E -->
+      <!-- 详情部分 -->
+      <view id="">
+      </view>
+      <!-- 须知 -->
+      <view class="">
+      </view>
+      <comments></comments>
+    </scroll-view>
     <!-- 底部导航 S -->
     <view class="nav-bottom">
-      <view class="flex1"><image src="../resource/img/home.png" class="icon"></image><text>首页</text></view>
-      <view class="flex1"><image src="../resource/img/aixin.png" class="icon"></image><text>收藏</text></view>
-      <view class="flex1"><image src="../resource/img/kefu.png" class="icon"></image><text>客服</text></view>
+      <view class="flex1">
+        <image src="../resource/img/home.png" class="icon"></image><text>首页</text></view>
+      <view class="flex1">
+        <image src="../resource/img/aixin.png" class="icon"></image><text>收藏</text></view>
+      <view class="flex1">
+        <image src="../resource/img/kefu.png" class="icon"></image><text>客服</text></view>
       <view class="flex2"><text>￥10</text><text>单独购买</text></view>
       <view class="flex3"><text>￥9</text><text>发起拼单</text></view>
       <!-- <view class="flex5"><text>报名已满</text></view> -->
@@ -557,34 +556,36 @@
     <!-- 底部导航 E -->
     <!-- 返回顶部 S -->
     <!-- <view class="backTop">
-      <image src="../resource/img/backTop.png"></image>
-    </view> -->
+        <image src="../resource/img/backTop.png"></image>
+      </view> -->
     <!-- 返回顶部 E -->
     <!-- 邀请分享 S -->
     <!-- <view class="share-box">
-      <view class="close"><image src="../resource/img/close.png"></image></view>
-      <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
-      <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
-    </view> -->
+        <view class="close"><image src="../resource/img/close.png"></image></view>
+        <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
+        <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
+      </view> -->
     <!-- 邀请分享 E -->
     <!-- 购买选择 S -->
     <view class="modal" wx:if="{{false}}">
       <view class="m-body">
-        <view class="close-btn"><image src="../resource/img/close2.png"></image></view>
+        <view class="close-btn">
+          <image src="../resource/img/close2.png"></image>
+        </view>
         <view class="intro">
-          <view class="goods-img"><image src="../resource/img/goods_img.png"></image></view>
+          <view class="goods-img">
+            <image src="../resource/img/goods_img.png"></image>
+          </view>
           <view class="goods-picked">
             <text class="price">￥3000</text>
             <text class="picked-text">请选择 游学组合</text>
           </view>
         </view>
-        <scroll-view
-          scroll-y="{{true}}"
-          class="scroll-h">
+        <scroll-view scroll-y="{{true}}" class="scroll-h">
           <view class="pick-block">
             <text>游学组合</text>
             <view class="btn-box">
-              <block  wx:for="{{goods_detal}}" wx:key="{{index}}">
+              <block wx:for="{{goods_detal}}" wx:key="{{index}}">
                 <view class="btn {{item.pick ? 'picked' : ''}}" @tap="goods_detal_tip({{index}})">{{item.name}}</view>
               </block>
               <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
@@ -600,7 +601,6 @@
               <view class="plus {{plus_max? 'disable' : ''}}" @tap="good_plus">+</view>
             </view>
           </view>
-          
         </scroll-view>
         <view class="btn-ok">确定</view>
       </view>
@@ -612,94 +612,99 @@
   import wepy from 'wepy'
   import TopNav from '@/components/TopNav'
   import comments from '@/components/comments'
-
   export default class goodsDetail extends wepy.page {
     data = {
       modalIsShow: false,
-
-      goods_detal:[
-        {"name":"商品1","pick":true},
-        {"name":"商品2","pick":false},
-        {"name":"商品3","pick":false},
-        {"name":"商品4","pick":false},
+      goods_detal: [{
+          "name": "商品1",
+          "pick": true
+        },
+        {
+          "name": "商品2",
+          "pick": false
+        },
+        {
+          "name": "商品3",
+          "pick": false
+        },
+        {
+          "name": "商品4",
+          "pick": false
+        },
       ],
-
-      good_number:1,
-      max_good_number:9,
-      min_good_number:1,
-      plus_max:false,
-      sub_min:true,
+      good_number: 1,
+      max_good_number: 9,
+      min_good_number: 1,
+      plus_max: false,
+      sub_min: true,
     };
-
     components = {
       TopNav,
       comments
     };
-
-    methods={
-      goods_detal_tip(index){
-        for(var i=0;i<this.goods_detal.length;i++){
-          if(i==index){
-            this.goods_detal[i].pick=true;
-          }else{
-            this.goods_detal[i].pick=false;
+    methods = {
+      goods_detal_tip(index) {
+        for (var i = 0; i < this.goods_detal.length; i++) {
+          if (i == index) {
+            this.goods_detal[i].pick = true;
+          } else {
+            this.goods_detal[i].pick = false;
           };
         }
         this.$apply();
       },
-
-      good_plus(){
-        if(this.good_number+1>this.max_good_number){
-          this.plus_max=true;
+      good_plus() {
+        if (this.good_number + 1 > this.max_good_number) {
+          this.plus_max = true;
           this.$apply();
           return;
         };
-        if(this.good_number+1==this.max_good_number){
-          this.plus_max=true;
-        }else{
-          this.plus_max=false;
+        if (this.good_number + 1 == this.max_good_number) {
+          this.plus_max = true;
+        } else {
+          this.plus_max = false;
         };
-        this.sub_min=false;
-        this.good_number=this.good_number+1;
+        this.sub_min = false;
+        this.good_number = this.good_number + 1;
         this.$apply();
       },
-
-      good_sub(){
-        if(this.good_number-1<this.min_good_number){
-          this.sub_min=true;
+      good_sub() {
+        if (this.good_number - 1 < this.min_good_number) {
+          this.sub_min = true;
           this.$apply();
           return;
         };
-        if(this.good_number-1==this.min_good_number){
-          this.sub_min=true;
-        }else{
-          this.sub_min=false;
+        if (this.good_number - 1 == this.min_good_number) {
+          this.sub_min = true;
+        } else {
+          this.sub_min = false;
         };
-        this.plus_max=false;
-        this.good_number=this.good_number-1;
+        this.plus_max = false;
+        this.good_number = this.good_number - 1;
         this.$apply();
       },
     }
-
-    good_num(e){
+    good_num(e) {
       console.log(e)
-      this.good_number= e.detail.value;
-
-      if(this.good_number>=this.max_good_number){
-        setTimeout(() => {
-          this.good_number=this.max_good_number;
-        this.$apply();
-      }, 200);
-
-        this.plus_max=true;
-        this.sub_min=false;
-      }else if(this.good_number<=this.min_good_number){
-        this.good_number=this.min_good_number;
-        this.sub_min=true;
-        this.plus_max=false;
-      }else{
-        this.plus_max=false;
-        this.sub_min=false;
+      this.good_number = e.detail.value;
+      if (this.good_number >= this.max_good_number) {
+        //   setTimeout(() => {
+        //     this.good_number=this.max_good_number;
+        //   this.$apply();
+        // }, 200);
+        wx.nextTick(() => {
+          this.good_number = this.max_good_number;
+          this.$apply();
+        })
+        this.plus_max = true;
+        this.sub_min = false;
+      } else if (this.good_number <= this.min_good_number) {
+        this.good_number = this.min_good_number;
+        this.sub_min = true;
+        this.plus_max = false;
+      } else {
+        this.plus_max = false;
+        this.sub_min = false;
       };
       this.$apply();
     }

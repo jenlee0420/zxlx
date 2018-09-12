@@ -1,0 +1,37 @@
+<style lang="less">
+  #homebtn{
+    position: absolute;
+    top:30rpx;
+    left:-59rpx;
+    span{
+      display: inline-block
+    }
+  }
+</style>
+
+<template>
+  <view id="homebtn" wx:if="{{!hasHomepage}}">
+    <span class="public_icon1_to_home" @tap="backHome"></span>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+export default class backtoHome extends wepy.component {
+  config = {
+  }
+  components = {}
+  mixins = [Mixin]
+  data = {
+    showBtn:false
+  } 
+  methods = {
+    backHome(){
+      wepy.reLaunch({url:'/pages/index'})
+    }
+  }
+  onLoad() {
+  }
+}
+</script>

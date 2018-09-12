@@ -1,0 +1,247 @@
+<style lang="less">
+    #orderMain {
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        swiper{height: 100%;}
+        .order_nav {
+            // position: fixed;
+            top: 0px;
+            display: flex;
+            font-size: 28rpx;
+            width: 100%;
+            color: #666;
+            height: 80rpx;
+            line-height: 80rpx;
+            background-color: #fff;
+            border-bottom: 1rpx solid @bColor;
+            box-sizing: border-box;
+            z-index: 10;
+            span {
+                margin: auto;
+                box-sizing: content-box;
+                display: flex;
+                &:first-child {
+                    padding-left: 14rpx;
+                    &.act:after {
+                        left: 12rpx;
+                    }
+                }
+                &.act {
+                    position: relative;
+                    font-weight: bold;
+                    color:@theme;
+                    &:after {
+                        content: '';
+                        position: absolute;
+                        width: 60rpx;
+                        height: 2px;
+                        background-color: @theme;
+                        left: 0;
+                        right: 0;
+                        bottom: 0;
+                        margin: auto;
+                    }
+                }
+            }
+        }
+        .main-scroll {
+            max-height: 100%;
+            // height: 100vh;
+            -webkit-overflow-scrolling: touch;
+            // margin-top: 20rpx
+        }
+        .itemContent {
+            width: 100%;
+            background-color: #fff;
+            margin-bottom: 20rpx;
+            .itemtop {
+                height: 80rpx;
+                display: flex;
+                justify-content: space-between;
+                padding: 0 20rpx;
+                align-items: center;
+                >span{line-height: 80rpx;}
+                image {
+                    width: 48rpx;
+                    height: 48rpx;
+                    border-radius: 50%;
+                }
+            }
+            .itemdetail {
+                background-color: #f5f5f5;
+                padding: 0 20rpx;
+                display: flex; // height: 180rpx;
+                line-height: 34rpx;
+                >view {
+                    height: 150rpx;
+                    padding: 25rpx 0;
+                    &:first-child {
+                        width: 153rpx;
+                        height: 153rpx;
+                    }
+                }
+                text {
+                    display: inline-block;
+                }
+                .itemname {
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                    font-size: 26rpx;
+                    color: #333;
+                    display: -webkit-box;
+                }
+            }
+            .itemprice {
+                display: flex;
+                flex-direction: column;
+                justify-content: flex-start;
+                align-items: flex-end;
+            }
+        }
+        .itempay{
+                height: 80rpx;
+                line-height: 80rpx;
+                font-size: 25rpx;
+                border-bottom: 1rpx solid @bColor;
+                color: #333;
+                text-align: right;
+                padding-right: 20rpx
+            }
+            .btns{
+                padding: 20rpx;
+                text-align: right;
+            }
+    }
+</style>
+
+<template>
+    <view class="container" id="orderMain">
+        <view class="order_nav">
+            <!-- <span wx:for="{{TypeList}}" wx:for-item="item" wx:key="index">{{item.name}}</span> -->
+            <repeat for="{{TypeList}}" index="index" item="item" key="key">
+                <span class="{{currType == item.key ? 'act' : ''}}" @tap="changeType({{item.key}})">{{item.name}}</span>
+            </repeat>
+        </view>
+        <!-- 广告部分 -->
+        <view wx:if="{{false}}"></view>
+        <view class="flex-1">
+            <swiper indicator-dots="{{false}}" autoplay="{{false}}" class="swiper" bindchange="changeType_swiper" current="{{currentIndex}}">
+                <block wx:for="{{TypeList}}" wx:for-item="item" wx:key="indexa" wx:for-index="indexa">
+                    <swiper-item>
+                        <scroll-view scroll-y @scrolltolower="nextpage" style="height:100%">
+                            <view class="main-scroll" wx:if="{{currType == item.key}}">
+                                <!-- 订单内容 -->
+                                <view class="itemContent">
+                                    <view class="itemtop">
+                                        <image src="{{baseServerImg}}" mode="aspectFill"/><span class="fs25 c333 flex-1 ml20">供应商</span>
+                                        <text class="fs25 ce02e24">待支付</text>
+                                    </view>
+                                    <view class="itemdetail">
+                                        <view class="mr20">
+                                            <image src="{{baseServerImg}}" mode="aspectFill" />
+                                        </view>
+                                        <view class="flex-1">
+                                            <text class="itemname">20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】</text>
+                                            <text class="fs22 c929292">八一军营期第一期发嘎嘎是</text>
+                                        </view>
+                                        <view class="itemprice ml20">
+                                            <text class="fs28 c333">￥500</text>
+                                            <view class="c888">
+                                                <font class="fs28">x</font>
+                                                <font class="fs24">1</font>
+                                            </view>
+                                        </view>
+                                    </view>
+                                    <view class="itempay">
+                                        实付：￥500
+                                    </view>
+                                    <view class="btns">
+                                        <button class="btnline mr12">取消订单</button>
+                                        <button class="btn">去支付</button>
+                                    </view>
+                                </view>
+                                <!-- 订单内容 end-->
+                                <!-- <block wx:if="{{item.list.length > 0}}">
+                                            <repeat for="{{item.list}}" index="index" item="itemb" key="key">
+                                                
+                                            </repeat>
+                                        </block> -->
+                            </view>
+                        </scroll-view>
+                    </swiper-item>
+                </block>
+            </swiper>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Index extends wepy.page {
+        config = {}
+        components = {}
+        mixins = [Mixin]
+        data = {
+            loading: false,
+            TypeList: [{
+                name: '全部',
+                key: '10',
+                current_page: 1,
+                list: []
+            }, {
+                name: '待付款',
+                key: '20',
+                current_page: 1,
+                list: []
+            }, {
+                name: '未使用',
+                key: '30',
+                current_page: 1,
+                list: []
+            }, {
+                name: '已完成',
+                key: '40',
+                current_page: 1,
+                list: []
+            }, {
+                name: '已取消',
+                key: '50',
+                current_page: 1,
+                list: []
+            }],
+            currType: '10',
+            currentIndex: 0,
+            page_size: 20
+        }
+        methods = {
+            changeType(index) {
+                this.currentIndex = this.getTypeIndex(index)
+                this.TypeList[this.currentIndex].current_page = 1
+            },
+            changeType_swiper(e) {
+                let index = e.detail.current
+                this.currType = this.TypeList[index].key
+                this.loadorderlist()
+            },
+            nextpage() {
+                let index = this.getTypeIndex(this.currType)
+                if (this.TypeList[index].list.length > 0) {
+                    if (this.TypeList[index].list.length < this.TypeList[index].total_count) {
+                        this.TypeList[index].current_page += 1
+                        this.loadorderlist(true)
+                    }
+                }
+            }
+        }
+        loadorderlist(){
+
+        }
+        getTypeIndex(){
+            
+        }
+        onLoad() {}
+    }
+</script>

@@ -9,22 +9,26 @@
   }
 </style>
 <script>
-  // let aldstat = require('./untils/ald-stat.js')
+  let aldstat = require('./untils/ald-stat.js')
   import wepy from 'wepy'
   import 'wepy-async-function'
+  import {
+    config,
+    init,
+    mode
+  } from './untils'
   export default class extends wepy.app {
     config = {
       pages: [
         // 'pages/icon',
         // 'pages/test',
         'pages/member/list_member',
+        'pages/mycenter/orderlist',
         'pages/mycenter/index',
         'pages/goodsDetail',
         'pages/custom',
         'pages/member/add_member',
-
         'pages/refund',
-
         'pages/index',
         'pages/seacrh_page'
       ],
@@ -43,6 +47,7 @@
           'text': '定制',
           'iconPath': 'images/custom.png',
           'selectedIconPath': 'images/custom_act.png'
+
         },{
           'pagePath': 'pages/seacrh_page',
           'text': '搜索',
@@ -64,9 +69,69 @@
       },
       debug: true
     }
+    globalData = {
+      userInfo: null,
+      mode,
+      config,
+    }
     constructor() {
       super()
+      this.use('requestfix')
       this.use('promisify')
+      /* 初始化HTTP拦截器等 */
+      Object.keys(init).forEach((v) => {
+        init[v].forEach((obj) => {
+          let key = v
+          let name = obj.name
+          let data = obj.data
+          this[key](name, data)
+        })
+      })
+    }
+    onLaunch(options) {
+      /* 启动先调用微信登录 => 服务器登录 */
+      // this.wxLogin().then(code => {
+      //   /* 用户登录 */
+      //   this.userlogin(code, options)
+      // })
+    }
+    wxLogin() {
+      return new Promise((resolve, reject) => {
+        /* 微信登录 */
+        wepy.login().then(res => {
+          if (res.code) {
+            resolve(res.code)
+          } else {
+            reject(res)
+          }
+        })
+      })
+    }
+    userlogin(code, debug, callbackurl) {
+      let data = {
+        code: code,
+        // login_key: wepy.getStorageSync('loginkey')
+      }
+      // 是否为测试
+      if (debug.debug == 'test' || this.globalData.mode == 'dev') {
+        data.debug = 'test'
+      }
+      wepy.request({
+        url: 'api/user/login',
+        method: 'POST',
+        noToken: true,
+        data: data
+      }).then(res => {
+        if (res.code == '1') {
+          wepy.setStorageSync('token', res.data.token)
+          wepy.setStorageSync('userid', res.data.user_id)
+        } else {
+          wepy.showModal({
+            content: res.msg,
+            showCancel: false
+          })
+        }
+      })
     }
   }
 </script>

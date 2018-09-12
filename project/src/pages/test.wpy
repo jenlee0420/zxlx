@@ -3,6 +3,7 @@
 
 <template>
   <view class="container">
+    <gooditem></gooditem> 
     <view class="public_icon4_cancle_goods"></view>
     <span class=""></span>
     <popwin :popObj="popObj">
@@ -16,6 +17,9 @@
       当前选择：{{region[0]}}，{{region[1]}}，{{region[2]}}
     </view>
     </picker>
+    <!-- <button @tap="addressinfo">收货地址</button> -->
+    <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"> eee</button>
+    <backtoHome />
   </view>
 </template>
 
@@ -23,12 +27,16 @@
   import wepy from 'wepy'
   import Mixin from '@/mixins/global'
   import popwin from '@@/popWin'
+  import gooditem from '@@/gooditem'
   import zanpopup from '@@/zan-popup'
+  import backtoHome from '@@/backtoHome'
   export default class Index extends wepy.page {
     config = {}
     components = {
       popwin,
-      zanpopup
+      zanpopup,
+      gooditem,
+      backtoHome
     }
     mixins = [Mixin]
     data = {
@@ -41,8 +49,17 @@
     }
     methods = {
       bindRegionChange() {
+      },
+      
+      getPhoneNumber(e){
+        console.log(e)
+        this.addressinfo()
       }
+      
     }
+    addressinfo(){
+        wepy.chooseAddress()
+      }
     onLoad() {
       //this.$invoke('popwin', 'togglePopup')
     }
