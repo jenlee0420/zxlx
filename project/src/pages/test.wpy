@@ -19,6 +19,7 @@
     </picker>
     <!-- <button @tap="addressinfo">收货地址</button> -->
     <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"> eee</button>
+    <backtoHome />
   </view>
 </template>
 
@@ -28,12 +29,14 @@
   import popwin from '@@/popWin'
   import gooditem from '@@/gooditem'
   import zanpopup from '@@/zan-popup'
+  import backtoHome from '@@/backtoHome'
   export default class Index extends wepy.page {
     config = {}
     components = {
       popwin,
       zanpopup,
-      gooditem
+      gooditem,
+      backtoHome
     }
     mixins = [Mixin]
     data = {

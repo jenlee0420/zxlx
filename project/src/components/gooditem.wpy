@@ -26,6 +26,7 @@
         }
     }
     .itemcontent{
+      .itemdesc{display: inline-block;line-height: 28rpx;}
       .itemprice{letter-spacing: 2rpx;}
       .itemlabel{
         >text{font-size: 20rpx; color: #fff; line-height: 32rpx;height: 32rpx; padding:5rpx 10rpx; border-radius: 5rpx; margin-right: 20rpx;}
@@ -42,15 +43,16 @@
         <text class="toptext abs">广西桂林20天19</text>
         <span class="public_icon1_hot_sale abs"></span>
         <view class="bottomtext abs">
-          <span class="public_icon1_play_day1"></span>
+          <!-- <span class="public_icon1_play_day1"></span> -->
           <span class="public_icon1_play_day3">纯玩11天</span>
-          <span class="public_icon1_play_day2"></span></view>
+          <!-- <span class="public_icon1_play_day2"></span> -->
+          </view>
         <div class="photo"><image src="{{imgBaseUrl}}tmpimg.png" mode="aspectFill"/></div>
     </view>
     <view class="itemcontent">
         <text class="itemtitle fs26 c333">20天军事特训</text>
         <view class="itemprice"><span class="fs30 cf71414 mr20">￥3000起</span><span class="fs22 cb4b4b4">已拼3500人次</span></view>
-        <text class="itemdesc fs22 cb4b4b4">知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文游</text>
+        <text class="itemdesc fs22 cb4b4b4">知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文游以“大语文”游学方式，知兮乐兮大语文游</text>
         <text class="itemdesc fs22 cb4b4b4">供应商：奥德曼</text>
         <view class="itemlabel">
             <text class="redlabel">知兮乐兮自营</text>

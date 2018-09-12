@@ -22,39 +22,7 @@ export default class Global extends wepy.mixin {
     loadloop:true
   }
   methods = {
-    default_head(e){
-        // console.log('dfffff', e)
-        if (e.target.dataset.img) {
-            let arr = e.target.dataset.img.split(',')
-            let tmp = this
-            for(let i = 0; i < arr.length - 1; i++){
-                tmp = tmp[arr[i]]
-            }
-            if (tmp) {
-                tmp[arr[arr.length - 1]] = this.imgBaseUrl+'default_head.png'
-            }
-            this.$apply()
-        }
-    },
-    default_pic(e){
-        // console.log('dddddf', e.target.dataset)
-        if (e.target.dataset.img) {
-            let arr = e.target.dataset.img.split(',')
-            let tmp = this
-            for(let i = 0; i < arr.length - 1; i++){
-                tmp = tmp[arr[i]]
-            }
-            if (tmp) {
-                // console.log('dddddf', tmp, arr[arr.length - 1])
-                tmp[arr[arr.length - 1]] = this.imgBaseUrl+'default_pic.png'
-            }
-            if(e.target.dataset.img.indexOf('parent')>-1){
-                this.$parent.$apply()
-            }else{
-                this.$apply()
-            }
-        }
-    },
+
   }
 
     // 数组显示
