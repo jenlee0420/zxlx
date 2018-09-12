@@ -4,9 +4,8 @@ export default class Global extends wepy.mixin {
   data = {
     imgBaseUrl: 'https://zxlx-web.oss-cn-beijing.aliyuncs.com/',
     baseHeadImg: 'http://zxlx-web.oss-cn-beijing.aliyuncs.com/head.png',
-    baseServerImg: 'http://weiapp-assets.oss-cn-hangzhou.aliyuncs.com/default_pic.png',
-    TenOral: '/pages/goods/index?id=55',
-    tel400: '4008333055',
+    baseServerImg: 'https://zxlx-web.oss-cn-beijing.aliyuncs.com/tmpimg.png',
+    hasHomepage:false,
     reg: {
         empty:/^\s*$/,
         phone:/^1[34578]\d{1}[\d\*]{4}\d{4}$/,
@@ -368,6 +367,18 @@ export default class Global extends wepy.mixin {
         })
         return backDelta
     }
+    //检测是否存在小程序首页
+    checkHomePage() {
+        var pages = getCurrentPages()
+        var bool = false
+        Object.keys(pages).forEach((v) => {
+            if ((pages[v].route).indexOf('pages/index') > -1) {
+                console.log('erewrew')
+                bool = true
+            }
+        })
+        return bool
+    }
     event() {
 
     }
@@ -403,5 +414,6 @@ export default class Global extends wepy.mixin {
     }
 
     onLoad() {
+        this.hasHomepage = this.checkHomePage()
     }
 }

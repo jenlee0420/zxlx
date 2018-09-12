@@ -10,7 +10,7 @@
 </style>
 
 <template>
-  <view id="homebtn">
+  <view id="homebtn" wx:if="{{!hasHomepage}}">
     <span class="public_icon1_to_home" @tap="backHome"></span>
   </view>
 </template>
@@ -24,6 +24,7 @@ export default class backtoHome extends wepy.component {
   components = {}
   mixins = [Mixin]
   data = {
+    showBtn:false
   } 
   methods = {
     backHome(){

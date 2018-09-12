@@ -12,6 +12,7 @@
 .cfeffff{color: #fcffff}
 .c555545{color: #555545}
 .cf71414{color: #f71414}
+.ce02e24{color:#e02e24}
 .c5ad{
     color:#5ada78;
 }
@@ -38,7 +39,7 @@
 .fs22{font-size: 22rpx;line-height: 22rpx}
 .fs24{font-size: 24rpx;line-height: 24rpx}
 .fs25{font-size: 25rpx;line-height: 25rpx}
-.fs26{font-size: 26rpx;line-height: 26rpx}
+.fs26{font-size: 26rpx;}
 .fs28{font-size: 28rpx;line-height: 28rpx}
 .fs30{font-size: 30rpx;line-height: 30rpx}
 .fs32{font-size: 32rpx;line-height: 32rpx}
@@ -114,11 +115,19 @@
 .fullbtn{
     width: 100%;
 }
-.btn{
+.btn,.btnline{
+    min-width: 140rpx;
     height: 80rpx;
     line-height: 80rpx;
     background-color: @theme;
     color:#fff;
     font-size: 30rpx;
     text-align: center;
+    padding: 0 20rpx;
+    display:inline-block;
+}
+.btnline{
+    color:#333;
+    background-color:#fff;
+    border:1rpx solid #f1f1f1;
 }

@@ -47,7 +47,7 @@
           <span class="public_icon1_play_day3">纯玩11天</span>
           <!-- <span class="public_icon1_play_day2"></span> -->
           </view>
-        <div class="photo"><image src="{{imgBaseUrl}}tmpimg.png" mode="aspectFill"/></div>
+        <div class="photo"><image src="{{baseServerImg}}" mode="aspectFill"/></div>
     </view>
     <view class="itemcontent">
         <text class="itemtitle fs26 c333">20天军事特训</text>

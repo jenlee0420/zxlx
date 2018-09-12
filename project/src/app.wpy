@@ -8,7 +8,7 @@
     font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
   }
 </style>
-<script>
+<script> 
   let aldstat = require('./untils/ald-stat.js')
   import wepy from 'wepy'
   import 'wepy-async-function'
@@ -21,7 +21,8 @@
     config = {
       pages: [
         // 'pages/icon',
-        'pages/test',
+        // 'pages/test',
+        'pages/mycenter/orderlist',
         'pages/mycenter/index',
         'pages/goodsDetail',
         'pages/custom',

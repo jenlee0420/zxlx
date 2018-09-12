@@ -1,0 +1,34 @@
+<style lang="less">
+
+</style>
+
+<template>
+    <view>
+        <view class="list-foot foot" wx:if="{{loading}}">
+            加载中......
+        </view>
+        <view class="list-foot foot" wx:if="{{item.list.length == item.total_count && item.list.length > page_size && !loading}}">
+            <span class="gopng_img">没有更多</span>
+        </view>
+        <view class="nodata" wx:if="{{!loading && item.list.length == 0}}">
+            <span class="word">暂无数据</span>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Index extends wepy.page {
+        config = {}
+        components = {}
+        props = {
+            loading: '',
+            item: {}
+        }
+        mixins = [Mixin]
+        data = {}
+        methods = {}
+        onLoad() {}
+    }
+</script>
