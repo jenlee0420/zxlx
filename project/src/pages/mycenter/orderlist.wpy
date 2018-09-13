@@ -121,7 +121,7 @@
         <view class="order_nav">
             <!-- <span wx:for="{{TypeList}}" wx:for-item="item" wx:key="index">{{item.name}}</span> -->
             <repeat for="{{TypeList}}" index="index" item="item" key="key">
-                <span class="{{currType == item.key ? 'act' : ''}}" @tap="changeType({{item.key}})">{{item.name}}</span>
+                <span class="{{currType == item.key ? 'act' : ''}}" @tap="changeType({{index}})">{{item.name}}</span>
             </repeat>
         </view>
         <!-- 广告部分 -->
@@ -165,7 +165,7 @@
                                 <!-- 订单内容 end-->
                                 <!-- <block wx:if="{{item.list.length > 0}}">
                                             <repeat for="{{item.list}}" index="index" item="itemb" key="key">
-                                                
+
                                             </repeat>
                                         </block> -->
                             </view>
@@ -181,51 +181,59 @@
     import wepy from 'wepy'
     import Mixin from '@/mixins/global'
     export default class Index extends wepy.page {
-        config = {}
+        config = {
+          enablePullDownRefresh:true
+        }
         components = {}
         mixins = [Mixin]
         data = {
             loading: false,
             TypeList: [{
                 name: '全部',
-                key: '10',
+                key: 'all',
                 current_page: 1,
                 list: []
             }, {
                 name: '待付款',
-                key: '20',
+                key: 'payment',
                 current_page: 1,
                 list: []
             }, {
                 name: '未使用',
-                key: '30',
+                key: 'noused',
                 current_page: 1,
                 list: []
             }, {
                 name: '已完成',
-                key: '40',
+                key: 'received',
                 current_page: 1,
                 list: []
             }, {
                 name: '已取消',
-                key: '50',
+                key: 'cancel',
                 current_page: 1,
                 list: []
             }],
-            currType: '10',
+            currType: 'all',
             currentIndex: 0,
-            page_size: 20
+            page_size: 1
         }
         methods = {
-            changeType(index) {
-                this.currentIndex = this.getTypeIndex(index)
-                this.TypeList[this.currentIndex].current_page = 1
+            changeType(index){
+                this.TypeList[index].current_page = 1;
+                this.currentIndex=index;
+                this.currType = this.TypeList[index].key;
             },
+
             changeType_swiper(e) {
-                let index = e.detail.current
-                this.currType = this.TypeList[index].key
-                this.loadorderlist()
+
+                this.loadorderlist({
+                  page:this.page_size,
+                  per_page:this.TypeList[e.detail.current].current_page,
+                  data_type:this.TypeList[e.detail.current].key,
+                }, e.detail.current)
             },
+
             nextpage() {
                 let index = this.getTypeIndex(this.currType)
                 if (this.TypeList[index].list.length > 0) {
@@ -236,12 +244,35 @@
                 }
             }
         }
-        loadorderlist(){
-
+        loadorderlist(data,index){
+            wepy.request({
+              url: 'api/order/lists',
+              method: 'POST',
+              data: data
+            }).then(res => {
+              console.log(res);
+              this.TypeList[index].current_page = 1;
+              this.currentIndex=index;
+              this.currType = this.TypeList[index].key
+              this.$apply();
+            })
         }
         getTypeIndex(){
-            
+
         }
-        onLoad() {}
+        onLoad() {
+            this.loadorderlist({
+              page:this.page_size,
+              per_page:this.TypeList[0].current_page,
+              data_type:this.TypeList[0].key,
+            });
+
+        }
+        onPullDownRefresh(){
+            console.log("!!!");
+        }
     }
+
+
+
 </script>
