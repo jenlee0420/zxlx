@@ -1,0 +1,69 @@
+<style lang="less">
+#dianpin{
+    background-color: #fff;
+    >view{
+        padding: 20rpx 80rpx;
+        padding-right: 10rpx;
+        font-size: 30rpx
+    }
+}
+</style>
+
+<template>
+  <view class="container" id="dianpin">
+    <view>
+        <text>游学名称</text><text>西双版纳7日游孩子加床【云南】</text>
+    </view>
+    <view>
+        <text>评分</text>
+        <view>
+            <radio-group class="my_picker" bindchange="getpicker">
+                <label>
+                    <radio value="5"/>
+                    <label class="public_icon3_not_choise"></label>5分
+                </label>
+                <label>
+                    <radio value="4"/>
+                    <label class="public_icon3_not_choise"></label>4分
+                </label>
+                <label>
+                    <radio value="3"/>
+                    <label class="public_icon3_not_choise"></label>3分
+                </label>
+                <label>
+                    <radio value="2"/>
+                    <label class="public_icon3_not_choise"></label>2分
+                </label>
+                <label>
+                    <radio value="1"/>
+                    <label class="public_icon3_not_choise"></label>1分
+                </label>
+            </radio-group>
+        </view>
+    </view>
+    <view><text>点评内容</text>
+        <textarea placeholder-style="color:#bbb" placeholder="请您描述您的评价内容。（最多500字）" />
+    </view> 
+    <view><text>上传照片</text><text class="c929292">(最多3张)</text>
+    <view>
+        </view></view>
+        <button class="w580 btn mb30">提交</button>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+import Star from '@/components/StarRatine'
+export default class dianpin extends wepy.page {
+  config = {
+  }
+  components = {Star}
+  mixins = [Mixin]
+  data = {
+  }
+  methods = {}
+  onLoad() {
+  }
+}
+</script>

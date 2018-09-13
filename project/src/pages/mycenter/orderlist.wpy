@@ -131,44 +131,49 @@
                 <block wx:for="{{TypeList}}" wx:for-item="item" wx:key="indexa" wx:for-index="indexa">
                     <swiper-item>
                         <scroll-view scroll-y @scrolltolower="nextpage" style="height:100%">
+
                             <view class="main-scroll" wx:if="{{currType == item.key}}">
+                              <!--<block wx:for="{{item.list}}" wx:key="{{index}}">-->
                                 <!-- 订单内容 -->
                                 <view class="itemContent">
-                                    <view class="itemtop">
-                                        <image src="{{baseServerImg}}" mode="aspectFill"/><span class="fs25 c333 flex-1 ml20">供应商</span>
-                                        <text class="fs25 ce02e24">待支付</text>
+                                  <view class="itemtop">
+                                    <image src="{{baseServerImg}}" mode="aspectFill"/><span class="fs25 c333 flex-1 ml20">供应商</span>
+                                    <text class="fs25 ce02e24">待支付</text>
+                                  </view>
+                                  <view class="itemdetail">
+                                    <view class="mr20">
+                                      <image src="{{baseServerImg}}" mode="aspectFill" />
                                     </view>
-                                    <view class="itemdetail">
-                                        <view class="mr20">
-                                            <image src="{{baseServerImg}}" mode="aspectFill" />
-                                        </view>
-                                        <view class="flex-1">
-                                            <text class="itemname">20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】</text>
-                                            <text class="fs22 c929292">八一军营期第一期发嘎嘎是</text>
-                                        </view>
-                                        <view class="itemprice ml20">
-                                            <text class="fs28 c333">￥500</text>
-                                            <view class="c888">
-                                                <font class="fs28">x</font>
-                                                <font class="fs24">1</font>
-                                            </view>
-                                        </view>
+                                    <view class="flex-1">
+                                      <text class="itemname">20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】</text>
+                                      <text class="fs22 c929292">八一军营期第一期发嘎嘎是</text>
                                     </view>
-                                    <view class="itempay">
-                                        实付：￥500
+                                    <view class="itemprice ml20">
+                                      <text class="fs28 c333">￥500</text>
+                                      <view class="c888">
+                                        <font class="fs28">x</font>
+                                        <font class="fs24">1</font>
+                                      </view>
                                     </view>
-                                    <view class="btns">
-                                        <button class="btnline mr12">取消订单</button>
-                                        <button class="btn">去支付</button>
-                                    </view>
+                                  </view>
+                                  <view class="itempay">
+                                    实付：￥500
+                                  </view>
+                                  <view class="btns">
+                                    <button class="btnline mr12">取消订单</button>
+                                    <button class="btn">去支付</button>
+                                  </view>
                                 </view>
-                                <!-- 订单内容 end-->
-                                <!-- <block wx:if="{{item.list.length > 0}}">
-                                            <repeat for="{{item.list}}" index="index" item="itemb" key="key">
+                              <!-- 订单内容 end-->
+                              <!-- <block wx:if="{{item.list.length > 0}}">
+                                          <repeat for="{{item.list}}" index="index" item="itemb" key="key">
 
-                                            </repeat>
-                                        </block> -->
+                                          </repeat>
+                                      </block> -->
+                              <!--</block>-->
                             </view>
+
+
                         </scroll-view>
                     </swiper-item>
                 </block>
@@ -216,7 +221,7 @@
             }],
             currType: 'all',
             currentIndex: 0,
-            page_size: 1
+            page_size: 1,
         }
         methods = {
             changeType(index){
@@ -250,10 +255,23 @@
               method: 'POST',
               data: data
             }).then(res => {
-              console.log(res);
+              if(res.code!="1"){
+                  showAlert({title:"警告",content:res.msg});
+                  return
+              }
               this.TypeList[index].current_page = 1;
               this.currentIndex=index;
               this.currType = this.TypeList[index].key
+              this.TypeList[index].list=[];
+
+              for(var i=0;i<res.data.length;i++){
+                this.TypeList[index].list.push({
+                  order_id:res.data[i].order_id,
+                  pay_status:res.data[i].pay_status,
+
+                })
+              }
+
               this.$apply();
             })
         }
@@ -269,7 +287,11 @@
 
         }
         onPullDownRefresh(){
-            console.log("!!!");
+            this.loadorderlist({
+              page:this.page_size,
+              per_page:this.TypeList[0].current_page,
+              data_type:this.TypeList[0].key,
+            });
         }
     }
 

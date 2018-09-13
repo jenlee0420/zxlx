@@ -22,8 +22,10 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        // 'pages/member/list_member',
         'pages/mycenter/orderlist',
+        'pages/mycenter/dianpin',
+        'pages/member/list_member',
+
         'pages/mycenter/index',
         'pages/goodsDetail',
         'pages/custom',
@@ -123,6 +125,7 @@
         data: data
       }).then(res => {
         if (res.code == '1') {
+            this.updateLoginInfo(res)
           wepy.setStorageSync('token', res.data.token)
           wepy.setStorageSync('userid', res.data.user_id)
         } else {
@@ -133,5 +136,14 @@
         }
       })
     }
+    updateLoginInfo(data) {
+            let userData = JSON.stringify(data)
+            // wepy.setStorageSync('userData', userData)
+            wepy.setStorageSync('token', data.token)
+            // wepy.setStorageSync('loginkey',data.login_key)
+            if (this.userInfoReadyCallback) {
+                this.userInfoReadyCallback(data)
+            }
+        }
   }
 </script>
