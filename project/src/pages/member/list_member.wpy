@@ -43,14 +43,21 @@
   color: #bdc0c1;
 }
 
-.list_menber_view_list_wd{
+.list_menber_view_list_text1{
   width: 110rpx;
+  display: inline-block;
 }
 
 .list_menber_view_list_mg{
   margin-left: 35rpx;
 }
 
+.list_member_view_flex{
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  padding-right: 20rpx;
+}
 
 </style>
 
@@ -68,18 +75,22 @@
     </view>
   </view>
 
-  <view class="list_menber_view_list">
-    <view class="list_menber_view_list_name"><text>李佳</text></view>
-    <view class="list_menber_view_list_other">
-      <text class="list_menber_view_list_wd">123</text>
-      <text class="list_menber_view_list_mg">123</text>
+  <block wx:for="{{list}}" wx:key="{{index}}">
+    <view class="list_member_view_flex">
+      <view  class="list_menber_view_list">
+        <view class="list_menber_view_list_name"><text>{{item.name}}</text></view>
+        <view class="list_menber_view_list_other">
+          <text class="list_menber_view_list_text1">手机号码</text>
+          <text class="list_menber_view_list_mg">{{item.phone}}</text>
+        </view>
+        <view class="list_menber_view_list_other" hidden="{{item.idcard==''}}">
+          <text class="list_menber_view_list_text1">身份证</text>
+          <text class="list_menber_view_list_mg">{{item.idcard}}</text>
+        </view>
+      </view>
+      <span class="c999 zan-icon zan-icon-arrow"></span>
     </view>
-    <view class="list_menber_view_list_other">
-      <text class="list_menber_view_list_wd">123123131</text>
-      <text class="list_menber_view_list_mg">123</text>
-    </view>
-  </view>
-
+  </block>
 
   </view>
 </template>
@@ -93,6 +104,11 @@
     components = {}
     mixins = [Mixin]
     data = {
+      list:[
+        {name:"lll",phone:"13724241455",idcard:"430104199301113456"},
+        {name:"ll2",phone:"13724241465",idcard:""},
+        {name:"ll3",phone:"13724241475",idcard:"430104199301113457"}
+        ]
     }
     methods = {}
     onLoad() {
