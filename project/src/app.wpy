@@ -93,7 +93,8 @@
       /* 启动先调用微信登录 => 服务器登录 */
       this.wxLogin().then(code => {
         /* 用户登录 */
-        this.userlogin(code, options)
+        console.log(code)
+        // this.userlogin(code, options)
       })
     }
     wxLogin() {

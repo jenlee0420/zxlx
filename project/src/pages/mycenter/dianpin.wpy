@@ -1,69 +1,122 @@
 <style lang="less">
-#dianpin{
-    background-color: #fff;
-    >view{
-        padding: 20rpx 80rpx;
-        padding-right: 10rpx;
-        font-size: 30rpx
+    #dianpin {
+        background-color: #fff;
+        padding-bottom: 30rpx;
+        min-height: 100%;
+        box-sizing: border-box;
+        >view {
+            padding: 20rpx 70rpx;
+            padding-right: 30rpx;
+            font-size: 30rpx;
+            box-sizing: border-box;
+            border-bottom: 1rpx solid @bColor;
+            &:last-child {
+                padding: auto 0;
+            }
+            >text:last-child {
+                margin-left: 30rpx;
+                color: #4e4d4d;
+            }
+        }
+        textarea {
+            font-size: 25rpx;
+            margin-top: 30rpx;
+            height: 300rpx;
+        }
+        .Topcorner {
+            top: -18rpx;
+            right: -10rpx;
+            color: @theme;
+        }
+        .imageitems{
+            margin-top: 30rpx;
+            min-height: 200rpx;
+            display: flex;
+            .imageitem{
+            position: relative;
+            flex-wrap: wrap;
+            width: 82rpx;
+            height: 82rpx;
+            margin-right: 35rpx;
+            margin-bottom: 30rpx;
+        }
+        }
+        
     }
-}
+    .my_picker{
+        flex-direction: column;
+        >label{margin-bottom: 20rpx;}
+    }
+    .mr75{margin-right: 75rpx;}
+    .bordernone{border: none !important;}
 </style>
 
 <template>
-  <view class="container" id="dianpin">
-    <view>
-        <text>游学名称</text><text>西双版纳7日游孩子加床【云南】</text>
-    </view>
-    <view>
-        <text>评分</text>
+    <view class="container" id="dianpin">
         <view>
-            <radio-group class="my_picker" bindchange="getpicker">
-                <label>
-                    <radio value="5"/>
-                    <label class="public_icon3_not_choise"></label>5分
-                </label>
-                <label>
-                    <radio value="4"/>
-                    <label class="public_icon3_not_choise"></label>4分
-                </label>
-                <label>
-                    <radio value="3"/>
-                    <label class="public_icon3_not_choise"></label>3分
-                </label>
-                <label>
-                    <radio value="2"/>
-                    <label class="public_icon3_not_choise"></label>2分
-                </label>
-                <label>
-                    <radio value="1"/>
-                    <label class="public_icon3_not_choise"></label>1分
-                </label>
-            </radio-group>
+            <text>游学名称</text><text>西双版纳7日游孩子加床【云南】</text>
+        </view>
+        <view class="flex">
+            <text class="mr75">评分</text>
+            <view>
+                <radio-group class="my_picker" bindchange="getpicker">
+                    <label>
+                        <radio value="5"/>
+                        <label class="public_icon3_not_choise"></label>5分
+                    </label>
+                    <label>
+                        <radio value="4"/>
+                        <label class="public_icon3_not_choise"></label>4分
+                    </label>
+                    <label>
+                        <radio value="3"/>
+                        <label class="public_icon3_not_choise"></label>3分
+                    </label>
+                    <label>
+                        <radio value="2"/>
+                        <label class="public_icon3_not_choise"></label>2分
+                    </label>
+                    <label>
+                        <radio value="1"/>
+                        <label class="public_icon3_not_choise"></label>1分
+                    </label>
+                </radio-group>
+            </view>
+        </view>
+        <view><text>点评内容</text>
+            <textarea placeholder-style="color:#bbb" placeholder="请您描述您的评价内容。（最多500字）" />
+        </view>
+        <view class="bordernone">
+            <view class="flex flex-between"> <text>上传照片</text><text class="c929292">(最多9张)</text></view> 
+            <view class="imageitems">
+                <view class="imageitem">
+                    <span class="Topcorner zan-icon-close zan-icon"></span>
+                    <image src="{{baseServerImg}}" mode="aspectFill" />
+                </view>
+                <view class="imageitem">
+                    <span class="Topcorner zan-icon-close zan-icon"></span>
+                    <image src="{{baseServerImg}}" mode="aspectFill" />
+                </view>
+            </view>
+        </view>
+        <view class="t_c bordernone pb30">
+            <button class="w600 btn">提交</button>
         </view>
     </view>
-    <view><text>点评内容</text>
-        <textarea placeholder-style="color:#bbb" placeholder="请您描述您的评价内容。（最多500字）" />
-    </view> 
-    <view><text>上传照片</text><text class="c929292">(最多3张)</text>
-    <view>
-        </view></view>
-        <button class="w580 btn mb30">提交</button>
-  </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-import Star from '@/components/StarRatine'
-export default class dianpin extends wepy.page {
-  config = {
-  }
-  components = {Star}
-  mixins = [Mixin]
-  data = {
-  }
-  methods = {}
-  onLoad() {
-  }
-}
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import Star from '@/components/StarRatine'
+    export default class dianpin extends wepy.page {
+        config = {}
+        components = {
+            Star
+        }
+        mixins = [Mixin]
+        data = {}
+        methods = {}
+        onLoad() {}
+    }
 </script>
