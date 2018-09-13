@@ -4,7 +4,7 @@
   @import "styles/common";
   page {
     height: 100%;
-    background-color: #fff;
+    background-color: #f4f4f4;
     font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
   }
 </style>
@@ -22,7 +22,7 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        'pages/member/list_member',
+        // 'pages/member/list_member',
         'pages/mycenter/orderlist',
         'pages/mycenter/index',
         'pages/goodsDetail',

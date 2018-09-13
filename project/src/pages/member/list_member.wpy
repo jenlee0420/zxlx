@@ -1,4 +1,7 @@
 <style lang="less">
+#memberlist{
+    
+}
 .list_menber_view_view_btn{
   border: 1rpx solid #c0dff4;
   border-radius: 20rpx;
@@ -16,21 +19,21 @@
   font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
   color: #1ba0f0;
   justify-content: space-between;
-  padding: 0 16rpx;
+  padding: 0 30rpx;
 }
 
 .list_menber_view_list{
   font-size: 26rpx;
+  background-color:#fff;
+    border-radius:20rpx;
+    margin:30rpx;
+    padding:30rpx 40rpx;
+    line-height:48rpx;
 
-  margin-top: 32rpx;
-
-  padding-left: 75rpx;
-  padding-bottom: 30rpx;
-  padding-top: 10rpx;
 }
 
 .list_menber_view_list_text{
-  margin-top: 22rpx;
+//   margin-top: 22rpx;
 }
 
 .list_menber_view_list_name{
@@ -52,17 +55,11 @@
   margin-left: 35rpx;
 }
 
-.list_member_view_flex{
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
-  padding-right: 20rpx;
-}
 
 </style>
 
 <template>
-  <view class="container">
+  <view class="container" id="memberlist">
   <view class="list_menber_view_view">
     <view class="list_menber_view_view_btn">
       <icon class="public_icon_add_menber"></icon>
@@ -76,7 +73,7 @@
   </view>
 
   <block wx:for="{{list}}" wx:key="{{index}}">
-    <view class="list_member_view_flex">
+    <!-- <view class="list_member_view_flex"> -->
       <view  class="list_menber_view_list">
         <view class="list_menber_view_list_name"><text>{{item.name}}</text></view>
         <view class="list_menber_view_list_other">
@@ -88,8 +85,7 @@
           <text class="list_menber_view_list_mg">{{item.idcard}}</text>
         </view>
       </view>
-      <span class="c999 zan-icon zan-icon-arrow"></span>
-    </view>
+    <!-- </view> -->
   </block>
 
   </view>
