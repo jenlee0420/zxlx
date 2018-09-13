@@ -217,8 +217,8 @@
             page_size: 20
         }
         methods = {
-            changeType(index) {
-                this.currentIndex = this.getTypeIndex(index)
+            changeType(key) {
+                this.currentIndex = this.getTypeIndex(key)
                 this.TypeList[this.currentIndex].current_page = 1
             },
             changeType_swiper(e) {

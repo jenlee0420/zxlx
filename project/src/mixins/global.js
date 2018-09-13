@@ -408,9 +408,17 @@ export default class Global extends wepy.mixin {
         //         }
         //     }
         // }
-        if (typeof(this.PageInit) === 'function' && getCurrentPages()[0].route != 'pages/hospital/pay') {
-            this.PageInit()
+        if (wepy.getStorageSync('token')){
+        }else{
+        this.$parent.userInfoReadyCallback = res => {
+            if (typeof(this.PageInit) === 'function') {
+                this.PageInit()
+            }
         }
+    }
+        // if (typeof(this.PageInit) === 'function' && getCurrentPages()[0].route != 'pages/hospital/pay') {
+        //     this.PageInit()
+        // }
     }
 
     onLoad() {

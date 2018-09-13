@@ -22,7 +22,8 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        // 'pages/member/list_member',
+        'pages/mycenter/dianpin',
+        'pages/member/list_member',
         'pages/mycenter/orderlist',
         'pages/mycenter/index',
         'pages/goodsDetail',
@@ -90,10 +91,10 @@
     }
     onLaunch(options) {
       /* 启动先调用微信登录 => 服务器登录 */
-      // this.wxLogin().then(code => {
-      //   /* 用户登录 */
-      //   this.userlogin(code, options)
-      // })
+      this.wxLogin().then(code => {
+        /* 用户登录 */
+        this.userlogin(code, options)
+      })
     }
     wxLogin() {
       return new Promise((resolve, reject) => {
@@ -114,7 +115,7 @@
       }
       // 是否为测试
       if (debug.debug == 'test' || this.globalData.mode == 'dev') {
-        data.debug = 'test'
+        data.is_bug = 'test'
       }
       wepy.request({
         url: 'api/user/login',
@@ -123,6 +124,7 @@
         data: data
       }).then(res => {
         if (res.code == '1') {
+            this.updateLoginInfo(res)
           wepy.setStorageSync('token', res.data.token)
           wepy.setStorageSync('userid', res.data.user_id)
         } else {
@@ -133,5 +135,14 @@
         }
       })
     }
+    updateLoginInfo(data) {
+            let userData = JSON.stringify(data)
+            // wepy.setStorageSync('userData', userData)
+            wepy.setStorageSync('token', data.token)
+            // wepy.setStorageSync('loginkey',data.login_key)
+            if (this.userInfoReadyCallback) {
+                this.userInfoReadyCallback(data)
+            }
+        }
   }
 </script>
