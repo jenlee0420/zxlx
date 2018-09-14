@@ -45,7 +45,7 @@
     }
     .my_picker{
         flex-direction: column;
-        >label{margin-bottom: 20rpx;}
+        >label{margin-bottom: 20rpx; display: flex;align-items: center;}
     }
     .mr75{margin-right: 75rpx;}
     .bordernone{border: none !important;}
@@ -61,24 +61,24 @@
             <view>
                 <radio-group class="my_picker" bindchange="getpicker">
                     <label>
-                        <radio value="5"/>
-                        <label class="public_icon3_not_choise"></label>5分
+                        <radio value="5" checked="checked"/>
+                        <label class="public_icon3_not_choise"></label><Star num="5" total="5" class="mr12"/>5分
                     </label>
                     <label>
                         <radio value="4"/>
-                        <label class="public_icon3_not_choise"></label>4分
+                        <label class="public_icon3_not_choise"></label><Star1 num="4" total="5" class="mr12"/>4分
                     </label>
                     <label>
                         <radio value="3"/>
-                        <label class="public_icon3_not_choise"></label>3分
+                        <label class="public_icon3_not_choise"></label><Star2 num="3" total="5" class="mr12"/>3分
                     </label>
                     <label>
                         <radio value="2"/>
-                        <label class="public_icon3_not_choise"></label>2分
+                        <label class="public_icon3_not_choise"></label><Star3 num="2" total="5" class="mr12"/>2分
                     </label>
                     <label>
                         <radio value="1"/>
-                        <label class="public_icon3_not_choise"></label>1分
+                        <label class="public_icon3_not_choise"></label><Star4 num="1" total="5" class="mr12"/>1分
                     </label>
                 </radio-group>
             </view>
@@ -112,7 +112,11 @@
     export default class dianpin extends wepy.page {
         config = {}
         components = {
-            Star
+            Star,
+            Star1:Star,
+            Star2:Star,
+            Star3:Star,
+            Star4:Star
         }
         mixins = [Mixin]
         data = {}

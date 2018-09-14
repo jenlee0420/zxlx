@@ -134,6 +134,10 @@
       //     console.log(res.data)
       //   }
       // })
+      this.PageInit()
+
+    }
+    PageInit(){
       wepy.request({
         url: "api/address/lists",
         method: 'POST',
@@ -155,7 +159,6 @@
           this.$apply();
         }
       })
-
-    }
+    } 
   }
 </script>

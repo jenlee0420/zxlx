@@ -16,8 +16,8 @@
 <template>
   <view class="starContainer" style="{{containerStyle ? containerStyle : ''}}">
     <repeat for="{{Star}}" key="1-{{index}}" index="index" item="item">
-      <image wx:if="{{item}}" src="../../resource/img/star1.png"></image>
-      <image wx:else src="../../resource/img/star0.png"></image>
+      <span wx:if="{{item}}" class="public_icon2_star_light"></span>
+      <span wx:else class="public_icon2_star_dark"></span>
     </repeat>
   </view>
 </template>
