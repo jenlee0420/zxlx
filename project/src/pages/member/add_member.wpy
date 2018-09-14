@@ -42,6 +42,23 @@
       width: 22rpx;
       height: 22rpx;
     }
+
+    .my_del_view{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+        margin-top: 50rpx;
+    }
+
+    .my_del_text{
+        width: 100%;
+        display: flex;
+        justify-content: center;
+
+        color:#cbcaca;
+        font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+        font-size: 30rpx;
+    }
 </style>
 <template>
     <view class="container">
@@ -54,14 +71,26 @@
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">姓名:</text>
-                <input class="my_input" focus/>
+                <input class="my_input" value="{{name}}" focus/>
             </view>
+        </view>
+        <view class="my_view">
+          <view class="my_view_view">
+            <text class="my_view_text">手机号:</text>
+            <input class="my_input" value="{{phone}}" focus/>
+          </view>
         </view>
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">身份证号:</text>
-                <input class="my_input" placeholder="18位身份证号码" />
+                <input class="my_input" id_card="{{id_card}}" placeholder="18位身份证号码" />
             </view>
+        </view>
+        <view class="my_view">
+          <view class="my_view_view">
+            <text class="my_view_text">邮政编码:</text>
+            <input class="my_input" value="{{postcode}}" focus/>
+          </view>
         </view>
         <view class="my_view">
             <view class="my_view_view">
@@ -89,7 +118,7 @@
                 <text class="my_view_text">选择地区:</text>
                 <picker class="my_picker" mode="region" @change="pick_place">
                     <view class="picker">
-                        <input class="my_input" placeholder="选择地区" value="{{place}}" disabled/>
+                        <input class="my_input" placeholder="选择地区" value="{{place.path}}" disabled/>
                     </view>
                 </picker>
             </view>
@@ -103,6 +132,13 @@
         </view>
         <view class="my_btn_view">
             <button class="btn my_btn" @tap="saveContact">保存</button>
+        </view>
+
+        <view class="my_del_view">
+            <icon class="public_icon4_del_addrss"></icon>
+        </view>
+        <view  class="my_del_text">
+            <text>删除</text>
         </view>
     </view>
 </template>
@@ -119,8 +155,7 @@
         }
         mixins = [Mixin]
         data = {
-            imgUrls: [],
-            navIndex: 0,
+            edit:false,
             my_type: [{
                     name: 'kid',
                     value: '儿童'
@@ -143,11 +178,24 @@
                 },
             ],
 
+            name:"",
+            id_card:"",
             bir_date:"",
+            phone:"",
 
             address:"",
+            address_id:"",
+            postcode:"",
 
-            place:"",
+            place:{
+              province_id:"",
+              city_id:"",
+              region_id:"",
+              province:"",
+              city:"",
+              region:"",
+              path:"",
+            },
         }
         events = {
             getradiodata(key, value) {
@@ -191,7 +239,37 @@
                 })
             },
             saveContact() {
-                // this.$invoke('myradio', 'getvalue')
+                var url ="";
+                if(this.edit){
+                  url= "api/address/edit"
+                }else {
+                  url= "api/address/add"
+                }
+
+                var data={
+                  address_id:this.address_id,
+                  name:this.name,
+                  phone:this.phone,
+                  province_id:this.place.province_id,
+                  city_id:this.place.city_id,
+                  region_id:this.place.region_id,
+                  detail:this.address,
+                  postcode:this.postcode,
+                };
+
+                wepy.request({
+                  url: url,
+                  method: 'POST',
+                  data: data,
+                }).then(res => {
+                  if(res.code!="1"){
+                    this.showAlert({title:"警告",content:res.msg});
+                  }else {
+                    wx.navigateTo({
+                      url:"list_member"
+                    })
+                  }
+                })
             },
             pick_date(e){
               this.bir_date=e.detail.value;
@@ -199,10 +277,50 @@
 
             pick_place(e){
               console.log(e)
-              this.place=e.detail.value;
+              this.place.province_id=e.detail.code[0];
+              this.place.city_id=e.detail.code[1];
+              this.place.region_id=e.detail.code[2];
+
+              this.place.province=e.detail.value[0];
+              this.place.city=e.detail.value[1];
+              this.place.region=e.detail.value[2];
+              this.place.path=this.place.province+"-"+this.place.city+"-"+this.place.region;
+              this.$apply();
             },
         }
-        onLoad() {
+        onLoad(options) {
+            if(!options.address_id){
+              this.edit=true;
+              return
+            }
+
+          wepy.request({
+            url: "api/address/detail",
+            method: 'POST',
+            data: {address_id:options.address_id},
+          }).then(res => {
+            if(res.code!="1"){
+              showAlert({title:"警告",content:res.msg});
+            }else {
+              res=res.data.detail;
+              this.name=res.name;
+              this.phone=res.phone;
+              this.address=res.detail;
+              this.address_id=options.address_id;
+              this.postcode=res.postcode;
+
+              this.place.province_id=res.province_id;
+              this.place.city_id=res.city_id;
+              this.place.region_id=res.region_id;
+
+              this.place.province=res.region.province;
+              this.place.city=res.region.city;
+              this.place.region=res.region.region;
+              this.place.path=this.place.province+"-"+this.place.city+"-"+this.place.region;
+
+              this.$apply();
+            }
+          })
 
         }
     }

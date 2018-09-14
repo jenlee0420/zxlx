@@ -21,10 +21,11 @@
     config = {
       pages: [
         // 'pages/icon',
-        // 'pages/test',
+        //'pages/test',
+        'pages/member/list_member',
         'pages/mycenter/orderlist',
         'pages/mycenter/dianpin',
-        'pages/member/list_member',
+
 
         'pages/mycenter/index',
         'pages/goodsDetail',

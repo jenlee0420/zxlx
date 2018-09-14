@@ -1,6 +1,6 @@
 <style lang="less">
 #memberlist{
-    
+
 }
 .list_menber_view_view_btn{
   border: 1rpx solid #c0dff4;
@@ -61,7 +61,9 @@
 <template>
   <view class="container" id="memberlist">
   <view class="list_menber_view_view">
-    <view class="list_menber_view_view_btn">
+
+    <view class="list_menber_view_view_btn" @tap="go_to_add">
+      <navigator url="/pages/member/add_member"></navigator>
       <icon class="public_icon_add_menber"></icon>
       <text>新增出行人</text>
     </view>
@@ -74,13 +76,13 @@
 
   <block wx:for="{{list}}" wx:key="{{index}}">
     <!-- <view class="list_member_view_flex"> -->
-      <view  class="list_menber_view_list">
+      <view  class="list_menber_view_list" @tap="go_to_edit({{index}})">
         <view class="list_menber_view_list_name"><text>{{item.name}}</text></view>
         <view class="list_menber_view_list_other">
           <text class="list_menber_view_list_text1">手机号码</text>
           <text class="list_menber_view_list_mg">{{item.phone}}</text>
         </view>
-        <view class="list_menber_view_list_other" hidden="{{item.idcard==''}}">
+        <view class="list_menber_view_list_other" hidden="{{item.idcard==''||!item.idcard}}">
           <text class="list_menber_view_list_text1">身份证</text>
           <text class="list_menber_view_list_mg">{{item.idcard}}</text>
         </view>
@@ -106,8 +108,54 @@
         {name:"ll3",phone:"13724241475",idcard:"430104199301113457"}
         ]
     }
-    methods = {}
+    methods = {
+      go_to_add(){
+        wx.navigateTo({
+          url:"add_member"
+        })
+      },
+
+      go_to_edit(index){
+        var address_id=this.list[index].address_id
+        wx.navigateTo({
+          url:"add_member?address_id="+address_id
+        })
+      }
+    }
     onLoad() {
+      // wx.request({
+      //   url:"api/address/lists",
+      //   method: 'POST',
+      //   data:{},
+      //   header: {
+      //     'content-type': 'application/json' // 默认值
+      //   },
+      //   success: function(res) {
+      //     console.log(res.data)
+      //   }
+      // })
+      wepy.request({
+        url: "api/address/lists",
+        method: 'POST',
+        data: {},
+      }).then(res => {
+        if(res.code!="1"){
+          this.showAlert({title:"警告",content:res.msg});
+        }else {
+          for(var i=0;i<res.data.list.length;i++){
+            var thisdata=res.data.list[i];
+            this.list.push({
+              address_id:thisdata.address_id,
+              name:thisdata.name,
+              phone:thisdata.phone,
+              user_id:thisdata.user_id,
+              idcard:thisdata.idcard
+            })
+          }
+          this.$apply();
+        }
+      })
+
     }
   }
 </script>

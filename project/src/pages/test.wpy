@@ -1,10 +1,27 @@
 <style lang="less">
+  .public_icon2{
+    background-image: url('@{imgbaseUrl}/icon2.png');
+    background-repeat: no-repeat;
+    background-size: 200rpx;
+    width: 22rpx;
+    height: 22rpx;
+  }
+
+  .public_icon2_star_light{
+    &:extend(.public_icon2);
+    background-position: 0rpx -50rpx ;
+    width: 42rpx;
+    height: 42rpx;
+  }
+
+
 </style>
+
 
 <template>
   <view class="container">
-    <gooditem></gooditem> 
-    <view class="public_icon4_cancle_goods"></view>
+    <gooditem>asdas</gooditem>
+    <view class="public_icon2_star_dark"></view>
     <span class=""></span>
     <popwin :popObj="popObj">
       <div slot="content">ddfdfsdf</div>
@@ -50,12 +67,12 @@
     methods = {
       bindRegionChange() {
       },
-      
+
       getPhoneNumber(e){
         console.log(e)
         this.addressinfo()
       }
-      
+
     }
     addressinfo(){
         wepy.chooseAddress()
