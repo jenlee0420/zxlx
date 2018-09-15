@@ -38,7 +38,7 @@
             width: 82rpx;
             height: 82rpx;
             margin-right: 35rpx;
-            margin-bottom: 30rpx;
+            margin-bottom: 20rpx;
         }
         }
         
@@ -89,6 +89,7 @@
         <view class="bordernone">
             <view class="flex flex-between"> <text>上传照片</text><text class="c929292">(最多9张)</text></view> 
             <view class="imageitems">
+                
                 <view class="imageitem">
                     <span class="Topcorner zan-icon-close zan-icon"></span>
                     <image src="{{baseServerImg}}" mode="aspectFill" />
@@ -97,6 +98,7 @@
                     <span class="Topcorner zan-icon-close zan-icon"></span>
                     <image src="{{baseServerImg}}" mode="aspectFill" />
                 </view>
+                <view class="public_icon4_upload_picture"></view>
             </view>
         </view>
         <view class="t_c bordernone pb30">

@@ -1,0 +1,33 @@
+<style lang="less">
+
+</style>
+
+<template>
+  <view class="btns">
+        <button class="btnline mr12">取消订单</button>
+        <button class="btnline mr12">再次购买</button>
+        <button class="btn" disabled>已评价</button>
+        <button class="btn">我要评价</button>
+        <button class="btn">去支付</button>
+        <button class="btn">发给好友</button>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+export default class orderbtn extends wepy.page {
+  config = {
+  }
+  components = {}
+  props = {
+      orderstatus:{}
+  }
+  mixins = [Mixin]
+  data = {
+  }
+  methods = {}
+  onLoad() {
+  }
+}
+</script>

@@ -1,0 +1,240 @@
+<style lang="less">
+//   @import '../resource/less/layout.less';
+//   @import '../resource/less/photo.less';
+
+  @footer-h: 106rpx;
+
+
+  .icon-44 {
+    width: 44rpx;
+    height: 44rpx;
+  }
+
+  .huabian {
+    // .huabian-bg;
+    background-size: contain;
+    padding-top: 44rpx;
+    width: 100%;
+    height: 570rpx;
+    .shop-photo {
+      margin-left: 40rpx;
+      width: 430rpx;
+      height: 430rpx;
+      image {
+        width: 100%;
+        height: 100%;
+      }
+    }
+    .shop-info {
+      width: 272rpx;
+      height: 440rpx;
+      .lisheng {
+        .t1 {
+          font-size: 26rpx;
+          color: #ed6b6b;
+          height: 58rpx;
+          line-height: 58rpx;
+        }
+        .t2 {
+          font-size: 30rpx;
+          color: #595959;
+          text-decoration: line-through;
+          letter-spacing:2rpx;
+          height: 50rpx;
+          line-height: 50rpx;
+        }
+        .t3 {
+          font-size: 40rpx;
+          color: #e70e0e;
+          height: 56rpx;
+          line-height: 56rpx;
+        }
+      }
+      .shop-gou {
+        .pin-avatar {
+          position: relative;
+          margin-bottom: 28rpx;
+          image {
+            width: 66rpx;
+            height: 66rpx;
+          }
+          .bubble {
+            position: absolute;
+            left:-8rpx;
+            top:-12rpx;
+            padding: 2rpx 8rpx;
+            background: #e0b213;
+            font-size: 14rpx;
+            color: #fff;
+            height: 22rpx;
+            border-radius: 11rpx;
+            line-height: 24rpx;
+          }
+          image + image {
+            margin-left: 2rpx;
+          }
+        }
+        .btn {
+          width: 182rpx;
+          height: 62rpx;
+          color: #f32422;
+          border: 1rpx solid #fb8785;
+          font-size: 30rpx;
+          border-radius: 10rpx;
+          text-align: center;
+          line-height: 60rpx;
+        }
+      }
+
+    }
+  }
+
+  .time-part {
+    padding: 70rpx 48rpx 20rpx 48rpx;
+    .btn {
+      width: 100%;
+      background: #e02e24;
+      color: #fff;
+      font-size: 30rpx;
+      text-align: center;
+      border-radius: 10rpx;
+      padding: 30rpx 0;
+      letter-spacing:2rpx;
+      margin-bottom: 26rpx;
+    }
+    .tips {
+      font-size: 24rpx;
+    }
+  }
+  .list {
+    padding: 0 20rpx;
+    // 游学组合
+    .item {
+      padding: 26rpx 6rpx 23rpx 6rpx;
+      border-top: 1rpx solid #e5e5e5;
+    //   .flexRow;
+      .title {
+        font-size: 24rpx;
+        margin-right: 96rpx;
+      }
+      .title2 {
+        font-size: 26rpx;
+        margin-bottom: 22rpx;
+        letter-spacing:2rpx
+      }
+      .des {
+        font-size: 22rpx;
+        color: #c0bebe;
+      }
+      .right_arrow {
+        margin-left: 44rpx;
+        width: 23rpx;
+        height: 31rpx;
+        image {
+          width:100%;
+          height:100%;
+          display:block;
+        }
+      }
+    }
+
+    .item2 {
+      height: 90rpx;
+      padding: 0 6rpx;
+      border-top: 1rpx solid #e5e5e5;
+      font-size: 24rpx;
+      .des {
+        color: #9c9999;
+        text {
+          margin: 0 10rpx;
+          font-size: 46rpx;
+        }
+      }
+    }
+  }
+
+  .tuijian {
+    background: #efeff4;
+    .title {
+      font-size: 30rpx;
+      height: 100rpx;
+      line-height: 100rpx;
+    }
+  }
+
+
+
+</style>
+<template>
+  <view>
+    <!-- 花边抢购 S -->
+    <view class="flexRow flex-astart huabian">
+      <view class="shop-photo">
+        <image src="../resource/img/big_zhi.png"></image>
+      </view>
+      <view class="flex flex-jbetween shop-info">
+        <view class="flex lisheng">
+          <text class="t1">限时立省</text>
+          <text class="t2">￥3000.3</text>
+          <text class="t3">￥2988</text>
+        </view>
+        <view class="flex shop-gou">
+          <view class="flexRow flex-jcenter pin-avatar">
+            <image src="../resource/img/avatar.png"></image>
+            <image src="../resource/img/avatar.png"></image>
+            <view class="bubble">拼主</view>
+          </view>
+          <view class="btn">点击抢购</view>
+        </view>
+      </view>
+    </view>
+    <!-- 花边抢购 E -->
+    <!-- 倒计时部分 S -->
+    <view class="flex time-part">
+      <view class="btn">
+        邀请好友拼单 2天 23:59:35.7 后结束
+      </view>
+      <view class="tips">
+        分享到3个群后，拼成率高达98%
+      </view>
+    </view>
+    <!-- 倒计时部分 E -->
+    <!-- 相似的列表 S -->
+    <view class="list">
+      <view class="item">
+        <view class="self-start title">游学组合</view>
+        <view class="flex flex-1 flex-astart">
+          <view class="title2">20天军事特训营打算方法嘎达范德大股东【北京】</view>
+          <view class="des">八一军营期第一期发嘎嘎是</view>
+        </view>
+        <view class="right_arrow">
+          <image src="../resource/img/right_arrow.png"></image>
+        </view>
+      </view>
+      <view class="flexRow flex-jbetween item2">
+        <view class="title">拼单时间</view>
+        <view class="time">2018/08/24 14:49:24</view>
+      </view>
+      <view class="flexRow flex-jbetween item2">
+        <view class="title">拼单须知</view>
+        <view class="flexRow reverse flex-1 des">
+          <view class="flexRow"><text>·</text>人满不退款</view>
+          <view class="flexRow"><text>·</text>人满拼成</view>
+          <view class="flexRow"><text>·</text>好友拼单</view>
+        </view>
+      </view>
+    </view>
+    <!-- 相似的列表 E -->
+    <view class="flex tuijian">
+      <text class="title">精品推荐</text>
+    </view>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+
+  export default class listYaoqing extends wepy.page {
+    data = {
+    };
+  }
+</script>

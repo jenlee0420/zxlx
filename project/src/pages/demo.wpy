@@ -11,7 +11,7 @@
 <script>
 import wepy from 'wepy'
 import Mixin from '@/mixins/global'
-export default class Index extends wepy.page {
+export default class collaborate extends wepy.page {
   config = {
   }
   components = {}
