@@ -4,17 +4,20 @@
 
 <template>
   <view class="container">
-    
+    <item></item>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy'
 import Mixin from '@/mixins/global'
-export default class Index extends wepy.page {
+import item from '@/components/collectionItem'
+export default class collection extends wepy.page {
   config = {
   }
-  components = {}
+  components = {
+      item
+  }
   mixins = [Mixin]
   data = {
   }

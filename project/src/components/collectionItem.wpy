@@ -1,0 +1,41 @@
+<style lang="less">
+#collectionIte{
+    
+}
+</style>
+
+<template>
+  <view class="container" id="collectionItem">
+    <view>
+        <image src="{{baseServerImg}}" mode="aspectFill"/>
+    </view>
+    <view class="">
+        <text class="itemname">20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】</text>
+        <text class="fs22 c929292">已拼3500人次 · 3人拼单</text>
+        <view>
+            <text class="redlabel">知兮乐兮自营</text>
+            <text class="greenlabel">不限年龄</text>
+        </view>
+        <view>
+            <text>￥3000.00起</text>
+            <button class="btn">发起拼单</button>
+        </view>
+    </view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+export default class collectionItem extends wepy.component {
+  config = {
+  }
+  components = {}
+  mixins = [Mixin]
+  data = {
+  }
+  methods = {}
+  onLoad() {
+  }
+}
+</script>

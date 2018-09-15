@@ -22,7 +22,9 @@
       pages: [ 
         // 'pages/icon',
         // 'pages/test',
-        'pages/collaborate',
+        'pages/mycenter/collection',
+        'pages/mycenter/feedback',
+        'pages/mycenter/collaborate',
         'pages/paypage',
         'pages/yaoqing',
         'pages/mycenter/orderdetail',
@@ -34,7 +36,7 @@
         'pages/custom',
         'pages/member/add_member',
         'pages/refund',
-        'pages/index',
+        'pages/index', 
         'pages/seacrh_page'
       ],
       tabBar: {

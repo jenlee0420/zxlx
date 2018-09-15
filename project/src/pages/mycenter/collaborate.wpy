@@ -1,0 +1,73 @@
+<style lang="less">
+#collaborate{
+  .words{
+      color:#9f9d9d;
+      font-size: 32rpx;
+      padding: 22rpx 22rpx 22rpx 80rpx;
+      line-height: 60rpx;
+      letter-spacing: 2rpx;
+      >text{display: inline-block}
+  }
+  .forminfo{
+      background-color: #fff;
+      ul>li{
+        height: 105rpx;
+        border-bottom: 1rpx solid @bColor;
+        line-height: 105rpx;
+        font-size: 30rpx;
+        color: #333;
+        width: 100%;
+        padding-left: 80rpx;
+        display: flex;
+        align-items: center;
+        padding-right: 30rpx;
+        box-sizing: border-box;
+        &:last-child{
+            height: 380rpx;
+            align-items:flex-start;
+            textarea{
+                margin-top: 30rpx;
+                flex:1
+            }
+        }
+        >text{
+            width: 140rpx;
+        }
+      }
+  }
+}
+</style>
+
+<template>
+  <view class="container" id="collaborate">
+    <view class="words">
+      <text>想和知兮乐兮进行合作吗？</text>
+      <text>现在提交您的联系方式和合作意向，我们会1-2内联系您:）</text>
+    </view>
+    <view class="forminfo">
+      <ul>
+        <li><text>联系人</text><input  placeholder="姓名" /></li>
+        <li><text>手机号码</text><input  placeholder="电话" /></li>
+        <li><text>所在城市</text><input  placeholder="您的业务所在城市" /></li>
+        <li><text>合作意向</text><textarea placeholder="介绍您的亲子产品以及希望的合作方式（最多500字）" ></textarea></li>
+      </ul>
+    </view>
+    <view class="flex flex-jcenter"><button class="w600 btn mb190 mt30">提交</button></view>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+export default class collaborate extends wepy.page {
+  config = {
+  }
+  components = {}
+  mixins = [Mixin]
+  data = {
+  }
+  methods = {}
+  onLoad() {
+  }
+}
+</script>
