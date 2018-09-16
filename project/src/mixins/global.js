@@ -108,6 +108,16 @@ export default class Global extends wepy.mixin {
         })
     }
 
+    showToast(title){
+        // title可不写 文本最多可显示两行
+        wepy.showToast({
+            title: title,
+            icon: 'none',
+            mask: true,
+            duration:2000
+        })
+    }
+
     // 显示加载动画，
     // hide 传入false则关闭加载提示
     showloading(hide) {

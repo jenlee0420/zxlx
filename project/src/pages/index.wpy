@@ -1,148 +1,149 @@
 <style lang="less">
-  #homepage{
-    // display: flex;
-    // flex-direction: column;
-    .topSwiper{
-      height: 306rpx;
-    }
-    .navTab{
-      background-color: #fff;
-      padding-top: 8rpx;
-      padding-bottom: 35rpx;
-      position: relative;
-    }
-    .navTablist{
-      height: 415rpx;
-      display: flex;
-      flex-wrap: wrap;
-      justify-content: space-between;
-      background-color: #fff;
-      .icon{
-        width: 77rpx;
-        height: 77rpx;
-        margin-bottom: 30rpx;
-      }
-      span{
-        width: 20%;
-        display:flex;
-        justify-content: center;
-        align-items: center;
-        flex-direction: column;
-      }
-    }
-    .navDots{
-      width: 100%;
-      display:flex;
-      justify-content: center;
-      .dot{
-        display: inline-block;
-        height: 10rpx;
-        width: 24rpx;
-        margin-right: 15rpx;
-        background-color: #ccc;
-        border-radius: 15rpx;
-        transition: all .3s;
-        &.current{
-          border-radius: 25rpx;
-          width: 32rpx;
-          background-color: rgb(246,17,17);
+    #homepage {
+        // display: flex;
+        // flex-direction: column;
+        .topSwiper {
+            height: 306rpx;
         }
-      }
+        .navTab {
+            background-color: #fff;
+            padding-top: 8rpx;
+            padding-bottom: 35rpx;
+            position: relative;
+        }
+        .navTablist {
+            height: 415rpx;
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: space-between;
+            background-color: #fff;
+            .icon {
+                width: 77rpx;
+                height: 77rpx;
+                margin-bottom: 30rpx;
+            }
+            span {
+                width: 20%;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                flex-direction: column;
+            }
+        }
+        .navDots {
+            width: 100%;
+            display: flex;
+            justify-content: center;
+            .dot {
+                display: inline-block;
+                height: 10rpx;
+                width: 24rpx;
+                margin-right: 15rpx;
+                background-color: #ccc;
+                border-radius: 15rpx;
+                transition: all .3s;
+                &.current {
+                    border-radius: 25rpx;
+                    width: 32rpx;
+                    background-color: rgb(246, 17, 17);
+                }
+            }
+        }
     }
-  }
-  
 </style>
 
 <template>
-  <view class="container" id="homepage">
-  <!-- 头部轮播图片 -->
-    <div class="topSwiper">
-      <swiper style="height:306rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
-        <block wx:for="{{imgUrls}}" wx:key="{{index}}">
-          <swiper-item>
-            <image src="{{item}}" class="slide-image"/>
-          </swiper-item>
-        </block>
-      </swiper>
-    </div>
-    <!-- 导航图标 -->
-    <view class="navTab">
-      <swiper  style="height:418rpx" @change="changenav" indicator-dots="{{false}}" autoplay="{{false}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
-          <swiper-item>
-            <div class="navTablist">
-              <span wx:for="{{10}}" wx:key="{{index}}">
-                <view class="icon">
-                <image src="{{baseServerImg}}" mode="aspectFill"/>
-              </view>
-                {{item}}
-              </span>
+    <view class="container" id="homepage">
+        <!-- 头部轮播图片 -->
+        <div class="topSwiper">
+            <swiper style="height:306rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
+                <block wx:for="{{imgUrls}}" wx:key="{{index}}">
+                    <swiper-item>
+                        <image src="{{item}}" class="slide-image" />
+                    </swiper-item>
+                </block>
+            </swiper>
+        </div>
+        <!-- 导航图标 -->
+        <view class="navTab">
+            <swiper style="height:418rpx" @change="changenav" indicator-dots="{{false}}" autoplay="{{false}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
+                <swiper-item>
+                    <div class="navTablist">
+                        <span wx:for="{{10}}" wx:key="{{index}}">
+                            <view class="icon">
+                                <image src="{{baseServerImg}}" mode="aspectFill"/>
+                            </view>
+                            {{item}}
+                        </span>
+                    </div>
+                </swiper-item>
+                <swiper-item>
+                    <div class="navTablist">
+                        <span wx:for="{{10}}" wx:key="{{index}}">{{item}}=</span>
+                    </div>
+                </swiper-item>
+            </swiper>
+            <div class="navDots">
+                <span class="dot {{navIndex == 0?'current':''}}"></span>
+                <span class="dot {{navIndex == 1?'current':''}}"></span>
             </div>
-          </swiper-item>
-          <swiper-item>
-            <div class="navTablist">
-              <span wx:for="{{10}}" wx:key="{{index}}">{{item}}=</span>
-            </div>
-          </swiper-item>
-      </swiper>
-      <div class="navDots">
-        <span class="dot {{navIndex == 0?'current':''}}"></span>
-        <span class="dot {{navIndex == 1?'current':''}}"></span>
-      </div>
+        </view>
+        <!-- 热门推荐 -->
+        <text class="sutitle">热门推荐</text>
+        <view class="p-0-32">
+            <recommend></recommend>
+        </view>
     </view>
-    <!-- 热门推荐 -->
-    <text class="sutitle">热门推荐</text>
-    <view class="p-0-32">
-      <recommend></recommend>
-    </view>
-    
-  </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-import recommend from '@/components/gooditem'
-export default class Index extends wepy.page {
-  config = {
-  }
-  components = {recommend}
-  mixins = [Mixin]
-  data = {
-    imgUrls: [],
-    catelist1:[],
-    catelist2:[],
-    navIndex: 0
-  }
-  methods = {
-    changenav(index) {
-      // console.log(index)
-      this.navIndex = index.detail.current
-    }
-  }
-  getAD(){
-    this.imgUrls.push(this.baseServerImg)
-    this.imgUrls.push(this.baseServerImg)
-    this.imgUrls.push(this.baseServerImg)
-  }
-  getCate(){
-      wepy.request({
-        url: 'api/category/lists',
-        method: 'POST',
-      }).then(res => {
-        if(res.code == '1'){
-          this.catelist1 = res.data
-        } else {
-          wepy.showModal({content:res.msg,showCancel:false})
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import recommend from '@/components/gooditem'
+    export default class Index extends wepy.page {
+        config = {}
+        components = {
+            recommend
         }
-      })
+        mixins = [Mixin]
+        data = {
+            imgUrls: [],
+            catelist1: [],
+            catelist2: [],
+            navIndex: 0
+        }
+        methods = {
+            changenav(index) {
+                // console.log(index)
+                this.navIndex = index.detail.current
+            }
+        }
+        getAD() {
+            this.imgUrls.push(this.baseServerImg)
+            this.imgUrls.push(this.baseServerImg)
+            this.imgUrls.push(this.baseServerImg)
+        }
+        getCate() {
+            wepy.request({
+                url: 'api/category/lists',
+                method: 'POST',
+            }).then(res => {
+                if (res.code == '1') {
+                    this.catelist1 = res.data
+                } else {
+                    wepy.showModal({
+                        content: res.msg,
+                        showCancel: false
+                    })
+                }
+            })
+        }
+        onLoad() {
+            this.PageInit()
+        }
+        PageInit() {
+            this.getCate()
+            this.getAD()
+        }
     }
-  onLoad() {
-    this.PageInit()
-  }
-  PageInit(){
-    this.getCate()
-    this.getAD()
-
-  }
-}
 </script>
