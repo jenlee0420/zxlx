@@ -1,0 +1,33 @@
+<style lang="less">
+    #guess{
+        .sutitle{
+            display:flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+</style>
+
+<template>
+  <view class="container" id="guess">
+    <view class="sutitle"><span class="public_icon2_doyoulike mr10"></span>猜你喜欢</view>
+    <gooditem></gooditem>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+import gooditem from '@/components/collectionItem'
+export default class Guess extends wepy.page {
+  config = {
+  }
+  components = {gooditem}
+  mixins = [Mixin]
+  data = {
+  }
+  methods = {}
+  onLoad() {
+  }
+}
+</script>

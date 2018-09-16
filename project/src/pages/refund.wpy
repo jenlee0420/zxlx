@@ -132,6 +132,7 @@
   import myradio from '@@/myradio'
   export default class Index extends wepy.page {
     config = {
+        navigationBarTitleText: '申请售后'
     }
     components = {myradio}
     mixins = [Mixin]

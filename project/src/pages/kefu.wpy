@@ -1,0 +1,38 @@
+<style lang="less">
+.container{
+    background:#fff;
+    width: 100%;
+}
+</style>
+
+<template>
+    <view class="container">
+        <rich-text type='text' nodes="{{intro}}" attrs="{{style}}" bindtap="tap"></rich-text>
+    </view>
+</template>
+
+<script> 
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class kefu extends wepy.page {
+        config = {
+            navigationBarTitleText: '客服信息',
+        }
+        components = {}
+        mixins = [Mixin]
+        data = {
+            intro: '',
+            style: {
+                class: 'rich-text',
+                style: 'width: 100%; height: 100%;'
+            },
+        }
+        methods = {}
+        getInfo() {
+            let t = unescape(intro)
+            t = t.replace(/<img src/g, '<img style="max-width:100%" src')
+            this.intro = t
+        }
+        onLoad() {}
+    }
+</script>

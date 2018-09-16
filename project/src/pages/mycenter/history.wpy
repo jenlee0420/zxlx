@@ -1,0 +1,38 @@
+<style lang="less">
+.container{
+    .datetxt{
+        font-size:22rpx;
+        color:#c0bebe;
+        line-height:50rpx;
+        padding-left:20rpx;
+    }
+}
+</style>
+
+<template>
+  <view class="container">
+    <view class="datetxt">9月26号</view>
+    <gooditem></gooditem>
+    <gooditem></gooditem>
+    <guess></guess>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+import gooditem from '@/components/collectionItem'
+import guess from '@/components/guess'
+export default class history extends wepy.page {
+  config = {
+      navigationBarTitleText: '我的浏览',
+  }
+  components = {gooditem,guess}
+  mixins = [Mixin]
+  data = {
+  }
+  methods = {}
+  onLoad() {
+  }
+}
+</script>

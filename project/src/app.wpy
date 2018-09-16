@@ -23,6 +23,9 @@
         // 'pages/icon',
         //'pages/test',
         'pages/member/list_member',
+        'pages/mycenter/history',
+        'pages/member/add_member',
+        'pages/about',
         'pages/index',
         'pages/mycenter/dianpin',
 
@@ -30,7 +33,6 @@
         'pages/mycenter/index',
         'pages/goodsDetail',
         'pages/custom',
-        'pages/member/add_member',
         'pages/refund',
         'pages/seacrh_page'
       ],
@@ -94,8 +96,8 @@
       /* 启动先调用微信登录 => 服务器登录 */
       this.wxLogin().then(code => {
         /* 用户登录 */
-        console.log('code',code)
-        // this.userlogin(code, options)
+        // console.log('code',code)
+        this.userlogin(code, options)
       })
     }
     wxLogin() {
