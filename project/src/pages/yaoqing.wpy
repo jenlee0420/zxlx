@@ -172,13 +172,13 @@
       <view class="shop-photo">
         <image src="../resource/img/big_zhi.png"></image>
       </view>
-      <view class="flex flex-jbetween shop-info">
+      <view class="flexCol flex-jbetween shop-info">
         <view class="flex lisheng">
           <text class="t1">限时立省</text>
           <text class="t2">￥3000.3</text>
           <text class="t3">￥2988</text>
         </view>
-        <view class="flex shop-gou">
+        <view class="flexCol shop-gou">
           <view class="flexRow flex-jcenter pin-avatar">
             <image src="../resource/img/avatar.png"></image>
             <image src="../resource/img/avatar.png"></image>
@@ -190,7 +190,7 @@
     </view>
     <!-- 花边抢购 E -->
     <!-- 倒计时部分 S -->
-    <view class="flex time-part">
+    <view class="flexCol time-part">
       <view class="btn">
         邀请好友拼单 2天 23:59:35.7 后结束
       </view>
@@ -203,7 +203,7 @@
     <view class="list">
       <view class="item">
         <view class="self-start title">游学组合</view>
-        <view class="flex flex-1 flex-astart">
+        <view class="flexCol flex-1 flex-astart">
           <view class="title2">20天军事特训营打算方法嘎达范德大股东【北京】</view>
           <view class="des">八一军营期第一期发嘎嘎是</view>
         </view>
@@ -225,7 +225,7 @@
       </view>
     </view>
     <!-- 相似的列表 E -->
-    <view class="flex tuijian">
+    <view class="flexCol tuijian">
       <text class="title">精品推荐</text>
     </view>
   </view>

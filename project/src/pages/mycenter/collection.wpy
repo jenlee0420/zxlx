@@ -14,6 +14,7 @@ import Mixin from '@/mixins/global'
 import item from '@/components/collectionItem'
 export default class collection extends wepy.page {
   config = {
+      navigationBarTitleText: '我的收藏',
   }
   components = {
       item

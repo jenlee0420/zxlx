@@ -225,7 +225,7 @@
     </view> -->
     <!-- 地址信息 E -->
     <!-- 按钮列表 S -->
-    <view class="flex flex-astretch listWrap">
+    <view class="flexCol flex-astretch listWrap">
       <view class="flexRow">
         <image class="icon-44" src="../resource/img/red_plus.png"></image>
         <text>手动添加联系信息</text>
@@ -239,7 +239,7 @@
     </view>
     <!-- 按钮列表 E -->
     <!-- 数量选择 S -->
-    <view class="flex flex-astretch numWrap">
+    <view class="flexCol flex-astretch numWrap">
       <view class="flexRow man-info">
         <view class="flex flex-jcenter avatar"><text>奥</text></view>
         <text>奥德曼</text>
@@ -247,7 +247,7 @@
       <view class="shop-info">
         <view class="flexRow flex-astretch">
           <image class="self-start" src="../resource/img/cailiao8.png"></image>
-          <view class="flex flex-astretch flex-jbetween">
+          <view class="flexCol flex-astretch flex-jbetween">
             <text class="title">20天军事特训营打算方法嘎达范德大股东【北京】</text>
             <text class="des">八一军营期第一期发嘎嘎是</text>
             <text class="price">￥3000.3/个</text>
@@ -265,7 +265,7 @@
     </view>
     <!-- 数量选择 E -->
     <!-- 支付方式 S -->
-    <view class="flex flex-astretch payway">
+    <view class="flexCol flex-astretch payway">
       <view class="flexRow">
         <image class="icon-44" mode="aspectFit" src="../resource/img/wx_03.png"></image>
         <text>微信支付</text>

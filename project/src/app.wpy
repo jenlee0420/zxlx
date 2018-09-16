@@ -22,6 +22,7 @@
       pages: [ 
         // 'pages/icon',
         // 'pages/test',
+        'pages/index', 
         'pages/mycenter/collection',
         'pages/mycenter/feedback',
         'pages/mycenter/collaborate',
@@ -36,7 +37,6 @@
         'pages/custom',
         'pages/member/add_member',
         'pages/refund',
-        'pages/index', 
         'pages/seacrh_page'
       ],
       tabBar: {
@@ -131,8 +131,8 @@
         data: data
       }).then(res => {
         if (res.code == '1') {
-            this.updateLoginInfo(res)
-          wepy.setStorageSync('token', res.data.token)
+            this.updateLoginInfo(res.data)
+          // wepy.setStorageSync('token', res.data.token)
           wepy.setStorageSync('userid', res.data.user_id)
         } else {
           wepy.showModal({
@@ -146,6 +146,7 @@
             let userData = JSON.stringify(data)
             // wepy.setStorageSync('userData', userData)
             wepy.setStorageSync('token', data.token)
+            console.log(wepy.getStorageSync('token'))
             // wepy.setStorageSync('loginkey',data.login_key)
             if (this.userInfoReadyCallback) {
                 this.userInfoReadyCallback(data)

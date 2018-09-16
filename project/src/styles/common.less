@@ -90,7 +90,7 @@
 .flex-1{flex:1}
 
 
-.flex { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; }
+.flexCol { display: flex; flex-direction: column; justify-content: flex-start; align-items: center; }
 .flexRow { display: flex; flex-direction: row; justify-content: flex-start; align-items: center; }
 .flexRow.reverse { flex-direction: row-reverse; }
 .flex-jcenter {justify-content: center;}
@@ -129,7 +129,15 @@
     width: 100%;
     background-color: #f4f4f4;
 }
-
+.sutitle{
+    width: 100%;
+    display: inline-block;
+    font-size: 28rpx;
+    height: 78prx;
+    line-height: 78rpx;
+    padding: 0 25rpx;
+    color:#333;
+  }
 
 /* 按钮类 */
 .w600{width: 600rpx;}
@@ -173,6 +181,12 @@
 
 
 /* 订单列表  订单详情 卡片样式*/
+.itemlabel{
+    >text{font-size: 20rpx; color: #fff; line-height: 32rpx;height: 32rpx; padding:5rpx 10rpx; border-radius: 5rpx; margin-right: 20rpx;}
+    .redlabel{background-color: #ee8151}
+    .greenlabel{background-color: #91c46c}
+}
+
 .itemContent {
     width: 100%;
     background-color: #fff;

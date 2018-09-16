@@ -1,23 +1,54 @@
 <style lang="less">
-#collectionIte{
-    
+#collectionItem{
+    display: flex;
+    background-color: #fcfafa;
+    padding: 40rpx 30rpx 25rpx 20rpx;
+    position: relative;
+    &:after{
+        content: '';
+        width: 100%;
+        left:20rpx;
+        height: 1rpx;
+        border-bottom: 1rpx solid @bColor;
+        position: absolute;
+        bottom:0;
+    }
+    &:last-child{
+        &::after{
+            content:none;
+        }
+    }
+    .imgbox{
+        height: 198rpx;
+        width:198rpx;
+        margin-right: 20rpx;
+    }
+    .itemname{
+        -webkit-box-orient: vertical;
+        -webkit-line-clamp: 2;
+        overflow: hidden;
+        font-size: 26rpx;
+        line-height: 36rpx;
+        color: #333;
+        display: -webkit-box;
+    }
 }
 </style>
 
 <template>
   <view class="container" id="collectionItem">
-    <view>
+    <view class="imgbox">
         <image src="{{baseServerImg}}" mode="aspectFill"/>
     </view>
-    <view class="">
+    <view class="flex-1">
         <text class="itemname">20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】</text>
         <text class="fs22 c929292">已拼3500人次 · 3人拼单</text>
-        <view>
+        <view class="itemlabel">
             <text class="redlabel">知兮乐兮自营</text>
             <text class="greenlabel">不限年龄</text>
         </view>
-        <view>
-            <text>￥3000.00起</text>
+        <view class="flex flex-between flex-algin-center">
+            <text class="maincolor fs30">￥3000.00起</text>
             <button class="btn">发起拼单</button>
         </view>
     </view>
