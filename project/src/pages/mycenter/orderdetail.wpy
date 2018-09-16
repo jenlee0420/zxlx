@@ -149,7 +149,7 @@
     <view class="container" id="orderdetail">
         <view class="orderstatus">
             <text>等待买家付款</text>
-            <span class=""></span>
+            <span class="order_wait_pay"></span>
         </view>
         <view class="address">
             <span class="public_icon2_location2"></span>
@@ -237,7 +237,9 @@
     import orderBtn from '@/components/orderBtn'
     import Star from '@/components/StarRatine'
     export default class orderdetail extends wepy.page {
-        config = {}
+        config = {
+            navigationBarTitleText: '订单详情',
+        }
         components = {orderBtn,Star}
         mixins = [Mixin]
         data = {}

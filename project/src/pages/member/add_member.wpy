@@ -31,6 +31,8 @@
         width: 100%;
         display: flex;
         justify-content: center;
+        flex-direction: column;
+        align-items: center;
     }
     .my_btn {
         width: 587rpx;
@@ -132,6 +134,10 @@
         </view>
         <view class="my_btn_view">
             <button class="btn my_btn" @tap="saveContact">保存</button>
+            <!-- 分享后微信好友看到的按钮 -->
+            <button class="btn my_btn">提交给朋友</button>
+            <text class="fs18 cb4b4b4 mt30">提交后，您的信息将出现在您朋友的知兮乐兮账号中</text>
+            <!--  -->
         </view>
 
         <view class="my_del_view">

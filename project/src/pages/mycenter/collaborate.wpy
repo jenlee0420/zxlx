@@ -61,6 +61,7 @@ import wepy from 'wepy'
 import Mixin from '@/mixins/global'
 export default class collaborate extends wepy.page {
   config = {
+      navigationBarTitleText: '业务合作',
   }
   components = {}
   mixins = [Mixin]

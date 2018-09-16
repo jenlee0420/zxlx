@@ -29,6 +29,7 @@ import wepy from 'wepy'
 import Mixin from '@/mixins/global'
 export default class feedback extends wepy.page {
   config = {
+      navigationBarTitleText: '反馈信息',
   }
   components = {}
   mixins = [Mixin]
