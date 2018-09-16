@@ -21,7 +21,7 @@
 <template>
   <view class="container">
     <gooditem>asdas</gooditem>
-    <view class="public_icon2_star_dark"></view>
+    <view class="public_icon_add_traveller"></view>
     <span class=""></span>
     <popwin :popObj="popObj">
       <div slot="content">ddfdfsdf</div>

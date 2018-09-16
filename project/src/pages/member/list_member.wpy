@@ -1,94 +1,142 @@
 <style lang="less">
-#memberlist{
+  #memberlist{
 
-}
-.list_menber_view_view_btn{
-  border: 1rpx solid #c0dff4;
-  border-radius: 20rpx;
-  width: 335rpx;
-  height: 78rpx;
-  display: flex;
-  justify-content: center;
-  align-items: center;
-}
+  }
+  .list_menber_view_view_btn{
+    border-radius: 20rpx;
+    width: 336rpx;
+    height: 90rpx;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-left: 30rpx;
+  }
 
-.list_menber_view_view{
-  margin-top: 54rpx;
-  display: flex;
-  font-size: 30rpx;
-  font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
-  color: #1ba0f0;
-  justify-content: space-between;
-  padding: 0 30rpx;
-}
+  .list_menber_view_view_btn_self{
+    &:extend(.list_menber_view_view_btn);
+    background-color: #e02e24;
+  }
 
-.list_menber_view_list{
-  font-size: 26rpx;
-  background-color:#fff;
-    border-radius:20rpx;
-    margin:30rpx;
-    padding:30rpx 40rpx;
-    line-height:48rpx;
+  .list_menber_view_view_btn_weixin{
+    &:extend(.list_menber_view_view_btn);
+    background-color: #08c303;
+    margin-left: 10rpx;
+  }
 
-}
+  .list_menber_view_view{
+    bottom: 148rpx;
+    display: flex;
+    font-size: 30rpx;
+    font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    justify-content: space-between;
+    position: fixed;
+    color: #FFFFFF;
+  }
 
-.list_menber_view_list_text{
-//   margin-top: 22rpx;
-}
+  .list_menber_view_list{
+    font-size: 26rpx;
+    color: #282727;
+    display: flex;
+  }
 
-.list_menber_view_list_name{
-  &:extend(.list_menber_view_list_text);
-  color: #181818;
-}
+  .list_location_icon{
+    margin-left: 32rpx;
+  }
 
-.list_menber_view_list_other{
-  &:extend(.list_menber_view_list_text);
-  color: #bdc0c1;
-}
+  .list_mg_35{
+    margin-left: 35rpx;
+  }
 
-.list_menber_view_list_text1{
-  width: 110rpx;
-  display: inline-block;
-}
+  .list_do{
+    display: flex;
+    margin-left: 35rpx;
+    margin-right: 19rpx;
+    border-top: 1rpx solid #e0e3df;
+    margin-bottom: 30rpx;
+    font-size: 24rpx;
+    font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  }
 
-.list_menber_view_list_mg{
-  margin-left: 35rpx;
-}
+  .list_do_1{
+    &:extend(.list_flex);
+    color: #f8280d;
+  }
+  .list_do_2{
+    &:extend(.list_flex);
+    color: #cecccc;
+  }
+  .list_flex{
+    display:flex;
+    align-items:center;
+  }
+  .list_bg{
+    background-color:#fff;
+  }
 
 
 </style>
 
 <template>
   <view class="container" id="memberlist">
-  <view class="list_menber_view_view">
+    <view class="list_menber_view_view">
 
-    <view class="list_menber_view_view_btn" @tap="go_to_add">
-      <navigator url="/pages/member/add_member"></navigator>
-      <icon class="public_icon_add_menber"></icon>
-      <text>新增出行人</text>
+      <view class="list_menber_view_view_btn_self" @tap="go_to_add">
+        <navigator url="/pages/member/add_member"></navigator>
+        <icon class="public_icon_add_traveller"></icon>
+        <text>手动添加</text>
+      </view>
+
+      <view class="list_menber_view_view_btn_weixin">
+        <icon class="public_icon1_white_weixin"></icon>
+        <text>微信添加</text>
+      </view>
     </view>
 
-    <view class="list_menber_view_view_btn">
-      <icon class="public_icon3_weixin"></icon>
-      <text>邀请好友填写</text>
-    </view>
-  </view>
-
-  <block wx:for="{{list}}" wx:key="{{index}}">
-    <!-- <view class="list_member_view_flex"> -->
-      <view  class="list_menber_view_list" @tap="go_to_edit({{index}})">
-        <view class="list_menber_view_list_name"><text>{{item.name}}</text></view>
-        <view class="list_menber_view_list_other">
-          <text class="list_menber_view_list_text1">手机号码</text>
-          <text class="list_menber_view_list_mg">{{item.phone}}</text>
+    <block wx:for="{{list}}" wx:key="{{index}}">
+      <!-- <view class="list_member_view_flex"> -->
+      <view class="list_bg">
+        <view  class="list_menber_view_list">
+          <icon class="public_icon2_location2 list_mg_35"></icon>
+          <view>
+            <view>
+              <text class="list_mg_35">{{item.name}}</text>
+              <text class="list_mg_35">{{item.phone}}</text>
+            </view>
+            <view>
+              <text class="list_mg_35">{{item.adress}}</text>
+            </view>
+          </view>
+          <icon class="zan-icon-success zan-icon"></icon>
         </view>
-        <view class="list_menber_view_list_other" hidden="{{item.idcard==''||!item.idcard}}">
-          <text class="list_menber_view_list_text1">身份证</text>
-          <text class="list_menber_view_list_mg">{{item.idcard}}</text>
+
+        <view class="list_do">
+          <view class="list_do_1 flex-1">
+            <icon class="public_icon4_defalt"></icon>
+            <text>已设为默认</text>
+          </view>
+          <view class="list_do_2">
+            <icon class="public_icon4_edit_addrss"></icon>
+            <text>编辑</text>
+          </view>
+          <view class="list_do_2">
+            <icon class="public_icon4_del_addrss"></icon>
+            <text>删除</text>
+          </view>
         </view>
       </view>
-    <!-- </view> -->
-  </block>
+
+        <!--<view class="list_menber_view_list_name"><text>{{item.name}}</text></view>-->
+        <!--<view class="list_menber_view_list_other">-->
+          <!--<text class="list_menber_view_list_text1">手机号码</text>-->
+          <!--<text class="list_menber_view_list_mg">{{item.phone}}</text>-->
+        <!--</view>-->
+        <!--<view class="list_menber_view_list_other" hidden="{{item.idcard==''||!item.idcard}}">-->
+          <!--<text class="list_menber_view_list_text1">身份证</text>-->
+          <!--<text class="list_menber_view_list_mg">{{item.idcard}}</text>-->
+        <!--</view>-->
+
+      <!-- </view> -->
+    </block>
 
   </view>
 </template>
@@ -103,10 +151,10 @@
     mixins = [Mixin]
     data = {
       list:[
-        {name:"lll",phone:"13724241455",idcard:"430104199301113456"},
-        {name:"ll2",phone:"13724241465",idcard:""},
-        {name:"ll3",phone:"13724241475",idcard:"430104199301113457"}
-        ]
+        {name:"lll",phone:"13724241455",adress:"湖南长沙1231231"},
+        {name:"ll2",phone:"13724241465",adress:""},
+        {name:"ll3",phone:"13724241475",adress:"湖南长沙刘老师累死了"}
+      ]
     }
     methods = {
       go_to_add(){
@@ -144,21 +192,21 @@
         data: {},
       }).then(res => {
         if(res.code!="1"){
-          this.showAlert({title:"警告",content:res.msg});
-        }else {
-          for(var i=0;i<res.data.list.length;i++){
-            var thisdata=res.data.list[i];
-            this.list.push({
-              address_id:thisdata.address_id,
-              name:thisdata.name,
-              phone:thisdata.phone,
-              user_id:thisdata.user_id,
-              idcard:thisdata.idcard
-            })
-          }
-          this.$apply();
+        this.showAlert({title:"警告",content:res.msg});
+      }else {
+        for(var i=0;i<res.data.list.length;i++){
+          var thisdata=res.data.list[i];
+          this.list.push({
+            address_id:thisdata.address_id,
+            name:thisdata.name,
+            phone:thisdata.phone,
+            user_id:thisdata.user_id,
+            adress:thisdata.adress
+          })
         }
-      })
-    } 
+        this.$apply();
+      }
+    })
+  }
   }
 </script>

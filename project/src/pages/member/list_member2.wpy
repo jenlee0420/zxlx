@@ -1,0 +1,164 @@
+<style lang="less">
+#memberlist{
+
+}
+.list_menber_view_view_btn{
+  border: 1rpx solid #c0dff4;
+  border-radius: 20rpx;
+  width: 335rpx;
+  height: 78rpx;
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+
+.list_menber_view_view{
+  margin-top: 54rpx;
+  display: flex;
+  font-size: 30rpx;
+  font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+  color: #1ba0f0;
+  justify-content: space-between;
+  padding: 0 30rpx;
+}
+
+.list_menber_view_list{
+  font-size: 26rpx;
+  background-color:#fff;
+    border-radius:20rpx;
+    margin:30rpx;
+    padding:30rpx 40rpx;
+    line-height:48rpx;
+
+}
+
+.list_menber_view_list_text{
+//   margin-top: 22rpx;
+}
+
+.list_menber_view_list_name{
+  &:extend(.list_menber_view_list_text);
+  color: #181818;
+}
+
+.list_menber_view_list_other{
+  &:extend(.list_menber_view_list_text);
+  color: #bdc0c1;
+}
+
+.list_menber_view_list_text1{
+  width: 110rpx;
+  display: inline-block;
+}
+
+.list_menber_view_list_mg{
+  margin-left: 35rpx;
+}
+
+
+</style>
+
+<template>
+  <view class="container" id="memberlist">
+  <view class="list_menber_view_view">
+
+    <view class="list_menber_view_view_btn" @tap="go_to_add">
+      <navigator url="/pages/member/add_member"></navigator>
+      <icon class="public_icon_add_menber"></icon>
+      <text>新增出行人</text>
+    </view>
+
+    <view class="list_menber_view_view_btn">
+      <icon class="public_icon3_weixin"></icon>
+      <text>邀请好友填写</text>
+    </view>
+  </view>
+
+  <block wx:for="{{list}}" wx:key="{{index}}">
+    <!-- <view class="list_member_view_flex"> -->
+      <view  class="list_menber_view_list" @tap="go_to_edit({{index}})">
+        <view class="list_menber_view_list_name"><text>{{item.name}}</text></view>
+        <view class="list_menber_view_list_other">
+          <text class="list_menber_view_list_text1">手机号码</text>
+          <text class="list_menber_view_list_mg">{{item.phone}}</text>
+        </view>
+        <view class="list_menber_view_list_other" hidden="{{item.idcard==''||!item.idcard}}">
+          <text class="list_menber_view_list_text1">身份证</text>
+          <text class="list_menber_view_list_mg">{{item.idcard}}</text>
+        </view>
+      </view>
+    <!-- </view> -->
+  </block>
+
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  export default class Index extends wepy.page {
+    config = {
+    }
+    components = {}
+    mixins = [Mixin]
+    data = {
+      list:[
+        {name:"lll",phone:"13724241455",idcard:"430104199301113456"},
+        {name:"ll2",phone:"13724241465",idcard:""},
+        {name:"ll3",phone:"13724241475",idcard:"430104199301113457"}
+        ]
+    }
+    methods = {
+      go_to_add(){
+        wx.navigateTo({
+          url:"add_member"
+        })
+      },
+
+      go_to_edit(index){
+        var address_id=this.list[index].address_id
+        wx.navigateTo({
+          url:"add_member?address_id="+address_id
+        })
+      }
+    }
+    onLoad() {
+      // wx.request({
+      //   url:"api/address/lists",
+      //   method: 'POST',
+      //   data:{},
+      //   header: {
+      //     'content-type': 'application/json' // 默认值
+      //   },
+      //   success: function(res) {
+      //     console.log(res.data)
+      //   }
+      // })
+      this.PageInit()
+
+    }
+    PageInit(){
+      wepy.request({
+        url: "api/address/lists",
+        method: 'POST',
+        data: {},
+      }).then(res => {
+        if(res.code!="1"){
+          this.showAlert({title:"警告",content:res.msg});
+        }else {
+          for(var i=0;i<res.data.list.length;i++){
+            var thisdata=res.data.list[i];
+            this.list.push({
+              address_id:thisdata.address_id,
+              name:thisdata.name,
+              phone:thisdata.phone,
+              user_id:thisdata.user_id,
+              idcard:thisdata.idcard
+            })
+          }
+          this.$apply();
+        }
+      })
+    } 
+  }
+</script>
