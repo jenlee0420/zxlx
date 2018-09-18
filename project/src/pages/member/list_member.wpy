@@ -37,6 +37,9 @@
     font-size: 26rpx;
     color: #282727;
     display: flex;
+    height: 128rpx;
+    align-items: center;
+    font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
   }
 
   .list_location_icon{
@@ -54,7 +57,6 @@
     border-top: 1rpx solid #e0e3df;
     margin-bottom: 30rpx;
     font-size: 24rpx;
-    font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
   }
 
   .list_do_1{
@@ -73,6 +75,16 @@
     background-color:#fff;
   }
 
+  .list_address{
+    margin-top: 25rpx;
+  }
+
+  .list_choice{
+    margin-right: 35rpx;
+    color: #f8280d;
+  }
+
+
 
 </style>
 
@@ -88,7 +100,7 @@
 
       <view class="list_menber_view_view_btn_weixin">
         <icon class="public_icon1_white_weixin"></icon>
-        <text>微信添加</text>
+        <text>微信好友添加</text>
       </view>
     </view>
 
@@ -97,45 +109,35 @@
       <view class="list_bg">
         <view  class="list_menber_view_list">
           <icon class="public_icon2_location2 list_mg_35"></icon>
-          <view>
+          <view class="flex-1">
             <view>
               <text class="list_mg_35">{{item.name}}</text>
               <text class="list_mg_35">{{item.phone}}</text>
             </view>
-            <view>
-              <text class="list_mg_35">{{item.adress}}</text>
+            <view class="list_address">
+              <text class="list_mg_35 ">{{item.adress}}</text>
             </view>
           </view>
-          <icon class="zan-icon-success zan-icon"></icon>
+          <span class="zan-icon-success zan-icon list_choice"></span>
         </view>
 
         <view class="list_do">
           <view class="list_do_1 flex-1">
-            <icon class="public_icon4_defalt"></icon>
-            <text>已设为默认</text>
+            <icon class="public_icon4_defalt"  hidden="{{default_addree!=index}}"></icon>
+            <text  hidden="{{default_addree!=index}}">已设为默认</text>
+            <text  hidden="{{default_addree==index}}" @tap="set_default({{index}})">设为默认</text>
           </view>
-          <view class="list_do_2">
+          <view class="list_do_2" @tap="go_to_edit({{index}})">
             <icon class="public_icon4_edit_addrss"></icon>
             <text>编辑</text>
           </view>
-          <view class="list_do_2">
+          <view class="list_do_2" @tap="del({{index}})">
             <icon class="public_icon4_del_addrss"></icon>
             <text>删除</text>
           </view>
         </view>
       </view>
 
-        <!--<view class="list_menber_view_list_name"><text>{{item.name}}</text></view>-->
-        <!--<view class="list_menber_view_list_other">-->
-          <!--<text class="list_menber_view_list_text1">手机号码</text>-->
-          <!--<text class="list_menber_view_list_mg">{{item.phone}}</text>-->
-        <!--</view>-->
-        <!--<view class="list_menber_view_list_other" hidden="{{item.idcard==''||!item.idcard}}">-->
-          <!--<text class="list_menber_view_list_text1">身份证</text>-->
-          <!--<text class="list_menber_view_list_mg">{{item.idcard}}</text>-->
-        <!--</view>-->
-
-      <!-- </view> -->
     </block>
 
   </view>
@@ -151,10 +153,12 @@
     mixins = [Mixin]
     data = {
       list:[
-        {name:"lll",phone:"13724241455",adress:"湖南长沙1231231"},
-        {name:"ll2",phone:"13724241465",adress:""},
-        {name:"ll3",phone:"13724241475",adress:"湖南长沙刘老师累死了"}
-      ]
+        {name:"我是谁",phone:"13724241455",adress:"湖南长沙1231231",address_id:""},
+        {name:"你是谁",phone:"13724241465",adress:"广东省深圳市123",address_id:""},
+        {name:"他是谁",phone:"13724241475",adress:"湖南长沙刘老师shuai",address_id:""}
+      ],
+
+      default_addree:0,
     }
     methods = {
       go_to_add(){
@@ -167,6 +171,44 @@
         var address_id=this.list[index].address_id
         wx.navigateTo({
           url:"add_member?address_id="+address_id
+        })
+      },
+
+      del(index){
+        var data={
+          address_id:this.list[index].address,
+        };
+
+        wepy.request({
+          url: "api/address/delete",
+          method: 'POST',
+          data: data,
+        }).then(res => {
+          if(res.code!="1"){
+            this.showAlert({title:"警告",content:res.msg});
+          }else {
+            this.list.remove(index);
+            this.$apply();
+          }
+        })
+      },
+
+      set_default(index){
+        var data={
+          address_id:this.list[index].address,
+        };
+
+        wepy.request({
+          url: "api/address/setdefault",
+          method: 'POST',
+          data: data,
+        }).then(res => {
+          if(res.code!="1"){
+            this.showAlert({title:"警告",content:res.msg});
+          }else {
+            this.default_addree=index;
+            this.$apply();
+          }
         })
       }
     }
