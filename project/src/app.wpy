@@ -128,9 +128,8 @@
         data: data
       }).then(res => {
         if (res.code == '1') {
-            this.updateLoginInfo(res)
-          wepy.setStorageSync('token', res.data.token)
           wepy.setStorageSync('userid', res.data.user_id)
+          this.updateLoginInfo(res.data)
         } else {
           wepy.showModal({
             content: res.msg,
@@ -141,9 +140,8 @@
     }
     updateLoginInfo(data) {
             let userData = JSON.stringify(data)
-            // wepy.setStorageSync('userData', userData)
+            wepy.setStorageSync('userData', userData)
             wepy.setStorageSync('token', data.token)
-            // wepy.setStorageSync('loginkey',data.login_key)
             if (this.userInfoReadyCallback) {
                 this.userInfoReadyCallback(data)
             }

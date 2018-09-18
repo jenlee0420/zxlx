@@ -419,6 +419,7 @@ export default class Global extends wepy.mixin {
         //     }
         // }
         if (wepy.getStorageSync('token')){
+            this.PageInit()
         }else{
         this.$parent.userInfoReadyCallback = res => {
             if (typeof(this.PageInit) === 'function') {
