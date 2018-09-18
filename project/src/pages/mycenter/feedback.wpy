@@ -1,57 +1,63 @@
 <style lang="less">
-#feedback{
-    height: 100vh;
-    background-color: #fff;
-    font-size: 30rpx;
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    textarea{width: 100%;margin-top: 30rpx;font-size: 25rpx;}
-    .boderbottom{
-        border-bottom: 1rpx solid @bColor;
-        padding:30rpx 30rpx 50rpx 80rpx;
+    #feedback {
+        height: 100vh;
+        background-color: #fff;
+        font-size: 30rpx;
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        textarea {
+            width: 100%;
+            margin-top: 30rpx;
+            font-size: 25rpx;
+        }
+        .boderbottom {
+            border-bottom: 1rpx solid @bColor;
+            padding: 30rpx 30rpx 50rpx 80rpx;
+        }
     }
-}
 </style>
 
 <template>
-  <view class="container" id="feedback">
-      <view class="boderbottom">
-    <text>反馈意见</text>
-    <textarea placeholder-style="color:#bbb" placeholder="请将您的建议告诉我们，以便我们提供更好的游学。（最多500字）" value="{{content}}"/>
+    <view class="container" id="feedback">
+        <view class="boderbottom">
+            <text>反馈意见</text>
+            <textarea placeholder-style="color:#bbb" placeholder="请将您的建议告诉我们，以便我们提供更好的游学。（最多500字）" value="{{content}}" />
+        </view>
+        <view class="flex flex-jcenter"><button class="w600 btn mb190 mt30" @tap="submit">提交</button></view>
     </view>
-    <view class="flex flex-jcenter"><button class="w600 btn mb190 mt30" @tap="submit">提交</button></view>
-  </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-export default class feedback extends wepy.page {
-  config = {
-      navigationBarTitleText: '反馈信息',
-  }
-  components = {}
-  mixins = [Mixin]
-  data = {
-      content:''
-  }
-  methods = {
-      submit(){
-          wepy.request({
-              url: "api/feedback/add",
-              method: 'POST',
-              data: {
-                  content:this.content
-              },
-            }).then(res => {
-              if(res.code=="1"){
-                  this.showSuccess()
-                }
-            })
-      }
-  }
-  onLoad() {
-  }
-}
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class feedback extends wepy.page {
+        config = {
+            navigationBarTitleText: '反馈信息',
+        }
+        components = {}
+        mixins = [Mixin]
+        data = {
+            content: ''
+        }
+        methods = {
+            submit() {
+                wepy.request({
+                    url: "api/feedback/add",
+                    method: 'POST',
+                    data: {
+                        content: this.content
+                    },
+                }).then(res => {
+                    if (res.code == "1") {
+                        this.showSuccess()
+                        setTimeout(() => {
+                            wepy.navigateBack()
+                        }, 500);
+                    }
+                })
+            }
+        }
+        onLoad() {}
+    }
 </script>

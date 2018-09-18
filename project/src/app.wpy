@@ -23,6 +23,7 @@
         // 'pages/icon',
         // 'pages/test',
         'pages/index',
+        'pages/center/collaborate',
         'pages/member/list_member',
         'pages/mycenter/feedback',
         'pages/kefu',
