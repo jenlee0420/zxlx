@@ -123,17 +123,17 @@
                 {
                     name: '意见反馈',
                     img: 'public_icon4_feedback',
-                    navTo: '/pages/mycenter/billindex'
+                    navTo: '/pages/mycenter/feedback'
                 },
                 {
                     name: '客服热线',
                     img: 'public_icon4_hot_line',
-                    navTo: '/pages/mycenter/schedule'
+                    navTo: '/pages/kefu'
                 },
                 {
                     name: '关于我们',
                     img: 'public_icon4_about_me',
-                    navTo: '/pages/mycenter/family'
+                    navTo: '/pages/mycenter/about'
                 }
             ]
         }

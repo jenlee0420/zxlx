@@ -18,9 +18,9 @@
   <view class="container" id="feedback">
       <view class="boderbottom">
     <text>反馈意见</text>
-    <textarea placeholder-style="color:#bbb" placeholder="请将您的建议告诉我们，以便我们提供更好的游学。（最多500字）" />
+    <textarea placeholder-style="color:#bbb" placeholder="请将您的建议告诉我们，以便我们提供更好的游学。（最多500字）" value="{{content}}"/>
     </view>
-    <view class="flex flex-jcenter"><button class="w600 btn mb190 mt30">提交</button></view>
+    <view class="flex flex-jcenter"><button class="w600 btn mb190 mt30" @tap="submit">提交</button></view>
   </view>
 </template>
 
@@ -34,8 +34,23 @@ export default class feedback extends wepy.page {
   components = {}
   mixins = [Mixin]
   data = {
+      content:''
   }
-  methods = {}
+  methods = {
+      submit(){
+          wepy.request({
+              url: "api/feedback/add",
+              method: 'POST',
+              data: {
+                  content:this.content
+              },
+            }).then(res => {
+              if(res.code=="1"){
+                  this.showSuccess()
+                }
+            })
+      }
+  }
   onLoad() {
   }
 }

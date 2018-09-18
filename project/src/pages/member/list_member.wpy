@@ -1,9 +1,9 @@
 <style lang="less">
   #memberlist{
-
+    border-top: 1rpx solid @bColor;
   }
   .list_menber_view_view_btn{
-    border-radius: 20rpx;
+    border-radius: 10rpx;
     width: 336rpx;
     height: 90rpx;
     display: flex;
@@ -40,6 +40,7 @@
     height: 128rpx;
     align-items: center;
     font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    padding: 20rpx 0;
   }
 
   .list_location_icon{
@@ -76,7 +77,7 @@
   }
 
   .list_address{
-    margin-top: 25rpx;
+    margin-top: 20rpx;
   }
 
   .list_choice{
@@ -93,7 +94,6 @@
     <view class="list_menber_view_view">
 
       <view class="list_menber_view_view_btn_self" @tap="go_to_add">
-        <navigator url="/pages/member/add_member"></navigator>
         <icon class="public_icon_add_traveller"></icon>
         <text>手动添加</text>
       </view>

@@ -33,7 +33,7 @@
 <template>
     <view class="cellgroup">
         <repeat for="{{syncList}}" item="item">
-            <view class="item {{item.class}} bottomline">
+            <view class="item {{item.class}} bottomline" bindtap="showDetail({{item.navTo}})">
                 <view class="img">
                     <span class="{{item.img}}"></span>
                     <!-- <image src="{{item.img}}"></image> -->

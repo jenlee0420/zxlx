@@ -21,14 +21,15 @@
     config = {
       pages: [
         // 'pages/icon',
-        'pages/test',
+        // 'pages/test',
+        'pages/index',
         'pages/member/list_member',
+        'pages/mycenter/feedback',
+        'pages/kefu',
         'pages/mycenter/history',
         'pages/member/add_member',
-        'pages/about',
-        'pages/index',
+        'pages/mycenter/about',
         'pages/mycenter/dianpin',
-
         'pages/mycenter/orderlist',
         'pages/mycenter/index',
         'pages/goodsDetail',
