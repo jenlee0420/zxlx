@@ -41,6 +41,7 @@ const init = {
                     /*if( response.code != 1 ){
                         wepy.clearStorageSync()
                     }*/
+                    console.log('errr',response.statusCode)
                     if (response.statusCode === 200) {
                         if ((response.data.code === '870101' || response.data.code === '870104' || response.data.code === '990016'|| response.data.code === '990013')) {
                             if(!wepy.getStorageSync('relogin')){
@@ -57,6 +58,7 @@ const init = {
                         wepy.showModal({content:msg,showCancel:false})
                         return response
                     }
+                    console.log(response)
                 },
                 fail(err,re) {
                     return err
