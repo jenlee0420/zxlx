@@ -20,23 +20,45 @@
 
 <template>
   <view class="container">
-    <gooditem>asdas</gooditem>
-    <view class="public_icon_add_traveller"></view>
-    <span class=""></span>
-    <popwin :popObj="popObj">
-      <div slot="content">ddfdfsdf</div>
-    </popwin>
-    <zanpopup direction="top">
-      <div>dsfffff</div>
-    </zanpopup>
-    <picker mode="region" @change="bindRegionChange" value="{{region}}">
-      <view class="picker">
-      当前选择：{{region[0]}}，{{region[1]}}，{{region[2]}}
+    <view>
+      <view>
+        <text>选择地区:</text>
+        <picker mode="multiSelector" @columnchange="choice_place" value="{{place_index}}" range="{{place_display_array}}">
+          <view class="picker">
+            <input placeholder="选择地区" value="{{place.path}}" disabled/>
+          </view>
+        </picker>
+      </view>
     </view>
-    </picker>
-    <!-- <button @tap="addressinfo">收货地址</button> -->
-    <button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"> eee</button>
-    <backtoHome />
+    <!--<view>-->
+      <!--<view>-->
+        <!--<text>选择地区:</text>-->
+        <!--<picker mode="multiSelector" @columnchange="choice_place" value="{{place_index}}" range="{{place_display_array}}">-->
+          <!--<view class="picker">-->
+            <!--当前选择：{{multiArray[0][multiIndex[0]]}}，{{multiArray[1][multiIndex[1]]}}，{{multiArray[2][multiIndex[2]]}}-->
+            <!--&lt;!&ndash;<input placeholder="选择地区" value="{{place.path}}" disabled/>&ndash;&gt;-->
+          <!--</view>-->
+        <!--</picker>-->
+      <!--</view>-->
+    <!--</view>-->
+
+    <!--<gooditem>asdas</gooditem>-->
+    <!--<view class="public_icon_add_traveller"></view>-->
+    <!--<span class=""></span>-->
+    <!--<popwin :popObj="popObj">-->
+      <!--<div slot="content">ddfdfsdf</div>-->
+    <!--</popwin>-->
+    <!--<zanpopup direction="top">-->
+      <!--<div>dsfffff</div>-->
+    <!--</zanpopup>-->
+    <!--<picker mode="region" @change="bindRegionChange" value="{{region}}">-->
+      <!--<view class="picker">-->
+      <!--当前选择：{{region[0]}}，{{region[1]}}，{{region[2]}}-->
+    <!--</view>-->
+    <!--</picker>-->
+    <!--&lt;!&ndash; <button @tap="addressinfo">收货地址</button> &ndash;&gt;-->
+    <!--<button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"> eee</button>-->
+    <!--<backtoHome />-->
   </view>
 </template>
 
@@ -62,7 +84,22 @@
         winh: '60%'
       },
       region: ['广东省', '广州市', '海珠区'],
-      customItem: '全部'
+      customItem: '全部',
+
+      multiArray:[
+        [1,2,3],
+        [4,5,6],
+        [7,8,9],
+      ],
+      multiIndex: [0, 0, 0],
+
+      place_array:[
+        [],[],[]
+      ],
+      place_index:[0,0,0],
+      place_display_array:[
+        [],[],[]
+      ],
     }
     methods = {
       bindRegionChange() {
@@ -71,14 +108,114 @@
       getPhoneNumber(e){
         console.log(e)
         this.addressinfo()
+      },
+
+      bindMultiPickerColumnChange(e){
+
+          console.log(e)
+          this.multiIndex[e.detail.column]=e.detail.value;
+      },
+
+      choice_place(e){
+        this.place_index[e.detail.column]=e.detail.value;
+
+        if (e.detail.column==2){
+          return
+        }
+
+        wepy.request({
+          url: "api/region/getregion",
+          method: 'POST',
+          data: {pid: this.place_array[0][this.place_index[0]].id},
+        }).then(res => {
+          if (res.code != "1") {
+            this.showAlert({title: "警告", content: res.msg});
+          } else {
+            this.place_display_array[1]=[];
+            this.place_array[1]=[];
+            for (var i = 0; i < res.data.length; i++) {
+              this.place_display_array[1].push(res.data[i].name);
+              this.place_array[1].push(res.data[i]);
+            }
+
+            wepy.request({
+              url: "api/region/getregion",
+              method: 'POST',
+              data: {pid: this.place_array[1][this.place_index[1]].id},
+            }).then(res => {
+              if (res.code != "1") {
+                this.showAlert({title: "警告", content: res.msg});
+              } else {
+                this.place_display_array[2]=[];
+                this.place_array[2]=[];
+
+                for (var i = 0; i < res.data.length; i++) {
+                  this.place_display_array[2].push(res.data[i].name);
+                  this.place_array[2].push(res.data[i]);
+                }
+                this.$apply()
+              }
+            })
+          }
+        })
       }
+    }
+
+    onLoad() {
+      wepy.request({
+        url: "api/region/getregion",
+        method: 'POST',
+        data: {pid:0},
+      }).then(res => {
+        if(res.code!="1"){
+          this.showAlert({title:"警告",content:res.msg});
+        }else {
+          for (var i = 0; i < res.data.length; i++) {
+            this.place_display_array[0].push(res.data[i].name);
+            this.place_array[0].push(res.data[i]);
+          }
+
+          wepy.request({
+            url: "api/region/getregion",
+            method: 'POST',
+            data: {pid: this.place_array[0][this.place_index[0]].id},
+          }).then(res => {
+            if (res.code != "1") {
+              this.showAlert({title: "警告", content: res.msg});
+            } else {
+
+              for (var i = 0; i < res.data.length; i++) {
+                this.place_display_array[1].push(res.data[i].name);
+                this.place_array[1].push(res.data[i]);
+              }
+
+              wepy.request({
+                url: "api/region/getregion",
+                method: 'POST',
+                data: {pid: this.place_array[1][this.place_index[1]].id},
+              }).then(res => {
+                if (res.code != "1") {
+                  this.showAlert({title: "警告", content: res.msg});
+                } else {
+                  for (var i = 0; i < res.data.length; i++) {
+                    this.place_display_array[2].push(res.data[i].name);
+                    this.place_array[2].push(res.data[i]);
+                  }
+                  this.$apply()
+                }
+              })
+            }
+          })
+
+        }
+
+      })
+    }
+
+    PageInit(){
 
     }
-    addressinfo(){
-        wepy.chooseAddress()
-      }
-    onLoad() {
-      //this.$invoke('popwin', 'togglePopup')
-    }
+
+
   }
 </script>

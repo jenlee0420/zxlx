@@ -21,7 +21,7 @@
     config = {
       pages: [
         // 'pages/icon',
-        //'pages/test',
+        'pages/test',
         'pages/member/list_member',
         'pages/mycenter/history',
         'pages/member/add_member',

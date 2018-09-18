@@ -56,9 +56,8 @@ const init = {
                     } else {
                         let msg = `服务器异常错误码：${response.statusCode}，联系管理员`
                         wepy.showModal({content:msg,showCancel:false})
-                        return response
+                        throw `服务器异常错误码：${response.statusCode}，联系管理员`
                     }
-                    console.log(response)
                 },
                 fail(err,re) {
                     return err

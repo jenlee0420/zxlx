@@ -73,25 +73,25 @@
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">姓名:</text>
-                <input class="my_input" value="{{name}}" focus/>
+                <input class="my_input" value="{{name}}" @input="input_name" focus/>
             </view>
         </view>
         <view class="my_view">
           <view class="my_view_view">
             <text class="my_view_text">手机号:</text>
-            <input class="my_input" value="{{phone}}" focus/>
+            <input class="my_input" value="{{phone}}" @input="input_phone"/>
           </view>
         </view>
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">身份证号:</text>
-                <input class="my_input" id_card="{{id_card}}" placeholder="18位身份证号码" />
+                <input class="my_input" id_card="{{id_card}}" @input="input_idcard" placeholder="18位身份证号码" />
             </view>
         </view>
         <view class="my_view">
           <view class="my_view_view">
             <text class="my_view_text">邮政编码:</text>
-            <input class="my_input" value="{{postcode}}" focus/>
+            <input class="my_input" value="{{postcode}}" @input="input_postcode"/>
           </view>
         </view>
         <view class="my_view">
@@ -128,24 +128,24 @@
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">详细地址:</text>
-                <input class="my_input mr20" placeholder="输入地址或点击地图选择" value="{{address}}"/>
+                <input class="my_input mr20" placeholder="输入地址或点击地图选择" value="{{address}}" @input="input_address"/>
                 <icon @tap="toMap" class="public_icon2_location2" />
             </view>
         </view>
         <view class="my_btn_view">
             <button class="btn my_btn" @tap="saveContact">保存</button>
             <!-- 分享后微信好友看到的按钮 -->
-            <button class="btn my_btn">提交给朋友</button>
+            <!--<button class="btn my_btn">提交给朋友</button>-->
             <text class="fs18 cb4b4b4 mt30">提交后，您的信息将出现在您朋友的知兮乐兮账号中</text>
             <!--  -->
         </view>
 
-        <view class="my_del_view">
-            <icon class="public_icon4_del_addrss"></icon>
-        </view>
-        <view  class="my_del_text">
-            <text>删除</text>
-        </view>
+        <!--<view class="my_del_view">-->
+            <!--<icon class="public_icon4_del_addrss"></icon>-->
+        <!--</view>-->
+        <!--<view  class="my_del_text">-->
+            <!--<text>删除</text>-->
+        <!--</view>-->
     </view>
 </template>
 <script>
@@ -203,11 +203,6 @@
               path:"",
             },
         }
-        events = {
-            getradiodata(key, value) {
-                console.log(key, value)
-            }
-        }
         methods = {
             toMap() {
                 var that=this;
@@ -252,6 +247,15 @@
                   url= "api/address/add"
                 }
 
+                if (this.name == ""){
+                  this.showAlert({title:"警告",content:"请输入名字"});
+                  return
+                }
+                if (this.phone == ""){
+                    this.showAlert({title:"警告",content:"请输入手机号"});
+                    return
+                }
+
                 var data={
                   address_id:this.address_id,
                   name:this.name,
@@ -270,6 +274,7 @@
                 }).then(res => {
                   if(res.code!="1"){
                     this.showAlert({title:"警告",content:res.msg});
+                    return
                   }else {
                     wx.navigateTo({
                       url:"list_member"
@@ -293,41 +298,67 @@
               this.place.path=this.place.province+"-"+this.place.city+"-"+this.place.region;
               this.$apply();
             },
+
+            input_name(e){
+              this.name= e.detail.value;
+            },
+
+            input_postcode(e){
+              this.postcode= e.detail.value;
+            },
+
+            input_idcard(e){
+              this.id_card= e.detail.value;
+            },
+
+            input_phone(e){
+              this.phone= e.detail.value;
+            },
+
+            input_address(e){
+              this.address= e.detail.value;
+            }
         }
         onLoad(options) {
-            if(!options.address_id){
-              this.edit=true;
+            if(options.address_id==undefined){
+              this.edit=false;
               return
             }
 
-          wepy.request({
-            url: "api/address/detail",
-            method: 'POST',
-            data: {address_id:options.address_id},
-          }).then(res => {
-            if(res.code!="1"){
-              showAlert({title:"警告",content:res.msg});
-            }else {
-              res=res.data.detail;
-              this.name=res.name;
-              this.phone=res.phone;
-              this.address=res.detail;
-              this.address_id=options.address_id;
-              this.postcode=res.postcode;
+            this.edit=true;
+            wepy.request({
+              url: "api/address/detail",
+              method: 'POST',
+              data: {address_id:options.address_id},
+            }).then(res => {
+              if(res.code!="1"){
+                this.showAlert({title:"警告",content:res.msg});
+              }else {
+                res=res.data.detail;
+                this.name=res.name;
+                this.phone=res.phone;
+                this.address=res.detail;
+                this.address_id=options.address_id;
+                this.postcode=res.postcode;
 
-              this.place.province_id=res.province_id;
-              this.place.city_id=res.city_id;
-              this.place.region_id=res.region_id;
+                this.place.province_id=res.province_id;
+                this.place.city_id=res.city_id;
+                this.place.region_id=res.region_id;
 
-              this.place.province=res.region.province;
-              this.place.city=res.region.city;
-              this.place.region=res.region.region;
-              this.place.path=this.place.province+"-"+this.place.city+"-"+this.place.region;
+                this.place.province=res.region.province;
+                this.place.city=res.region.city;
+                this.place.region=res.region.region;
+                this.place.path=this.place.province+"-"+this.place.city+"-"+this.place.region;
 
-              this.$apply();
-            }
-          })
+                this.$apply();
+              }
+            })
+        }
+
+        PageInit(){
 
         }
+
+
     }
 </script>

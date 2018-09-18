@@ -179,18 +179,22 @@
           address_id:this.list[index].address,
         };
 
-        wepy.request({
-          url: "api/address/delete",
-          method: 'POST',
-          data: data,
-        }).then(res => {
-          if(res.code!="1"){
-            this.showAlert({title:"警告",content:res.msg});
-          }else {
-            this.list.remove(index);
-            this.$apply();
-          }
-        })
+        this.showAlert({title:"警告",content:"确认要删除吗？",confirm:function(){
+            wepy.request({
+              url: "api/address/delete",
+              method: 'POST',
+              data: data,
+            }).then(res => {
+              if(res.code!="1"){
+                this.showAlert({title:"警告",content:res.msg});
+              }else {
+                this.list.remove(index);
+                this.$apply();
+              }
+            })
+        }});
+
+
       },
 
       set_default(index){
@@ -224,7 +228,7 @@
       //     console.log(res.data)
       //   }
       // })
-      this.PageInit()
+      //this.PageInit()
 
     }
     PageInit(){
@@ -236,16 +240,24 @@
         if(res.code!="1"){
         this.showAlert({title:"警告",content:res.msg});
       }else {
+          var index=0;
         for(var i=0;i<res.data.list.length;i++){
           var thisdata=res.data.list[i];
+          this.list=[];
           this.list.push({
             address_id:thisdata.address_id,
             name:thisdata.name,
-            phone:thisdata.phone,
             user_id:thisdata.user_id,
-            adress:thisdata.adress
+            adress:thisdata.region.province+thisdata.region.city+thisdata.region.region+thisdata.detail,
+            phone:thisdata.phone,
           })
+
+          if(res.data.default_id==thisdata.address_id){
+            index=i;
+          }
         }
+
+        this.default_addree=index;
         this.$apply();
       }
     })
