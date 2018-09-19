@@ -118,7 +118,7 @@
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">选择地区:</text>
-                <picker class="my_picker" mode="region" @change="pick_place">
+                <picker class="my_picker" mode="multiSelector" @columnchange="choice_place" value="{{place_index}}" range="{{place_display_array}}">
                     <view class="picker">
                         <input class="my_input" placeholder="选择地区" value="{{place.path}}" disabled/>
                     </view>
@@ -202,6 +202,14 @@
               region:"",
               path:"",
             },
+
+            place_array:[
+              [],[],[]
+            ],
+            place_index:[0,0,0],
+            place_display_array:[
+              [],[],[]
+            ],
         }
         methods = {
             toMap() {
@@ -221,21 +229,9 @@
                           that2.address=res.address;
                           that2.$apply();
                         },
-                        // fail:function(err){
-                        //
-                        // }
                       })
                   },
                   fail:function(err){
-                    // wx.openSetting({
-                    //     success:function(res){
-                    //       console.log(res);
-                    //     },
-                    //     fail:function(err){
-                    //       console.log(err);
-                    //     }
-                    //
-                    // })
                   }
                 })
             },
@@ -317,7 +313,67 @@
 
             input_address(e){
               this.address= e.detail.value;
+            },
+
+          choice_place(e){
+            this.place_index[e.detail.column]=e.detail.value;
+
+            if (e.detail.column==2){
+              this.place.region_id=this.place_array[2][this.place_index[2]].id;
+              this.place.region=this.place_array[2][this.place_index[2]].name;
+              this.place.path=this.place.province+"-"+this.place.city+"-"+this.place.region;
+              this.$apply();
+
+              return
             }
+
+            wepy.request({
+              url: "api/region/getregion",
+              method: 'POST',
+              data: {pid: this.place_array[0][this.place_index[0]].id},
+            }).then(res => {
+              if (res.code != "1") {
+                this.showAlert({title: "警告", content: res.msg});
+              } else {
+                this.place_display_array[1]=[];
+                this.place_array[1]=[];
+                for (var i = 0; i < res.data.length; i++) {
+                  this.place_display_array[1].push(res.data[i].name);
+                  this.place_array[1].push(res.data[i]);
+                }
+
+                wepy.request({
+                  url: "api/region/getregion",
+                  method: 'POST',
+                  data: {pid: this.place_array[1][this.place_index[1]].id},
+                }).then(res => {
+                  if (res.code != "1") {
+                    this.showAlert({title: "警告", content: res.msg});
+                  } else {
+                    this.place_display_array[2]=[];
+                    this.place_array[2]=[];
+
+                    for (var i = 0; i < res.data.length; i++) {
+                      this.place_display_array[2].push(res.data[i].name);
+                      this.place_array[2].push(res.data[i]);
+                    }
+
+                    this.place.province_id=this.place_array[0][this.place_index[0]].id;
+                    this.place.city_id=this.place_array[1][this.place_index[1]].id;
+                    this.place.region_id=this.place_array[2][this.place_index[2]].id;
+
+                    this.place.province=this.place_array[0][this.place_index[0]].name;
+                    this.place.city=this.place_array[1][this.place_index[1]].name;
+                    this.place.region=this.place_array[2][this.place_index[2]].name;
+                    this.place.path=this.place.province+"-"+this.place.city+"-"+this.place.region;
+                    this.$apply();
+                  }
+                })
+              }
+            })
+          },
+
+
         }
         onLoad(options) {
             if(options.address_id==undefined){
@@ -356,7 +412,52 @@
         }
 
         PageInit(){
+            wepy.request({
+              url: "api/region/getregion",
+              method: 'POST',
+              data: {pid:0},
+            }).then(res => {
+              if(res.code!="1"){
+                this.showAlert({title:"警告",content:res.msg});
+              }else {
+                for (var i = 0; i < res.data.length; i++) {
+                  this.place_display_array[0].push(res.data[i].name);
+                  this.place_array[0].push(res.data[i]);
+                }
 
+                wepy.request({
+                  url: "api/region/getregion",
+                  method: 'POST',
+                  data: {pid: this.place_array[0][this.place_index[0]].id},
+                }).then(res => {
+                  if (res.code != "1") {
+                    this.showAlert({title: "警告", content: res.msg});
+                  } else {
+
+                    for (var i = 0; i < res.data.length; i++) {
+                      this.place_display_array[1].push(res.data[i].name);
+                      this.place_array[1].push(res.data[i]);
+                    }
+
+                    wepy.request({
+                      url: "api/region/getregion",
+                      method: 'POST',
+                      data: {pid: this.place_array[1][this.place_index[1]].id},
+                    }).then(res => {
+                      if (res.code != "1") {
+                        this.showAlert({title: "警告", content: res.msg});
+                      } else {
+                        for (var i = 0; i < res.data.length; i++) {
+                          this.place_display_array[2].push(res.data[i].name);
+                          this.place_array[2].push(res.data[i]);
+                        }
+                        this.$apply()
+                      }
+                    })
+                  }
+                })
+              }
+            })
         }
 
 
