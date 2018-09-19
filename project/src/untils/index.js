@@ -30,10 +30,11 @@ const init = {
                     request.url = baseUrl + request.url
                     request.header = Object.assign({}, {'Content-Type': 'application/x-www-form-urlencoded'}, request.header)
                     if (!request.noToken && !!token){
-                        request.token = token
+                        // data.token = token
+                        data = Object.assign({'token':token}, data)
                     }
                     if (request.method === 'POST') {
-                        request.data = qs.stringify(request.data)
+                        request.data = qs.stringify(data)
                     }
                     return request
                 },
