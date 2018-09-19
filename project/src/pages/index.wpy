@@ -17,6 +17,8 @@
             flex-wrap: wrap;
             justify-content: space-between;
             background-color: #fff;
+            font-size: 23rpx;
+            color: #6c6b6b;
             .icon {
                 width: 77rpx;
                 height: 77rpx;
@@ -69,21 +71,25 @@
             <swiper style="height:418rpx" @change="changenav" indicator-dots="{{false}}" autoplay="{{false}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
                 <swiper-item>
                     <div class="navTablist">
-                        <span wx:for="{{10}}" wx:key="{{index}}">
+                        <span wx:for="{{catelist1}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
                             <view class="icon">
-                                <image src="{{baseServerImg}}" mode="aspectFill"/>
+                                <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
                             </view>
-                            {{item}}
+                            {{item.name}}
                         </span>
                     </div>
                 </swiper-item>
-                <swiper-item>
+                <swiper-item wx:if="{{cateShow}}">
                     <div class="navTablist">
-                        <span wx:for="{{10}}" wx:key="{{index}}">{{item}}=</span>
+                        <span wx:for="{{catelist2}}" wx:key="{{index}}"  @tap="gotolist({{item.id}})">
+                            <view class="icon">
+                                <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
+                            </view>
+                            {{item.name}}</span>
                     </div>
                 </swiper-item>
             </swiper>
-            <div class="navDots">
+            <div class="navDots" wx:if="{{cateShow}}">
                 <span class="dot {{navIndex == 0?'current':''}}"></span>
                 <span class="dot {{navIndex == 1?'current':''}}"></span>
             </div>
@@ -110,12 +116,18 @@
             imgUrls: [],
             catelist1: [],
             catelist2: [],
-            navIndex: 0
+            navIndex: 0,
+           cateShow:false
         }
         methods = {
             changenav(index) {
                 // console.log(index)
                 this.navIndex = index.detail.current
+            },
+            gotolist(id){
+                wx.navigateTo({
+                    url:"/pages/"
+                    })
             }
         }
         getAD() {
@@ -125,11 +137,17 @@
         }
         getCate() {
             wepy.request({
-                url: 'api/category/lists',
+                url: 'api/label/getlist',
                 method: 'POST',
             }).then(res => {
-                if (res.code == '1') {
-                    this.catelist1 = res.data
+                if (res.code == 1) {
+                    console.log(res.data.list.slice(0,10))
+                    this.catelist1 = res.data.list.slice(0,10)
+                    if(res.data.list.length > 10){
+                        this.catelist2 = res.data.list.slice(10)
+                        this.cateShow = true
+                    }
+                    // 
                 } else {
                     wepy.showModal({
                         content: res.msg,

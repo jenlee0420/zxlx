@@ -65,36 +65,36 @@
         </view>
         <view class="panel">
             <view class="flex flex-between"><text class="fs30 c333">我的订单</text>
-                <view class="fs24 c888">查看全部 <span class="c999 zan-icon zan-icon-arrow"></span></view>
+               <navigator class="fs24 c888" url="/pages/mycenter/orderlist?type=all" hover-class="none">查看全部 <span class="c999 zan-icon zan-icon-arrow"></span></navigator>
             </view>
             <view class="ordertype">
-                <span class="flex-column">
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=payment" hover-class="none">
                         <span class="public_icon3_waite_pay"><span class="zan-badge__count" wx:if="{{orderCount.payment}}">{{orderCount.payment}}</span></span>
                 待付款
-                </span>
-                <span class="flex-column">
+                </navigator>
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=noused" hover-class="none">
                         <span class="public_icon3_not_use"><span class="zan-badge__count" wx:if="{{orderCount.noused}}">{{orderCount.noused}}</span></span> 未使用
-                </span>
-                <span class="flex-column">
+                </navigator>
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=finish" hover-class="none">
                         <span class="public_icon3_complete"><span class="zan-badge__count" wx:if="{{orderCount.finish}}">{{orderCount.finish}}</span></span> 已完成
-                </span>
-                <span class="flex-column">
+                </navigator>
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=cancel" hover-class="none">
                         <span class="public_icon3_not_complete"><span class="zan-badge__count" wx:if="{{orderCount.cancel}}">{{orderCount.cancel}}</span></span> 已取消
-                </span>
+                </navigator>
             </view>
         </view>
         <view class="panel">
             <view class="ordertype m0">
-                <navigator class="flex-column" url="/pages/center/collection" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/collection" hover-class="none">
                     <span class="public_icon3_collection"></span> 我的收藏
                 </navigator>
-                <navigator class="flex-column" url="/pages/center/collection" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/collection" hover-class="none">
                     <span class="public_icon3_invite_friend"></span> 邀请好友
                 </navigator>
                 <navigator class="flex-column" url="/pages/member/list_member" hover-class="none">
                     <span class="public_icon3_contact_info"></span> 联系信息
                 </navigator>
-                <navigator class="flex-column" url="/pages/center/collaborate" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/collaborate" hover-class="none">
                     <span class="public_icon3_cooprate"></span> 我要合作
                 </navigator>
             </view>

@@ -22,7 +22,7 @@
     <view class="container" id="feedback">
         <view class="boderbottom">
             <text>反馈意见</text>
-            <textarea placeholder-style="color:#bbb" placeholder="请将您的建议告诉我们，以便我们提供更好的游学。（最多500字）" value="{{content}}" />
+            <textarea placeholder-style="color:#bbb" placeholder="请将您的建议告诉我们，以便我们提供更好的游学。（最多500字）" @input="changeinput" />
         </view>
         <view class="flex flex-jcenter"><button class="w600 btn mb190 mt30" @tap="submit">提交</button></view>
     </view>
@@ -41,6 +41,9 @@
             content: ''
         }
         methods = {
+            changeinput(e){
+                this.content = e.detail.value
+            },
             submit() {
                 wepy.request({
                     url: "api/feedback/add",
@@ -50,7 +53,7 @@
                     },
                 }).then(res => {
                     if (res.code == "1") {
-                        this.showSuccess()
+                        this.showSuccess(res.msg)
                         setTimeout(() => {
                             wepy.navigateBack()
                         }, 500);

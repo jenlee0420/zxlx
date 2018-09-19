@@ -1,26 +1,71 @@
 <style lang="less">
-
+  #searchpage {
+    .toppanel {
+      height: 105rpx;
+      border-top: 1rpx solid @bColor;
+      border-bottom: 1rpx solid @bColor;
+      padding: 20rpx 33rpx;
+      background-color: #fff;
+      width: 100%;
+      box-sizing: border-box;
+    }
+    .seachinput {
+      background-color: #f1f1f1;
+      border-radius: 30rpx;
+      width: 100%;
+      height: 60rpx;
+      line-height: 60rpx;
+      font-size: 30rpx;
+      color: #b3b3b3;
+      text-align: center;
+    }
+  }
 </style>
 
 <template>
-  <view class="container">
-    
+  <view class="container" id="searchpage">
+    <view class="toppanel">
+      <view class="seachinput">
+        <span class="zan-icon zan-icon-search"></span>
+      </view>
+    </view>
+    <scroll-view scroll-x>
+      <span>全部</span><span wx:for="{{catelist}}" @tap="changeCate">{{item.name}}</span>
+    </scroll-view>
   </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-export default class searchpage extends wepy.page {
-  config = {
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  import gooditem from '@/components/gooditem'
+  export default class searchpage extends wepy.page {
+    config = {}
+    components = {
+      gooditem
+    }
+    mixins = [Mixin]
+    data = {
+      catelist: []
+    }
+    methods = {}
+    getCate() {
+      wepy.request({
+        url: 'api/label/getlist',
+        method: 'POST',
+      }).then(res => {
+        if (res.code == 1) {
+          this.catelist = res.data.list
+        } else {
+          wepy.showModal({
+            content: res.msg,
+            showCancel: false
+          })
+        }
+      })
+    }
+    onLoad() {
+      this.getCate()
+    }
   }
-  components = {}
-  mixins = [Mixin]
-  data = {
-    imgUrls:[]
-  }
-  methods = {}
-  onLoad() {
-  }
-}
 </script>
