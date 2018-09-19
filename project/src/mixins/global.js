@@ -86,13 +86,14 @@ export default class Global extends wepy.mixin {
         confirmText: data.confirmText ? data.confirmText : '确定',
         cancelText: data.cancelText ? data.cancelText : '取消',
         }).then(res => {
+
             if (res.confirm) {
-                if (typeof(that[data.confirm]) === 'function') {
-                    that[data.confirm]()
+                if (typeof(data.confirm) === 'function') {
+                    data.confirm()
                 }
             } else if (res.cancel) {
-                if (typeof(that[data.cancel]) === 'function') {
-                    that[data.cancel]()
+                if (typeof(data.cancel) === 'function') {
+                    data.cancel()
                 }
             }
         })

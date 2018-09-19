@@ -51,7 +51,7 @@
             -webkit-overflow-scrolling: touch;
             // margin-top: 20rpx
         }
-        
+
             .btns{
                 padding: 20rpx;
                 text-align: right;
@@ -133,7 +133,7 @@
                                   <orderBtn :key="3"/>
                                 </view>
                               <!-- 订单内容 end-->
-                             
+
                             </view>
 
 
@@ -195,7 +195,6 @@
             },
 
             changeType_swiper(e) {
-
                 this.loadorderlist({
                   page:this.page_size,
                   per_page:this.TypeList[e.detail.current].current_page,
@@ -220,9 +219,10 @@
               data: data
             }).then(res => {
               if(res.code!="1"){
-                  showAlert({title:"警告",content:res.msg});
+                  this.showAlert({title:"警告",content:res.msg});
                   return
               }
+              console.log(index)
               this.TypeList[index].current_page = 1;
               this.currentIndex=index;
               this.currType = this.TypeList[index].key
@@ -247,15 +247,14 @@
               page:this.page_size,
               per_page:this.TypeList[0].current_page,
               data_type:this.TypeList[0].key,
-            });
-
+            },0);
         }
         onPullDownRefresh(){
-            this.loadorderlist({
-              page:this.page_size,
-              per_page:this.TypeList[0].current_page,
-              data_type:this.TypeList[0].key,
-            });
+            // this.loadorderlist({
+            //   page:this.page_size,
+            //   per_page:this.TypeList[0].current_page,
+            //   data_type:this.TypeList[0].key,
+            // });
         }
     }
 

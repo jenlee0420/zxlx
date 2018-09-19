@@ -22,6 +22,7 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
+        'pages/mycenter/orderlist',
         'pages/member/list_member',
         'pages/member/add_member',
         'pages/index',
@@ -31,7 +32,6 @@
         'pages/mycenter/history',
         'pages/mycenter/about',
         'pages/mycenter/dianpin',
-        'pages/mycenter/orderlist',
         'pages/mycenter/index',
         'pages/goodsDetail',
         'pages/custom',

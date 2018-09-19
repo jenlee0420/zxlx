@@ -168,7 +168,7 @@
       },
 
       go_to_edit(index){
-        var address_id=this.list[index].address_id
+        var address_id=this.list[index].address_id;
         wx.navigateTo({
           url:"add_member?address_id="+address_id
         })
@@ -176,9 +176,9 @@
 
       del(index){
         var data={
-          address_id:this.list[index].address,
+          address_id:this.list[index].address_id,
         };
-
+        var that=this;
         this.showAlert({title:"警告",content:"确认要删除吗？",confirm:function(){
             wepy.request({
               url: "api/address/delete",
@@ -186,10 +186,10 @@
               data: data,
             }).then(res => {
               if(res.code!="1"){
-                this.showAlert({title:"警告",content:res.msg});
+                that.showAlert({title:"警告",content:res.msg});
               }else {
-                this.list.remove(index);
-                this.$apply();
+                that.list.splice(index,1);
+                that.$apply();
               }
             })
         }});
@@ -199,7 +199,7 @@
 
       set_default(index){
         var data={
-          address_id:this.list[index].address,
+          address_id:this.list[index].address_id,
         };
 
         wepy.request({
@@ -241,9 +241,9 @@
         this.showAlert({title:"警告",content:res.msg});
       }else {
           var index=0;
+          this.list=[];
         for(var i=0;i<res.data.list.length;i++){
           var thisdata=res.data.list[i];
-          this.list=[];
           this.list.push({
             address_id:thisdata.address_id,
             name:thisdata.name,
