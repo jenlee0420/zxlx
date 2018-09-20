@@ -1,5 +1,6 @@
 <style lang="less">
   #searchpage {
+    //  background-color: #fff;
     .toppanel {
       height: 105rpx;
       border-top: 1rpx solid @bColor;
@@ -19,6 +20,28 @@
       color: #b3b3b3;
       text-align: center;
     }
+    .cateTap{
+        height: 88rpx;
+        background-color: #fff;
+        border-bottom: 1rpx solid @bColor;
+        white-space: nowrap;
+    }
+    .cate{
+        font-size: 28rpx;
+        color:#5b5a5a;
+        margin-right: 39rpx;
+        display: inline-block;
+        line-height: 88rpx;
+        height: 85rpx;
+        box-sizing: content-box;
+        &:first-child{
+            margin-left: 24rpx;
+        }
+        &.active{
+            color: @theme;
+            border-bottom: 2px solid @theme;
+        }
+    }
   }
 </style>
 
@@ -27,10 +50,22 @@
     <view class="toppanel">
       <view class="seachinput">
         <span class="zan-icon zan-icon-search"></span>
+        搜索{{category.val}}
       </view>
     </view>
-    <scroll-view scroll-x>
-      <span>全部</span><span wx:for="{{catelist}}" @tap="changeCate">{{item.name}}</span>
+    <scroll-view  scroll-x style="width: 100%;" class="cateTap">
+        <view class="cateTap">
+        <span class="cate {{0 == category.id?'active':''}}" @tap="changeCate">全部</span><span class="cate {{item.id==category.id?'active':''}}" wx:for="{{catelist}}" @tap="changeCate({{item}})" wx:key="{{index}}">{{item.name}}</span>
+      </view>
+    </scroll-view>
+    <view class="mb30"></view>
+    <scroll-view  scroll-y style="height: cala(100% - 143rpx);">
+        <view class="p-0-32">
+            <repeat for="{{goodslist}}" index="index" item="item" key="key">
+                <gooditem :goodsitem="item">
+            </repeat>
+            <listFooter loading="{{loading}}" item="{{goodslist}}" pagesize="{{page_size}}"></listFooter>
+        </view>
     </scroll-view>
   </view>
 </template>
@@ -39,6 +74,7 @@
   import wepy from 'wepy'
   import Mixin from '@/mixins/global'
   import gooditem from '@/components/gooditem'
+  import listFooter from '@/components/listFooter'
   export default class searchpage extends wepy.page {
     config = {}
     components = {
@@ -46,9 +82,28 @@
     }
     mixins = [Mixin]
     data = {
-      catelist: []
+      catelist: [],
+      goodslist:[],
+      page:1,
+      category:{
+          id:0,
+          val:'全部'
+      },
+      loading:true
     }
-    methods = {}
+    methods = {
+        changeCate(obj){
+            if(obj){
+            this.category.id = obj.id
+            this.category.val = obj.name 
+            }else{
+                this.category.id = 0
+            this.category.val = '全部'
+            }
+            this.page = 1
+            this.getlist()
+        }
+    }
     getCate() {
       wepy.request({
         url: 'api/label/getlist',
@@ -61,11 +116,36 @@
             content: res.msg,
             showCancel: false
           })
+        } 
+        this.$apply()
+      })
+    }
+    getlist() {
+      wepy.request({
+        url: 'api/goods/lists',
+        method: 'POST',
+        data:{
+            per_page:10,
+            page: this.page,
+            category_id:this.category.id,
+            search:this.search
         }
+      }).then(res => {
+          this.loading= false
+        if (res.code == 1) {
+          this.goodslist = res.data.list.data
+        } else {
+          wepy.showModal({
+            content: res.msg,
+            showCancel: false
+          })
+        }
+        this.$apply()
       })
     }
     onLoad() {
       this.getCate()
+      this.getlist()
     }
   }
 </script>

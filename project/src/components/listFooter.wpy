@@ -7,7 +7,7 @@
         <view class="list-foot foot" wx:if="{{loading}}">
             加载中......
         </view>
-        <view class="list-foot foot" wx:if="{{item.list.length == item.total_count && item.list.length > page_size && !loading}}">
+        <view class="list-foot foot" wx:if="{{item.list.length == item.total_count && item.list.length > pagesize && !loading}}">
             <span class="gopng_img">没有更多</span>
         </view>
         <view class="nodata" wx:if="{{!loading && item.list.length == 0}}">
@@ -19,12 +19,13 @@
 <script>
     import wepy from 'wepy'
     import Mixin from '@/mixins/global'
-    export default class Index extends wepy.page {
+    export default class listFooter extends wepy.component {
         config = {}
         components = {}
         props = {
             loading: '',
-            item: {}
+            item: {},
+            pagesize:''
         }
         mixins = [Mixin]
         data = {}

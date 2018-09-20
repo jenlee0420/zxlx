@@ -30,8 +30,13 @@
     }
     .itemcontent{
       padding:20rpx;
-      .itemdesc{display: inline-block;line-height: 28rpx;}
+      .itemdesc{display: flex;line-height: 28rpx;}
       .itemprice{letter-spacing: 2rpx;}
+    }
+    .itemlabel{
+        display:flex;
+        flex-flow:wrap;
+        text{white-space: nowrap;margin-top: 10rpx}
     }
   }
 </style>
@@ -39,25 +44,28 @@
 <template>
   <view id="proditem">
     <view class="photoview">
-        <text class="toptext abs">广西桂林20天19</text>
-        <span class="public_icon1_hot_sale abs"></span>
+        <text class="toptext abs">{{goodsitem.subtitle_goods_name}}</text>
+        <span class="public_icon1_hot_sale abs" wx:if="{{goodsitem.propaganda == 1}}"></span>
         <view class="bottomtext abs">
           <!-- <span class="public_icon1_play_day1"></span> -->
           <span class="public_icon1_play_day3">纯玩11天</span>
           <!-- <span class="public_icon1_play_day2"></span> -->
           </view>
         <!-- <view class="photo"> -->
-          <image src="{{baseServerImg}}" mode="aspectFill"/>
+          <image src="{{goodsitem.image.length>0?goodsitem.image[0].file_path:baseServerImg}}" mode="aspectFill"/>
           <!-- </view> -->
     </view>
     <view class="itemcontent">
-        <text class="itemtitle fs26 c333">20天军事特训</text>
-        <view class="itemprice"><span class="fs30 cf71414 mr20">￥3000起</span><span class="fs22 cb4b4b4">已拼3500人次</span></view>
-        <text class="itemdesc fs22 cb4b4b4">知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文游以“大语文”游学方式，知兮乐兮大语文游</text>
-        <text class="itemdesc fs22 cb4b4b4">供应商：奥德曼</text>
+        <text class="itemtitle fs26 c333">{{goodsitem.source_name}}</text>
+        <view class="itemprice"><span class="fs30 cf71414 mr20">￥{{goodsitem.goods_min_price}}起</span><span class="fs22 cb4b4b4">已拼{{goodsitem.meed_num}}人次</span></view>
+        <text class="itemdesc fs22 cb4b4b4">{{goodsitem.describe}}</text>
+        <text class="itemdesc fs22 cb4b4b4">供应商：{{goodsitem.source_name}}</text>
         <view class="itemlabel">
-            <text class="redlabel">知兮乐兮自营</text>
-            <text class="greenlabel">不限年龄</text>
+            <text class="redlabel" wx:if="{{goodsitem.is_own_business == 1}}">知兮乐兮自营</text>
+            <text class="redlabel">{{goodsitem.category.name}}</text>
+            <repeat for="{{goodsitem.label_name}}" index="index" item="item" key="key">
+            <text class="greenlabel">{{item.name}}</text>
+            </repeat>
         </view>
     </view>
   </view>
@@ -71,6 +79,14 @@ export default class gooditem extends wepy.component {
   }
   components = {}
   mixins = [Mixin]
+  props = {
+      goodsitem: {
+        type: Object,
+        default: () => {
+          return ''
+        }
+      }
+    }
   data = {
   }
   methods = {}
