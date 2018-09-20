@@ -75,8 +75,8 @@
                     <swiper-item>
                         <scroll-view scroll-y @scrolltolower="nextpage({{indexa}})" style="height:100%">
                             <view class="main-scroll" wx:if="{{currType == itemb.key}}">
-                              <block wx:for="{{itemb.list}}" wx:key="{{index}}" >
-                                <!-- <repeat for="{{itemb.list}}" index="index" item="item" key="key"> -->
+                              <!-- <block wx:for="{{itemb.list}}" wx:key="{{index}}" > -->
+                                <repeat for="{{itemb.list}}" index="index" item="item" key="key">
                                 <!-- 订单内容 -->
                                 <view class="itemContent">
                                   <view class="itemtop">
@@ -104,7 +104,7 @@
                                   <view class="itempay">
                                     实付：￥{{item.total_price}}
                                   </view>
-                                  <orderBtn :orderstatus.sync="item.total_price"/>
+                                  <orderBtn :orderitem="item.order_status"/>
                                   <!-- <view class="btns ">
                                     <button class="btnline mr12" wx:if="{{item.order_status.value=='40'}}">申请退款</button>
                                     <button class="btnline mr12" wx:if="{{item.order_status.value=='10'}}">取消订单</button>
@@ -118,8 +118,8 @@
                                     <button class="btn" wx:if="{{item.order_status.value=='20'}}">再次购买</button>
                                   </view> -->
                                 </view>
-                              <!-- </repeat> -->
-                              </block>
+                              </repeat>
+                              <!-- </block> -->
                             </view>
                         </scroll-view>
                     </swiper-item>
