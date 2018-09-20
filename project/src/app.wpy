@@ -22,8 +22,9 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        // 'pages/mycenter/orderlist',
-        'pages/seacrh_page',
+        'pages/mycenter/orderdetail',
+        'pages/mycenter/orderlist',
+        'pages/search_page',
         'pages/index',
         'pages/mycenter/index',
         'pages/member/list_member',
@@ -57,7 +58,7 @@
           'selectedIconPath': 'images/custom_act.png'
 
         },{
-          'pagePath': 'pages/seacrh_page',
+          'pagePath': 'pages/search_page',
           'text': '搜索',
           'iconPath': 'images/search.png',
           'selectedIconPath': 'images/search_act.png'

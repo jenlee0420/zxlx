@@ -148,55 +148,58 @@
 <template>
     <view class="container" id="orderdetail">
         <view class="orderstatus">
-            <text>等待买家付款</text>
-            <span class="order_wait_pay"></span>
+            <text wx:if="{{order_status=='10'}}">等待买家付款</text>
+            <span class="public_icon_order_wait_pay" wx:if="{{order_status=='10'}}"></span>
         </view>
         <view class="address">
             <span class="public_icon2_location2"></span>
             <view class="flex-1 ml20">
-                <text>李佳   17727982525</text>
-                <text>广东省深圳市南山区海王大厦12层</text>
+                <text>{{detail.address.name}}   {{detail.address.phone}}</text>
+                <text>{{detail.address.region.province+detail.address.region.city+detail.address.region.region+detail.address.detail}}</text>
             </view>
             <view>
-                <button class="btnRdline">修改</button>
+                <button class="btnRdline" @tap="to_address_list">修改</button>
             </view>
-        </view> 
+        </view>
         <!-- 待支付 -->
         <view class="payment">
             <text class="fs24">请选择支付方式</text>
             <view class="paylist">
                 <ul>
-                    <li><span class="public_icon2_weixin_pay mr20"></span><text>微信支付</text><span class="zan-icon-success zan-icon"></span></li>
-                    <li><span class="public_icon2_other_pay mr20"></span><text>找微信朋友代付</text><span class="zan-icon-success zan-icon"></span></li>
+                    <li @tap="choice_pay(1)"><span class="public_icon2_weixin_pay mr20"></span><text>微信支付</text><span class="zan-icon-success zan-icon" wx:if="{{pay_type==1}}" ></span></li>
+                    <li @tap="choice_pay(2)"><span class="public_icon2_other_pay mr20"></span><text>找微信朋友代付</text><span class="zan-icon-success zan-icon"  wx:if="{{pay_type==2}}"></span></li>
                 </ul>
             </view>
         </view>
         <!-- 待支付 end-->
         <view class="itemContent">
             <view class="itemtop">
-                <image src="{{baseServerImg}}" mode="aspectFill" /><span class="fs25 c333 flex-1 ml20">供应商</span>
+                <image src="{{detail.source_image}}" mode="aspectFill" /><span class="fs25 c333 flex-1 ml20">{{detail.source_name}}</span>
             </view>
-            <view class="itemdetail">
+            <block wx:for="{{detail.goods}}" wx:key="{{index}}">
+              <view class="itemdetail">
                 <view class="mr20">
-                    <image src="{{baseServerImg}}" mode="aspectFill" />
+                  <image src="{{item.image.file_path}}" mode="aspectFill" />
                 </view>
                 <view class="flex-1">
-                    <text class="itemname">20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】</text>
-                    <text class="fs22 c929292">八一军营期第一期发嘎嘎是</text>
+                  <text class="itemname">{{item.goods_name}}</text>
+                  <text class="fs22 c929292">{{item.goods_attr}}</text>
                 </view>
                 <view class="itemprice ml20">
-                    <text class="fs28 c333">￥500</text>
-                    <view class="c888">
-                        <font class="fs28">x</font>
-                        <font class="fs24">1</font>
-                    </view>
+                  <text class="fs28 c333">￥{{item.goods_price}}</text>
+                  <view class="c888">
+                    <font class="fs28">x</font>
+                    <font class="fs24">{{item.total_num}}</font>
+                  </view>
                 </view>
-            </view>
+              </view>
+            </block>
+
             <view class="itempay">
-                实付：￥500
+                实付：￥{{detail.total_price}}
             </view>
             <!-- 出行人信息 -->
-            <view class="members">
+            <view class="members" wx:if="{{order_status=='20'}}">
                 <view class="c555545"><text >出行人信息（2人）</text></view>
                 <view class="memberinfo">
                     <text class="c333">李佳</text>
@@ -206,7 +209,7 @@
             </view>
             <!-- 出行人信息 end-->
             <!-- 评价信息 -->
-            <view class="comments">
+            <view class="comments" wx:if="{{order_status=='30'}}">
                 <view class="commlabel"><text >评价信息</text><Star  total="5" num="3"></view>
                 <!-- <view class="commContent">评价内容</view>
                 <view class="commentimgs">
@@ -221,13 +224,14 @@
             <!-- 评价信息 end -->
             <view class="contact"><span class="public_icon4_contact mr10"></span>联系客服</view>
         </view>
-        <view class="orderinfo">
-            <text>订单编号：189-4454266467</text>
-            <text>支付方式：微信</text>
-            <text>下单时间：2018-09-11  00:28:19  </text>
-            <text>完成时间：2018-12-19  </text>
+        <view class="orderinfo" wx:if="{{order_status=='10'}}">
+            <text>订单编号：{{detail.order_no}}</text>
+            <text wx:if="{{pay_type==1}}">支付方式：微信</text>
+            <text wx:if="{{pay_type==2}}">支付方式：好友代付</text>
+            <text>下单时间：{{detail.create_time}}</text>
+            <text wx:if="{{order_status=='20'}}">完成时间：2018-12-19  </text>
         </view>
-        <orderBtn />
+        <orderBtn orderitem="{{detail.order_status}}"/>
     </view>
 </template>
 
@@ -242,8 +246,45 @@
         }
         components = {orderBtn,Star}
         mixins = [Mixin]
-        data = {}
-        methods = {}
-        onLoad() {}
+        data = {
+          order_status:"",
+          detail:{},
+          pay_type:1,
+        }
+        methods = {
+          to_address_list(){
+            wx.navigateTo({
+              url:"/pages/member/list_member",
+            })
+          },
+
+          choice_pay(pay_type){
+            this.pay_type=pay_type;
+            this.$apply();
+          }
+        }
+        onLoad(options) {
+//          if(options.order_id==undefined){
+//            this.showAlert({title:"错误"});
+//            return
+//          }
+
+        }
+
+        PageInit(){
+          wepy.request({
+            url: "api/order/detail",
+            method: 'POST',
+            data: {order_id:41},
+          }).then(res => {
+            if(res.code != "1"){
+              this.showAlert({title: "警告", content: res.msg});
+            }else{
+              this.order_status=res.data.order_status.value;
+              this.detail=res.data
+              this.$apply();
+            }
+          })
+        }
     }
 </script>
