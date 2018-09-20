@@ -22,7 +22,7 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        'pages/mycenter/orderlist',
+        // 'pages/mycenter/orderlist',
         'pages/seacrh_page',
         'pages/index',
         'pages/mycenter/index',

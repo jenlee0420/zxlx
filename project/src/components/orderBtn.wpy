@@ -4,39 +4,38 @@
 
 <template>
   <view class="btns">
-        <!--10待支付 20已取消 30 已完成 40未使用  50已删除 60退款中、70已退款、80退款失败-->
-        asdadas
-        <button class="btnline mr12" wx:if="{{orderStatus=='40'}}">申请退款</button>
-        <button class="btnline mr12" wx:if="{{orderStatus=='10'}}">取消订单</button>
-        <button class="btnline mr12" wx:if="{{orderStatus=='30'}}">再次购买</button>
-        <button class="btn" wx:if="{{orderStatus=='40'}}">完善出行人</button>
-        <button class="btn" wx:if="{{orderStatus=='noused'}}" disabled>已评价</button>
-        <button class="btn" wx:if="{{orderStatus=='30'}}">我要评价</button>
-        <button class="btn" wx:if="{{orderStatus=='10'}}">去支付</button>
-        <button class="btn" wx:if="{{orderStatus=='all'}}">发给好友</button>
-        <button class="btn" wx:if="{{orderStatus=='20'}}">删除订单</button>
-        <button class="btn" wx:if="{{orderStatus=='20'}}">再次购买</button>
-    </view>
-
+    <!--10待支付 20已取消 30 已完成 40未使用  50已删除 60退款中、70已退款、80退款失败-->
+    {{itemb}}
+    <button class="btnline mr12" wx:if="{{item.order_status.value=='40'}}">申请退款</button>
+    <button class="btnline mr12" wx:if="{{item.order_status.value=='10'}}">取消订单</button>
+    <button class="btnline mr12" wx:if="{{item.order_status.value=='30'}}">再次购买</button>
+    <button class="btn" wx:if="{{item.order_status.value=='40'}}">完善出行人</button>
+    <button class="btn" wx:if="{{item.order_status.value=='noused'}}" disabled>已评价</button>
+    <button class="btn" wx:if="{{item.order_status.value=='30'}}">我要评价</button>
+    <button class="btn" wx:if="{{item.order_status.value=='10'}}">去支付</button>
+    <button class="btn" wx:if="{{item.order_status.value=='all'}}">发给好友</button>
+    <button class="btn" wx:if="{{item.order_status.value=='20'}}">删除订单</button>
+    <button class="btn" wx:if="{{item.order_status.value=='20'}}">再次购买</button>
+  </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-export default class orderbtn extends wepy.page {
-  config = {
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  export default class Orderbtn extends wepy.component {
+    config = {}
+    components = {}
+    props = {
+      itemb: {
+        type: Object,
+        default: () => {
+          return {}
+        }
+      }
+    }
+    mixins = [Mixin]
+    data = {}
+    methods = {}
+    onLoad() {}
   }
-  components = {
-
-  }
-  props = {
-
-  }
-  mixins = [Mixin]
-  data = {
-  }
-  methods = {}
-  onLoad() {
-  }
-}
 </script>

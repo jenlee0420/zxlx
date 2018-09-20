@@ -71,12 +71,12 @@
         <view wx:if="{{false}}"></view>
         <view class="flex-1">
             <swiper indicator-dots="{{false}}" autoplay="{{false}}" class="swiper" bindchange="changeType_swiper" current="{{currentIndex}}">
-                <block wx:for="{{TypeList}}" wx:for-item="item" wx:key="indexa" wx:for-index="indexa">
+                <block wx:for="{{TypeList}}" wx:for-item="itemb" wx:key="indexa" wx:for-index="indexa">
                     <swiper-item>
                         <scroll-view scroll-y @scrolltolower="nextpage({{indexa}})" style="height:100%">
-
-                            <view class="main-scroll" wx:if="{{currType == item.key}}">
-                              <block wx:for="{{item.list}}" wx:key="{{index}}">
+                            <view class="main-scroll" wx:if="{{currType == itemb.key}}">
+                              <block wx:for="{{itemb.list}}" wx:key="{{index}}" >
+                                <!-- <repeat for="{{itemb.list}}" index="index" item="item" key="key"> -->
                                 <!-- 订单内容 -->
                                 <view class="itemContent">
                                   <view class="itemtop">
@@ -104,8 +104,8 @@
                                   <view class="itempay">
                                     实付：￥{{item.total_price}}
                                   </view>
-                                  <!--<orderBtn :orderstatus.sync="currType"/>-->
-                                  <view class="btns ">
+                                  <orderBtn :orderstatus.sync="item.total_price"/>
+                                  <!-- <view class="btns ">
                                     <button class="btnline mr12" wx:if="{{item.order_status.value=='40'}}">申请退款</button>
                                     <button class="btnline mr12" wx:if="{{item.order_status.value=='10'}}">取消订单</button>
                                     <button class="btnline mr12" wx:if="{{item.order_status.value=='30'}}">再次购买</button>
@@ -116,8 +116,9 @@
                                     <button class="btn" wx:if="{{item.order_status.value=='all'}}">发给好友</button>
                                     <button class="btn" wx:if="{{item.order_status.value=='20'}}">删除订单</button>
                                     <button class="btn" wx:if="{{item.order_status.value=='20'}}">再次购买</button>
-                                  </view>
+                                  </view> -->
                                 </view>
+                              <!-- </repeat> -->
                               </block>
                             </view>
                         </scroll-view>
