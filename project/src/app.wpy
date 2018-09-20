@@ -22,6 +22,7 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
+        'pages/mycenter/orderdetail',
         'pages/mycenter/orderlist',
         'pages/seacrh_page',
         'pages/index',
