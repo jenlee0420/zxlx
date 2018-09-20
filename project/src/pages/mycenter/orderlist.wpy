@@ -73,70 +73,53 @@
             <swiper indicator-dots="{{false}}" autoplay="{{false}}" class="swiper" bindchange="changeType_swiper" current="{{currentIndex}}">
                 <block wx:for="{{TypeList}}" wx:for-item="item" wx:key="indexa" wx:for-index="indexa">
                     <swiper-item>
-                        <scroll-view scroll-y @scrolltolower="nextpage" style="height:100%">
+                        <scroll-view scroll-y @scrolltolower="nextpage({{indexa}})" style="height:100%">
 
                             <view class="main-scroll" wx:if="{{currType == item.key}}">
-                              <!--<block wx:for="{{item.list}}" wx:key="{{index}}">-->
+                              <block wx:for="{{item.list}}" wx:key="{{index}}">
                                 <!-- 订单内容 -->
                                 <view class="itemContent">
                                   <view class="itemtop">
-                                    <image src="{{baseServerImg}}" mode="aspectFill"/><span class="fs25 c333 flex-1 ml20">供应商</span>
-                                    <text class="fs25 ce02e24">待支付</text>
+                                    <image src="{{item.image.file_path}}" mode="aspectFill"/><span class="fs25 c333 flex-1 ml20">供应商</span>
+                                    <text class="fs25 ce02e24">{{item.order_status.text}}</text>
                                   </view>
-                                  <view class="itemdetail">
-                                    <view class="mr20">
-                                      <image src="{{baseServerImg}}" mode="aspectFill" />
-                                    </view>
-                                    <view class="flex-1">
-                                      <text class="itemname">20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】</text>
-                                      <text class="fs22 c929292">八一军营期第一期发嘎嘎是</text>
-                                    </view>
-                                    <view class="itemprice ml20">
-                                      <text class="fs28 c333">￥500</text>
-                                      <view class="c888">
-                                        <font class="fs28">x</font>
-                                        <font class="fs24">1</font>
+                                  <block wx:for="{{item.goods}}" wx:key="{{index}}">
+                                    <view class="itemdetail">
+                                      <view class="mr20">
+                                        <image src="{{item.image.file_path}}" mode="aspectFill" />
+                                      </view>
+                                      <view class="flex-1">
+                                        <text class="itemname">{{item.goods_name}}</text>
+                                        <text class="fs22 c929292">{{item.goods_attr}}</text>
+                                      </view>
+                                      <view class="itemprice ml20">
+                                        <text class="fs28 c333">￥{{item.goods_price}}</text>
+                                        <view class="c888">
+                                          <font class="fs28">x</font>
+                                          <font class="fs24">{{item.total_num}}</font>
+                                        </view>
                                       </view>
                                     </view>
-                                  </view>
+                                  </block>
                                   <view class="itempay">
-                                    实付：￥500
+                                    实付：￥{{item.total_price}}
                                   </view>
-                                  <orderBtn />
+                                  <!--<orderBtn :orderstatus.sync="currType"/>-->
+                                  <view class="btns ">
+                                    <button class="btnline mr12" wx:if="{{item.order_status.value=='40'}}">申请退款</button>
+                                    <button class="btnline mr12" wx:if="{{item.order_status.value=='10'}}">取消订单</button>
+                                    <button class="btnline mr12" wx:if="{{item.order_status.value=='30'}}">再次购买</button>
+                                    <button class="btn" wx:if="{{item.order_status.value=='40'}}">完善出行人</button>
+                                    <button class="btn" wx:if="{{item.order_status.value=='noused'}}" disabled>已评价</button>
+                                    <button class="btn" wx:if="{{item.order_status.value=='30'}}">我要评价</button>
+                                    <button class="btn" wx:if="{{item.order_status.value=='10'}}">去支付</button>
+                                    <button class="btn" wx:if="{{item.order_status.value=='all'}}">发给好友</button>
+                                    <button class="btn" wx:if="{{item.order_status.value=='20'}}">删除订单</button>
+                                    <button class="btn" wx:if="{{item.order_status.value=='20'}}">再次购买</button>
+                                  </view>
                                 </view>
-                              <!-- 订单内容 end-->
-                              <!-- 订单内容 -->
-                                <view class="itemContent">
-                                  <view class="itemtop">
-                                    <image src="{{baseServerImg}}" mode="aspectFill"/><span class="fs25 c333 flex-1 ml20">供应商</span>
-                                    <text class="fs25 ce02e24">待支付</text>
-                                  </view>
-                                  <view class="itemdetail">
-                                    <view class="mr20">
-                                      <image src="{{baseServerImg}}" mode="aspectFill" />
-                                    </view>
-                                    <view class="flex-1">
-                                      <text class="itemname">20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】</text>
-                                      <text class="fs22 c929292">八一军营期第一期发嘎嘎是</text>
-                                    </view>
-                                    <view class="itemprice ml20">
-                                      <text class="fs28 c333">￥500</text>
-                                      <view class="c888">
-                                        <font class="fs28">x</font>
-                                        <font class="fs24">1</font>
-                                      </view>
-                                    </view>
-                                  </view>
-                                  <view class="itempay">
-                                    实付：￥500
-                                  </view>
-                                  <orderBtn :key="3"/>
-                                </view>
-                              <!-- 订单内容 end-->
-
+                              </block>
                             </view>
-
-
                         </scroll-view>
                     </swiper-item>
                 </block>
@@ -161,31 +144,36 @@
                 name: '全部',
                 key: 'all',
                 current_page: 1,
+                total_page:1,
                 list: []
             }, {
                 name: '待付款',
                 key: 'payment',
                 current_page: 1,
+                total_page:1,
                 list: []
             }, {
                 name: '未使用',
                 key: 'noused',
                 current_page: 1,
+                total_page:1,
                 list: []
             }, {
                 name: '已完成',
                 key: 'received',
                 current_page: 1,
+                total_page:1,
                 list: []
             }, {
                 name: '已取消',
                 key: 'cancel',
                 current_page: 1,
+                total_page:1,
                 list: []
             }],
             currType: 'all',
             currentIndex: 0,
-            page_size: 1,
+            page_size: 2,
         }
         methods = {
             changeType(index){
@@ -196,20 +184,26 @@
 
             changeType_swiper(e) {
                 this.loadorderlist({
-                  page:this.page_size,
-                  per_page:this.TypeList[e.detail.current].current_page,
+                  per_page:this.page_size,
+                  page:this.TypeList[e.detail.current].current_page,
                   data_type:this.TypeList[e.detail.current].key,
                 }, e.detail.current)
             },
 
-            nextpage() {
-                let index = this.getTypeIndex(this.currType)
-                if (this.TypeList[index].list.length > 0) {
-                    if (this.TypeList[index].list.length < this.TypeList[index].total_count) {
-                        this.TypeList[index].current_page += 1
-                        this.loadorderlist(true)
-                    }
-                }
+            nextpage(index) {
+
+              this.loadorderlist({
+                per_page:this.page_size,
+                page:this.TypeList[index].current_page,
+                data_type:this.TypeList[index].key,
+              },index);
+                // let index = this.getTypeIndex(this.currType)
+                // if (this.TypeList[index].list.length > 0) {
+                //     if (this.TypeList[index].list.length < this.TypeList[index].total_count) {
+                //         this.TypeList[index].current_page += 1
+                //         this.loadorderlist(true)
+                //     }
+                // }
             }
         }
         loadorderlist(data,index){
@@ -222,18 +216,23 @@
                   this.showAlert({title:"警告",content:res.msg});
                   return
               }
-              console.log(index)
-              this.TypeList[index].current_page = 1;
+              if(data.page==1){
+                this.TypeList[index].list=[];
+              }
+
+              this.TypeList[index].current_page = res.data.list.current_page+1;
               this.currentIndex=index;
-              this.currType = this.TypeList[index].key
-              this.TypeList[index].list=[];
+              this.currType = this.TypeList[index].key;
+              this.TypeList[index].total_page=res.data.list.last_page;
 
+              //last page
+              if(this.TypeList[index].current_page==res.data.list.last_page){
+
+              }
+
+              res=res.data.list;
               for(var i=0;i<res.data.length;i++){
-                this.TypeList[index].list.push({
-                  order_id:res.data[i].order_id,
-                  pay_status:res.data[i].pay_status,
-
-                })
+                this.TypeList[index].list.push(res.data[i])
               }
 
               this.$apply();
@@ -243,18 +242,23 @@
 
         }
         onLoad() {
+
+        }
+
+        PageInit(){
+          this.loadorderlist({
+            per_page:this.page_size,
+            page:this.TypeList[0].current_page,
+            data_type:this.TypeList[0].key,
+          },0);
+        }
+
+        onPullDownRefresh(e){
             this.loadorderlist({
-              page:this.page_size,
-              per_page:this.TypeList[0].current_page,
+              per_page:this.page_size,
+              page:this.TypeList[0].current_page,
               data_type:this.TypeList[0].key,
             },0);
-        }
-        onPullDownRefresh(){
-            // this.loadorderlist({
-            //   page:this.page_size,
-            //   per_page:this.TypeList[0].current_page,
-            //   data_type:this.TypeList[0].key,
-            // });
         }
     }
 

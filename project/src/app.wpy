@@ -22,10 +22,10 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
+        'pages/mycenter/orderlist',
         'pages/seacrh_page',
         'pages/index',
         'pages/mycenter/index',
-        'pages/mycenter/orderlist',
         'pages/member/list_member',
         'pages/member/add_member',
         'pages/mycenter/collaborate',
@@ -38,7 +38,7 @@
         'pages/goodsDetail',
         'pages/custom',
         'pages/refund'
-        
+
       ],
       tabBar: {
         color: '#949393',
