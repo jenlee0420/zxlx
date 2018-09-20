@@ -1,0 +1,117 @@
+<template>
+    <view class="container">
+        <view class="family_head">
+            <span class="family_ico"></span>
+            <text class="fs30 mb24 mt30">{{patientInfo.nickname}}的家人</text>
+            <text class="fs24">家庭创建时间：{{addtime}}</text>
+        </view>
+        <view class="family_list" wx:if="{{Patientlist.length > 0}}">
+            <ul>
+                <li wx:for="{{Patientlist}}" wx:key="index"  @tap="edit_info({{item.id}})">
+                    <span class="img"><image src="{{item.avatar ? item.avatar : baseHeadImg}}" @error="default_head" data-img="Patientlist,{{index}},avatar" /></span>
+                    <view class="flex-column flex-1">
+                        <view class="flex mb20"><text class="fs30 c333 mr12">{{item.user_name?item.user_name:item.nickname}}</text>
+                        <text class="fs22 relationship {{item.relation.key == 1 ? 'mainCorlor':''}}">{{item.relation.value}}</text></view>
+                        <view class="fs22 c929292">加入时间：{{item.add_time}}</view>
+                    </view>
+                    <span class="arrow-right"></span>
+                </li>
+            </ul>
+        </view>
+        <view class="nodata flex-1" wx:if="{{Patientlist.length == 0 && initCancel}}">
+            <span class="word">暂无数据</span>
+        </view>
+        <view class="spaceBox"></view>
+        <navigator url="/pages/mycenter/familyAdd?type=add" class="btn_wpe100 fixed-bottom">添加家人</navigator>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Family extends wepy.page {
+        config = {
+            navigationBarTitleText: '我的家庭'
+            // disableScroll: true
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {
+            initCancel: false,
+            Patientlist: [],
+            patientInfo: {},
+            addtime: ''
+        }
+        computed = {}
+        methods = {
+            edit_info(id) {
+                wepy.navigateTo({
+                    url: '/pages/mycenter/familyAdd?type=edit&id=' + id
+                })
+            }
+        }
+        events = {}
+        loadfamily() {
+            this.initCancel = false
+            this.showloading()
+            // 取就诊人列表
+            wepy.request({
+                url: 'weiappapi/familyarchives/lists',
+                method: 'get',
+                data: {}
+            }).then(res => {
+                this.initCancel = true
+                this.showloading(false)
+                if (res.code === '1' && res.data.length > 0) {
+                    //  // 判断姓名和昵称
+                    // res.data.forEach(v => {
+                    //     v.nickname = v.user_name ? v.user_name : v.nickname
+                    // })
+
+                    this.Patientlist = res.data
+                    this.addtime = res.data[0].add_time
+
+                    // 重写缓存中的用户信息
+                    this.reSetUserInfo(this.Patientlist)
+                }
+                this.$apply()
+            })
+        }
+        onLoad() {
+            this.patientInfo = this.getUserInfobyStorage()
+        }
+        onShow() {
+            this.loadfamily()
+            if (wepy.getStorageSync('visit')) {
+                wepy.removeStorage({
+                    key: 'visit'
+                })
+            }
+        }
+    }
+</script>
+
+<style lang="less">
+    .mainCorlor {
+        background-color: @theme !important;
+    }
+    // .container{height: 100%;overflow:auto;}
+    .family_head {
+        height: 340rpx;
+        margin-bottom: 20rpx;
+        color: #fff;
+        padding-top: 36rpx;
+        box-sizing: border-box;
+        background: @theme url('@{imgbaseUrl}/family_bg.png') center no-repeat;
+        background-size: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center; // justify-content: center;
+    }
+    .addBtn{
+        position: absolute;
+        bottom:0;
+        width:100%;
+    }
+
+</style>

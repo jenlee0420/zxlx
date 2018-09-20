@@ -1,0 +1,488 @@
+<template>
+    <view class="hp100 flex-column">
+        <searchbar type="goods" defValue="请输入商品名称"></searchbar>
+        <view class="navSort">
+            <view class="navs_sort">
+                <view class="nav_list" @tap="showCity">
+                    <text class="triangle_down {{cityStatus?'triangle_up':''}} {{nums == 1?'bgcolor':''}}">{{cityname}}</text>
+                </view>
+                <block wx:if="{{cityStatus}}">
+                    <cascade ref="cascade" :current.sync="currentCity"></cascade>
+                </block>
+                <view class="nav_list {{nums == 2?'bgcolor':''}}" @tap="btn_p">
+                    <text>销量最高</text>
+                </view>
+                <view class="nav_list {{nums == 3?'bgcolor':''}}" @tap="btn_ps">
+                    <text>距离最近</text>
+                </view>
+            </view>
+        </view>
+        <view class="tabTodo" style="height: calc(100% - 194rpx);">
+            <scroll-view scroll-y class="tab_s" style="height: 100%">
+                <!--会员 专场-->
+                <view @tap="tab_i({{item.id}})" class="flex flex-algin-center tab_i {{specialStatus?'cur':''}}" wx:for="{{goodType}}" wx:key="{{index}}" wx:for-item="item" wx:for-index="id">
+                    <text class="special_{{id}} mr12"></text>
+                    <text class="specials">{{item.name}}</text>
+                </view>
+                <!--产品列表-->
+                <view @tap="serviceType({{item.id}})" class="tab_i {{num==item.id?'cur':''}}" wx:key="{{index}}" wx:for="{{tabTodo}}" wx:for-item="item" wx:for-index="id">
+                    <text class="specials">{{item.name}}</text>
+                </view>
+            </scroll-view>
+            <scroll-view class="tab_item" scroll-y @scrolltolower="nextpages" style="height: 100%">
+                <view class="special" wx:if="{{specialStatus}}">
+                    <!--获取专场活动接口-->
+                    <view class="special_img" wx:key="{{index}}" wx:for="{{eventlist}}" wx:for-item="item" wx:for-index="id">
+                        <image src="{{item.pic}}" mode="aspectFill" @tap="Navto({{item.link}})"></image>
+                    </view>
+                </view>
+                <view class="recommend" wx:if="{{specialStatus}}">
+                    <span class="re_text">推荐项目</span>
+                </view>
+                <!-- 热门推荐-->
+                <view class="tab_ct" wx:if="{{specialStatus}}">
+                    <!-- 推荐商品信息 -->
+                    <view class="list-foot p-32-0" wx:if="{{goodlist.length == 0}}">暂无推荐产品</view>
+                    <reGoodsinfo :goodlist.sync="goodlist" isIndex="false"></reGoodsinfo>
+                    <view class="foots_s" wx:if="{{goodstodo > goodlist.length && goodlist.length > 0}}">
+                        <text>正在加载......</text>
+                    </view>
+                    <view class="foots_s" wx:if="{{goodstodo === goodlist.length && goodstodo > page_size}}">
+                        <text class="gopng_img">没有更多了</text>
+                    </view>
+                </view>
+                <!--商品列表-->
+                <view class="tab_ct" wx:if="{{!specialStatus}}">
+                    <view class="list-foot p-32-0" wx:if="{{tab_item.length == 0 && !isload}}">该分类下暂无产品</view>
+                    <!-- 普通商品信息 -->
+                    <goodsinfo :gooddata.sync="tab_item"></goodsinfo>
+                    <view class="foots_s" wx:if="{{total_count > tab_item.length && tab_item.length > 0}}">
+                        <text>正在加载......</text>
+                    </view>
+                    <view class="foots_s" wx:if="{{total_count === tab_item.length && total_count > page_size}}">
+                        <text class="gopng_img">没有更多了</text>
+                    </view>
+                </view>
+            </scroll-view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import cascade from '@@/cascade'
+    import Mixin from '@/mixins/global'
+    import searchbar from '@/components/searchbar'
+    import goodsinfo from '@/components/goodinfo1'
+    import reGoodsinfo from '@/components/goodinfo'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '找服务',
+            disableScroll: true
+        }
+        components = {
+            cascade,
+            goodsinfo,
+            reGoodsinfo,
+            searchbar
+        }
+        props = {
+            name_num: {}
+        }
+        mixins = [Mixin]
+        data = {
+            isload: true,
+            nums: 1,
+            num: 0,
+            goods_num: 1,
+            goods_id: '',
+            goodType: [{
+                    id: 'sp',
+                    name: '专场'
+                }
+                // {id: 21, name: '会员'}
+            ],
+            tabTodo: {},
+            tab_item: [],
+            goodlist: [],
+            goodstodo: '',
+            eventlist: [],
+            specialStatus: true,
+            cityStatus: false,
+            currentCity: [{
+                id: 2
+            }, {
+                id: 38
+            }],
+            cityid: '',
+            cityname: '',
+            flag: '',
+            current_page: 1,
+            page_size: 10,
+            total_count: 0,
+            localinfo: {},
+            province: '',
+            cityShow: true,
+            keyword: ''
+        }
+        methods = {
+            // 推广活动图片跳转
+            Navto(url) {
+                wepy.navigateTo({
+                    url: url
+                })
+            },
+            showCity() {
+                this.nums = 1
+                this.cityStatus = !this.cityStatus
+            },
+            jump(id) {
+                wepy.navigateTo({
+                    url: '/pages/goods/index?id=' + id
+                })
+            },
+            tab_i(e) {
+                this.specialStatus = true
+                this.num = e
+                if (e === 'sp') {
+                    this.specialStatus = true
+                    this.current_page = 1
+                    this.getEvents()
+                    this.getRecommend()
+                }
+            },
+            serviceType(e) {
+                this.specialStatus = false
+                this.num = e
+                this.goods_id = e
+                this.current_page = 1
+                this.getGoodslist()
+            },
+            // 按销量
+            btn_p() {
+                this.current_page = 1
+                this.nums = 2
+                this.flag = 'sale'
+                this.cityStatus = false
+                if (this.specialStatus === true) {
+                    this.getEvents()
+                    this.getRecommend()
+                } else {
+                    this.getGoodslist()
+                }
+            },
+            // 距离最近
+            btn_ps() {
+                this.current_page = 1
+                this.nums = 3
+                this.flag = 'distance'
+                this.cityStatus = false
+                if (this.specialStatus === true) {
+                    this.getEvents()
+                    this.getRecommend()
+                } else {
+                    this.getGoodslist()
+                }
+            },
+            nextpages() {
+                if (this.specialStatus) {
+                    if (this.goodstodo > this.goodlist.length) {
+                        this.current_page += 1
+                        this.getRecommend(true)
+                    }
+                } else {
+                    if (this.tab_item.length < this.total_count) {
+                        this.current_page += 1
+                        this.getGoodslist(true)
+                    }
+                }
+            }
+        }
+        events = {
+            selectSuccess(res) {
+                this.currentCity = [{
+                    id: res[0].id
+                }, {
+                    id: res[1].id
+                }]
+                this.tab_item.length = 0
+                this.current_page = 1
+                this.cityStatus = false
+                this.province = res[0].id
+                this.cityid = res[1].id
+                this.cityname = res[1].name
+                this.cityShow = false
+                this.flag = ''
+                this.showloading()
+                this.getEvents()
+                this.getRecommend()
+                this.getGoodslist()
+                // this.goods_id = ''
+                // this.getEvents()
+                // this.getRecommend()
+                // this.getGoodslist()
+                // setTimeout(() => {
+                //     if (this.goodlist.length < 1 && this.eventlist.length < 1 && this.tab_item.length < 1) {
+                //         // this.showSuccess('当前城市暂无商品')
+                //         this.cityname = false
+                //         this.province = ''
+                //         this.cityid = ''
+                //         this.goods_id = this.num
+                //         this.showAlert({
+                //             showCancel: false,
+                //             content: '当前城市暂无商品',
+                //             confirm: 'nogoods'
+                //         })
+                //     } else {
+                //         this.showloading()
+                //         this.goods_id = this.num
+                //         this.getEvents()
+                //         this.getRecommend()
+                //         this.getGoodslist()
+                //         this.cityShow = true
+                //         this.showloading(false)
+                //     }
+                // }, 1000)
+            },
+            cascadeClose() {
+                this.cityStatus = false
+            }
+        }
+        nogoods() {
+            this.showloading()
+            if (this.specialStatus === true) {
+                this.getEvents()
+                this.getRecommend()
+                this.cityShow = true
+            } else {
+                this.getGoodslist()
+                this.cityShow = true
+            }
+        }
+        //  热门推荐接口
+        getRecommend(append) {
+            if (this.specialStatus === false) {
+                return
+            }
+            var that = this
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/promotion/recommend',
+                method: 'POST',
+                data: {
+                    province: this.province,
+                    city_id: this.cityid,
+                    current_page: this.current_page,
+                    page_size: this.page_size,
+                    flag: this.flag,
+                    lng: this.localinfobyStorage().lng,
+                    lat: this.localinfobyStorage().lat
+                }
+            }).then(res => {
+                this.showloading(false)
+                that.goodstodo = res.data.total_count
+                if (append) {
+                    that.goodlist = that.goodlist.concat(res.data.list)
+                } else {
+                    that.goodlist = res.data.list
+                }
+                that.$apply()
+            })
+        }
+        // 获取专场活动接口
+        getEvents() {
+            if (this.specialStatus === false) {
+                return
+            }
+            var that = this
+            wepy.request({
+                url: '/weiappapi/promotion/events',
+                method: 'POST',
+                data: {
+                    'city_id': this.cityid
+                }
+            }).then(res => {
+                this.showloading(false)
+                that.eventlist = res.data.list
+                that.$apply()
+            })
+        }
+        //  获取商品分类
+        getCategory() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/goods/category',
+                method: 'GET',
+                data: {}
+            }).then(res => {
+                that.tabTodo = res.data
+                that.$apply()
+            })
+        }
+        //  获取商品列表
+        getGoodslist(append) {
+            this.showloading()
+            this.isload = true
+            if (this.specialStatus === true) {
+                return
+            }
+            var that = this
+            wepy.request({
+                url: '/weiappapi/goods/goodslist',
+                method: 'GET',
+                data: {
+                    province: this.province,
+                    cat_id: this.goods_id,
+                    city: this.cityid,
+                    flag: this.flag,
+                    current_page: this.current_page,
+                    page_size: this.page_size,
+                    lng: this.localinfobyStorage().lng,
+                    lat: this.localinfobyStorage().lat
+                }
+            }).then(res => {
+                this.showloading(false)
+                this.isload = false
+                that.total_count = res.data.total_count
+                // 距离显示 格式化
+                // res.data.list.forEach(v => {
+                //     v.distance = Math.round(v.distance * 100) / 100
+                // })
+                if (append) {
+                    that.tab_item = that.tab_item.concat(res.data.list)
+                } else {
+                    that.tab_item = res.data.list
+                }
+                that.$apply()
+            })
+        }
+        onLoad() {
+            this.province = this.localinfobyStorage().province_id
+            this.cityid = this.localinfobyStorage().city_id
+            this.cityname = this.localinfobyStorage().city_name
+            this.PageInit()
+            // console.log(1)
+        }
+        onShow() {
+        }
+        PageInit(){
+            this.getCategory()
+            this.getRecommend()
+            this.getEvents()
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+    .tabTodo {
+        width: 100%;
+        display: flex;
+        background: #fff;
+        height: 100%;
+        overflow: hidden;
+        .tab_s {
+            width: 180rpx;
+            .cur {
+                background: #fff;
+                color: #333 !important;
+            }
+            background-color: #f8f8f8;
+        }
+        .tab_item {
+            flex: 1;
+            overflow: hidden;
+            background: #ffffff;
+            .special {
+                padding: 0rpx 32rpx 0rpx 30rpx;
+                .special_img {
+                    width: 100%;
+                    height: 184rpx;
+                    margin-bottom: 20rpx;
+                    border-radius: 6rpx;
+                    // background: #418fff;
+                    image {
+                        width: 100%;
+                        height: 100%;
+                    }
+                    &:nth-of-type(1) {
+                        margin-top: 20rpx;
+                    }
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                }
+            }
+            .recommend {
+                padding: 0;
+                border-bottom: 1rpx solid @bColor;
+            }
+            .tab_ct {
+
+            }
+            .distance {
+                position: absolute;
+                top: 82rpx;
+                right: 0;
+                align-items: center;
+                font-size: 22rpx;
+                color: #929292;
+                flex: 1;
+            }
+            .tab_t {
+                font-size: 0;
+                .tab_t1 {
+                    display: block;
+                    width: 192rpx;
+                    font-size: 30rpx;
+                    color: #333333;
+                    font-weight: 700;
+                }
+                .tab_t2 {
+                    display: block;
+                    margin-top: 10rpx;
+                    font-size: 24rpx;
+                    color: #929292;
+                    width: 282rpx;
+                }
+                .tab_t3 {
+                    display: block;
+                    margin-top: 3rpx;
+                    font-size: 22rpx;
+                    color: #929292;
+                    color: #333333;
+                }
+            }
+            .tab_t4 {
+                display: inline-block;
+                margin-top: 10rpx;
+                color: #ff8c00;
+                .tab_t5 {
+                    font-size: 22rpx;
+                    padding-right: 6rpx;
+                }
+                .tab_t6 {
+                    font-size: 34rpx;
+                    padding-right: 20rpx;
+                }
+                .tab_t7 {
+                    font-size: 20rpx;
+                    color: #929292;
+                    padding-right: 6rpx;
+                    text-decoration: line-through;
+                }
+            }
+        }
+    }
+    .foots_s {
+        width: 100%;
+        height: 50rpx;
+        color: #929292;
+        margin: 20rpx 0;
+        font-size: 22rpx;
+        text-align: center;
+        text {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>

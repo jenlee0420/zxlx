@@ -1,0 +1,255 @@
+<template>
+    <!-- <view wx:if="{{type == index}}" class="container" wx:for="{{archives}}" wx:key="{{index}}" wx:for-item="item" wx:for-index="index"> -->
+    <view class="container">
+        <view class="header case{{showlevel}}">
+            <view class="light">
+                <span>{{archives.selected_child.name}}</span>
+            </view>
+            <view class="degree" wx:if="{{archives.islevel}}">
+                <span></span>
+                <text>正常</text>
+                <span></span>
+                <text>轻度</text>
+                <span></span>
+                <text>中度</text>
+                <span></span>
+                <text>重度</text>
+            </view>
+        </view>
+        <view class="doct_proposal">
+            <view class="proposal_t">
+                <text>医生建议： </text>
+                <text>{{archives.advice}}</text>
+            </view>
+        </view>
+        <view class="use">
+            <view class="use_t">
+                <text class="use_t1">根据你的检查结果推荐以下治疗方案</text>
+            </view>
+        </view>
+        <!-- 商品列表 -->
+        <goodinfo :goodlist.sync="goodlist" isIndex="true"> </goodinfo>
+        <view class="list-foot foot" wx:if="{{goodlist.length == 0 && !isload}}">
+            <span class="gopng_img">没有相关数据</span>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import Goodinfo from '@/components/goodinfo'
+    export default class Index extends wepy.page {
+        config = {
+        }
+        components = {
+            goodinfo: Goodinfo
+        }
+        mixins = [Mixin]
+        data = {
+            type: '',
+            archives: [],
+            goodlist: [],
+            islevel: [1, 2, 5, 7, 8],
+            treatid: 1,
+            archiveslist: [1, 2, 3, 4, 5, 6, 7, 9, 10, 11],
+            family_id: '',
+            isload: true
+        }
+        props = {
+            goodlist: {}
+        }
+        computed = {
+            showlevel() {
+                let res = '0'
+                if (this.archives.selected_child && this.archives.islevel) {
+                    let tmp = this.archives.selected_child.name.slice(0, 1)
+                    switch (tmp) {
+                        case '正':
+                            res = '1'
+                            break
+                        case '轻':
+                            res = '2'
+                            break
+                        case '中':
+                            res = '3'
+                            break
+                        case '重':
+                            res = '4'
+                            break
+                        default:
+                            res = '0'
+                            break
+                    }
+                }
+                return res
+            }
+        }
+        methods = {}
+        //  诊断报告
+        getArchives() {
+            var that = this
+            this.isload = true
+            wepy.request({
+                url: '/weiappapi/diagnosis/assess',
+                method: 'GET',
+                data: {
+                    parent_id: this.pid,
+                    option_id: this.childid
+                }
+            }).then(res => {
+                that.isload = false
+                that.archives = res.data
+                if (that.islevel.indexOf(this.pid) > -1) {
+                    that.archives.islevel = true
+                }
+                that.$apply()
+            })
+        }
+        title() {
+            wepy.setNavigationBarTitle({
+                title: this.archives.name
+            })
+        }
+        // 热门推荐
+        getRecommend() {
+            var that = this
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/promotion/treatrecommend',
+                method: 'POST',
+                data: {
+                    'city_id': this.localinfobyStorage().city_id,
+                    'treat_id': this.pid //治疗项目id
+                }
+            }).then(res => {
+                this.showloading(false)
+                that.goodlist = res.data.list
+                that.$apply()
+            })
+        }
+        onLoad(options) {
+            this.pid = options.pid
+            this.childid = options.childid
+            this.getArchives()
+            this.getRecommend()
+            this.title()
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+    .container {
+        .case0{
+            background: #f5f7fa url('@{imgbaseUrl}/level0.png') top left no-repeat;
+        }
+        .case1{
+            background: #f5f7fa url('@{imgbaseUrl}/level1.png') top left no-repeat;
+        }
+        .case2{
+            background: #f5f7fa url('@{imgbaseUrl}/level2.png') top left no-repeat;
+        }
+        .case3{
+            background: #f5f7fa url('@{imgbaseUrl}/level3.png') top left no-repeat;
+        }
+        .case4{
+            background: #f5f7fa url('@{imgbaseUrl}/level4.png') top left no-repeat;
+        }
+        .header {
+            position: relative;
+            height: 380rpx;
+            background-size: 100% 100%;
+            font-size: 0;
+            text-align: center;
+            overflow: hidden;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            .light {
+                display:flex;
+                justify-content: center;
+                align-items: center;
+                font-size: 30rpx;
+                font-weight: bold;
+                color: #333333;
+                flex: 1;
+                span{
+                    display: inline-block;
+                    max-width: 5em;
+                    line-height: 40rpx;
+                }
+            }
+            .degree {
+                // position: absolute;
+                height: 52rpx;
+                width: 100%;
+                text-align: center;
+                span {
+                    display: inline-block;
+                    width: 18rpx;
+                    height: 18rpx;
+                    margin-right: 8rpx;
+                    border-radius: 100%;
+                    background: #1ed566;
+                    &:nth-of-type(2) {
+                        background: #c8a46a;
+                    }
+                    &:nth-of-type(3) {
+                        background: #ff9000;
+                    }
+                    &:nth-of-type(4) {
+                        background: #ff5d5d;
+                    }
+                }
+                text {
+                    display: inline-block;
+                    margin-right: 24rpx;
+                    font-size: 22rpx;
+                    color: #666666;
+                    &:last-of-type {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+        .doct_proposal {
+            padding: 30rpx;
+            background: #ffffff;
+            margin-bottom: 20rpx;
+            .proposal_t {
+                margin-top: 12rpx;
+                margin-bottom: 30rpx;
+                text {
+                    font-size: 26rpx;
+                    color: #666666;
+                    &:nth-of-type(1) {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+        .use {
+            font-size: 0;
+            padding: 30rpx;
+            background: #ffffff;
+            border-bottom: 1rpx solid #ededed;
+            .use_t {
+                .use_t1 {
+                    display: flex;
+                    flex-direction: row;
+                    font-size: 28rpx;
+                    color: #333333;
+                    &::before {
+                        content: '';
+                        width: 4rpx;
+                        height: 24rpx;
+                        margin-top: 8rpx;
+                        margin-right: 20rpx;
+                        display: inline-block;
+                        background: #4284ff;
+                    }
+                }
+            }
+        }
+    }
+</style>

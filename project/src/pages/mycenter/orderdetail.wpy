@@ -231,25 +231,26 @@
             <text>下单时间：{{detail.create_time}}</text>
             <text wx:if="{{order_status=='20'}}">完成时间：2018-12-19  </text>
         </view>
-        <orderBtn orderitem="{{detail.order_status}}"/>
+        <orderbtn :orderitem.sync="detail"></orderbtn>
     </view>
 </template>
 
 <script>
     import wepy from 'wepy'
     import Mixin from '@/mixins/global'
-    import orderBtn from '@/components/orderBtn'
+    import orderbtn from '@/components/orderBtn'
     import Star from '@/components/StarRatine'
     export default class orderdetail extends wepy.page {
         config = {
             navigationBarTitleText: '订单详情',
         }
-        components = {orderBtn,Star}
+        components = {orderbtn,Star}
         mixins = [Mixin]
         data = {
           order_status:"",
           detail:{},
           pay_type:1,
+          loading:true
         }
         methods = {
           to_address_list(){
@@ -277,13 +278,14 @@
             method: 'POST',
             data: {order_id:41},
           }).then(res => {
+              this.loading= false
             if(res.code != "1"){
               this.showAlert({title: "警告", content: res.msg});
             }else{
               this.order_status=res.data.order_status.value;
               this.detail=res.data
-              this.$apply();
             }
+            this.$apply();
           })
         }
     }

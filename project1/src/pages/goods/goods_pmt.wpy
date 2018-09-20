@@ -1,0 +1,197 @@
+<template>
+    <view>
+        <!--支付页面-->
+        <view>
+            <view class="payment_todo">
+                <view class="payment_list">
+                    <text>订单编号</text>
+                    <text>{{goodsinfo.order_no}}</text>
+                </view>
+                <view class="payment_list" wx:if="{{goodsinfo.type == 2}}">
+                    <text>支付金额</text>
+                    <text>￥{{goodsinfo.to_amount}}</text>
+                </view>
+                <view class="payment_list" wx:else>
+                    <text>预约金</text>
+                    <text>￥{{goodsinfo.pre_amount}}</text>
+                </view>
+                <view class="payment_list">
+                    <text>支付方式</text>
+                    <text>微信支付</text>
+                </view>
+                <text class="wxzf"></text>
+            </view>
+            <text class="pay_ts">订单已经生成，请在60分钟内完成预约金支付</text>
+            <view class="order_bt">
+                <view class="payment">
+                    <view class="payment_r" @tap="btt_pmt">
+                        立即支付
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '支付订单'
+        }
+        components = {}
+        mixins = [Mixin]
+        data = {
+            order_id: 38,
+            goodsinfo: {},
+            wxpaydata: {},
+            backDelta: false
+        }
+        methods = {
+            btt_pmt() {
+                this.backDelta = this.BackToDelta('/orderlist')
+                if (this.backDelta) {
+                    wepy.setStorageSync('ordertype', 30)
+                }
+                this.getWxpaydata()
+            }
+        }
+        //  获取订单详情
+        getGoodsinfo() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/order/orderinfo',
+                method: 'POST',
+                data: {
+                    'order_id': that.order_id
+                }
+            }).then(res => {
+                that.goodsinfo = res.data
+                that.$apply()
+            })
+        }
+        // 微信支付
+        getWxpaydata() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/order/wxpaydata',
+                method: 'POST',
+                data: {
+                    // 交易单号 交易金额 交易标题 交易内容
+                    'order_id': that.goodsinfo.id,
+                    'amount': that.goodsinfo.pre_amount,
+                    'body': that.goodsinfo.product_name,
+                    'detail': ''
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    that.wxpaydata = res.data
+                    let data = {
+                        'timeStamp': this.wxpaydata.timestamp,
+                        'nonceStr': this.wxpaydata.nonceStr,
+                        'package': this.wxpaydata.package,
+                        'signType': this.wxpaydata.signType,
+                        'paySign': this.wxpaydata.paySign
+                    }
+                    wepy.requestPayment(data).then(wxdata => { 
+                        console.log(res ,'success')
+                        
+                        if (this.backDelta) {
+                            wepy.navigateBack({
+                                delta: this.backDelta
+                            })
+                        } else {
+                            wepy.redirectTo({url: '/pages/mycenter/orderlist?type=30'})
+                        }
+                    }).catch(err => {
+                        console.log(err, 'complete')
+                    })
+                    that.$apply()
+                } else {
+                    this.showAlert({
+                        content: res.msg,
+                        showCancel: false
+                    })
+                }
+            })
+        }
+        onLoad(options) {
+            this.order_id = options.id
+            this.getGoodsinfo()
+        }
+    }
+</script>
+
+<style lang="less">
+    .payment_todo {
+        position: relative;
+        .payment_list {
+            display: flex;
+            height: 30rpx;
+            line-height: 30rpx;
+            color: #333333;
+            padding: 30rpx;
+            font-size: 30rpx;
+            border-bottom: 1rpx solid #ededed;
+            background: #ffffff;
+            text {
+                flex: 1;
+                &:nth-of-type(2) {
+                    color: #929292;
+                    text-align: right;
+                }
+            }
+            &:first-child {
+                margin-top: 20rpx;
+            }
+            &:nth-of-type(2) {
+                text {
+                    flex: 1;
+                    &:nth-of-type(2) {
+                        color: #ff8c00;
+                        text-align: right;
+                    }
+                }
+            }
+        }
+        .wxzf {
+            position: absolute;
+            right: 164rpx;
+            bottom: 24rpx;
+            width: 40rpx;
+            height: 40rpx;
+            background: #ffffff url('@{imgbaseUrl}/wxicon.png') top left no-repeat;
+            background-size: 100% 100%;
+        }
+    }
+    .pay_ts {
+        margin: 10rpx 0 0 30rpx;
+        display: flex;
+        font-size: 24rpx;
+        color: #4287ff;
+    }
+    .order_bt {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        .payment {
+            display: flex;
+            border: 1rpx solid #ff8c00;
+            .payment_r {
+                flex: 1;
+                padding: 0;
+                margin: 0;
+                width: 100%;
+                border-radius: 0rpx;
+                background: #ff8c00;
+                height: 96rpx;
+                color: #fff;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+            }
+        }
+    }
+</style>

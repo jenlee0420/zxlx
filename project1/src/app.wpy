@@ -1,0 +1,358 @@
+<style lang="less">
+    @import 'style/reset';
+    @import "style/icon";
+    @import "style/common";
+    page {
+        height: 100%;
+        background-color: #f2f5fa;
+        font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
+    }
+</style>
+
+<script>
+    let aldstat = require('./untils/ald-stat.js')
+    let QQMapWX = require('./untils/qqmap-wx-jssdk.min.js')
+    import wepy from 'wepy'
+    import 'wepy-async-function'
+    import {
+        config,
+        init,
+        mode
+    } from './untils'
+    export default class extends wepy.app {
+        config = {
+            pages: [
+            //    'pages/hospital/pay', 
+                // 首页
+                'pages/index',
+                 //支付页
+                'pages/hospital/pay',
+                // 疯狂砍价
+                'pages/bargain/index',
+                'pages/bargain/bargain',
+                // 找诊所
+                'pages/hospital/index',
+                'pages/hospital/hospital',
+                'pages/hospital/clinic',
+                'pages/hospital/hos_clinic',
+                // 找服务
+                'pages/service/index',
+                // 找医生
+                'pages/doctor/index',
+                'pages/doctor/details',
+                // 商品
+                'pages/goods/index',
+                'pages/goods/order',
+                'pages/goods/goods_pmt',
+                // 档案
+                'pages/archives/diagnosis',
+                'pages/archives/case',
+                'pages/archives/presentation',
+                'pages/archives/index',
+                // 我的中心
+                'pages/mycenter/orderDetail',
+                'pages/mycenter/billrecord',
+                'pages/mycenter/billDetail',
+                'pages/mycenter/billindex',
+                'pages/mycenter/refund',
+                'pages/mycenter/review',
+                'pages/mycenter/family',
+                'pages/mycenter/familyAdd',
+                'pages/mycenter/myDoctor',
+                'pages/mycenter/index',
+                'pages/mycenter/orderlist',
+                'pages/mycenter/schedule',
+                'pages/mycenter/scheduleAdd',
+                'pages/mycenter/selectPatient',
+                'pages/mycenter/bindphone',
+                // 我的关注
+                'pages/mycenter/myfav',
+                'pages/searchpage',
+            ],
+            tabBar: {
+                color: '#929292',
+                selectedColor: '#4287ff',
+                backgroundColor: '#ffffff',
+                borderStyle: 'black',
+                list: [{
+                    'pagePath': 'pages/index',
+                    'text': '首页',
+                    'iconPath': 'images/home.png',
+                    'selectedIconPath': 'images/home_act.png'
+                }, {
+                    'pagePath': 'pages/archives/index',
+                    'text': '档案',
+                    'iconPath': 'images/file.png',
+                    'selectedIconPath': 'images/file_act.png'
+                }, {
+                    'pagePath': 'pages/mycenter/index',
+                    'text': '我的',
+                    'iconPath': 'images/my.png',
+                    'selectedIconPath': 'images/my_act.png'
+                }]
+            },
+            window: {
+                backgroundTextStyle: 'light',
+                navigationBarBackgroundColor: '#fff',
+                navigationBarTitleText: 'WeChat',
+                navigationBarTextStyle: 'black',
+                backgroundColor: '#fff',
+                navigationBarTitleText: '河狸口腔'
+            }
+            // , debug: true
+        }
+        globalData = {
+            userInfo: null,
+            mode,
+            config,
+            qqmap:null
+        }
+        constructor() {
+            super()
+            this.use('requestfix')
+            this.use('promisify')
+            /* 初始化HTTP拦截器等 */
+            Object.keys(init).forEach((v) => {
+                init[v].forEach((obj) => {
+                    let key = v
+                    let name = obj.name
+                    let data = obj.data
+                    this[key](name, data)
+                })
+            })
+        }
+        onLaunch(options) {
+            /* 启动先调用微信登录 => 服务器登录 */
+            this.wxLogin().then(code => {
+                this.login(code)
+            })
+            /* 打开调试 */
+            if (this.globalData.mode === 'dev') {
+                wepy.setEnableDebug({
+                    enableDebug: true
+                }).catch(err => console.log(err))
+            }
+            /* 牙医生测试环境 title */
+            if (this.globalData.mode === 'tempProd') {
+                wepy.setNavigationBarTitle({
+                    title: '牙医生'
+                })
+            }
+            this.globalData.qqmap = new QQMapWX({key: '6ETBZ-3FKRV-2CHPH-UDKE5-P4A5F-LIFBI'});
+
+            wepy.getNetworkType().then((res)=>{
+                if (res.networkType === 'none') {
+                    if (typeof(that.$pages['/'+that.__route__].PageInit) === 'function') {
+                        // wx.showLoading({title: '加载中'})
+                        that.$pages['/'+that.__route__].PageInit()
+                    }
+                }
+            })
+            // 检测网络状态
+            let that = this
+            wx.onNetworkStatusChange(function(res){
+                console.log(res,'netchange')
+                if(res.isConnected){
+                    if (typeof(that.$pages['/'+that.__route__].PageInit) === 'function') {
+                        // wx.showLoading({title: '加载中'})
+                        that.$pages['/'+that.__route__].PageInit()
+                    }
+                }
+            })
+        }
+        wxLogin() {
+            return new Promise((resolve, reject) => {
+                wepy.login().then(res => {
+                    if (res.code) {
+                        resolve(res.code)
+                    } else {
+                        reject(res)
+                    }
+                })
+            })
+        }
+        /* 获取用户信息 */
+        getUserInfo(cb) {
+            return new Promise((resolve, reject) => {
+                if (this.globalData.userInfo) {
+                    resolve(this.globalData.userInfo)
+                }
+                wepy.getUserInfo().then(res => {
+                    this.globalData.signature = res.signature
+                    this.globalData.user_row = res.rawData
+                    this.globalData.userInfo = res.userInfo
+                    this.globalData.encrypted_data = res.encryptedData
+                    this.globalData.iv = res.iv
+                    cb && cb(res.userInfo)
+                    resolve(res)
+                    console.log(res)
+                }).catch(err => {
+                    console.log(err)
+                    // this.getLocalSetting_user()
+                })
+            })
+        }
+        checklogin() {
+            return new Promise((resolve, reject) => {
+                wepy.request({
+                    url: 'weiappapi/index/checklogin',
+                    data: {
+                        token: wepy.getStorageSync('token')
+                    }
+                }).then(res => {
+                    if (res.code === '870101' || res.code === '870104') {
+                        resolve(false)
+                    } else {
+                        resolve(true)
+                    }
+                })
+            })
+        }
+        login(code, type, callbackurl) {
+            let debug = false // 是否为开发版本
+            let data = {
+                code: code,
+                login_key:wepy.getStorageSync('loginkey')
+            }
+            if (debug) {
+                data = {
+                    debug: 1
+                }
+            }
+            wepy.request({
+                url: 'weiappapi/index/login',
+                noToken: true,
+                data: data
+            }).then(res => {
+                /* 没有注册 => 获取注册必要信息 => 注册 */
+                if (res.code === '870100') {
+                    console.log('注册')
+                    this.getUserInfo().then(res => {
+                        this.wxLogin().then(code => {
+                            this.register(code)
+                        })
+                    })
+                } else if (res.code === '870000' || res.code === '1') {
+                    /* 070000 登录成功 */
+                    this.updateLoginInfo(res.data)
+                    if (type === 'relogin') {
+                        if (callbackurl === '/pages/index' || callbackurl === '/pages/archives/index' || callbackurl === '/pages/mycenter/index' || !callbackurl) {
+                            wepy.reLaunch({
+                                url: callbackurl ? callbackurl : '/pages/index' 
+                            })
+                            wepy.removeStorage({key:'relogin'})
+                        } else {
+                            wepy.redirectTo({
+                                url: callbackurl
+                            })
+                        }
+                        wepy.removeStorage({
+                            key: 'relogin'
+                        })
+                    }
+                }
+            })
+        }
+        /* 若用户未授权用户信息，则弹出设置页面*/
+        getLocalSetting_user() {
+            wepy.getSetting().then(res => {
+                console.log(res)
+                if (res.authSetting["scope.userInfo"] === false || res.authSetting["scope.userLocation"] === false) {
+                    wepy.openSetting().then(res => {
+                        if (res.authSetting["scope.userInfo"] === true) {
+                            console.log(res)
+                            // this.relogin()
+                        }
+                    })
+                }
+            })
+        }
+        openLocalSetting(){
+            wepy.openSetting().then(res => {
+                console.log(res)
+            })
+        }
+        /* 经纬度取城市code 腾讯SDK*/
+        getCityCode(data) {
+            let lat='',lng=''
+            if(data){
+                lat = data.latitude ? data.latitude : ''
+                lng = data.longitude ? data.longitude: ''
+            }
+            return new Promise((resolve, reject) => {
+                this.globalData.qqmap.reverseGeocoder({
+                    location: {
+                        latitude: lat,
+                        longitude: lng
+                    },
+                    success: function(res) {
+                        resolve(res.result.ad_info)
+                    },
+                    fail: function(res) {
+                        console.log(res);
+                    },
+                    complete: function(res) {
+                        console.log(res);
+                    }
+                });
+            })
+        }
+        /* 注册用户 */
+        register(code) {
+            wepy.request({
+                url: 'weiappapi/index/register',
+                method: 'POST',
+                noToken: true,
+                data: {
+                    code: code,
+                    encrypted_data: this.globalData.encrypted_data,
+                    user_row: this.globalData.user_row,
+                    signature: this.globalData.signature,
+                    iv: this.globalData.iv
+                }
+            }).then(res => {
+                /* 070001 注册 => 自动登录成功 */
+                if (res.code === '870001') {
+                    this.relogin('/pages/index')
+                } else if (res.code === '870000') {
+                    this.updateLoginInfo(res.data)
+                }
+            })
+        }
+        /*重新登录*/
+        relogin(Url) {
+            this.wxLogin().then(code => {
+                this.login(code, 'relogin', Url)
+            })
+        }
+        // 取当前页路由
+        getCurrentPageUrl() {
+            var pages = getCurrentPages() //获取加载的页面
+            var currentPage = pages[pages.length - 1] //获取当前页面的对象
+            var url = currentPage.route //当前页面url
+            var params = []
+            Object.keys(currentPage.options).forEach((v) => {
+                params.push(v + "=" + currentPage.options[v])
+            })
+            if (params.length > 0) {
+                url = url + "?" + params.join("&")
+            }
+            console.log('url', url)
+            return url
+        }
+        updateLoginInfo(data) {
+            let userData = JSON.stringify(data)
+            wepy.setStorageSync('userData', userData)
+            wepy.setStorageSync('token', data.token)
+            wepy.setStorageSync('loginkey',data.login_key)
+            if (this.userInfoReadyCallback) {
+                this.userInfoReadyCallback(data)
+            }
+            if (wepy.getStorageSync('visit')) {
+                wepy.removeStorage({
+                    key: 'visit'
+                })
+            }
+        }
+    }
+</script>

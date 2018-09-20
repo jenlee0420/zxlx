@@ -1,0 +1,629 @@
+<template>
+    <view class="container" wx:if="{{isload}}">
+        <!-- <scroll-view scroll-y @scrolltolower="nextpages" style="height: calc(100% - 1rpx);"> -->
+        <view class="header">
+            <view  class="searchCity">
+                <text  @tap="showCity" class="triangle1_down {{cityStatus?'triangle1_up':''}}">{{currentCity.city_name}}</text>
+                <view class="searchbar"  @tap="searchPage">
+                    <text class="search"></text> <text class="fs26 c929292">请输入诊所名字、产品或者医生名字</text>
+                </view>
+                <block wx:if="{{cityStatus}}">
+                    <cascade :current.sync="currentCity.info"></cascade>
+                </block>
+            </view>
+            <swiper circular="true" class="swiper-box" @change="changeCurrent" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+                <block wx:key="{{index}}" wx:for="{{bannerlist}}">
+                    <swiper-item>
+                        <image src="{{item.banner_img}}" mode="aspectFill" class="slide-image" @tap="Navto({{item.banner_link}})" />
+                    </swiper-item>
+                </block>
+            </swiper>
+            <!-- <view class="address flex">
+                <span class="icon_local"></span>
+                <span class="address_text">{{currentCity.city_name}}</span>
+            </view> -->
+            <view class="indicator">
+                <block wx:key="{{index}}" wx:for="{{bannerlist}}">
+                    <span class="dots {{current == index ? 'act' : ''}}"></span>
+                </block>
+            </view>
+        </view>
+        <view class="navi">
+            <ul>
+                <navigateTo class="navi_list" wx:for="{{navList}}" wx:key="{{id}}" wx:for-item="item" wx:for-index="id">
+                    <span @tap="jump({{item.id}})" class="{{item.img}}"></span>
+                    <span class="nav_text">{{item.name}}</span>
+                </navigateTo>
+            </ul>
+        </view>
+        <view class="na_1"></view>
+        <!-- 好友头条 -->
+        <!-- <view class="header_title">
+                                                                            <view class="friends_title"></view>
+                                                                            <view class="ht_img"></view>
+                                                                            <view class="ht_t">
+                                                                                <span class="ht_t1">初夏的雨</span>
+                                                                                <span class="ht_t2">预约了超声波...</span>
+                                                                                <span class="ht_t3">1月10日</span>
+                                                                            </view>
+                                                                            <span class="ht_t4">太原皓久口腔千峰店</span>
+                                                                        </view> -->
+        <!-- 横幅位置 -->
+        <view class="selection mt20" wx:if="{{AdImg!=''}}">
+            <!-- <swiper class="ad-box" indicator-dots="{{false}}" autoplay="{{autoplay}}">
+                                                                        <block wx:key="{{index}}" wx:for="{{AdImg}}">
+                                                                            <swiper-item>
+                                                                                <image mode="center" src="{{item.banner_img}}" class="slide-image" @tap="Navto({{item.banner_link}})" />
+                                                                            </swiper-item>
+                                                                        </block>
+                                                                    </swiper> -->
+            <view class="ad-box">
+                <image src="{{AdImg.banner_img}}" class="slide-image" @tap="Navto({{AdImg.banner_link}})" />
+            </view>
+        </view>
+        <view class="recommend mt20">
+            <span class="re_text">热门推荐</span>
+        </view>
+        <!-- 商品列表 -->
+        <view class="goodsCss {{goodlist.length > 9 ? 'goodsh':''}}" wx:if="{{goodlist.length > 0}}">
+            <goodinfo :goodlist.sync="goodlist" isIndex="true"></goodinfo>
+        </view>
+        <view class="foots_s" wx:if="{{goodstodo > goodlist.length && goodlist.length > 0}}">
+            <text>正在加载......</text>
+        </view>
+        <view class="foots_s" wx:if="{{goodstodo === goodlist.length && goodstodo > page_size}}">
+            <text class="gopng_img">没有更多了</text>
+        </view>
+        <!-- 无商品列表 -->
+        <view class="foot" wx:if="{{goodlist.length == 0}}">
+            <span class="gopng_img">暂无推荐商品</span>
+        </view>
+        <!-- </scroll-view> -->
+        <view class="netbreak" wx:if="{{netError}}">
+            网络异常，请重试
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '../mixins/global'
+    import Goodinfo from '../components/goodinfo'
+    import cascade from '@@/cascade'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '河狸口腔',
+            enablePullDownRefresh: true,
+            backgroundTextStyle: 'dark'
+        }
+        components = {
+            goodinfo: Goodinfo,
+            cascade
+        }
+        mixins = [Mixin]
+        data = {
+            autoplay: true,
+            interval: 3000,
+            duration: 500,
+            current: 0,
+            id: 0,
+            navList: [{
+                    id: 1,
+                    img: 'service',
+                    name: '找服务'
+                },
+                {
+                    id: 2,
+                    img: 'clinic',
+                    name: '找诊所'
+                },
+                {
+                    id: 3,
+                    img: 'doctor',
+                    name: '找医生'
+                },
+                {
+                    id: 4,
+                    img: 'bargain_ico',
+                    name: '砍低价'
+                }
+                // ,
+                // {
+                //     id: 4,
+                //     img: 'member',
+                //     name: '河狸会员'
+                // }
+            ],
+            bannerlist:[],
+            bannerlistDef: [{
+                    banner_img: 'http://weiapp-assets.oss-cn-hangzhou.aliyuncs.com/banner1.png',
+                    banner_link: ''
+                },
+                {
+                    banner_img: 'http://weiapp-assets.oss-cn-hangzhou.aliyuncs.com/banner2.png',
+                    banner_link: ''
+                },
+                {
+                    banner_img: 'http://weiapp-assets.oss-cn-hangzhou.aliyuncs.com/banner3.png',
+                    banner_link: ''
+                }
+            ],
+            goodlist: [],
+            AdImg: '',
+            currentCity: {},
+            goodstodo: '',
+            current_page: 1,
+            page_size: 10,
+            isload: false,
+            netError: false,
+            cityStatus: false
+        }
+        props = {
+            goodlist: {}
+        }
+        computed = {}
+        methods = {
+            searchPage() {
+                wepy.navigateTo({url:'/pages/searchpage?searchAll=true'})
+            },
+            showCity() {
+                this.cityStatus = !this.cityStatus
+            },
+            jump(id) {
+                this.id = id
+                if (id === 1) {
+                    wepy.navigateTo({
+                        url: '/pages/service/index'
+                    })
+                } else if (id === 2) {
+                    wepy.navigateTo({
+                        url: '/pages/hospital/index'
+                    })
+                } else if (id === 3) {
+                    wepy.navigateTo({
+                        url: '/pages/doctor/index'
+                    })
+                } else if (id === 4) {
+                    wepy.navigateTo({
+                        url: '/pages/bargain/index'
+                    })
+                }
+            },
+            // 广告横幅切换时触发
+            changeCurrent(e) {
+                this.current = e.detail.current
+                this.$apply()
+            },
+            // 广告位的链接跳转
+            Navto(url) {
+                if (url) {
+                    wepy.navigateTo({
+                        url: url
+                    })
+                }
+            }
+        }
+        events = {
+            selectSuccess(res) {
+                this.currentCity.info = [{
+                    id: res[0].id
+                }, {
+                    id: res[1].id
+                }]
+                this.cityStatus = false
+                this.currentCity.city_id = res[1].id
+                this.currentCity.code = res[1].code
+                this.currentCity.city_name = res[1].name
+                this.getBannerlist(this.currentCity.code)
+            },
+            cascadeClose() {
+                this.cityStatus = false
+            }
+        }
+        //  获取首页banner横幅和推荐商品接口 integer 位置id ( 1=>banner 2=>横幅)
+        getBannerlist(code) {
+            var that = this
+            var thiscode = code ? code : this.currentCity.code
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/promotion/indexlist',
+                method: 'POST',
+                data: {
+                    page_size: this.page_size,
+                    code: thiscode
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    this.fillContent(res)
+                }
+                setTimeout(() => {
+                    wepy.stopPullDownRefresh()
+                }, 150)
+                that.showloading(false)
+                that.$apply()
+            })
+        }
+        fillContent(res) {
+            this.isload = true
+            var that = this
+            // 清空推荐列表
+            that.goodlist = []
+            that.bannerlist = that.bannerlistDef
+            that.AdImg = ''
+            console.log(that.bannerlist)
+            if (res.data.bannerList.list.length > 0) {
+                that.bannerlist = res.data.bannerList.list
+                if (that.bannerlist.length > 5) {
+                    that.bannerlist = that.bannerlist.splice(0, 5)
+                }
+            }
+            if (res.data.bannerList.list2.length > 0) {
+                that.AdImg = res.data.bannerList.list2[0]
+            }
+            // 推荐商品
+            if (res.data.recommend) {
+                that.goodstodo = res.data.recommend.total_count
+                that.goodlist = res.data.recommend.list
+            }
+        }
+        // 刷新
+        nextpages() {
+            if (this.goodstodo > this.goodlist.length) {
+                this.current_page += 1
+                this.getRecommend(true)
+            }
+        }
+        //  热门推荐
+        getRecommend(append) {
+            var that = this
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/promotion/recommend',
+                method: 'POST',
+                data: {
+                    city_id: this.currentCity.city_id,
+                    current_page: this.current_page,
+                    page_size: this.page_size
+                }
+            }).then(res => {
+                this.showloading(false)
+                that.goodstodo = res.data.total_count
+                if (that.goodlist.length > 0 && that.goodlist.length === that.goodstodo) {
+                    return
+                }
+                if (this.current_page > 1) {
+                    that.goodlist = that.goodlist.concat(res.data.list)
+                } else {
+                    that.goodlist = res.data.list
+                }
+                that.$apply()
+            })
+        }
+        getLocalinfo() {
+            wepy.getLocation().then(res => {
+                this.getLocalCity(res)
+            }).catch(err => {
+                console.log('LocalinfoErr', err)
+                this.getareaid()
+            })
+        }
+        getareaid(mapdata) {
+            let code = '', lng = '', lat = ''
+            if (mapdata) {
+                code = mapdata.adcode
+                lng = mapdata.location.lng
+                lat = mapdata.location.lat
+            }
+            wepy.request({
+                url: '/weiappapi/promotion/indexlist',
+                method: 'POST',
+                data: {
+                    code: code
+                }
+            }).then(data => {
+                this.showloading(false)
+                if (data.code === '1') {
+                    this.currentCity = data.data.areaId
+                    this.fillContent(data)
+                    this.$apply()
+                    if (mapdata) {
+                        this.currentCity.lng = lng
+                        this.currentCity.lat = lat
+                    }
+                } else {
+                    // this.showAlert({
+                    //     content: data.msg,
+                    //     showCancel: false
+                    // })
+                }
+                let localinfo = JSON.stringify(this.currentCity)
+                wepy.setStorageSync('localinfo', localinfo)
+            })
+        }
+        getLocalCity(res) {
+            this.$parent.getCityCode(res).then(mapdata => {
+                console.log('获取坐标mapdata:', mapdata)
+                this.getareaid(mapdata)
+            })
+        }
+        PageInit() {
+            this.showloading()
+            let info = this.localinfobyStorage()
+            if (!info.code) {
+                this.getLocalinfo()
+            } else {
+                let t = {
+                    location:{
+                        lng: info.lng,
+                        lat: info.lat
+                    },
+                    adcode: info.code
+                }
+                this.getBannerlist(info.code)
+            }
+        }
+        onLoad() {
+            let self = this
+            this.$parent.getUserInfo(function(userInfo) {
+                if (userInfo) {
+                    self.userInfo = userInfo
+                    self.$apply()
+                }
+            })
+        }
+        onShow() {
+            this.showloading()
+            let info = this.localinfobyStorage()
+            if (info) {
+                this.currentCity.city_name = info.city_name
+                this.currentCity.code = info.code
+                this.currentCity.info = [{
+                    id: info.province_id
+                }, {
+                    id: info.city_id
+                }]
+            }
+
+        }
+        onPullDownRefresh() {
+            console.log('is refesh')
+            wepy.getNetworkType().then((res) => {
+                if (res.networkType === 'none') {
+                    this.netError = true
+                    setTimeout(() => {
+                        this.netError = false
+                    }, 2000)
+                    wepy.stopPullDownRefresh()
+                } else {
+                    this.current_page = 1
+                    this.showloading()
+                    this.getBannerlist()
+                }
+            }).catch(err => {
+                console.log(err, this.netError)
+            })
+        }
+        onReachBottom() {
+            console.log('is bottom')
+            this.nextpages()
+        }
+    }
+</script>
+<style lang="less">
+.triangle1_up{
+    &:after{
+        transform: rotate(-135deg);
+        transition: all .5;
+        bottom:-8rpx;
+    }
+}
+
+    .container {
+        position: relative;
+        width: 100%;
+        height: 100%;
+        background: #f5f7fa;
+        .header {
+            width: 100%;
+            height: 422rpx; // background: #418fff;
+            position: relative;
+            .swiper-box {
+                width: 100%;
+                height: 100%;
+                image {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .searchCity{
+                height: 90rpx;
+                padding: 15rpx 32rpx;
+                width: 100%;
+                box-sizing: border-box;
+                display: flex;
+                background-color: #fff;
+                align-items: center;
+                &>text{
+                    // width: 100rpx;
+                    font-size: 28rpx;
+                    color: #333;
+                    margin-right: 60rpx;
+                    white-space: nowrap;
+                    padding-right: 10rpx;
+                }
+                .cascade {
+                    top:91rpx;
+                }
+                .searchbar {
+                    flex:1;
+                    display: flex;
+                    border-radius: 30rpx;
+                    background-color: #f3f3f3;
+                    align-items: center;
+                    height: 60rpx;
+                    margin: 18rpx 0;
+                }
+                .search {
+                    background-image: url('@{imgbaseUrl}/searchico/search.png');
+                    background-repeat: no-repeat;
+                    background-size: 26rpx;
+                    overflow: hidden;
+                    margin: 0 20rpx;
+                    width: 26rpx;
+                    height: 26rpx;
+                }
+            }
+            .indicator {
+                width: 100%;
+                display: flex;
+                justify-content: center;
+                position: absolute;
+                bottom: 5rpx;
+                .dots {
+                    display: inline-block;
+                    width: 20rpx;
+                    margin: 0 5rpx;
+                    height: 6rpx;
+                    border-radius: 2rpx;
+                    background-color: rgba(255, 255, 255, .6);
+                    &.act {
+                        background-color: #fff;
+                    }
+                }
+            }
+            .address {
+                position: absolute;
+                top: 40rpx;
+                left: 40rpx;
+                min-width: 114rpx;
+                height: 44rpx;
+                line-height: 44rpx;
+                background: rgba(0, 0, 0, .3);
+                border-radius: 22rpx;
+                text-align: center;
+                justify-content: flex-start;
+                align-items: center;
+                padding: 0 15rpx;
+                cursor: pointer;
+                .address_text {
+                    color: #fff;
+                    font-size: 24rpx;
+                    margin: 0 10rpx;
+                    line-height: 0rpx;
+                    margin-top: 2rpx;
+                }
+            }
+        }
+        .navi {
+            position: absolute;
+            top: 434rpx;
+            left: 32rpx;
+            width: 686rpx;
+            height: 200rpx;
+            background: #fff;
+            border-radius: 8rpx;
+            box-shadow: 2rpx 8rpx 20rpx rgba(51, 51, 51, 0.11);
+            ul {
+                display: flex;
+                .navi_list {
+                    flex: 1;
+                    text-align: center;
+                    .nav_text {
+                        display: block;
+                        font-size: 24rpx;
+                        margin-top: 20rpx;
+                    }
+                }
+            }
+        }
+        .na_1 {
+            width: 100%;
+            height: 204rpx;
+            padding-bottom: 10rpx;
+        }
+        .header_title {
+            width: 100%;
+            height: 136rpx;
+            margin-top: 20rpx;
+            text-align: center;
+            background: #fff;
+            .ht_img {
+                float: left;
+                margin: 28rpx 0 0 30rpx;
+                width: 80rpx;
+                height: 80rpx;
+                background: pink;
+                &:nth-of-type(2) {
+                    margin-right: 20rpx;
+                }
+            }
+            .ht_t {
+                width: 66%;
+                overflow: hidden;
+                .ht_t1 {
+                    float: left;
+                    margin-top: 28rpx;
+                    color: #333;
+                    font-size: 24rpx;
+                }
+                .ht_t2 {
+                    float: left;
+                    font-size: 24rpx;
+                    color: #929292;
+                    margin: 28rpx 0 0 20rpx;
+                }
+                .ht_t3 {
+                    float: right;
+                    margin: 30rpx 38rpx 0 0;
+                    font-size: 22rpx;
+                    color: #929292;
+                }
+            }
+            .ht_t4 {
+                float: left;
+                margin-top: 15rpx;
+                color: #333;
+                font-size: 28rpx;
+            }
+        }
+        .selection {
+            width: 100%;
+            height: 180rpx;
+            line-height: 180rpx;
+            overflow: hidden;
+            .ad-box {
+                height: 180rpx;
+            }
+            image {
+                width: 100%;
+                height: 180rpx;
+            }
+        }
+        .recommend {
+            border-bottom: 1rpx solid @bColor;
+        }
+        .goodsCss {
+            display: flex;
+        }
+        .foots_s {
+            width: 100%;
+            color: #929292;
+            margin: 20rpx 0;
+            font-size: 22rpx;
+            text-align: center;
+            text {
+                width: 100%;
+                text-align: center;
+            }
+        }
+        /*.goodsh{*/
+        /*height: 1000rpx;*/
+        /*}*/
+        .foot {
+            margin: 20rpx;
+            text-align: center;
+            font-size: 22rpx;
+            color: #929292;
+        }
+    }
+</style>

@@ -1,0 +1,44 @@
+<template>
+    <view class="navs_sort">
+        <view class="nav_list">
+            <text @tap="showCity" class="triangle_down {{cityStatus?'triangle_up':''}}">{{cityname ? cityname :'全国地区'}}</text>
+            <block wx:if="{{cityStatus}}">
+                <cascade :current.sync="currentCity"></cascade>
+            </block>
+        </view>
+        <view class="nav_list" @tap="btn_p">
+            <text>销量最高</text>
+        </view>
+        <view class="nav_list" @tap="btn_ps">
+            <text>距离最近</text>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Bindphone extends wepy.component {
+        mixins = [Mixin]
+        components = {}
+        data = {
+            currentCity: [{
+                id: 2
+            }, {
+                id: 38
+            }],
+        }
+        computed = {}
+        methods = {
+            btn_p() {
+                this.$emit('btn_p')
+            }
+        }
+        events = {}
+        onLoad() {}
+    }
+</script>
+
+<style lang="less">
+
+</style>

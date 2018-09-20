@@ -1,0 +1,449 @@
+<template>
+    <view class="doctors_in">
+        <view class="herder">
+            <view class="herder_l">
+                <view class="doc_portrait">
+                    <image src="{{orderdata.photo}}" mode="aspectFill" />
+                    <!--<view class="doc_vip"></view>-->
+                </view>
+                <!-- <view class="doc_video">
+                    <text>查看医生视频</text>
+                </view> -->
+            </view>
+            <view class="herder_b">
+                <view class="doc_name">
+                    <text class="doc_n">{{orderdata.show_name}}</text>
+                    <text class="doc_i prompt" wx:if="{{orderdata.status === 2}}"></text>
+                </view>
+                <view class="doc_p flex-algin-center flex">
+                    <view class="score">
+                        <span class="mico_star_gray">
+                            <span class="mico_star_all" style="width:{{(orderdata.score == 0 ? 5:orderdata.score / 5) * 100}}%"></span>
+                        </span>
+                    </view>
+                    <text class="doc_xt">{{orderdata.score == 0 ? 5:orderdata.score}}分</text>
+                </view>
+                <view class="doc_type">
+                    <text>{{orderdata.department.value}} {{orderdata.place ? orderdata.place : '医生'}}</text>
+                </view>
+                <view class="follow">
+                    <text>{{orderdata.attention_num}}</text>
+                    <text>关注人数</text>
+                </view>
+            </view>
+            <view class="herder_r" @tap="btn_es">
+                <button wx:if="{{!follow}}" class="btn_e btn_es">+ 关注</button>
+                <button wx:if="{{follow}}" class="btn_e">已关注</button>
+            </view>
+        </view>
+        <block  wx:if="{{orderdata.work_year || orderdata.good_project.length>0 || orderdata.intro}}">
+        <view class="recommend mt20">
+            <span class="re_text">医生简介</span>
+        </view>
+        <view class="sketch">
+            <view class="sketch_t" wx:if="{{orderdata.work_year}}">
+                <text class="sket">资历：</text>
+                <text>{{orderdata.work_year}}年从业经验</text>
+            </view>
+            <view class="sketch_t" wx:if="{{orderdata.good_project.length>0}}">
+                <text class="sket">擅长：</text>
+                <text>
+                    <text wx:for="{{orderdata.good_project}}" wx:key="{{item.id}}" wx:for-item="item">{{item.value}} </text>
+                </text>
+            </view>
+            <view class="sketch_t" wx:if="{{orderdata.intro}}">
+                <text class="sket">简介：</text>
+                <text>{{orderdata.intro}}</text>
+            </view>
+        </view>
+        </block>
+        <view class="clinic_address">
+            <navigator class="details_i" hover-class="none" url="/pages/hospital/hospital?id={{clinic_id}}">
+                <text class="details_ii hospital_icon"></text>
+                <text class="details_t1">{{orderdata.clinic_name}}</text>
+            </navigator>
+            <view class="flex-algin-center flex mr30"><text class="arrow-right"></text>
+            </view>
+        </view>
+        <view class="recommend mt20">
+            <span class="re_text">患者评价</span>
+        </view>
+        <repeat for="{{doctorcomment}}" index="index" item="item" key="key">
+            <comment :comments.sync="item" :contact="true"></comment>
+        </repeat>
+        <view class="doctComent"> </view>
+        <view class="empty-cell" wx:if="{{doctorcomment.length == 0}}">
+            暂无评论
+        </view>
+        <view wx:else class="foot">
+            <text class="gopng_img">没有更多了...</text>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import Comment from '@/components/comment'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '医生详情'
+        }
+        mixins = [Mixin]
+        components = {
+            comment: Comment
+        }
+        data = {
+            doctor_id: 194,
+            clinic_id: 14,
+            comment_id: 1,
+            follow: false,
+            orderdata: {},
+            doctorcomment: []
+        }
+        methods = {
+            // 关注 未关注
+            btn_es() {
+                // this.follow = !this.follow
+                if (this.follow) {
+                    this.getCancelfocus()
+                    this.orderdata.attention_num = this.orderdata.attention_num - 1
+                    this.showSuccess('取消关注成功')
+                } else {
+                    this.getFocus()
+                    this.orderdata.attention_num = this.orderdata.attention_num + 1
+                    this.showSuccess('关注成功')
+                }
+            },
+            // 获取医生位置
+            getLocation() {
+                // 在地图上显示诊所位置
+                let locdata = {
+                    latitude: parseFloat(this.orderdata.lat),
+                    longitude: parseFloat(this.orderdata.lng),
+                    name: this.orderdata.clinic_name,
+                    address: this.orderdata.addr
+                }
+                wepy.openLocation(locdata)
+            }
+        }
+        // 获取关注 未关注接口
+        getFocus() {
+            wepy.request({
+                url: '/weiappapi/doctor/focus',
+                method: 'GET',
+                data: {
+                    'clinic_id': this.clinic_id,
+                    'doctor_id': this.doctor_id
+                }
+            }).then(res => {
+                this.follow = true
+                this.$apply()
+            })
+        }
+        getCancelfocus() {
+            wepy.request({
+                url: '/weiappapi/doctor/cancelfocus',
+                method: 'GET',
+                data: {
+                    'clinic_id': this.clinic_id,
+                    'doctor_id': this.doctor_id
+                }
+            }).then(res => {
+                this.follow = false
+                this.$apply()
+            })
+        }
+        // 获取医生主页
+        getDoctor() {
+            var that = this
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/findclinic/clinicdoctordetail',
+                method: 'GET',
+                data: {
+                    'clinic_id': this.clinic_id,
+                    'doctor_id': this.doctor_id
+                }
+            }).then(res => {
+                this.showloading(false)
+                if (res.code === '1' && res.data){
+                    // 评分为0的时候 显示为满分
+                    res.data.score = res.data.score === 0 ? 5 : res.data.score
+                    that.orderdata = res.data
+                    console.log(that.orderdata.intro.length)
+                    if(that.orderdata.intro.length > 200) {
+                        that.orderdata.intro = that.orderdata.intro.slice(0, 200)
+                        that.orderdata.intro += '...'
+                    }
+                    
+                    if (that.orderdata.is_focus.key === 0 ) {
+                        this.follow = false
+                    } else {
+                        this.follow = true
+                    }
+                    that.$apply()
+                }
+            })
+        }
+        // 医生评价列表
+        getDoctorcomment() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/clinicshop/doctorcomment',
+                method: 'POST',
+                data: {
+                    'doctor_id': this.doctor_id
+                }
+            }).then(res => {
+                that.doctorcomment = res.data.list
+                that.$apply()
+            })
+        }
+        onLoad(options) {
+            this.doctor_id = options.id
+            this.clinic_id = options.clinic_id
+            this.getDoctor()
+            this.getDoctorcomment()
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+    .doctors_in{
+        overflow: hidden;
+        .herder{
+            display: flex;
+            padding: 30rpx;
+            background: #ffffff;
+            overflow: hidden;
+            .herder_l{
+                flex: 2;
+                margin-right: 30rpx;
+                .doc_portrait{
+                    width: 160rpx;
+                    height: 160rpx;
+                    border-radius: 100%;
+                    border: 1rpx solid  #f5f5f5;
+                    background: #f5f5f5 url('@{imgbaseUrl}/doc_I.png') top left no-repeat ;
+                    background-size: 100% 100%;
+                    image{
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 100%;
+                    }
+                    image{
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                    }
+                    .doc_vip{
+                        position: absolute;
+                        top: 132rpx;
+                        left: 134rpx;
+                        width: 60rpx;
+                        height: 60rpx;
+                        background: palevioletred;
+                    }
+                }
+                .doc_video{
+                    width: 160rpx;
+                    height: 40rpx;
+                    line-height: 40rpx;
+                    margin-top: 15rpx;
+                    font-size: 22rpx;
+                    color: #ffffff;
+                    text-align: center;
+                    border-radius: 4rpx;
+                    background: #b5b5b5;
+                }
+            }
+            .herder_b{
+                flex: 5;
+                font-size: 0;
+                .doc_name{
+                    font-size: 38rpx;
+                    font-weight: 700;
+                    .doc_i{
+                        margin-top: 10rpx;
+                        margin-left: 12rpx;
+                        display: inline-block;
+                        width: 34rpx;
+                        height: 34rpx;
+                        border-radius: 100%;
+                    }
+                }
+                .doc_p{
+                    margin-top: 20rpx;
+                    .doc_x{
+                        width: 130rpx;
+                        height: 22rpx;
+                        font-size: 20rpx;
+                        display: inline-block;
+                    }
+                    .doc_xt{
+                        margin-left: 20rpx;
+                        font-size: 24rpx;
+                        color: #ff8c00;
+                    }
+                }
+                .doc_type{
+                    margin-top: 20rpx;
+                    font-size: 28rpx;
+                    color: #333333;
+                }
+                .follow{
+                    margin-top: 34rpx;
+                    font-size: 24rpx;
+                    color: #929292;
+                    line-height:1;
+                    text{
+                        &:nth-of-type(1){
+                            display: block;
+                            margin-bottom: 12rpx;
+                            font-size: 30rpx;
+                            font-weight: 700;
+                            color: #333333;
+                        }
+                    }
+                }
+            }
+            .herder_r{
+                flex: 2;
+                align-self: flex-end;
+                .btn_e{
+                    border-radius: 6rpx;
+                    background: #d9d9d9;
+                    border: 1rpx solid #d9d9d9;
+                    color: #929292;
+                    width: 160rpx;
+                    height: 64rpx;
+                }
+                .btn_es{
+                    background: #fff;
+                    color: #4287ff;
+                    border: 1rpx solid #4287ff;
+                }
+            }
+        }
+        .recommend{
+            border-bottom: 1rpx solid @bColor;
+        }
+        .sketch{
+            width: 100%;
+            padding: 30rpx;
+            background: #ffffff;
+            .sketch_t{
+                width: 690px;
+                margin-bottom: 20rpx;
+                display: flex;
+                line-height:42rpx;
+                &:last-child{
+                    margin-bottom: 0rpx;
+                }
+                .sket{
+                    /*width: 100rpx;*/
+                    margin-right: 12rpx;
+                    font-weight: 700;
+                }
+                text{
+                    font-size: 28rpx;
+                    color: #333333;
+                    &:last-child{
+                        line-height: 44rpx;
+                        width: 590rpx;
+                    }
+                }
+            }
+        }
+        .clinic_address{
+            height: 100rpx;
+            line-height: 100rpx;
+            padding: 0 0 0 35rpx;
+            font-size: 28rpx;
+            color: #333333;
+            margin-top: 20rpx;
+            background: #ffffff;
+            // border-top: 1rpx solid @bColor;
+            display: flex;
+            flex-direction: row;
+            .details_i{
+                display: flex;
+                flex-direction: row;
+                width:100%;
+                align-content:center;
+                .details_ii{
+                    width: 32rpx;
+                    height: 31rpx;
+                    margin-top: 36rpx;
+                    margin-right: 30rpx;
+                }
+            }
+        }
+        .comment{
+            display: flex;
+            padding: 30rpx;
+            background: #ffffff;
+            border-bottom: 1rpx solid @bColor;
+            .herder_l{
+                flex: 1;
+                margin-right: 10rpx;
+                .doc_portrait{
+                    width: 100rpx;
+                    height: 100rpx;
+                    border-radius: 100%;
+                    border: 1rpx solid  #f5f5f5;
+                    background: #f5f5f5 url('@{imgbaseUrl}/default_head.png') top left no-repeat ;
+                    background-size: 100% 100%;
+                }
+            }
+            .herder_b{
+                flex: 5;
+                font-size: 0;
+                .doc_name{
+                    display: flex;
+                    font-size: 28rpx;
+                    align-content: space-between;
+                    .herder_r{
+                        position: absolute;
+                        right: 35rpx;
+                        text-align: right;
+                        font-size: 22rpx;
+                        color: #919191;
+                    }
+                }
+                .doc_p{
+                    margin-top: 10rpx;
+                    .doc_x{
+                        width: 130rpx;
+                        height: 22rpx;
+                        margin-left: 20rpx;
+                        background: #ff8c00;
+                        display: inline-block;
+                    }
+                    .doc_xt{
+                        font-size: 24rpx;
+                        color: #929292;
+                    }
+                }
+                .doc_type{
+                    flex-basis:600rpx;
+                    margin-top: 5rpx;
+                    font-size: 28rpx;
+                    color: #333333;
+                }
+            }
+        }
+        .doctComent {
+            width: 100%;
+            height: 30rpx;
+            background: #ffffff;
+        }
+        .foot{
+            margin: 20rpx;
+            text-align: center;
+            font-size: 22rpx;
+            color: #929292;
+        }
+    }
+</style>

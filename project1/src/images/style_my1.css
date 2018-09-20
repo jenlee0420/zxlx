@@ -1,0 +1,220 @@
+#gopng_医生icon_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_医生icon {
+    background: url() -0rpx -0rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_预约备注_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_预约备注 {
+    background: url() -0rpx -36rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_预约日期_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_预约日期 {
+    background: url() -0rpx -72rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_预约项目_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_预约项目 {
+    background: url() -0rpx -108rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_预约诊所_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_预约诊所 {
+    background: url() -0rpx -144rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_大半灰星星_outer {
+    height: 51rpx;
+    width: 50rpx;
+    overflow: hidden;
+    }
+    #gopng_大半灰星星 {
+    background: url() -0rpx -180rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_大黄星星_outer {
+    height: 51rpx;
+    width: 50rpx;
+    overflow: hidden;
+    }
+    #gopng_大黄星星 {
+    background: url() -0rpx -231rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_大灰星星_outer {
+    height: 51rpx;
+    width: 50rpx;
+    overflow: hidden;
+    }
+    #gopng_大灰星星 {
+    background: url() -0rpx -282rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_男_outer {
+    height: 30rpx;
+    width: 30rpx;
+    overflow: hidden;
+    }
+    #gopng_男 {
+    background: url() -0rpx -333rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_女_outer {
+    height: 30rpx;
+    width: 30rpx;
+    overflow: hidden;
+    }
+    #gopng_女 {
+    background: url() -0rpx -363rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_时段icon_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_时段icon {
+    background: url() -0rpx -393rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_添加图片_outer {
+    height: 120rpx;
+    width: 120rpx;
+    overflow: hidden;
+    }
+    #gopng_添加图片 {
+    background: url() -40rpx -429rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_退款成功_outer {
+    height: 40rpx;
+    width: 40rpx;
+    overflow: hidden;
+    }
+    #gopng_退款成功 {
+    background: url() -0rpx -545rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_小灰星星_outer {
+    height: 30rpx;
+    width: 30rpx;
+    overflow: hidden;
+    }
+    #gopng_小灰星星 {
+    background: url() -0rpx -589rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_小半灰星星_outer {
+    height: 30rpx;
+    width: 30rpx;
+    overflow: hidden;
+    }
+    #gopng_小半灰星星 {
+    background: url() -0rpx -619rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_小黄星星_outer {
+    height: 30rpx;
+    width: 30rpx;
+    overflow: hidden;
+    }
+    #gopng_小黄星星 {
+    background: url() -0rpx -649rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_默认头像_outer {
+    height: 124rpx;
+    width: 124rpx;
+    overflow: hidden;
+    }
+    #gopng_默认头像 {
+    background: url() -0rpx -679rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_默认头像2_outer {
+    height: 80rpx;
+    width: 80rpx;
+    overflow: hidden;
+    }
+    #gopng_默认头像2 {
+    background: url() -0rpx -803rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_通话_outer {
+    height: 64rpx;
+    width: 64rpx;
+    overflow: hidden;
+    }
+    #gopng_通话 {
+    background: url() -0rpx -883rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_选中-勾_outer {
+    height: 48rpx;
+    width: 48rpx;
+    overflow: hidden;
+    }
+    #gopng_选中-勾 {
+    background: url() -0rpx -947rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_短信_outer {
+    height: 64rpx;
+    width: 64rpx;
+    overflow: hidden;
+    }
+    #gopng_短信 {
+    background: url() -0rpx -995rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_家人头像_outer {
+    height: 150rpx;
+    width: 150rpx;
+    overflow: hidden;
+    }
+    #gopng_家人头像 {
+    background: url() -0rpx -1059rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }

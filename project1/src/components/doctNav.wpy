@@ -1,0 +1,117 @@
+
+<template>
+    <view class="navs">
+        <view class="nav_list">
+            <text @tap="showCity">全国地区</text>
+            <block wx:if="{{cityStatus}}">
+                <cascade :current.sync="test"></cascade>
+            </block>
+        </view>
+        <view class="nav_list" @tap="btn_p">
+            <text>{{name_num.name}}</text>
+        </view>
+        <view class="nav_list" @tap="btn_ps">
+            <text>距离最近</text>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import cascade from '@@/cascade'
+    export default class DoctNav extends wepy.component {
+        components = {
+            cascade: cascade
+        }
+        props = {
+            name_num: {}
+        }
+        data = {
+            discount: [],
+            sale: '',
+            region: ['广东省', '广州市', '海珠区'],
+            customItem: '全部',
+            current_page: 1,
+            page_size: 10,
+            cityStatus: false,
+            test: [{id:2},{id:38}]
+        }
+        methods = {
+            showCity() {
+                this.cityStatus = true
+            },
+            btn_p () {
+                this.sale = 'sale'
+                this.getCliniclist()
+            },
+            btn_ps () {
+                this.sale = 'distance'
+                this.getCliniclist()
+            }
+        }
+        events = {
+            selectSuccess (res) {
+                this.cityStatus = false
+            },
+            cascadeClose () {
+                this.cityStatus = false
+            }
+        }
+        bindRegionChange = function (e) {
+            console.log('picker发送选择改变，携带值为', e.detail.value)
+            this.setData({
+                region: e.detail.value
+            })
+        }
+        // 获取诊所列表
+        getCliniclist(append) {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/findclinic/cliniclist',
+                method: 'GET',
+                data: {
+                    'province': '',
+                    'city': '',
+                    'flag': this.sale,
+                    'lng': 113.959025,
+                    'lat': 22.541624,
+                    'current_page': that.current_page,
+                    'page_size': that.page_size
+                }
+            }).then(res => {
+                that.hospitals = res.data
+                for (var i = 0; i < that.hospitals.list.length; i++) {
+                    this.discount.push(Math.round(that.hospitals.list[i].distance * 100) / 100)
+                }
+                if (append) {
+                    setTimeout(() => {
+                        that.hospitalTodo = that.hospitalTodo.concat(res.data.list)
+                        this.page_size = that.hospitalTodo.length
+                    }, 1000)
+                } else {
+                    that.hospitalTodo = res.data.list
+                }
+                that.$apply()
+            })
+        }
+        onLoad() {
+
+        }
+    }
+</script>
+<style lang="less">
+    .navs{
+        display: flex;
+        height: 96rpx;
+        line-height: 96rpx;
+        text-align: center;
+        color: #666666;
+        font-size: 28rpx;
+        border-top: 1rpx solid @bColor;
+        border-bottom: 1rpx solid @bColor;
+        background: #fff;
+        .nav_list{
+            flex: 1;
+            background-color: #fff;
+        }
+    }
+</style>

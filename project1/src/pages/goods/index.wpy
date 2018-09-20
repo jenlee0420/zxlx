@@ -1,0 +1,930 @@
+<template>
+    <view class="content">
+        <view class="header rel">
+            <view class="headers">
+                <swiper circular="true" class="swiper-box" @change="changeCurrent" autoplay="{{autoplay}}" interval="{{interval}}" duration="{{duration}}">
+                    <block wx:key="{{index}}" wx:for="{{goodsinfo.images}}" wx:for-item="item" wx:for-index="index">
+                        <swiper-item>
+                            <image src="{{item}}" class="slide-image" mode="aspectFill" @tap="Navto({{item.banner_link}})" />
+                        </swiper-item>
+                    </block>
+                </swiper>
+                <view class="indicator">
+                    <block wx:key="{{index}}" wx:for="{{goodsinfo.images}}">
+                        <span class="dots {{current == index ? 'act' : ''}}"></span>
+                    </block>
+                </view>
+            </view>
+            <!--<image src="{{goodsinfo.images}}" mode="scaleToFill"></image>-->
+            <view class="tob_img"></view>
+            <!--砍价-->
+            <view class="bargain" wx:if="{{cutAble}}">
+                <view class="bag_le">
+                    <text>￥</text>
+                    <text class="flPrices {{goodsinfo.floor_price > 999 ? 'flPrice':''}}">{{goodsinfo.floor_price}}</text>
+                    <text>最低价</text>
+                </view>
+                <view class="bag_z division"></view>
+                <view class="bag_re">
+                    <text class="bag_hd">活动结束倒计时</text>
+                    <view class="bag_time">
+                        <text class="bag_t">{{datetime.hour}}</text>
+                        <text class="bag_tbs">
+                                            :
+                                </text>
+                        <text class="bag_t">{{datetime.min}}</text>
+                        <text class="bag_tbs">
+                                            :
+                                </text>
+                        <text class="bag_t">{{datetime.sec}}</text>
+                        <text class="bag_tbs">
+                                            .
+                                 </text>
+                        <text class="bag_t">{{datetime.micsec}}</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="title_s">
+            <text class="title_t">{{goodsinfo.name}} </text>
+            <view class="price">
+                <text class="cff8c00 fs34">￥</text>
+                <text class="cff8c00 fs54 mr20 lh48">{{goodsinfo.dis_price}}</text>
+                <block wx:if="{{discount == 10}}">
+                    <text class="inhot">爆款</text>
+                </block>
+                <block wx:else>
+                    <text class="original">￥{{goodsinfo.price}}</text>
+                    <text class="discount" wx:if="{{!cutAble}}">{{discount}}折</text>
+                </block>
+                <view class="appointment">已有<span class="c333">{{goodsinfo.sale_count}}</span>人预约</view>
+            </view>
+        </view>
+        <view class="hp_list">
+            <view class="hp_t" @tap="jump({{goodsinfo.clinic_id}})">
+                <view class="address">
+                    <view class="address_img">
+                        <image src="{{goodsinfo.clinic_info.logo}}" mode="aspectFill"></image>
+                    </view>
+                    <view class="address_t">
+                        <view class="address_t1">
+                            <text class="name">{{goodsinfo.clinic_info.name}} </text>
+                            <view class="name_img members"></view>
+                        </view>
+                        <view class="evaluate">
+                            <view class="score mr20">
+                                <span class="mico_star_gray" wx:if="{{goodsinfo.clinic_info.score > 0.1}}">
+                                                <span class="mico_star_all" style="width:{{(goodsinfo.clinic_info.score / 5) * 100}}%"></span>
+                                </span>
+                                <span class="mico_star_gray" wx:if="{{goodsinfo.clinic_info.score < 0.1}}">
+                                                <span class="mico_star_all" style="width:{{(5 / 5) * 100}}%"></span>
+                                </span>
+                            </view>
+                            <text class="evaluate_t">{{goodsinfo.clinic_info.score===0?'5':goodsinfo.clinic_info.score}}分</text>
+                        </view>
+                        <view class="address_ts">
+                            <span class="address_text">{{goodsinfo.clinic_info.addr}}</span>
+                        </view>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <view class="recommend">
+            <span class="re_text">预约流程</span>
+        </view>
+        <view class="teaching">
+            <view class="app_imgs">
+                <view class="app_img place"></view>
+                <view class="app_line arrow"></view>
+                <view class="app_img make"></view>
+                <view class="app_line arrow"></view>
+                <view class="app_img confirm"></view>
+                <view class="app_line arrow"></view>
+                <view class="app_img clinic_doc"></view>
+            </view>
+            <view class="app_t">
+                <span class="app_t1">支付订单</span>
+                <span class="app_t1">预约就诊</span>
+                <span class="app_t1">确认预约</span>
+                <span class="app_t1">诊所就诊</span>
+            </view>
+        </view>
+        <view class="recommend">
+            <span class="re_text">购买须知</span>
+        </view>
+        <view class="use">
+            <view class="use_t">
+                <text class="use_t1">使用流程</text>
+                <view class="use_t2">
+                    <text>1. 提交订单并付款</text>
+                    <text>2. 填写个人基本信息</text>
+                    <text>3. 诊所来电预约就诊时间</text>
+                    <text>4. 按预约时间就诊</text>
+                </view>
+            </view>
+            <!-- 适用范围暂时不显示 -->
+            <!-- <view class="use_t">
+                                <text class="use_t1">适用范围</text>
+                                <view class="use_t2">
+                                    <text>· 适用于深圳、山西太原、上海、背景的乐莎莎口腔</text>
+                                    <text>· 适用于2~12岁儿童</text>
+                                </view>
+                            </view> -->
+            <view class="use_t">
+                <text class="use_t1">注意事项</text>
+                <view class="use_t2">
+                    <text>未预约订单支持无条件退款，可在线退款或拨打 {{tel400}} 办理</text>
+                </view>
+            </view>
+        </view>
+        <view class="recommend">
+            <span class="re_text">产品详情</span>
+        </view>
+        <view class="goods_img">
+            <rich-text type='text' nodes="{{intro}}" attrs="{{img}}" bindtap="tap"></rich-text>
+        </view>
+        <view class="order_bt">
+            <view class="payment">
+                <view class="payment_l">
+                    <view class="pay_t">
+                        <text>预约金</text>
+                        <text class="fs34 cff8c00">{{goodsinfo.res_price}}</text>
+                        <text @tap="prompts" class="pay_i sign"></text>
+                    </view>
+                    <view class="pay_t mt20">
+                        <view>
+                            <text>到院再付</text>
+                            <text>{{payment}}</text>
+                        </view>
+                    </view>
+                </view>
+                <view class="payment_r" @tap="btt_pmt({{goodsinfo.id}})">
+                    立即购买
+                </view>
+            </view>
+        </view>
+        <!--预约金提示框-->
+        <model :content="promptsObj" wx:if="{{promptsObj.show}}"></model>
+        <!--砍价悬浮图标-->
+        <view wx:if="{{cutAble}}" class="bag_xf" @tap="bag_bt(artShows)"></view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import model from '@/components/model'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '产品详情'
+        }
+        mixins = [Mixin]
+        components = {
+            model
+        }
+        mixins = [Mixin]
+        data = {
+            promptsObj: {
+                title: '什么是预约金',
+                details: ['预约金是您在河狸看牙购买项目预先支付的定金，剩余的项目可以到院后线性支付。', '既： 预约金+项目尾款=河狸价格'],
+                show: false
+            },
+            cutAble: false,
+            prompts: false,
+            payment: 0,
+            discount: 0,
+            goods_id: 1,
+            goodsinfo: {},
+            intro: '',
+            autoplay: true,
+            interval: 3000,
+            duration: 500,
+            current: 0,
+            img: {
+                class: 'rich-text',
+                style: 'width: 100%; height: 100%;'
+            },
+            datetime: {},
+            loop: null,
+            count: 10000,
+            bargainAble: true
+        }
+        methods = {
+            // 跳转砍价
+            bag_bt(e) {
+                if (this.bargainAble) {
+                    var id = 'id' + '=' + this.goods_id
+                    wepy.navigateTo({
+                        url: '/pages/bargain/bargain?' + id + '&isbargain=' + this.goodsinfo.is_bargain
+                    })
+                    this.bargainAble = false
+                    return 
+                }
+            },
+            // 跳转医院
+            jump(id) {
+                wepy.navigateTo({
+                    url: '/pages/hospital/hospital?id=' + id
+                })
+            },
+            // 广告横幅切换时触发
+            changeCurrent(e) {
+                this.current = e.detail.current
+                this.$apply()
+            },
+            // 预约金提示
+            prompts() {
+                this.promptsObj.show = true
+                this.$apply()
+            },
+            btt_pmt(id) {
+                wepy.navigateTo({
+                    url: '/pages/goods/order?id=' + id
+                })
+            },
+            onShareAppMessage(res){
+                return {
+                    title: this.goodsinfo.name,
+                    path: '/pages/goods/index?id=' + this.goods_id,
+                    imageUrl: this.goodsinfo.images[0],
+                    success: function(res) {
+                        console.log(res)
+                        // 转发成功
+                    },
+                    fail: function(res) {
+                        // 转发失败
+                    }
+                }
+            }
+        }
+        events = {}
+        //  获取商品详情
+        getGoodsinfo() {
+            this.showloading()
+            var that = this
+            wepy.request({
+                url: '/weiappapi/goods/goodsinfo',
+                method: 'GET',
+                data: {
+                    'goods_id': that.goods_id
+                }
+            }).then(res => {
+                this.showloading(false)
+                that.goodsinfo = res.data
+                if (res.code !== '1') { return }
+                // 打折 到院再付
+                // that.payment =  that.goodsinfo.dis_price - that.goodsinfo.res_price
+                that.payment = Math.round((that.goodsinfo.dis_price - that.goodsinfo.res_price) * 100) / 100
+                that.discount = Math.round(that.goodsinfo.dis_price / that.goodsinfo.price * 100) / 10
+                let t = unescape(that.goodsinfo.intro)
+                t = t.replace(/<img src/g, '<img style="max-width:100%" src')
+                that.intro = t
+                if (that.goodsinfo.images) {
+                    if (that.goodsinfo.images.length > 5) {
+                        that.goodsinfo.images = that.goodsinfo.images.splice(0, 5)
+                    }
+                }
+                if (that.goodsinfo.floor_price) {
+                    that.cutAble = true
+                    that.count = res.data.end_time * 10
+                    if (!that.loop) {
+                        that.loop = setInterval(() => {
+                            that.countdown()
+                        }, 100)
+                    }
+                }
+                that.$apply()
+            })
+        }
+        // 获取砍价商品详情
+        bargainproductinfo() {
+            this.showloading()
+            var that = this
+            wepy.request({
+                url: '/weiappapi/bargain/bargainproductinfo',
+                method: 'POST',
+                data: {
+                    'goods_id': that.goods_id
+                }
+            }).then(res => {
+                this.showloading(false)
+                that.goodsinfo = res.data
+                if (res.code !== '1') { return }
+                // 打折 到院再付
+                that.payment = Math.round((that.goodsinfo.dis_price - that.goodsinfo.res_price) * 100) / 100
+                that.discount = Math.round(that.goodsinfo.dis_price / that.goodsinfo.price * 100) / 10
+                let t = unescape(that.goodsinfo.intro)
+                t = t.replace(/<img src/g, '<img style="max-width:100%" src')
+                that.intro = t
+                that.count = res.data.end_time * 10
+                if (!that.loop) {
+                    that.loop = setInterval(() => {
+                        that.countdown()
+                    }, 100)
+                }
+                if (that.goodsinfo.images) {
+                    if (that.goodsinfo.images.length > 5) {
+                        that.goodsinfo.images = that.goodsinfo.images.splice(0, 5)
+                    }
+                }
+                that.$apply()
+            })
+        }
+        // 倒计时
+        countdown() {
+            // let date = '2018-03-20 14:47:00.0'
+            this.count = this.count - 1
+            let time = this.count / 10
+            let thisTime = {
+                hour: parseInt(time / 60 / 60),
+                min: parseInt(time / 60 % 60),
+                sec: parseInt(time % 60),
+                micsec: String(parseInt(time * 10)).slice(-1)
+            }
+            this.datetime = thisTime
+            this.datetime.hour = thisTime.hour < 10 ? '0' + String(thisTime.hour) : thisTime.hour
+            this.datetime.min = thisTime.min < 10 ? '0' + String(thisTime.min) : thisTime.min
+            this.datetime.sec = thisTime.sec < 10 ? '0' + String(thisTime.sec) : thisTime.sec
+            if (parseInt(this.count) <= 0) {
+                this.datetime.hour = 0
+                this.datetime.min = 0
+                this.datetime.sec = 0
+                this.datetime.micsec = 0
+                clearInterval(this.loop)
+            }
+            this.$apply()
+        }
+        onUnload() {
+            clearInterval(this.loop)
+        }
+        onLoad(options) {
+            this.cutAble = options.cutAble ? options.cutAble: false
+            this.goods_id = options.id
+        }
+        onShow() {
+            this.bargainAble = true
+        }
+        PageInit(){
+            if (this.cutAble) {
+                this.bargainproductinfo()
+            } else {
+                this.getGoodsinfo()
+            }
+        }
+    }
+</script>
+<style lang="less">
+    .lh48 {
+        line-height: 48rpx
+    }
+    .content {
+        position: relative;
+        width: 750rpx;
+        overflow: hidden;
+        text {
+            // font-size: 0;
+        }
+        .header {
+            position: relative;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 560rpx;
+            overflow: hidden;
+            background: #f5f5f5;
+            .headers {
+                position: absolute;
+                width: 100%;
+                height: 100%;
+                z-index: 3;
+                .swiper-box {
+                    width: 100%;
+                    height: 100%;
+                }
+                image {
+                    z-index: 3;
+                }
+                .indicator {
+                    width: 100%;
+                    display: flex;
+                    justify-content: center;
+                    position: absolute;
+                    bottom: 20rpx;
+                    .dots {
+                        display: inline-block;
+                        width: 20rpx;
+                        margin: 0 5rpx;
+                        height: 6rpx;
+                        border-radius: 2rpx;
+                        background-color: rgba(225, 225, 225, .6);
+                        &.act {
+                            background-color: #fff;
+                        }
+                    }
+                }
+            }
+            .tob_img {
+                position: absolute;
+                left: 0;
+                top: 0;
+                right: 0;
+                bottom: 0;
+                margin: auto;
+                width: 146rpx;
+                height: 146rpx;
+                background: url('@{imgbaseUrl}/gd-bg.png') top left no-repeat;
+                background-size: 100% 100%;
+            }
+            image {
+                position: absolute;
+                left: 0;
+                top: 0;
+                z-index: 1;
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .title_s {
+            padding: 26rpx 30rpx 0 30rpx;
+            font-size: 0;
+            margin-bottom: 20rpx;
+            background: #fff;
+            .title_t {
+                width: 690rpx;
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                font-size: 32rpx;
+                color: #333333;
+                font-weight: 700;
+                line-height: 42rpx;
+            }
+            .price {
+                line-height: 1;
+                display: flex;
+                flex-direction: row;
+                padding: 30rpx 0;
+                align-items: flex-end;
+                padding-top: 40rpx;
+                .price_t {
+                    color: #ff8c00;
+                    line-height: 54rpx;
+                    text {
+                        &:first-child {
+                            font-size: 34rpx;
+                            margin-right: -3rpx;
+                        }
+                        &:last-child {
+                            font-size: 54rpx;
+                            margin-right: 20rpx;
+                        }
+                    }
+                }
+                .inhot{
+                    width: 100rpx;
+                    height: 36rpx;
+                    border-radius: 6rpx;
+                    background: #ff4545 url('@{imgbaseUrl}/inhot.png') 10rpx center no-repeat;
+                    background-size:auto 28rpx;
+                    font-size:24rpx;
+                    color: #fff;
+                    padding-left:39rpx;
+                    box-sizing:border-box;
+                    line-height: 36rpx;
+                    margin-bottom:5rpx;
+
+                }
+                .original {
+                    font-size: 22rpx;
+                    color: #929292;
+                    margin-top: 10rpx;
+                    margin-right: 20rpx;
+                    text-decoration: line-through
+                }
+                .discount {
+                    width: 66rpx;
+                    height: 26rpx;
+                    line-height: 26rpx;
+                    font-size: 20rpx;
+                    text-align: center;
+                    color: #fff;
+                    background: #ff8c00;
+                    border-radius: 4rpx;
+                }
+                .appointment {
+                    flex: 3;
+                    font-size: 22rpx;
+                    color: #929292;
+                    margin-top: 10rpx;
+                    text-align: right;
+                }
+            }
+        }
+        .hp_list {
+            .hp_t {
+                position: relative;
+                .address {
+                    padding: 30rpx 32rpx 40rpx 32rpx;
+                    display: flex;
+                    flex-direction: row;
+                    background: #ffffff;
+                    position: relative;
+                    height: 206rpx;
+                    box-sizing: border-box;
+                    .address_img {
+                        width: 198rpx;
+                        height: 136rpx;
+                        margin-right: 30rpx;
+                        background: #f5f5f5 url('@{imgbaseUrl}/zensuo.png') center no-repeat;
+                        background-size: 100%;
+                        border-radius: 4rpx;
+                        border: 1rpx solid @bColor;
+                        box-sizing: border-box;
+                        image {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 4rpx;
+                        }
+                    }
+                    .address_t {
+                        flex: 1;
+                        height: 100%;
+                        font-size: 0;
+                        display: flex;
+                        flex-direction: column;
+                        align-content: space-between;
+                        .address_t1 {
+                            display: flex;
+                            flex-direction: row;
+                            margin-bottom: 10rpx;
+                            .name {
+                                margin-right: 12rpx;
+                                font-size: 30rpx;
+                                font-weight: 700;
+                                color: #333333;
+                                max-width: 310rpx;
+                                overflow: hidden;
+                                /*溢出隐藏*/
+                                text-overflow: ellipsis;
+                                /*以省略号...显示*/
+                                white-space: nowrap;
+                                /*强制不换行*/
+                            }
+                            .name_img {
+                                display: inline-block;
+                                margin-top: 6rpx;
+                                width: 60rpx;
+                                height: 30rpx;
+                            }
+                        }
+                        .evaluate {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            .evaluate_i {
+                                width: 150rpx;
+                                height: 21rpx;
+                                margin-top: 5rpx;
+                                margin-right: 20rpx;
+                                background: #ffbc00;
+                            }
+                            .evaluate_t {
+                                font-size: 22rpx;
+                                margin-right: 20rpx;
+                                color: #ff8c00;
+                                &:nth-of-type(2) {
+                                    color: #929292;
+                                }
+                            }
+                        }
+                        .address_ts {
+                            width: 400rpx;
+                            height: 30rpx;
+                            display: flex;
+                            align-items: flex-end;
+                            flex: 1; // margin-top: 26rpx;
+                            .address_text {
+                                font-size: 24rpx;
+                                color: #929292;
+                                &:nth-of-type(1) {
+                                    display: block;
+                                    width: 400rpx;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .recommend {
+            margin-top: 20rpx;
+            border-bottom: 1rpx solid @bColor;
+        }
+        .teaching {
+            display: flex;
+            flex-wrap: wrap; // height: 166rpx;
+            font-size: 0;
+            background: #fff;
+            .app_imgs {
+                width: 100%;
+                padding: 0 48rpx;
+                box-sizing: border-box;
+                margin-top: 30rpx;
+                display: flex;
+                justify-content: space-around;
+                .app_img {
+                    display: inline-block;
+                    width: 48rpx;
+                    height: 48rpx;
+                    border-radius: 100%;
+                    vertical-align: middle
+                }
+                .app_line {
+                    margin-top: 20rpx;
+                }
+            }
+            .app_t {
+                float: left;
+                display: flex;
+                padding: 30rpx 0rpx 40rpx 0rpx;
+                justify-content: space-around;
+                box-sizing: border-box;
+                font-size: 28rpx;
+                line-height: 1;
+                width: 100%; // .app_t1{
+                //     margin-left: 34rpx;
+                //     margin-right: 50rpx;
+                //     font-size: 28rpx;
+                // }
+            }
+        }
+        .use {
+            font-size: 0;
+            padding: 30rpx 32rpx 30rpx 32rpx;
+            background: #ffffff;
+            box-sizing: border-box;
+            .use_t {
+                .use_t1 {
+                    display: flex;
+                    flex-direction: row;
+                    font-size: 28rpx;
+                    color: #333333;
+                    margin-bottom: 15rpx;
+                    &::before {
+                        content: '';
+                        width: 4rpx;
+                        height: 24rpx;
+                        margin-top: 8rpx;
+                        margin-right: 20rpx;
+                        display: inline-block;
+                        background: #4284ff;
+                    }
+                }
+                .use_t2 {
+                    margin-left: 20rpx;
+                    text {
+                        width: 100%;
+                        font-size: 24rpx;
+                        margin-bottom: 11rpx;
+                        color: #666666;
+                        display: inline-block;
+                        &:last-child {
+                            margin-bottom: 20rpx;
+                        }
+                    }
+                }
+            }
+        }
+        .goods_img {
+            background: #ffffff;
+            padding: 20rpx 10rpx 200rpx 10rpx;
+            width: 100%;
+            box-sizing: border-box;
+            word-break: break-all;
+            image {
+                width: 100%;
+                height: 100%;
+            }
+            img {
+                max-width: 750rpx;
+                height: auto;
+            }
+            .rich-text {
+                // width: 100%;
+                // height: 100%;
+                image {
+                    width: 100%;
+                    height: 100%;
+                }
+                img {
+                    width: 750rpx;
+                    height: 100%;
+                }
+            }
+        }
+        .order_bt {
+            position: fixed;
+            width: 100%;
+            bottom: 0;
+            background-color: #fff;
+            /* box-shadow: -2rpx -2rpx 10rpx rgba(0,0,0,.3); */
+            .payment {
+                display: flex;
+                height: 96rpx;
+                align-items: center;
+                overflow: hidden;
+                .payment_l {
+                    flex: 1;
+                    font-size: 22rpx;
+                    padding-left: 32rpx;
+                    border-top: 1rpx solid @bColor;
+                    height: 100%;
+                    display: flex;
+                    flex-direction: column;
+                    padding-top: 10rpx;
+                    box-sizing: border-box;
+                    .pay_t {
+                        color: #929292;
+                        .pay_i {
+                            display: inline-block;
+                            width: 32rpx;
+                            height: 33rpx;
+                        }
+                        text {
+                            font-size: 22rpx;
+                            margin-right: 20rpx;
+                            &:nth-of-type(1) {
+                                margin-top: 10rpx;
+                                margin-right: 12rpx;
+                            }
+                            &:nth-of-type(2) {
+                                
+                                font-size: 34rpx;
+                                &::before {
+                                    content: "￥";
+                                    font-size: 22rpx;
+                                }
+                            }
+                        }
+                        &:nth-of-type(2) {
+                            margin-top: 5rpx;
+                            text {
+                                font-size: 22rpx;
+                                margin-right: 20rpx;
+                                &:nth-of-type(1) {
+                                    margin-right: 12rpx;
+                                }
+                                &:nth-of-type(2) {
+                                    font-size: 24rpx;
+                                    color: #333333;
+                                    &::before {
+                                        content: "￥";
+                                        font-size: 22rpx;
+                                    }
+                                }
+                                &:nth-of-type(3) {
+                                    width: 30rpx;
+                                    height: 30rpx;
+                                    display: inline-block;
+                                    border: 3rpx solid #929292;
+                                    border-radius: 50rpx;
+                                }
+                            }
+                        }
+                        &:first-child {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                        }
+                    }
+                }
+                .payment_r {
+                    flex: 1;
+                    background-color: #ff8c00;
+                    color: #fff;
+                    border-top: 1px solid #ff8c00;
+                    display: flex;
+                    height: 100%;
+                    justify-content: center;
+                    align-items: center;
+                    box-sizing: border-box;
+                }
+            }
+        }
+        .bargain {
+            position: absolute;
+            width: 100%;
+            height: 100rpx;
+            bottom: 0rpx;
+            /*overflow: hidden;*/
+            z-index: 10;
+            display: flex;
+            .bag_le {
+                width: 484rpx;
+                height: 100%;
+                background: #ff3a75;
+                display: flex;
+                align-items: flex-end;
+                text {
+                    font-size: 48rpx;
+                    color: #ffffff;
+                    &:nth-of-type(1) {
+                        line-height: 48rpx;
+                        margin-left: 30rpx;
+                        margin-bottom: 12rpx;
+                    }
+                    &:nth-of-type(3) {
+                        display: inline-block;
+                        margin-left: 10rpx;
+                        width: 112rpx;
+                        height: 40rpx;
+                        line-height: 40rpx;
+                        text-align: center;
+                        color: rgba(255, 255, 255, .8);
+                        font-size: 28rpx;
+                        border-radius: 4rpx;
+                        background: rgba(0, 0, 0, .3);
+                        margin-bottom: 15rpx;
+                    }
+                }
+                .flPrices {
+                    font-size: 82rpx;
+                    line-height: 1;
+                    margin-bottom: 6rpx;
+                }
+                .flPrice {
+                    font-size: 60rpx;
+                    line-height: 1;
+                    margin-bottom: 10rpx;
+                }
+            }
+            .bag_z {
+                width: 32rpx;
+                height: 100%;
+            }
+            .bag_re {
+                flex: 1;
+                box-sizing: border-box;
+                height: 100%;
+                background: #ffe56e;
+                padding: 12rpx 32rpx 12rpx 14rpx;
+                display: flex;
+                flex-direction: column;
+                flex: 1;
+                min-width: 250rpx;
+                .bag_hd {
+                    display: inline-block;
+                    letter-spacing: 4rpx;
+                    font-size: 24rpx;
+                    color: #ff3a75;
+                    line-height: 1;
+                    flex: 1;
+                    text-align: center;
+                }
+                .bag_time {
+                    padding: 6px 0;
+                    box-sizing: border-box;
+                    display: flex;
+                    justify-content: center;
+                    .bag_t {
+                        width: 36rpx;
+                        border-radius: 4rpx;
+                        padding: 0 6rpx;
+                        background: rgba(0, 0, 0, .5);
+                        text-align: center;
+                        height: 40rpx;
+                        line-height: 40rpx;
+                        font-size: 26rpx;
+                        color: #ffffff; // box-sizing: border-box;
+                        &:first-child {
+                            // min-width: 1em;
+                            width: auto;
+                            display: inline-block;
+                        }
+                        &:last-child {
+                            width: 36rpx;
+                        }
+                    }
+                    .bag_tbs {
+                        line-height: 12rpx;
+                        font-size: 30rpx;
+                        color: rgba(0, 0, 0, .5);
+                        padding: 0 2rpx;
+                    }
+                }
+            }
+        }
+        .bag_xf {
+            position: fixed;
+            bottom: 140rpx;
+            right: 10rpx;
+            width: 200rpx;
+            height: 200rpx;
+        }
+    }
+</style>

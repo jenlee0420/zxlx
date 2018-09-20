@@ -1,0 +1,223 @@
+<template>
+    <view>
+        <!--医院名称-->
+        <ul class="good_clinic flex">
+            <li class="fs28 flex-1">
+                <navigator class="flex" hover-class="none" 
+                    open-type="{{orderdata.open_shop == 1 ?'navigate':'switchTab'}}"
+                    url="{{orderdata.open_shop == 1 ? '/pages/hospital/hospital?id=' + orderdata.clinic_id :'/pages/index'}}"
+                ><text class="mr16">{{orderdata.clinic_name}}</text><span class="arrow-right"></span></navigator>
+            </li>
+            <li class="status" wx:if="{{oprable}}">{{orderdata.status.value}}</li>
+        </ul>
+        <view class="goodsDetail flex" @tap="navToDetail({{orderdata}})">
+            <!-- 使用在线支付的订单 -->
+            <block wx:if="{{orderdata.type == 2}}">
+                <ul class="OnlinePayment fs24">
+                    <li><span class="c929292">订单编号</span><span class="fs30">{{orderdata.order_no}}</span></li>
+                    <li><span class="c929292">诊疗费用</span><span>￥</span><span class="fs30">{{orderdata.sale_amount}}</span></li>
+                    <li><span class="c929292">优惠金额</span><span>￥</span><span class="fs30">{{orderdata.dis_amount}}</span></li>
+                    <li wx:if="{{isDetail}}"><span class="c929292">不参与优惠金额</span><span>￥</span><span class="fs30">{{orderdata.not_discount_amount}}</span></li>
+                    <li>
+                        <span class="c929292">实际支付</span><span>￥</span><span class="fs30">{{orderdata.to_amount}}</span>
+                    </li>
+                </ul>
+            </block>
+            <block wx:else>
+                <view class="goodsimg">
+                    <image mode="aspectFill" src="{{orderdata.product_img[0] ? orderdata.product_img[0] : baseServerImg}}" @error="default_pic" data-img="{{callbackStr}}" />
+                </view>
+                <ul class="goodsinfo fs24 flex-1">
+                    <li class="goodname">{{orderdata.product_name}}</li>
+                    
+                    <li class="al-bottom">
+                        <view><span class="c929292">数量</span><span> x {{orderdata.product_num}}</span></view>
+                        <view class="mt12"><span class="c929292">预约金</span><span>￥</span><span class="fs30">{{orderdata.pre_amount}}</span></view>
+                    </li>
+                </ul>
+            </block>
+        </view>
+        <view class="btns-foot" wx:if="{{oprable}}">
+            <block wx:if="{{orderdata.status.key === 1}}">
+                <button class="btn-Cancel mr20 btn_fff" @tap="cancelAlert({{orderdata.id}})">取消订单</button>
+                <navigator url="/pages/goods/goods_pmt?id={{orderdata.id}}" hover-class="none" class="btn-NoFill">立即付款</navigator>
+            </block>
+            <block wx:if="{{orderdata.status.key === 2}}">
+                <block wx:if="{{orderdata.pre_amount > 0}}">
+                    <navigator url="/pages/mycenter/orderDetail?type=refund&id={{orderdata.id}}" hover-class="none" class="btn-Cancel mr20">退款</navigator>
+                </block>
+                <button class="btn-NoFill" @tap="appointemnt({{orderdata.id}})">就诊预约</button>
+            </block>
+            <block wx:if="{{orderdata.status.key === 3}}">
+                <navigator url="/pages/mycenter/review?id={{orderdata.id}}" hover-class="none" class="btn-NoFill">评价</navigator>
+            </block>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Orderitem extends wepy.component {
+        components = {}
+        data = {
+            thisid: ''
+        }
+        props = {
+            orderdata: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+                // twoWay: true
+            },
+            oprable: {
+                type: Boolean,
+                default: true
+            },
+            isDetail: {
+                type: Boolean,
+                default: false
+            },
+            callbackStr: {}
+        }
+        watch = {}
+        computed = {
+            // fomtPre: () => {
+            //     if (this.orderdata) {
+            //         // console.log('orderdata', this.orderdata.pre_amount)
+            //         return this.formatCurrency(this.orderdata.pre_amount)
+            //     }
+            // }
+        }
+        mixins = [Mixin]
+        methods = {
+            // 确认取消订单
+            cancelAlert(id) {
+                let showdata = {
+                    confirm: 'cancelOrder',
+                    content: '是否确认取消订单'
+                }
+                this.thisid = id
+                this.showAlert(showdata)
+            },
+            // 跳转详情
+            navToDetail(item) {
+                this.$emit('navToDetail', item)
+                // wepy.navigateTo({
+                //     url: '/pages/mycenter/orderDetail?id=' + id
+                // })
+            },
+            // 预约跳转
+            appointemnt(id) {
+                if (this.checkBind()) {
+                    wepy.navigateTo({
+                        url: '/pages/mycenter/scheduleAdd?goodsid=' + id
+                    })
+                } else {
+                    this.showAlert({
+                        showCancel: false,
+                        content: '请先绑定手机号',
+                        confirm: 'navTo'
+                    })
+                }
+            }
+        }
+        navTo() {
+            wepy.navigateTo({
+                url: '/pages/mycenter/bindphone'
+            })
+        }
+        events = {}
+        // 取消订单
+        cancelOrder() {
+            wepy.request({
+                url: '/weiappapi/order/cancelorder',
+                method: 'POST',
+                data: {
+                    order_id: this.thisid
+                }
+            }).then(res => {
+                this.$emit('orderlist')
+            })
+        }
+        onLoad() {}
+    }
+</script>
+
+<style lang="less">
+    .good_clinic {
+        background-color: #fff;
+        padding: 0 32rpx;
+        height: 80rpx;
+        line-height: 80rpx;
+        border-bottom: 1rpx solid @bColor;
+        li {
+            display: flex;
+            align-items: center;
+        }
+        .status {
+            justify-content: flex-end;
+            font-size: 26rpx;
+            color: @theme;
+        }
+        .arrow-right{margin-top: 3rpx}
+    }
+    .goodsDetail {
+        padding: 0 32rpx;
+        background-color: #fff;
+        height: 220rpx;
+        .OnlinePayment{
+            margin:30rpx auto;
+            display:flex;
+            flex-direction:column;
+            width:100%;
+            // line-height:40rpx;
+            li{flex:1}
+            span.c929292{
+                margin-right: 10rpx;
+            }
+        }
+        .goodsinfo {
+            margin: 34rpx auto;
+            display: flex;
+            flex-direction: column;
+            .goodname {
+                font-size: 30rpx;
+                line-height: 38rpx;
+                margin-bottom: 15rpx;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+                overflow: hidden;
+                flex:1;
+            }
+            .flex-1 {
+                display: block;
+            }
+            .al-bottom {
+                view{
+                    line-height: 1;
+                }
+                // height:110rpx;
+                // display: flex;
+                // align-items: flex-end;
+            }
+        }
+        .goodsimg {
+            margin-right: 30rpx;
+            margin-top: auto;
+            margin-bottom: auto;
+            width: 160rpx;
+            border-radius: 6rpx;
+            background-color: #f5f5f5;
+            line-height: 1;
+            image {
+                border-radius: 6rpx;
+                width: 160rpx;
+                height: 160rpx;
+                max-width: 100%;
+                max-height: 100%;
+            }
+        }
+    }
+</style>

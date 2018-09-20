@@ -1,0 +1,207 @@
+<template>
+    <view style="height: 100%" class="flex-column">
+        <searchbar type="doctors" defValue="请输入医生名称"></searchbar>
+        <view class="navs_sort">
+            <view class="nav_list" @tap="showCity">
+                <text class="triangle_down {{cityStatus?'triangle_up':''}} {{nums == 1?'bgcolor':''}}">{{cityname}}</text>
+            </view>
+            <block wx:if="{{cityStatus}}">
+                <cascade :current.sync="currentCity"></cascade>
+            </block>
+            <view class="nav_list {{nums == 2?'bgcolor':''}}" @tap="btn_p">
+                <text>评分最高</text>
+            </view>
+            <view class="nav_list {{nums == 3?'bgcolor':''}}" @tap="btn_ps">
+                <text>距离最近</text>
+            </view>
+        </view>
+        <!--医生列表-->
+        <scroll-view scroll-y @scrolltolower="nextpage" style="height: calc(100% - 192rpx);">
+            <view class="doctorTodo" wx:if="{{hos_doctor.length > 0}}">
+                <repeat for="{{hos_doctor}}" index="index" item="item" key="key">
+                    <view @tap="jumptoDoc({{item}})" >
+                        <doctcard :docdata="item" :nolocal.sync="nolocal"></doctcard>
+                    </view>
+                </repeat>
+                <view class="foots_s" wx:if="{{hos_doctors.total_count > page_size}}">
+                    <text>正在加载......</text>
+                </view>
+                <view class="foots_s" wx:if="{{hos_doctors.total_count === page_size}}">
+                    <text>已加载完全部数据</text>
+                </view>
+            </view>
+            <view class="nodata" wx:if="{{hos_doctor.length < 1 && initCancel}}">
+                <span class="word">暂无数据</span>
+            </view>
+        </scroll-view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import cascade from '@@/cascade'
+import Mixin from '@/mixins/global'
+import DoctCard from '@/components/doctCard'
+import searchbar from '@/components/searchbar'
+export default class Index extends wepy.page {
+    config = {
+        navigationBarTitleText: '医生列表',
+        disableScroll: true
+    }
+    mixins = [Mixin]
+    components = {
+        doctcard: DoctCard,
+        cascade,
+        searchbar
+    }
+    data = {
+        initCancel: false,
+        nums: 1,
+        current_page: 1,
+        page_size: 10,
+        sale: '',
+        customItem: '全部',
+        hos_doctor: [],
+        hos_doctors: {},
+        cityStatus: false,
+        nolocal: false,
+        prid: '',
+        cityid: '',
+        cityname: '',
+        nextAllow:true
+    }
+    methods = {
+        jumptoDoc(id) {
+            var doctor_id = 'id' + '=' + id.doctor.key
+            var clinic_id = 'clinic_id' + '=' + id.clinic_id
+            var doc_id = clinic_id + '&' + doctor_id
+            var urls = '/pages/doctor/details?' + doc_id
+            wepy.navigateTo({
+                url: urls
+            })
+        },
+        btn_p () {
+            this.current_page = 1
+            this.nums = 2
+            this.sale = 'score'
+            this.cityStatus = false
+            this.hos_doctor.length = 0
+            this.getdoctor()
+        },
+        btn_ps () {
+            this.current_page = 1
+            this.nums = 3
+            this.sale = 'distance'
+            this.cityStatus = false
+            this.hos_doctor.length = 0
+            this.getdoctor()
+        },
+        nextpage() {
+            if (this.hos_doctors.total_count > this.hos_doctor.length) {
+                if(this.nextAllow){
+                    this.nextAllow = false
+                    this.current_page += 1
+                    this.getdoctor(true)
+                }
+            }
+        },
+        showCity() {
+            
+            this.current_page = 1
+            this.nums = 1
+            this.sale = ''
+            this.cityStatus = !this.cityStatus
+        }
+    }
+    events = {
+        selectSuccess(res) {
+            this.currentCity = [{
+                id: res[0].id
+            }, {
+                id: res[1].id
+            }]
+            this.cityStatus = false
+            this.prid = res[0].id
+            this.cityid = res[1].id
+            this.cityname = res[1].name
+            this.hos_doctor.length = 0
+            this.getdoctor()
+        },
+        cascadeClose() {
+            this.cityStatus = false
+        }
+    }
+    // 获取医生列表
+    getdoctor(append) {
+        this.initCancel = false
+        this.showloading()
+        var that = this
+        this.nolocal = this.sale === 'distance'
+        wepy.request({
+            url: '/weiappapi/finddoctor/doctorlist',
+            method: 'GET',
+            data: {
+                province: this.prid,
+                city: this.cityid,
+                flag: that.sale,
+                lng: this.localinfobyStorage().lng,
+                lat: this.localinfobyStorage().lat,
+                current_page: that.current_page,
+                page_size: 10
+            }
+        }).then(res => {
+            this.initCancel = true
+            this.nextAllow = true
+            this.showloading(false)
+            if (res.code === '1') {
+
+                that.hos_doctors = res.data
+                if ( that.hos_doctor.length === that.hos_doctors.total_count ){
+                    return
+                }
+                if (that.current_page > 1) {
+                    that.hos_doctor = that.hos_doctor.concat(res.data.list)
+                    this.page_size = that.hos_doctor.length
+                } else {
+                    that.hos_doctor = res.data.list
+                }
+
+                // that.hos_doctors = res.data
+                // if (append) {
+                //     that.hos_doctor = that.hos_doctor.concat(res.data.list)
+                //     this.page_size = that.hos_doctor.length
+                // } else {
+                //     that.hos_doctor = res.data.list
+                // }
+                that.$apply()
+            }
+        })
+    }
+    onLoad() {
+        this.prid = this.localinfobyStorage().province_id
+        this.cityid = this.localinfobyStorage().city_id
+        this.cityname = this.localinfobyStorage().city_name
+        // this.getdoctor()
+    }
+    PageInit(){
+        this.getdoctor()
+    }
+}
+</script>
+
+<style lang="less" scoped>
+    .doctorTodo{
+        width: 750rpx;
+        .foots_s{
+            color: #929292;
+            margin: 20rpx 0;
+            font-size: 22rpx;
+            display: flex;
+            flex-direction: row;
+            text{
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+</style>

@@ -1,0 +1,164 @@
+
+<template>
+    <view class="{{perscore > 0 ?'circleProgress_wrapper':''}}">
+        <div class="wrapper right">
+            <div class="circleProgress rightcircle" style="transform:rotate({{rotate1}}deg);}"></div>
+        </div>
+        <div class="wrapper left">
+            <div class="circleProgress leftcircle" style="transform:rotate({{rotate2}}deg);transition-duration:{{compuSec}}s"></div>
+        </div>
+        <div class="left circleColor{{typeid}}">
+            <div class="iconcircle" style="transform:rotate({{rotate3}}deg);transition-duration:{{sumSec}}s"></div>
+        </div>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    export default class Circle extends wepy.component {
+        data = {
+        }
+        props = {
+            perscore: {},
+            typeid: {}
+        }
+        computed = {
+            // 右边半圆旋转的度数
+            rotate1() {
+                let res = 0
+                if (this.perscore > 0) {
+                    let v = (this.perscore / 100) * 360
+                    if (v >= 180) {
+                        res = 180
+                    } else {
+                        res = v
+                    }
+                }
+                return res + 45
+            },
+            // 左边半圆旋转的度数
+            rotate2() {
+                let res = 0
+                if (this.perscore > 0) {
+                    let v = (this.perscore / 100) * 360
+                    if (v >= 180) {
+                        res = v - 180
+                    }
+                }
+                return res + 45
+            },
+            // 跟随小圆球的度数
+            rotate3() {
+                let res = 0
+                if (this.perscore > 0) {
+                    res = (this.perscore / 100) * 360
+                }
+                return res + 45
+            },
+            // 左半边圆的动画时长
+            compuSec() {
+                let v = this.rotate2
+                let res = (v - 45) / 180 * 2
+                return res
+            },
+            // 跟随小圆球的动画时长
+            sumSec() {
+                let v = (this.perscore / 100) * 360
+                let res = 2 / 180 * v
+                return res
+            }
+        }
+    }
+</script>
+<style lang="less">
+    .circleProgress_wrapper {
+        width: 240rpx;
+        height: 240rpx;
+        margin: 10rpx auto;
+        position: absolute;
+        top: 69rpx;
+        left: 60rpx;
+    }
+    .wrapper {
+        width: 122rpx;
+        height: 242rpx;
+        position: absolute;
+        top: 0rpx;
+        overflow: hidden;
+    }
+    .right {
+        right: 0rpx;
+        background: url('@{imgbaseUrl}/case_logo.png') right top no-repeat;
+        background-size: 240rpx;
+    }
+    .left {
+        left: 0;
+        background: url('@{imgbaseUrl}/case_logo.png') left top no-repeat;
+        background-size: 240rpx;
+    }
+    .circleProgress {
+        width: 218rpx;
+        height: 218rpx;
+        border: 12rpx solid #fff;
+        border-radius: 50%;
+        position: absolute;
+        top: 0rpx;
+        transform: rotate(45deg);
+    }
+    .rightcircle {
+        border-top: 12rpx solid transparent;
+        border-right: 12rpx solid transparent;
+        right: 0rpx;
+        // box-shadow: -3rpx 0rpx 3rpx rgba(0, 0, 0, .3);
+        transition: all linear 2s;
+        transform: rotate(45deg);
+    }
+    .leftcircle {
+        border-bottom: 12rpx solid transparent;
+        border-left: 12rpx solid transparent;
+        left: 0;
+        // box-shadow: 0rpx -3rpx 3rpx rgba(0, 0, 0, .3);
+        transition: all linear 2s;
+        transform: rotate(45deg);
+        transition-delay: 2s;
+    }
+    .iconcircle {
+        width: 186rpx;
+        height: 186rpx;
+        transform: rotate(45deg);
+        position: absolute;
+        top: 27rpx;
+        left: 27rpx;
+        transition: all linear 4s;
+        &:after {
+            content: '';
+            width: 24rpx;
+            height: 24rpx;
+            background-color: #56c7ff;
+            border: 7rpx solid #fff;
+            border-radius: 50%;
+            box-sizing: border-box;
+            position: absolute;
+            left: 0rpx;
+        }
+    }
+    .circleColor1 {
+        .iconcircle:after {
+            background-color: #1ed566
+        }
+    }
+    .circleColor2 {
+        .iconcircle:after {
+            background-color: #c8a46a
+        }
+    }
+    .circleColor3 {
+        .iconcircle:after {
+            background-color: #ff9000
+        }
+    }
+    .circleColor4 {
+        .iconcircle:after {
+            background-color: #ff5d5d
+        }
+    }
+</style>

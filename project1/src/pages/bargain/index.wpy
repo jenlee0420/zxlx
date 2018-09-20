@@ -1,0 +1,231 @@
+<template>
+    <view>
+        <view class="navs_sort">
+            <view class="nav_list">
+                <text @tap="showCity" class="triangle_down {{cityStatus?'triangle_up':''}} {{nums == 1?'bgcolor':''}}">{{cityname}}</text>
+                <block wx:if="{{cityStatus}}">
+                    <cascade :current.sync="currentCity"></cascade>
+                </block>
+            </view>
+            <view class="nav_list {{nums == 2?'bgcolor':''}}" @tap="btn_p">
+                <text>销量最高</text>
+            </view>
+            <view class="nav_list {{nums == 3?'bgcolor':''}}" @tap="btn_ps">
+                <text>距离最近</text>
+            </view>
+        </view>
+        <!--商品列表-->
+        <view class="bagCont">
+            <scroll-view class="tab_ct" scroll-y @scrolltolower="nextpage" style="height: calc(100% - 96rpx);">
+                <view class="list-foot p-32-0" wx:if="{{tab_item.length == 0 && initCancel}}">暂无产品</view>
+                <!-- 普通商品信息 -->
+                <goodsinfo :gooddata.sync="tab_item" type="act"></goodsinfo>
+                <view class="foots_s" wx:if="{{total_count > tab_item.length && tab_item.length > 0 && total_count > 10}}">
+                    <text>正在加载......</text>
+                </view>
+                <view class="foots_s" wx:if="{{total_count === tab_item.length && total_count > page_size}}">
+                    <text class="gopng_img">没有更多了</text>
+                </view>
+            </scroll-view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import cascade from '@@/cascade'
+    import Mixin from '@/mixins/global'
+    import goodsinfo from '@/components/goodinfo1'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '砍低价',
+            disableScroll: true
+        }
+        components = {
+            cascade,
+            goodsinfo
+        }
+        props = {}
+        mixins = [Mixin]
+        data = {
+            initCancel: false,
+            goods_id: '',
+            tab_item: [],
+            cityStatus: false,
+            currentCity: [{
+                id: 2
+            }, {
+                id: 38
+            }],
+            cityid: '',
+            cityname: '',
+            flag: '',
+            current_page: 1,
+            page_size: 10,
+            total_count: 0,
+            localinfo: {},
+            province: '',
+            cityShow: true,
+            tab_items: [],
+            nums: 1
+        }
+        methods = {
+            showCity() {
+                this.nums = 1
+                this.cityStatus = !this.cityStatus
+            },
+            // 按销量
+            btn_p() {
+                this.current_page = 1
+                this.nums = 2
+                this.flag = 'sale'
+                this.cityStatus = false
+                if (this.specialStatus === true) {
+                    this.getEvents()
+                    this.getRecommend()
+                } else {
+                    this.getGoodslist()
+                }
+            },
+            // 距离最近
+            btn_ps() {
+                this.current_page = 1
+                this.nums = 3
+                this.flag = 'distance'
+                this.cityStatus = false
+                if (this.specialStatus === true) {
+                    this.getEvents()
+                    this.getRecommend()
+                } else {
+                    this.getGoodslist()
+                }
+            },
+            nextpage() {
+                if (this.tab_item.length < this.total_count) {
+                    this.current_page += 1
+                    this.getGoodslist(true)
+                }
+            }
+        }
+        events = {
+            selectSuccess(res) {
+                this.currentCity = [{
+                    id: res[0].id
+                }, {
+                    id: res[1].id
+                }]
+                this.cityStatus = false
+                this.province = res[0].id
+                this.cityid = res[1].id
+                this.cityname = res[1].name
+                this.cityShow = false
+                this.flag = ''
+                this.getGoodslist()
+            },
+            cascadeClose() {
+                this.cityStatus = false
+            }
+        }
+        //  获取商品列表
+        getGoodslist(append) {
+            var that = this
+            this.initCancel = false
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/bargain/bargainlist',
+                method: 'POST',
+                data: {
+                    province: this.province,
+                    city: this.cityid,
+                    flag: this.flag,
+                    lng: this.localinfobyStorage().lng,
+                    lat: this.localinfobyStorage().lat,
+                    current_page: this.current_page,
+                    page_size: 10
+                }
+            }).then(res => {
+                this.initCancel = true
+                this.showloading(false)
+                that.total_count = res.data.total_count
+                // 距离显示 格式化
+                // res.data.list.forEach(v => {
+                //     v.distance = Math.round(v.distance * 100) / 100
+                // })
+                if (append) {
+                    that.tab_item = that.tab_item.concat(res.data.list)
+                } else {
+                    that.tab_item = res.data.list
+                }
+                that.$apply()
+            })
+        }
+        getLocalinfo() {
+            wepy.getLocation().then(res => {
+                this.getCity(res.latitude, res.longitude).then(data => {
+                    wepy.request({
+                        url: '/weiappapi/promotion/getareaid',
+                        method: 'POST',
+                        data: {
+                            code: data.adcode,
+                        }
+                    }).then(data => {
+                        let cityData = null
+                        if (data.data) {
+                            cityData = data.data
+                            cityData.lng = res.longitude
+                            cityData.lat = res.latitude
+                            this.cityid = data.data.city_id
+                            this.province = data.data.province_id
+                            this.cityname = data.data.city_name
+                            this.currentCity = [{
+                                id: this.province
+                            }, {
+                                id: this.cityid
+                            }]
+                            this.getGoodslist()
+                            this.$apply()
+                        }
+                        let localinfo = JSON.stringify(cityData)
+                        wepy.setStorageSync('localinfo', localinfo)
+                    })
+                })
+            })
+        }
+        PageInit(){
+            if (!wepy.getStorageSync('localinfo')) {
+                this.getLocalinfo()
+            } else {
+                this.cityid = this.localinfobyStorage().city_id
+                this.province = this.localinfobyStorage().province_id
+                this.cityname = this.localinfobyStorage().city_name
+                this.getGoodslist()
+            }
+        }
+        onLoad(options) {
+            console.log(options,'00000000')
+        }
+        onShow() {
+            // this.PageInit()
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+    .bagCont{
+        position: absolute;
+        width: 750rpx;
+        height: 100%;
+    }
+    .foots_s {
+        width: 100%;
+        height: 50rpx;
+        color: #929292;
+        margin: 20rpx 0;
+        font-size: 22rpx;
+        text-align: center;
+        text {
+            width: 100%;
+            text-align: center;
+        }
+    }
+</style>

@@ -1,0 +1,172 @@
+<template>
+    <view class="container">
+        <text class="fs24 cb4b4b4 h80 p-0-32">为了您的账户安全，请绑定手机号</text>
+        <view class="bindphone">
+            <ul>
+                <li class="flex h100 flex-algin-center">
+                    <span class="bindphone-ico"></span>
+                    <input placeholder="请输入您的手机号" maxlength="11" bindinput="bindphoneInput" auto-focus type="number" confirm-type='next' class="flex-1 fs30 c333 ml20" />
+                    <button class="btn-sendcode btn_fff" disabled="{{code_disabled}}" @tap="getSms">{{waitInfo}}</button></li>
+                <li class="flex h100 flex-algin-center">
+                    <span class="bindphone-ico2"></span>
+                    <input placeholder="请输入收到的验证码" type="number" bindinput="bindcodeInput" class="flex-1 fs30 c333 ml20" />
+                </li>
+            </ul>
+        </view>
+        <button class="btn_w100 {{submit_disabled ? 'btn_gray':''}}" disabled="{{submit_disabled}}" @tap="bindmobile">绑定</button>
+    </view>
+</template>
+ 
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Bindphone extends wepy.page {
+        config = {
+            navigationBarTitleText: '绑定手机号'
+        }
+        components = {}
+        mixins = [Mixin]
+        data = {
+            code_disabled: true,
+            submit_disabled: true,
+            mobile: '',
+            smsCode: '',
+            waitInfo: '获取验证码',
+            wait: 0,
+            loop: null
+        }
+        computed = {}
+        methods = {
+            bindphoneInput(e) {
+                let evalue = e.detail.value
+                if (this.regPhone(evalue)) {
+                    if (this.wait <= 0 ) {
+                    this.code_disabled = false
+                    }
+                } else {
+                    this.code_disabled = true
+                }
+                this.mobile = evalue
+            },
+            bindcodeInput(e) {
+                let evalue = e.detail.value
+                if (this.regCode(evalue) && this.regPhone(this.mobile)) {
+                    this.submit_disabled = false
+                } else {
+                    this.submit_disabled = true
+                }
+                this.smsCode = evalue
+            },
+            // 获取验证码
+            getSms() {
+                this.code_disabled = true
+                wepy.request({
+                    url: 'weiappapi/user/sendsms',
+                    method: 'get',
+                    data: {
+                        'mobile': this.mobile
+                    }
+                }).then(res => {
+                    if (res.code === '1') { 
+                        this.wait = 60
+                        if (!this.loop) {
+                            this.loop = setInterval(() => {
+                                this.wait--
+                                    this.waitInfo = '重新发送(' + this.wait + ')'
+                                if (this.wait <= 0) {
+                                    clearInterval(this.loop)
+                                    this.waitInfo = '重新发送'
+                                    this.code_disabled = false
+                                }
+                                this.$apply()
+                            }, 1000)
+                        }
+                        this.showSuccess('发送成功')
+                    } else {
+                        this.code_disabled = false
+                        this.showAlert({
+                            showCancel: false,
+                            content: res.msg
+                        })
+                        return false
+                    }
+                })
+            },
+            // 绑定手机号码
+            bindmobile() {
+                var params = {
+                    mobile: this.mobile,
+                    sms_code: this.smsCode
+                }
+                wepy.request({
+                    url: '/weiappapi/user/bindmobile',
+                    method: 'POST',
+                    data: params
+                }).then(res => {
+                    if (res.code === '1') {
+                        this.showSuccess('绑定成功')
+                        this.reSetUserInfo(this.mobile, 'mobile')
+                        setTimeout(() => {
+                            // wepy.switchTab({
+                            //     url: '/pages/mycenter/index'
+                            // })
+                            wepy.navigateBack()
+                        }, 500);
+                    } else {
+                        this.showAlert({
+                            showCancel: false,
+                            content: res.msg
+                        })
+                    }
+                })
+            },
+            checkForm() {
+                if (this.mobile === '') {
+                    this.msg = '请输入手机号码'
+                    this.show = true
+                    return
+                }
+                if (this.smsCode === '') {
+                    this.msg = '请输入验证码'
+                    this.show = true
+                    return
+                }
+                this.bindmobile()
+            }
+        }
+        events = {}
+        onLoad() {
+            if (this.checkBind()) { 
+                // this.showAlert({
+                //     showCancel: false,
+                //     content: '已绑定手机号'
+                // })
+                // setTimeout(() => {
+                //     wepy.navigateBack()
+                // }, 1000);
+            }
+        }
+    }
+</script>
+
+<style lang="less">
+    .h100 {
+        height: 100rpx;
+        line-height: 100rpx;
+    }
+    .h80 {
+        height: 80rpx;
+        line-height: 80rpx;
+    }
+    .bindphone {
+        background-color: #fff;
+        padding-left: 32rpx;
+        margin-bottom: 60rpx;
+        li {
+            padding-right: 32rpx;
+        }
+        li:first-child {
+            border-bottom: 1rpx solid @bColor;
+        }
+    }
+</style>

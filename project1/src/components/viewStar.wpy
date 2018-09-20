@@ -1,0 +1,44 @@
+
+<template>
+    <view class="score mr20">
+        <span class="mico_star_gray">
+            <span class="mico_star_all" style="width:{{starNum}}%"></span>
+        </span>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    export default class ViewStar extends wepy.component {
+        data = {}
+        props = {
+            starscore: {}
+        }
+        computed = {
+            starNum() {
+                if (this.starscore >= 0) {
+                    return (this.starscore / 5) * 100
+                } else {
+                    return 0
+                }
+            }
+        }
+    }
+</script>
+<style lang="less">
+    .mico_star_all,
+    .mico_star_gray {
+        background-image: url('@{imgbaseUrl}/mico_star.png');
+        background-repeat: no-repeat;
+        background-size: 124rpx;
+        overflow: hidden;
+        height: 23rpx;
+        width: 124rpx;
+        display: inline-block;
+        left: 0; // clip:rect(0px,61px,20px,0px);
+        position: absolute
+    }
+    .mico_star_gray {
+        background-image: url('@{imgbaseUrl}/mico_star_gray.png');
+        position: relative
+    }
+</style>

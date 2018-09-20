@@ -1,0 +1,120 @@
+#gopng_头像背景@2x_outer {
+    height: 150rpx;
+    width: 150rpx;
+    overflow: hidden;
+    }
+    #gopng_头像背景@2x {
+    background: url() -0rpx -0rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_待预约@2x_outer {
+    height: 48rpx;
+    width: 48rpx;
+    overflow: hidden;
+    }
+    #gopng_待预约@2x {
+    background: url() -0rpx -150rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_待付款@2x_outer {
+    height: 48rpx;
+    width: 48rpx;
+    overflow: hidden;
+    }
+    #gopng_待付款@2x {
+    background: url() -48rpx -150rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_待评价@2x_outer {
+    height: 48rpx;
+    width: 48rpx;
+    overflow: hidden;
+    }
+    #gopng_待评价@2x {
+    background: url() -96rpx -150rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_客服@2x_outer {
+    height: 37rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_客服@2x {
+    background: url() -0rpx -198rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_预约@2x_outer {
+    height: 37rpx;
+    width: 37rpx;
+    overflow: hidden;
+    }
+    #gopng_预约@2x {
+    background: url() -36rpx -198rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_专属牙医@2x_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_专属牙医@2x {
+    background: url() -73rpx -198rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_账单@2x_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_账单@2x {
+    background: url() -109rpx -198rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_我的会员卡@2x_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_我的会员卡@2x {
+    background: url() -0rpx -235rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_关注@2x_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_关注@2x {
+    background: url() -36rpx -235rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_家庭档案@2x_outer {
+    height: 36rpx;
+    width: 36rpx;
+    overflow: hidden;
+    }
+    #gopng_家庭档案@2x {
+    background: url() -72rpx -235rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }
+    #gopng_扩展@2x_outer {
+    height: 26rpx;
+    width: 26rpx;
+    overflow: hidden;
+    }
+    #gopng_扩展@2x {
+    background: url() -108rpx -235rpx no-repeat;
+    width: 100%;
+    height: 100%;
+    }

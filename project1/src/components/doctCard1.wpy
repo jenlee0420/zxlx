@@ -1,0 +1,141 @@
+
+<template>
+    <view class="doctors">
+        <view class="doctor_img mr40">
+            <image src="{{docdata.photo}}" mode="aspectFill" />
+            <view class="doctor_mvp prompt" wx:if="{{docdata.status === 2 || docdata.status.key === 2}}"></view>
+        </view>
+        <view class="doctor_text flex-column flex-1">
+            <view class="doc_t">
+                <text class="doct_name">{{docdata.doctor.value ? docdata.doctor.value : docdata.true_name}}</text>
+            </view>
+            <view class="doct_score" wx:if="{{contact == false}}">
+                <view class="score mr20">
+                    <span class="mico_star_gray">
+                            <span class="mico_star_all" style="width:{{(docdata.score == 0 ? 5:docdata.score / 5) * 100}}%"></span>
+                    </span>
+                </view>
+                <view class="score_t">{{docdata.score == 0 ? 5:docdata.score}}分</view>
+            </view>
+            <view class="doc_t1">
+                <text class="doc_t11">{{docdata.department.value}}</text>
+                <text>{{docdata.place ? docdata.place : '医生'}}</text>
+            </view>
+            <view class="fs24 c929292 flex mt20" wx:if="{{docdata.good_project.length>0}}">
+                <text class="w50 lh32">擅长：</text>
+                <text class="flex-1 lh32 nowarp"><block wx:for="{{docdata.good_project}}" wx:key="key">{{item.value}}，</block></text>
+                <view class="selectbox" wx:if="{{docselect}}">
+                </view>
+            </view>
+            <view class="doc_t3" wx:if="{{contact == false}}">
+                <text class="doc_t33" wx:if="{{docdata.work_year > 0}}">从业{{docdata.work_year}}年</text>
+                <text class="doc_t33" wx:if="{{docdata.gradu_school}}">{{docdata.gradu_school}}</text>
+            </view>
+        </view>
+        <view class="flex doctor_contact" wx:if="{{contact}}">
+            <span class="doc_wechat"></span>
+            <view class="mr30"></view>
+            <span class="doc_phone" @tap.stop="makecall(docdata.mobile)"></span>
+        </view>
+
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import viewStar from '@/components/viewStar'
+    export default class DoctCard extends wepy.component {
+        props = {
+            docdata: {
+                type: Object
+            },
+            contact: {},
+            docselect: {}
+        }
+        components = {
+            viewstar: viewStar
+        }
+        mixins = [Mixin]
+        computed = {}
+        methods = {
+            makecall(mobile) {
+                console.log(mobile)
+                if (mobile) {
+                    wepy.makePhoneCall({
+                        phoneNumber: mobile
+                    })
+                }
+            }
+        }
+        onLoad() {
+            // console.log('docdata', this.contact)
+        }
+    }
+</script>
+<style lang="less">
+    .doctors {
+        .selectbox{
+            width: 50rpx;
+        }
+        .doctor_contact {
+            width: 180rpx;
+            align-items: center;
+            justify-content:flex-end;
+        }
+        .doctor_text {
+            // width: 492rpx;
+            font-size: 0;
+            padding-top: 4px;
+            .doc_t {
+                margin-bottom: 16rpx;
+                align-items: flex-start;
+                .doct_name {
+                    font-size: 34rpx;
+                    color: #333;
+                    font-weight: bold;
+                    line-height: 1; // margin-bottom: 16rpx;
+                }
+            }
+            .doct_score {
+                display: flex;
+                align-items: center;
+                margin-top: 2rpx;
+                margin-bottom: 5rpx;
+                .score {
+                    // width: 152rpx;
+                    margin-right: 40rpx;
+                    background: none;
+                }
+                .score_t {
+                    // width: 54rpx;
+                    font-size: 22rpx;
+                    color: #ff8c00; // margin-top: -3rpx;
+                }
+            }
+            .doc_t1 {
+                font-size: 24rpx;
+                color: #333333;
+                .doc_t11 {
+                    margin-right: 12rpx;
+                }
+            }
+            .doc_t2 {
+                font-size: 24rpx;
+                color: #929292;
+                display: flex;
+                flex-direction: row;
+                .nowarp {
+                    white-space: nowrap;
+                    text-overflow: ellipsis;
+                    width: 350rpx;
+                    overflow: hidden;
+                }
+                .distance {
+                    margin-top: 1rpx;
+                    margin-left: 136rpx;
+                    font-size: 22rpx;
+                }
+            }
+        }
+    }
+</style>

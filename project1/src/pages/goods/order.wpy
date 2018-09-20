@@ -1,0 +1,490 @@
+<template>
+    <view>
+        <!--显示商品支付列表-->
+        <view>
+            <view class="goods_item">
+                <view class="goods_i">
+                    <image wx:if="{{!cutAble}}" src="{{product_img[0]}}" mode="aspectFill" />
+                    <image wx:if="{{cutAble}}" src="{{goodsinfo.product_list.images[0]}}" mode="aspectFill" />
+                </view>
+                <view class="goods_t">
+                    <text wx:if="{{!cutAble}}" class="b">{{goodsinfo.name}}</text>
+                    <text wx:if="{{cutAble}}" class="b">{{goodsinfo.product_list.name}}</text>
+                    <view class="goods_sl fs26 c666">
+                        <text>数量</text>
+                        <text> x 1</text>
+                    </view>
+                    <view class="goods_j">
+                        <text class="fs26 c666" wx:if="{{!cutAble}}">预约金: </text>
+                        <view class="cff8c00">
+                            <span class="fs26">￥</span>
+                            <text class="fs34" wx:if="{{!cutAble}}">{{goodsinfo.res_price}}</text>
+                            <text class="fs34" wx:if="{{cutAble}}">{{goodsinfo.product_list.dis_price}}</text>
+                        </view>
+                    </view>
+                    <!--<view class="goods_b">-->
+                    <!--<view class="gd_b">-->
+                    <!--<text @tap="reduce">-</text>-->
+                    <!--<text>{{num}}</text>-->
+                    <!--<text @tap="plus">+</text>-->
+                    <!--</view>-->
+                    <!--</view>-->
+                </view>
+            </view>
+            <view class="bargain" wx:if="{{cutAble}}">
+                <view class="bag_mn">
+                    <text>砍价优惠</text>
+                    <text class="bag_cors">-￥{{goodsinfo.bargain_list.total_bargain_price}}</text>
+                </view>
+                <view class="bag_mn">
+                    <text>应付合计</text>
+                    <text class="bag_cor">￥{{goodsinfo.bargain_list.cut_down_price}}</text>
+                </view>
+            </view>
+            <view class="order_bt">
+                <view class="payment">
+                    <view class="payment_l">
+                        <view class="pay_t">
+                            <view>
+                                <text>预约金:</text>
+                                <text>{{pre_amount}}</text>
+                            </view>
+                        </view>
+                        <view class="pay_t mt20">
+                            <view>
+                                <text>到院再付:</text>
+                                <text>{{payment}}</text>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="payment_r" @tap="btt_pmt">
+                        提交订单
+                    </view>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '订单确认'
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {
+            cutAble: false,
+            num: 1,
+            // 打折 产品id 产品数量 诊所id 诊所名称 产品名称 销售价 优惠价 预付金 到院再付 图片
+            discount: 0,
+            goods_id: 1,
+            product_num: 1,
+            clinic_id: 14,
+            clinic_name: '',
+            product_name: '',
+            sale_amount: 0,
+            dis_amount: 0,
+            pre_amount: 0,
+            payment: 0,
+            product_img: [],
+            goodsinfo: {},
+            createorder: {},
+            goodbargain: {},
+            bargain_id: 0,
+            type: 1,
+            backDelta: false
+        }
+        methods = {
+            btt_pmt(id) {
+                this.backDelta = this.BackToDelta('/orderlist')
+                if (this.backDelta) {
+                    wepy.setStorageSync('ordertype', 30)
+                }
+                if (this.cutAble) {
+                    this.createactivityorder()
+                } else {
+                    this.getCreateorder()
+                }
+            }
+            // reduce() {
+            //     this.num--
+            //     if ( this.num < 0 ) {
+            //         this.num = 0
+            //     }
+            //     this.pre_amount = this.goodsinfo.res_price * this.num
+            //     this.payment = this.goodsinfo.dis_price*this.num - this.pre_amount
+            // },
+            // plus() {
+            //     this.num++
+            //     this.pre_amount = this.goodsinfo.res_price * this.num
+            //     this.payment = this.goodsinfo.dis_price*this.num - this.pre_amount
+            // }
+        }
+        // 创建砍价活动订单
+        createactivityorder() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/order/createactivityorder',
+                method: 'POST',
+                data: {
+                    'product_id': that.goods_id,
+                    'product_num': that.product_num,
+                    'bargain_id': that.bargain_id,
+                    'type': that.type
+                }
+            }).then(res => {
+                if (res.msg === '创建成功') {
+                    that.createorder = res.data
+                    this.showSuccess()
+                    let urls = '/pages/goods/goods_pmt?id=' + that.createorder.order_id
+                    if (this.pre_amount === '0' || this.pre_amount === '0.00') {
+                        if (this.backDelta) {
+                            wepy.navigateBack({
+                                delta: this.backDelta
+                            })
+                            urls = ''
+                        } else {
+                            urls = '/pages/mycenter/orderlist?type=30'
+                        }
+                    }
+                    if (urls) {
+                        setTimeout(function() {
+                            wepy.redirectTo({
+                                url: urls
+                            })
+                        }, 800)
+                    }
+                } else {
+                    this.showAlert({
+                        showCancel: false,
+                        content: res.msg
+                    })
+                }
+                that.$apply()
+            })
+        }
+        // 创建订单
+        getCreateorder() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/order/createorder',
+                method: 'POST',
+                data: {
+                    'product_id': that.goods_id,
+                    'product_num': that.product_num
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    that.createorder = res.data
+                    this.showSuccess()
+                    let urls = '/pages/goods/goods_pmt?id=' + that.createorder.order_id
+                    // 订单金额为0的，创建成功后直接跳转到待预约界面
+                    if (this.pre_amount === '0' || this.pre_amount === '0.00') {
+                        if (this.backDelta) {
+                            wepy.navigateBack({
+                                delta: this.backDelta
+                            })
+                            urls = ''
+                        } else {
+                            urls = '/pages/mycenter/orderlist?type=30'
+                        }
+                    }
+                    if (urls) {
+                        setTimeout(function() {
+                            wepy.redirectTo({
+                                url: urls
+                            })
+                        }, 800)
+                    }
+                } else {
+                    this.showAlert({
+                        showCancel: false,
+                        content: res.msg
+                    })
+                }
+                that.$apply()
+            })
+        }
+        // 通过id 获取产品
+        getGoodsinfo() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/goods/goodsinfo',
+                method: 'GET',
+                data: {
+                    'goods_id': that.goods_id
+                }
+            }).then(res => {
+                that.goodsinfo = res.data
+                var goods = that.goodsinfo
+                //  到院再付 打折
+                that.payment = Math.round((that.goodsinfo.dis_price - that.goodsinfo.res_price) * 100) / 100
+                that.discount = Math.round(that.goodsinfo.dis_price / that.goodsinfo.price * 100) / 10
+                //  产品id 产品数量 诊所id 诊所名称 产品名称 销售价 优惠价 预付金 到院再付
+                this.goods_id = goods.id
+                this.clinic_id = goods.clinic_id
+                this.clinic_name = goods.clinic_info.name
+                this.product_name = goods.name
+                this.sale_amount = goods.price
+                this.dis_amount = goods.dis_price
+                this.pre_amount = goods.res_price
+                this.product_img = goods.images
+                that.$apply()
+            })
+        }
+        // 获取砍价商品
+        bargaininfo() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/bargain/bargaininfo',
+                method: 'POST',
+                data: {
+                    'goods_id': that.goods_id
+                }
+            }).then(res => {
+                that.goodsinfo = res.data
+                that.pre_amount = that.goodsinfo.product_list.res_price
+                that.payment = Math.round((that.goodsinfo.bargain_list.cut_down_price - that.goodsinfo.product_list.res_price) * 100) / 100
+                that.$apply()
+            })
+        }
+        onLoad(options) {
+            this.goods_id = options.id
+            this.cutAble = options.cutAble
+            if (this.cutAble) {
+                this.bargain_id = options.bargain_id
+                this.bargaininfo()
+            } else {
+                this.getGoodsinfo()
+            }
+        }
+    }
+</script>
+
+<style lang="less">
+    .goods_item {
+        display: flex;
+        padding: 30rpx;
+        background: #ffffff;
+        border-bottom: 1rpx solid #ededed;
+        .goods_i {
+            flex: 2;
+            width: 160rpx;
+            height: 160rpx;
+            margin-right: 20rpx;
+            background: #f5f5f5 url('@{imgbaseUrl}/default_pic.png') top left no-repeat;
+            background-size: 100% 100%;
+            image {
+                max-width: 160rpx;
+                max-height: 160rpx;
+                border-radius: 6rpx;
+            }
+        }
+        .goods_t {
+            flex: 7;
+            font-size: 0;
+            position: relative;
+            font-size: 30rpx;
+            color: #333333;
+            .b {
+                width: 460rpx;
+                /*height: 80rpx;*/
+                overflow: hidden;
+                text-overflow: ellipsis;
+                display: -webkit-box;
+                -webkit-box-orient: vertical;
+                -webkit-line-clamp: 2;
+            }
+            .goods_sl {
+                position: absolute;
+                bottom: 48rpx;
+                text {
+                    margin-right: 12rpx;
+                    display: inline-block;
+                    &:nth-of-type(1) {
+                        color: #666666;
+                    }
+                    &:nth-of-type(2) {
+                        color: #333333;
+                    }
+                }
+            }
+            .goods_j {
+                position: absolute;
+                bottom: 0rpx;
+                text {
+                    &:nth-of-type(1) {
+                        margin-right: 12rpx;
+                        display: inline-block;
+                    }
+                }
+                view {
+                    margin-right: 12rpx;
+                    color: #ff8c00;
+                    display: inline-block;
+                }
+            }
+            .goods_b {
+                position: absolute;
+                bottom: 0;
+                right: 0;
+                width: 160rpx;
+                height: 50rpx;
+                line-height: 50rpx;
+                border: 1rpx solid #d9d9d9;
+                border-radius: 6rpx;
+                .gd_b {
+                    display: flex;
+                    flex-direction: row;
+                    text-align: center;
+                    color: #666666;
+                    text {
+                        flex: 1;
+                        font-size: 30rpx;
+                        font-weight: 100;
+                        &:nth-of-type(2) {
+                            flex: 2;
+                            font-size: 30rpx;
+                            color: #333333;
+                            font-weight: bold;
+                            border-left: 1rpx solid #d9d9d9;
+                            border-right: 1rpx solid #d9d9d9;
+                        }
+                        &:nth-of-type(3):active {
+                            color: #4257ff;
+                            background: #9d9d9d;
+                        }
+                        &:nth-of-type(1):active {
+                            color: #4257ff;
+                            background: #9d9d9d;
+                        }
+                    }
+                }
+            }
+        }
+        &:first-child {
+            margin-top: 20rpx;
+        }
+    }
+    .bargain {
+        width: 100%;
+        background: #ffffff;
+        .bag_mn {
+            width: 720rpx;
+            height: 100rpx;
+            margin-left: 30rpx;
+            line-height: 100rpx;
+            background: #ffffff;
+            &:nth-of-type(1) {
+                margin-top: 20rpx;
+                border-bottom: 1rpx solid #ededed;
+            }
+            text {
+                float: left;
+                font-size: 30rpx;
+                color: #929292;
+            }
+            .bag_cors {
+                float: right;
+                color: #ff3a75;
+                margin-right: 28rpx;
+            }
+            .bag_cor {
+                float: right;
+                color: #333333;
+                margin-right: 28rpx;
+            }
+        }
+    }
+    .order_bt {
+        position: fixed;
+        width: 100%;
+        bottom: 0;
+        background-color: #fff;
+        /* box-shadow: -2rpx -2rpx 10rpx rgba(0,0,0,.3); */
+        .payment {
+            display: flex;
+            height: 96rpx;
+            align-items: center;
+            overflow: hidden;
+            .payment_l {
+                flex: 1;
+                font-size: 22rpx;
+                padding-left: 32rpx;
+                border-top: 1px solid @bColor;
+                height: 100%;
+                display: flex;
+                flex-direction: column;
+                padding-top: 10rpx;
+                box-sizing: border-box;
+                .pay_t {
+                    color: #929292;
+                    .pay_i {
+                        display: inline-block;
+                        width: 32rpx;
+                        height: 32rpx;
+                    }
+                    text {
+                        font-size: 22rpx;
+                        margin-right: 20rpx;
+                        &:nth-of-type(1) {
+                            margin-top: 10rpx;
+                            margin-right: 12rpx;
+                        }
+                        &:nth-of-type(2) {
+                            font-size: 34rpx;
+                            color: #ff8c00;
+                            &::before {
+                                content: "￥";
+                                font-size: 22rpx;
+                            }
+                        }
+                    }
+                    &:nth-of-type(2) {
+                        margin-top: 5rpx;
+                        text {
+                            font-size: 22rpx;
+                            margin-right: 20rpx;
+                            &:nth-of-type(1) {
+                                margin-right: 12rpx;
+                            }
+                            &:nth-of-type(2) {
+                                font-size: 24rpx;
+                                color: #333333;
+                                &::before {
+                                    content: "￥";
+                                    font-size: 22rpx;
+                                }
+                            }
+                            &:nth-of-type(3) {
+                                width: 30rpx;
+                                height: 30rpx;
+                                display: inline-block;
+                                border: 3rpx solid #929292;
+                                border-radius: 50rpx;
+                            }
+                        }
+                    }
+                    &:first-child {
+                        display: flex;
+                        flex-direction: row;
+                    }
+                }
+            }
+            .payment_r {
+                flex: 1;
+                background-color: #ff8c00;
+                color: #fff;
+                border-top: 1px solid #ff8c00;
+                display: flex;
+                height: 100%;
+                justify-content: center;
+                align-items: center;
+                box-sizing: border-box;
+            }
+        }
+    }
+</style>

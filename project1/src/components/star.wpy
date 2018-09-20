@@ -1,0 +1,59 @@
+
+<template>
+    <view class="{{startype === 'mini'?'star_mini_box':'star_box'}}">
+        <repeat for="{{starArr}}" index="index" item="item" key="key">
+            <block wx:if="{{startype === 'mini'}}" >
+                <span class="star_mini {{starArr[index]}}" @tap="beStar({{index + 1}})"></span>
+            </block>
+            <block wx:else >
+                <span class="star {{starArr[index]}}" @tap="beStar({{index + 1}})"></span>
+            </block>
+        </repeat>
+        
+        <!-- <span class="star {{starArr[1]}}" @tap="beStar(1)"></span>
+        <span class="star {{starArr[2]}}" @tap="beStar(2)"></span>
+        <span class="star {{starArr[3]}}" @tap="beStar(3)"></span>
+        <span class="star {{starArr[4]}}" @tap="beStar(4)"></span> -->
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Star extends wepy.component {
+        data = {
+            starArr: ['', '', '', '', '']
+        }
+        props = {
+            startype: {},
+            callback: {}
+        }
+        mixins = [Mixin]
+        methods = {
+            beStar(num) {
+                this.starArr.forEach((n, index) => {
+                    if (parseInt(num) <= index) {
+                        this.starArr[index] = 'star_gray'
+                    } else {
+                        this.starArr[index] = ''
+                    }
+                })
+                this.$emit('docstar', num, this.callback)
+            }
+        }
+        events = {}
+        onLoad() {
+            // console.log('kkkk', this.callback)
+        }
+    }
+</script>
+<style lang="less">
+    .star_box,.star_mini_box{
+        display: flex;
+        width: 420rpx;
+        justify-content: space-between;
+        margin: 0 auto;
+    }
+    .star_mini_box{
+        width: 230rpx;
+    }
+</style>

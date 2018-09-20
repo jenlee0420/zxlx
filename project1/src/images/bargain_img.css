@@ -1,0 +1,120 @@
+#gopng_查看更多icon_outer {
+    height: 20px;
+    width: 20px;
+    overflow: hidden;
+}
+#gopng_查看更多icon {
+    background: url(http://gopng/static/images/sprite.png) -0px -0px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_收起_outer {
+    height: 20px;
+    width: 20px;
+    overflow: hidden;
+}
+#gopng_收起 {
+    background: url(http://gopng/static/images/sprite.png) -0px -20px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_分隔节点_outer {
+    height: 100px;
+    width: 32px;
+    overflow: hidden;
+}
+#gopng_分隔节点 {
+    background: url(http://gopng/static/images/sprite.png) -0px -40px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_疯狂砍价icon_outer {
+    height: 80px;
+    width: 80px;
+    overflow: hidden;
+}
+#gopng_疯狂砍价icon {
+    background: url(http://gopng/static/images/sprite.png) -0px -140px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_金色-右边图标_outer {
+    height: 8px;
+    width: 86px;
+    overflow: hidden;
+}
+#gopng_金色-右边图标 {
+    background: url(http://gopng/static/images/sprite.png) -0px -220px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_金色-左边图标_outer {
+    height: 8px;
+    width: 86px;
+    overflow: hidden;
+}
+#gopng_金色-左边图标 {
+    background: url(http://gopng/static/images/sprite.png) -0px -228px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_砍价悬浮按钮_outer {
+    height: 200px;
+    width: 202px;
+    overflow: hidden;
+}
+#gopng_砍价悬浮按钮 {
+    background: url(http://gopng/static/images/sprite.png) -0px -236px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_砍刀icon_outer {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+}
+#gopng_砍刀icon {
+    background: url(http://gopng/static/images/sprite.png) -0px -436px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_标签三角形_outer {
+    height: 30px;
+    width: 13px;
+    overflow: hidden;
+}
+#gopng_标签三角形 {
+    background: url(http://gopng/static/images/sprite.png) -0px -486px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_青龙刀_outer {
+    height: 50px;
+    width: 50px;
+    overflow: hidden;
+}
+#gopng_青龙刀 {
+    background: url(http://gopng/static/images/sprite.png) -0px -516px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_问号_outer {
+    height: 22px;
+    width: 22px;
+    overflow: hidden;
+}
+#gopng_问号 {
+    background: url(http://gopng/static/images/sprite.png) -0px -566px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_已成功印章_outer {
+    height: 126px;
+    width: 142px;
+    overflow: hidden;
+}
+#gopng_已成功印章 {
+    background: url(http://gopng/static/images/sprite.png) -0px -588px no-repeat;
+    width: 100%;
+    height: 100%;
+}

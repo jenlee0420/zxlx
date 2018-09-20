@@ -1,0 +1,46 @@
+<template>
+    <view class="container">
+        <view class="refund bg_fff">
+            <ul class="flex-column">
+                <li class="fs34 c333 mt50 mb60 t_c">
+                    <span class="refund-ico"></span><text class="ml20">退款申请成功</text>
+                </li>
+                <li class="lh40 fs28 c666">温馨提示：原路退款时，若订单显示“已退款”，则示款项已经从河狸口腔返回支付方，距离到账时间 3-10 个工作日</li>
+            </ul>
+        </view>
+        <button class="btn_w100" @tap="backTolist">返回订单</button>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Refund extends wepy.page {
+        config = {
+            navigationBarTitleText: '退款成功'
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {}
+        computed = {}
+        methods = {
+            backTolist() {
+                wepy.redirectTo({url: '/pages/mycenter/orderlist?type=50'})
+            }
+        }
+        events = {}
+        onLoad() {}
+    }
+</script>
+
+<style lang="less">
+    .refund {
+        height: 320rpx;
+        margin-top: 20rpx;
+        margin-bottom: 60rpx;
+        padding: 0rpx 32rpx;
+        .lh40 {
+            line-height: 40rpx;
+        }
+    }
+</style>

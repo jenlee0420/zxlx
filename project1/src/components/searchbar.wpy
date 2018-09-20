@@ -1,0 +1,51 @@
+<template>
+    <view class="searchmain">
+        <view class="searchbar" @tap="searchPage({{type}})">
+            <text class="search"></text> <text class="fs26 c929292">{{defValue}}</text>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class SearchBar extends wepy.component {
+        props = {
+            type: {},
+            defValue:{}
+        }
+        data = {
+        }
+        mixins = [Mixin]
+        methods = {
+            searchPage(type) {
+                wepy.navigateTo({url:'/pages/searchpage?type=' + type})
+            }
+        }
+        onLoad() {}
+    }
+</script>
+<style lang="less">
+    .searchmain {
+        background-color: #fff;
+        padding: 0 32rpx;
+        .searchbar {
+            display: flex;
+            border-radius: 30rpx;
+            background-color: #f3f3f3;
+            align-items: center;
+            justify-content: center;
+            height: 60rpx;
+            margin: 18rpx 0;
+        }
+    }
+    .search {
+        background-image: url('@{imgbaseUrl}/searchico/search.png');
+        background-repeat: no-repeat;
+        background-size: 26rpx;
+        overflow: hidden;
+        margin: 0 20rpx;
+        width: 26rpx;
+        height: 26rpx;
+    }
+</style>
+

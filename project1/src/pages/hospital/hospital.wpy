@@ -1,0 +1,1380 @@
+<template>
+    <view>
+        <scroll-view scroll-y @scrolltolower="nextpage" style="height: 100vh">
+            <view class="HSwrap">
+                <view style="heigth:416rpx">
+                <view class="header">
+                    <view class="head_bg" style="background: url({{header_bg}});background-size: 100%;background-position:center center"></view>
+                    <view class="head_cl"></view>
+                    <view class="head_c2"></view>
+                    <view class="hd_t">
+                        <text class="hd_t1">{{orderdata.name}}</text>
+                        <view class="hd_img members"></view>
+                    </view>
+                    <view class="vd">
+                        <image class="vd_img" src="{{orderdata.logo}}"></image>
+                        <!--<view class="vd_but">-->
+                        <!--</view>-->
+                    </view>
+                </view>
+                <view class="act"></view>
+                <!--<view class="activity"  @tap="bomb">-->
+                <!--<view class="act_t">-->
+                <!--<span class="act_img l_vip"></span>-->
+                <!--<text class="act_t1">河狸会员享受各项治疗9折优惠</text>-->
+                <!--</view>-->
+                <!--<view class="act_b rig_icon"></view>-->
+                <!--</view>-->
+                <view class="navs">
+                    <view @tap="taps({{index}})" class="nav_list" wx:key="{{index}}" wx:for="{{navbar}}" wx:for-item="item" data-index="{{index}}" wx:key="index">
+                        <view class="{{nav_num==item.id?'curs':''}}">{{item.name}}<span wx:if="{{index == 1}}">({{commentnums}})</span></view>
+                        <text class="{{nav_num==item.id?'cur':''}}"></text>
+                    </view>
+                </view>
+                </view>
+                <!-- <view class="payPanel"><navigator url="/pages/hospital/pay?clinic_id={{clinic_id}}" hover-class="none" class="btn-NoFill">优惠买单</navigator></view> -->
+                <!--诊所-->
+                <view class="clinicTodo" wx:if="{{currentTab == 0}}">
+                    <view class="details" wx:if="{{orderdata.clinic_photo.length>0}}">
+                        <view class="details_t" @tap="jumpImg">
+                            <view class="details_i">
+                                <text class="details_ii hos_i"></text>
+                                <text class="details_t1 flex-1">诊所环境</text>
+
+                                <text class="details_t2">共{{orderdata.clinic_photo.length}}张图</text>
+                                <text class="arrow-right"></text>
+                            </view>
+                        </view>
+                        <view class="details_img" @tap="jumpImg">
+                            <view class="de_img" wx:for="{{orderdata.clinic_photo}}" wx:key="{{index}}" wx:for-item="item" data-index="{{index}}">
+                                <image src="{{item}}" mode="aspectFill"></image>
+                            </view>
+                        </view>
+                    </view>
+                    <view class="clinic_time">
+                        <view class="details_i">
+                            <text class="details_ii business"></text>
+                            <text class="details_t1">营业时间：{{orderdata.start_time}}~{{orderdata.end_time}}</text>
+                        </view>
+                    </view>
+                    <view class="clinic_address">
+                        <view class="details_i" @tap="getLocation">
+                            <text class="details_ii location"></text>
+                            <text class="details_t1">{{orderdata.province.value}}{{orderdata.city.value}}{{orderdata.county.value}}{{orderdata.addr}}</text>
+                            <text class="arrow-right"></text>
+                        </view>
+                    </view>
+                    <view class="clinic_time">
+                        <view class="details_i" @tap="jumpImgs">
+                            <text class="details_ii medical"></text>
+                            <text class="details_t1">查看诊所资质</text>
+                            <text class="arrow-right"></text>
+                        </view>
+                    </view>
+                    <!--<view class="members">-->
+                    <!--<view class="details_i">-->
+                    <!--<text class="details_ii l_vip"></text>-->
+                    <!--<text class="details_t1">河狸会员享受各项治疗9折优惠</text>-->
+                    <!--</view>-->
+                    <!--<view class="details_i">-->
+                    <!--<text class="details_ii doct"></text>-->
+                    <!--<text class="details_t1">看牙无忧科分期付款（会员专享）</text>-->
+                    <!--</view>-->
+                    <!--<view class="details_i">-->
+                    <!--<text class="details_ii l_vip"></text>-->
+                    <!--<text class="details_t1">河狸会员享受各项治疗9折优惠</text>-->
+                    <!--</view>-->
+                    <!--<view class="details_i">-->
+                    <!--<text class="details_ii doct"></text>-->
+                    <!--<text class="details_t1">看牙无忧科分期付款（会员专享）</text>-->
+                    <!--</view>-->
+                    <!--</view>-->
+                </view>
+                <!--诊所评价-->
+                <view class="comentTodo" wx:if="{{currentTab == 1}}">
+                    <view class="comment">
+                        <view class="cm_left">
+                            <view class="cm_l1">{{clini.avg_score}}</view>
+                            <view class="cm_l2">诊所评分</view>
+                        </view>
+                        <view class="cm_auto">
+                            <view class="cm_t">
+                                <text class="cm_t1">服务</text>
+                                <viewstar1 class="cm_t2" :starscore.sync="starNum_1"></viewstar1>
+                                <text class="cm_t3">{{clini.service_score}}分</text>
+                            </view>
+                            <view class="cm_t">
+                                <text class="cm_t1">环境</text>
+                                <viewstar2 class="cm_t2" :starscore.sync="starNum_2"></viewstar2>
+                                <text class="cm_t3">{{clini.env_score}}分</text>
+                            </view>
+                            <view class="cm_t">
+                                <text class="cm_t1">医生</text>
+                                <viewstar3 class="cm_t2" :starscore.sync="starNum_3"></viewstar3>
+                                <text class="cm_t3">{{clini.skill_score}}分</text>
+                            </view>
+                        </view>
+                        <view class="cm_line"></view>
+                        <view class="cm_right">
+                            <view class="cm_l1">{{clini.satisfaction}}</view>
+                            <view class="cm_l2">就诊满意度</view>
+                        </view>
+                    </view>
+                    <view class="content">
+                        <view class="bun_all">
+                            <button @tap="btu_all({{item.id}})" class="btn_w100 {{but_num==item.id?'cur':''}}" wx:for="{{but_text}}" wx:key="{{index}}" wx:for-item="item" data-index="{{index}}">{{item.name}}
+                            </button>
+                        </view>
+                        <view class="btt" wx:if="{{but_num==1}}">
+                            <view wx:if="{{item.tagnum > 0}}" class="btn-Cances {{cances==index?'btn_Canc':''}}" @tap="btnCances({{index}})" wx:key="{{index}}" wx:for="{{taglist}}" wx:for-item="item" wx:for-index="index">
+                                {{item.tagname}} {{item.tagnum}}</view>
+                        </view>
+                        <view class="commentss">
+                            <view class="nodata"  wx:if="{{comment.length<1}}">
+                                <span class="word">暂时没有评价</span>
+                            </view>
+                            <repeat for="{{comment}}" index="index" item="item" key="key">
+                                <comment :comments.sync="item" :contact="true"></comment>
+                                <view class="comline"></view>
+                            </repeat>
+                            <view class="foot_line"></view>
+                            <view class="foots_s" wx:if="{{cliniccomment.total_count < page_sizes && page_sizes>20}}">
+                                <text>正在加载...</text>
+                            </view>
+                            <view class="foots_s" wx:if="{{cliniccomment.total_count === page_sizes}}">
+                                <text class="gopng_img"> 没有更多了...</text>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <!--找服务-->
+                <view class="tabTodo" wx:if="{{currentTab == 3}}"  style="flex:1">
+                    <scroll-view scroll-y class="tab_s" style="height: 100%">
+                        <view @tap="serviceType({{item.id}})" class="tab_is {{num==item.id?'cur':''}}" wx:for="{{tabTodo}}" wx:key="index" wx:for-item="item" data-index="{{index}}">
+                            <text>{{item.name}}</text>
+                        </view>
+                    </scroll-view>
+                    <scroll-view class="tab_item" scroll-y @scrolltolower="nextpagess" style="height: 100%">
+                        <view class="list-foot" wx:if="{{tab_item.length == 0 && !isload}}">该分类下暂无产品</view>
+                        <ul class="tab_ct" wx:else>
+                            
+                                <li class="tab_to" @tap="jumpGood({{item.id}})" wx:key="index" wx:for="{{tab_item}}" wx:for-item="item" data-index="{{index}}">
+                                <span class="tob_img default_proImg">
+                                        <image src="{{item.images[0]}}" mode="aspectFill"/>
+                                </span>
+                                    <view class="tab_t">
+                                        <text class="tab_t1">{{item.name}}</text>
+                                        <text class="tab_t2">{{item.clinic_info.name}}</text>
+                                        <view class="tab_t3">已有<span class="c333">{{item.sale_count}}</span>人预约</view>
+                                        <text class="tab_t4">
+                                            <text class="tab_t5">￥</text>
+                                            <text class="tab_t6">{{item.dis_price}}</text>
+                                            <text class="tab_t7">￥{{item.price}}</text>
+                                        </text>
+                                    </view>
+                                </li>
+                                <!-- <goodsinfo :gooddata.sync="tab_item"></goodsinfo> -->
+                                <view class="foots_s" wx:if="{{total_count > tab_item.length && tab_item.length > 0}}">
+                                    <text>正在加载......</text>
+                                </view>
+                                <view class="foots_s" wx:if="{{total_count === tab_item.length && total_count > page_size}}">
+                                    <text class="gopng_img">没有更多了</text>
+                                </view>
+                        </ul>
+                    </scroll-view>
+                </view>
+                <!--医生列表-->
+                <view class="doctorTodo"  wx:if="{{currentTab == 2}}">
+                    <scroll-view wx:if="{{hos_doctor.length > 0}}" scroll-y @scrolltolower="nextpages" style="height: 100%">
+                        <repeat for="{{hos_doctor}}" index="index" item="item" key="key">
+                            <view @tap="jumptoDoc({{item}})" class="{{index == hos_doctor.length - 1?'nobottom':''}}">
+                                <doctcard :docdata="item" :nolocal.sync="nolocal"></doctcard>
+                            </view>
+                        </repeat>
+                        <view class="foots_s" wx:if="{{hos_doctors.total_count > hos_doctor.length}}">
+                            <text>正在加载......</text>
+                        </view>
+                        <view class="foots_s" wx:if="{{hos_doctors.total_count === hos_doctor.length}}">
+                            <text>已加载完全部数据</text>
+                        </view>
+                    </scroll-view>
+                    <view class="nodata" wx:else>
+                        <span class="word">暂无数据</span>
+                    </view>
+                </view>
+                <!--会员弹框-->
+                <view class="box_f" wx:if="{{box}}">
+                    <view class="box">
+                        <view class="box_img">
+                            <image src="{{orderdata.logo}}"></image>
+                        </view>
+                        <text class="tatle_name">{{orderdata.name}}</text>
+                        <view class="cm_t">
+                            <viewstar4 class="cm_t2" :starscore.sync="starNum"></viewstar4>
+                            <text class="cm_t3">{{clini.avg_score}}分</text>
+                        </view>
+                        <text class="tatle_name">优惠活动</text>
+                        <view class="member_s">
+                            <view class="details_i">
+                                <text class="details_ii l_vip"></text>
+                                <text class="details_t1">河狸会员享受各项治疗9折优惠</text>
+                            </view>
+                            <view class="details_i">
+                                <text class="details_ii doct"></text>
+                                <text class="details_t1">看牙无忧科分期付款（会员专享）</text>
+                            </view>
+                        </view>
+                        <view @tap="bomb" class="button_x b_close"></view>
+                    </view>
+                </view>
+                <!--预约小框框-->
+                <view>
+                    <view @tap="jumpYuy" class="dxin" wx:if="{{currentTab == 3 && is_appoint == 1 }}"></view>
+                </view>
+            </view>
+        </scroll-view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '../../mixins/global'
+    import Comment from '@/components/comment'
+    import viewStar from '@/components/viewStar'
+    import DoctCard from '@/components/doctCard'
+    import goodsinfo from '@/components/goodinfo1'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '诊所主页',
+            // disableScroll: true
+        }
+        props = {
+            comments: {}
+        }
+        mixins = [Mixin]
+        components = {
+            viewstar1: viewStar,
+            viewstar2: viewStar,
+            viewstar3: viewStar,
+            viewstar4: viewStar,
+            comment: Comment,
+            doctcard: DoctCard,
+            goodsinfo
+        }
+        data = {
+            isload:true,
+            initCancel: false,
+            page_sizes: 0,
+            cances: 10,
+            current_page: 1,
+            page_size: 10,
+            currentTab: 0,
+            clinic_id: 14,
+            commentnum: 1,
+            header_bg: '',
+            num: 0,
+            nav_num: 0,
+            goods_num: 1,
+            box: false,
+            index: 0,
+            navbar: [{
+                    id: 0,
+                    name: '诊所'
+                },
+                {
+                    id: 1,
+                    name: '评价'
+                },
+                {
+                    id: 2,
+                    name: '医生'
+                },
+                {
+                    id: 3,
+                    name: '服务'
+                }
+            ],
+            tabTodo: [],
+            orderdata: {},
+            hos_doctor: [],
+            tab_item: [],
+            img_length: [],
+            cliniccomment: {},
+            clini: {},
+            but_text: [{
+                    id: 1,
+                    name: '全部'
+                },
+                {
+                    id: 2,
+                    name: '有图'
+                }
+            ],
+            but_num: 1,
+            type: 1,
+            comment: [],
+            commentlist: {},
+            comments: {},
+            taglist: {},
+            commentnums: 0,
+            tag: '',
+            hos_doctors: {},
+            foots: true,
+            total_count: '',
+            is_appoint: '',
+            patientInfo: {}
+        }
+        computed = {
+            starNum() {
+                if (this.clini && this.clini.avg_score) {
+                    return this.clini.avg_score
+                }
+            },
+            starNum_1() {
+                if (this.clini && this.clini.service_score) {
+                    return this.clini.service_score
+                }
+            },
+            starNum_2() {
+                if (this.clini && this.clini.env_score) {
+                    return this.clini.env_score
+                }
+            },
+            starNum_3() {
+                if (this.clini && this.clini.skill_score) {
+                    return this.clini.skill_score
+                }
+            }
+        }
+        methods = {
+            // 商品下拉刷新
+            nextpagess() {
+                if (this.tab_item.length < this.total_count) {
+                    this.current_page += 1
+                    this.getGoodslist(true)
+                }
+            },
+            // 医生下拉刷新
+            nextpages() {
+                if (this.hos_doctors.total_count > this.hos_doctor.length) {
+                    this.current_page += 1
+                    this.getdoctor(true)
+                }
+            },
+            // 评论下拉刷新
+            nextpage() {
+                if (this.commentlist.length < this.cliniccomment.total_count) {
+                    this.current_page += 1
+                    this.getCliniccomment(true)
+                }
+            },
+            // 点击评论的全部 有图
+            btu_all(e) {
+                this.current_page = 1
+                this.but_num = e
+                this.type = e
+                this.cances = 10
+                this.tag = ''
+                this.getCliniccomment()
+            },
+            // 点击服务态度
+            btnCances(e) {
+                this.current_page = 1
+                this.cances = e
+                if (e === 0) {
+                    this.tag = '服务态度好'
+                } else if (e === 1) {
+                    this.tag = '技术好'
+                } else if (e === 2) {
+                    this.tag = '很耐心'
+                } else if (e === 3) {
+                    this.tag = '很专业'
+                } else {
+                    this.tag = '其他'
+                }
+                this.getCliniccomment()
+            },
+            // 优惠活动的弹框
+            bomb() {
+                this.box = !this.box
+            },
+            // 跳转预约
+            jumpYuy() {
+                wepy.navigateTo({
+                    url: '/pages/mycenter/scheduleAdd?second=true&clid=' + this.clinic_id
+                })
+            },
+            // 跳转医生主页
+            jumptoDoc(id) {
+                var doctor_id = "id" + '=' + id.doctor.key
+                var clinic_id = "clinic_id" + '=' + this.clinic_id
+                var doc_id = clinic_id + '&' + doctor_id
+                var urls = '/pages/doctor/details?' + doc_id
+                wepy.navigateTo({
+                    url: urls
+                })
+            },
+            // 跳转图片详情
+            jumpImg() {
+                var id = this.clinic_id
+                wepy.navigateTo({
+                    url: '/pages/hospital/clinic?id=' + id
+                })
+            },
+            jumpImgs() {
+                var id = this.clinic_id
+                wepy.navigateTo({
+                    url: '/pages/hospital/hos_clinic?id=' + id
+                })
+            },
+            //  跳转商品
+            jumpGood(id) {
+                wepy.navigateTo({
+                    url: '/pages/goods/index?id=' + id
+                })
+            },
+            // 导航
+            taps(e) {
+                this.currentTab = e
+                this.nav_num = e
+            },
+            serviceType(e) {
+                this.current_page = 1
+                this.num = e
+                this.goods_num = e
+                this.getGoodslist()
+            },
+            // 获取诊所位置 显示地图
+            getLocation() {
+                var name = this.orderdata.province.value + this.orderdata.city.value + this.orderdata.county.value +  this.orderdata.addr
+                var latitude = parseFloat(this.orderdata.lat)
+                var longltude = parseFloat(this.orderdata.lng)
+                wepy.openLocation({
+                    latitude: latitude,
+                    longitude: longltude,
+                    desc: '我的位置',
+                    address: name,
+                    name: name,
+                    scale: 28
+                })
+            }
+        }
+        //  获取诊所商品分类
+        getCategory() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/goods/category',
+                method: 'GET',
+                data: {
+                    'clinic_id': that.clinic_id
+                }
+            }).then(res => {
+                that.tabTodo = res.data
+                if (res.code !== '1') {return}
+                if (this.num === 0) {
+                    this.num = that.tabTodo[0].id
+                }
+                if (that.tabTodo.length > 0) {
+                    that.goods_num = that.tabTodo[0].id
+                    that.getGoodslist()
+                }
+                that.$apply()
+            })
+        }
+        //  获取诊所商品列表
+        getGoodslist(append) {
+            var that = this
+            this.isload = true
+            this.showloading()
+            console.log('that.goods_num',that.goods_num)
+            wepy.request({
+                url: '/weiappapi/goods/clinicgoodslist',
+                method: 'GET',
+                data: {
+                    'clinic_id': that.clinic_id,
+                    'cat_id': that.goods_num,
+                    'current_page': that.current_page,
+                    'page_size': 10
+                }
+            }).then(res => {
+                this.isload = false
+                this.showloading(false)
+                that.total_count = res.data.total_count
+                if (append) {
+                    that.tab_item = that.tab_item.concat(res.data.list)
+                } else {
+                    that.tab_item = res.data.list
+                }
+                that.$apply()
+            })
+        }
+        //  获取诊所详情
+        gethospital() {
+            var that = this
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/findclinic/clinicdetail',
+                method: 'GET',
+                data: {
+                    'clinic_id': that.clinic_id
+                }
+            }).then(res => {
+                this.showloading(false)
+                // '880101',  '未开通店铺'
+                if(res.code === '880101') {
+                    wepy.switchTab({
+                        url: '/pages/index'
+                    })
+                }
+                if (res.code === '1') {
+                    that.orderdata = res.data
+                    if (that.orderdata.clinic_photo) {
+                        this.header_bg = that.orderdata.clinic_photo[0]
+                    }
+                    if (!this.header_bg) {
+                        this.header_bg = this.imgBaseUrl + 'hos-bg.png'
+                    }
+                    this.is_appoint = that.orderdata.is_appoint
+                }
+                 
+                that.$apply()
+            })
+        }
+        // 获取医生列表
+        getdoctor(append) {
+            // this.initCancel = false
+            this.showloading()
+            var that = this
+            this.nolocal = this.sale === 'distance'
+            wepy.request({
+                url: '/weiappapi/findclinic/clinicdoctorlist',
+                method: 'GET',
+                data: {
+                    clinic_id: that.clinic_id,
+                    current_page: that.current_page,
+                    page_size: 6
+                }
+            }).then(res => {
+                // this.initCancel = true
+                this.showloading(false)
+                if (res.code === '1') {
+                    that.hos_doctors = res.data
+                    if (append) {
+                        that.hos_doctor = that.hos_doctor.concat(res.data.list)
+                    } else {
+                        that.hos_doctor = res.data.list
+                    }
+                    that.$apply()
+                }
+            })
+        }
+        // 诊所评价列表
+        getCliniccomment(append) {
+            var that = this
+            that.showloading()
+            wepy.request({
+                url: '/weiappapi/clinicshop/cliniccomment',
+                method: 'POST',
+                data: {
+                    'clinic_id': that.clinic_id,
+                    'type': that.type,
+                    'tag': that.tag,
+                    'current_page': that.current_page,
+                    'page_size': 20
+                }
+            }).then(res => {
+                that.showloading(false)
+                that.cliniccomment = res.data
+                if (append) {
+                    that.commentlist = that.commentlist.concat(res.data.list)
+                    that.comment = that.commentlist
+                    that.page_sizes = that.commentlist.length
+                } else {
+                    that.commentlist = res.data.list
+                    that.comment = that.commentlist
+                    that.page_sizes = that.commentlist.length
+                }
+                // 诊所评价数量
+                that.commentnums = res.data.total_count
+                that.$apply()
+            })
+        }
+        // 诊所评价综合信息
+        getCliniccommentmessage() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/clinicshop/cliniccommentmessage',
+                method: 'POST',
+                data: {
+                    'clinic_id': that.clinic_id
+                }
+            }).then(res => {
+                that.clini = res.data
+                if (that.clini.avg_score === 0) {
+                    that.clini = {
+                        'avg_score': 5,
+                        'service_score': 5,
+                        'env_score': 5,
+                        'skill_score': 5,
+                        'satisfaction': '100%'
+                    }
+                }
+                that.$apply()
+            })
+        }
+        // 获取评论服务态度的总数
+        getTaglist() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/clinicshop/taglist',
+                method: 'POST',
+                data: {
+                    'clinic_id': that.clinic_id,
+                    'type': that.type
+                }
+            }).then(res => {
+                that.taglist = res.data
+                that.$apply()
+            })
+        }
+        onLoad(options) {
+            if (options.iscomment){
+                this.nav_num = 1
+                this.currentTab = 1
+            }
+            this.patientInfo = this.getUserInfobyStorage()
+            this.clinic_id = options.id
+            ///////
+            this.gethospital()
+            this.getdoctor()
+            this.getCategory()
+            this.getCliniccomment()
+            this.getCliniccommentmessage()
+            this.getTaglist()
+        }
+        onShow() {
+            if (this.num != 0) {
+                this.getGoodslist()
+            }
+        }
+        PageInit() {
+            // this.gethospital()
+            // this.getdoctor()
+            // this.getCategory()
+            // this.getCliniccomment()
+            // this.getCliniccommentmessage()
+            // this.getTaglist()
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+    .payPanel{background: #fff;padding:5rpx 32rpx;border-top:1rpx solid #ededed;display: block;
+    .btn-NoFill{
+        float: right;
+    }
+}
+    .HSwrap{
+        width: 100%;
+        // height: 1200rpx;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+    }
+    .header {
+        position: relative;
+        width: 750rpx;
+        height: 300rpx;
+        // background: #f5f7fa url('@{imgbaseUrl}/hos-bg.png') top left no-repeat;
+        background-size: 100% 100%;
+        .head_bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            z-index: 1;
+            width: 100%;
+            height: 300rpx;
+        }
+        .head_cl {
+            position: absolute;
+            z-index: 2;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 300rpx;
+            background: rgba(0, 0, 0, .2);
+        }
+        .head_c2 {
+            position: absolute;
+            z-index: 2;
+            left: 0;
+            bottom: 0;
+            width: 100%;
+            height: 100rpx;
+            background: -webkit-linear-gradient(rgba(0, 0, 0, 0), rgba(0, 0, 0, .5));
+        }
+        .hd_t {
+            position: absolute;
+            z-index: 2;
+            width: 100%;
+            box-sizing: border-box;
+            margin-top: 240rpx; // text-align: center;
+            padding-left: 215rpx;
+            display: flex;
+            align-items: center;
+            .hd_t1 {
+                // margin-left: 80rpx;
+                max-width: 360rpx;
+                margin-right: 12rpx;
+                font-size: 40rpx;
+                color: #ffffff;
+                line-height: 1;
+                overflow: hidden;  /*溢出隐藏*/
+                text-overflow: ellipsis; /*以省略号...显示*/
+                white-space: nowrap;  /*强制不换行*/
+            }
+            .hd_img {
+                display: inline-block;
+                width: 60rpx;
+                height: 30rpx;
+            }
+        }
+        .vd {
+            position: absolute;
+            z-index: 2;
+            left: 35rpx;
+            bottom: -20rpx;
+            width: 160rpx;
+            height: 160rpx;
+            border-radius: 8rpx;
+            background: #ffffff url('@{imgbaseUrl}/zensuo.png') top left no-repeat;
+            background-size: 100% 100%;
+            box-shadow: 2rpx 8rpx 20rpx rgba(51, 51, 51, 0.11);
+            image {
+                width: 100%;
+                height: 100%;
+                border-radius: 8rpx;
+            }
+            /*.vd_but{*/
+            /*position: absolute;*/
+            /*top: 0;*/
+            /*left: 0;*/
+            /*right: 0;*/
+            /*bottom: 0;*/
+            /*margin: auto;*/
+            /*width: 60rpx;*/
+            /*height: 60rpx;*/
+            /*background: hotpink;*/
+            /*}*/
+        }
+    }
+    .act {
+        width: 100%;
+        height: 20rpx;
+        background: #ffffff;
+    }
+    .activity {
+        width: 100%;
+        height: 100rpx;
+        line-height: 100rpx;
+        background: #ffffff;
+        .act_t {
+            float: left;
+            margin-left: 30rpx;
+            font-size: 28rpx;
+            color: #333;
+            .act_img {
+                float: left;
+                margin-top: 38rpx;
+                width: 32rpx;
+                height: 32rpx;
+                margin-right: 12rpx;
+            }
+        }
+        .act_b {
+            float: right;
+            margin-right: 30rpx;
+            margin-top: 38rpx;
+            width: 26rpx;
+            height: 26rpx;
+        }
+    }
+    .navs {
+        display: flex;
+        height: 96rpx;
+        line-height: 96rpx;
+        text-align: center;
+        color: #666666;
+        font-size: 28rpx;
+        /*border-top: 1rpx solid #ededed;*/
+        background: #fff;
+        .nav_list {
+            flex: 1;
+            .curs {
+                font-weight: bold;
+            }
+            .cur {
+                display: block;
+                width: 60rpx;
+                height: 2px;
+                background: #4287ff;
+                margin: auto;
+                margin-top: -2px;
+            }
+        }
+    }
+    .tabTodo {
+        float: left;
+        width: 100%;
+        // height:804rpx;
+        
+        border-top: 1rpx solid #ededed;
+        background: #fff;
+        overflow: hidden;
+        .tab_s {
+            float: left;
+            width: 24%;
+            height: 100%;
+            background: #f8f8f8;
+            .tab_is {
+                width: 180rpx;
+                height: 100rpx;
+                line-height: 100rpx;
+                text-align: center;
+                background: #f8f8f8;
+                font-size: 28rpx;
+                color: #666666;
+            }
+            .cur {
+                background: #ffffff;
+                color: #333333;
+            }
+        }
+        .tab_item {
+            float: left;
+            width: 68%;
+            height: 1000rpx;
+            padding: 30rpx;
+            .tab_ct {
+                width: 100%;
+                height: 100%;
+                .tab_to {
+                    float: left;
+                    margin-bottom: 30rpx;
+                    width: 100%;
+                    height: 180rpx;
+                    background: #fff;
+                    .tob_img {
+                        float: left;
+                        display: inline-block;
+                        margin: 0 30rpx 30rpx 0;
+                        width: 160rpx;
+                        height: 160rpx;
+                        border-radius: 6rpx;
+                        image{
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 6rpx;
+                        }
+                    }
+                    .tab_t {
+                        font-size: 0;
+                        .tab_t1 {
+                            display: inline-block;
+                            width: 230rpx;
+                            font-size: 30rpx;
+                            color: #333333;
+                            font-weight: 700;
+                            overflow: hidden;  /*溢出隐藏*/
+                            text-overflow: ellipsis; /*以省略号...显示*/
+                            white-space: nowrap;  /*强制不换行*/
+                        }
+                        .tab_t2 {
+                            display: block;
+                            width: 260rpx;
+                            margin-top: 10rpx;
+                            font-size: 24rpx;
+                            color: #929292;
+                            overflow: hidden;  /*溢出隐藏*/
+                            text-overflow: ellipsis; /*以省略号...显示*/
+                            white-space: nowrap;  /*强制不换行*/
+                        }
+                        .tab_t3 {
+                            display: block;
+                            margin-top: 3rpx;
+                            font-size: 22rpx;
+                            color: #929292;
+                        }
+                        .tab_t4 {
+                            display: inline-block;
+                            margin-top: 10rpx;
+                            color: #ff8c00;
+                            .tab_t5 {
+                                font-size: 22rpx;
+                                padding-right: 6rpx;
+                            }
+                            .tab_t6 {
+                                font-size: 34rpx;
+                                padding-right: 20rpx;
+                            }
+                            .tab_t7 {
+                                font-size: 20rpx;
+                                color: #929292;
+                                padding-right: 6rpx;
+                                text-decoration: line-through;
+                            }
+                        }
+                    }
+                }
+                .foots_s {
+                    width: 100%;
+                    height: 50rpx;
+                    color: #929292;
+                    margin: 20rpx 0;
+                    font-size: 22rpx;
+                    text-align: center;
+                    text {
+                        width: 100%;
+                        text-align: center;
+                    }
+                }
+            }
+        }
+    }
+    .comentTodo {
+        .comment {
+            width: 100%;
+            height: 160rpx;
+            background: #ffffff;
+            font-size: 0;
+            padding: 10rpx 0;
+            border-top: 1rpx solid #ededed;
+            display: flex;
+            align-items: center;
+            .cm_left {
+                float: left;
+                width: 210rpx;
+                height: 100%;
+                text-align: center;
+                font-size: 0;
+                overflow: hidden;
+                .cm_l1 {
+                    font-size: 54rpx;
+                    font-weight: 700;
+                    color: #ff8c00;
+                    margin: 10rpx 0 18rpx 0;
+                }
+                .cm_l2 {
+                    font-size: 24rpx;
+                    color: #666666;
+                }
+            }
+            .cm_auto {
+                float: left;
+                width: 48%;
+                .cm_t {
+                    font-size: 0;
+                    margin: 0rpx 0rpx 15rpx 10rpx;
+                    position: relative;
+                    &:last-child {
+                        margin-bottom: 0;
+                    }
+                    .cm_t1 {
+                        display: inline-block;
+                        margin-right: 20rpx;
+                        font-size: 22rpx;
+                        color: #919191;
+                        vertical-align: center;
+                    }
+                    .cm_t2 {
+                        position: relative;
+                        top: 3rpx;
+                        width: 100rpx;
+                        font-size: 22rpx;
+                        display: inline-block;
+                        margin-right: 40rpx;
+                    }
+                    .cm_t3 {
+                        display: inline-block;
+                        font-size: 22rpx;
+                        color: #ff8c00;
+                        margin-right: 60rpx;
+                        vertical-align: center;
+                    }
+                }
+            }
+            .cm_line{
+                float: left;
+                width: 3rpx;
+                height: 80rpx;
+                background: #ededed;
+            }
+            .cm_right {
+                float: left;
+                width: 190rpx;
+                height: 100%;
+                text-align: center;
+                overflow: hidden;
+                .cm_l1 {
+                    font-size: 40rpx;
+                    color: #919191;
+                    margin: 20rpx 0 20rpx 0;
+                }
+                .cm_l2 {
+                    font-size: 24rpx;
+                    color: #919191;
+                }
+            }
+        }
+        .content {
+            margin-top: 20rpx;
+            width: 100%;
+            overflow: hidden;
+            background: #ffffff;
+            .bun_all {
+                width: 690rpx;
+                margin-left: 32rpx;
+                margin-top: 20rpx;
+                margin-bottom: 20rpx;
+                height: 100%;
+                overflow: hidden;
+                .btn_w100 {
+                    margin: 0;
+                    float: left;
+                    width: 343rpx;
+                    height: 64rpx;
+                    line-height: 64rpx;
+                    border-radius: 0;
+                    border: 1rpx solid #4287ff;
+                    background: #fff;
+                    font-size: 28rpx;
+                    color: #4287ff;
+                    &:nth-of-type(1) {
+                        border-top-left-radius: 8rpx;
+                        border-bottom-left-radius: 8rpx;
+                    }
+                    &:nth-of-type(2) {
+                        border-top-right-radius: 8rpx;
+                        border-bottom-right-radius: 8rpx;
+                    }
+                }
+                .cur {
+                    border: 0rpx solid #fff;
+                    color: #ffffff;
+                    background: #4287ff;
+                }
+            }
+            .btt {
+                padding: 0rpx 30rpx;
+                width: 690rpx;
+                overflow: hidden;
+                margin-bottom: 30rpx;
+                .btn-Cances {
+                    float: left;
+                    margin-right: 14rpx;
+                    margin-bottom: 10rpx;
+                    font-size: 24rpx;
+                    color: #666666;
+                    padding: 12rpx;
+                    border: 1rpx solid #fff;
+                    border-radius: 4rpx;
+                    background: #f6f6f6;
+                }
+                .btn_Canc {
+                    color: #ff8c00;
+                    background: #fff3e5;
+                    border: 1rpx solid #ff8c00;
+                }
+            }
+            .commentss{
+                position: relative;
+                width: 100%;
+                .nodata {
+                    background:url('http://weiapp-assets.oss-cn-hangzhou.aliyuncs.com/nodata.png') center 50rpx no-repeat;
+                    text-align:center;
+                    background-size:314rpx;
+                    .word{
+                        margin-top: 294rpx;
+                        margin-bottom: 160rpx;
+                    }
+                }
+                .comline{
+                    width: 718rpx;
+                    height: 20rpx;
+                    border-bottom: 1rpx solid #ededed;
+                    margin-left: 32rpx;
+                }
+                .foot_line{
+                    margin-top: -5rpx;
+                    width: 100%;
+                    height: 5rpx;
+                    background: #fff;
+                }
+                .foots_s {
+                     width: 100%;
+                     color: #929292;
+                     padding: 20rpx 0;
+                     font-size: 22rpx;
+                     text-align: center;
+                     background: #f2f5fa;
+                     text {
+                         width: 100%;
+                         text-align: center;
+                     }
+                }
+            }
+        }
+    }
+    .doctorTodo {
+        flex:1;
+        display: flex;
+        width: 750rpx;
+        // height: 780rpx;
+        border-top: 1rpx solid #ededed;
+        .foots_s {
+            color: #929292;
+            margin: 20rpx 0;
+            font-size: 22rpx;
+            display: flex;
+            flex-direction: row;
+            text {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+    .clinicTodo {
+        width: 750rpx;
+        overflow: hidden;
+        .details {
+            .details_t {
+                height: 100rpx;
+                line-height: 100rpx;
+                padding: 0 0 0 35rpx;
+                font-size: 24rpx;
+                color: #333333;
+                background: #ffffff;
+                border-top: 1rpx solid #ededed;
+                display: flex;
+                flex-direction: row;
+                .details_i {
+                    display: flex;
+                    flex-direction: row;
+                    align-items: center;
+                    justify-content: center;
+                    width: 100%;
+                    .details_ii {
+                        width: 32rpx;
+                        height: 32rpx;
+                        // margin-top: 36rpx;
+                        margin-right: 30rpx;
+                        // &:nth-of-type(1) {
+                        //     width: 31rpx;
+                        // }
+                    }
+                }
+                .details_t2 {
+                    font-size: 22rpx;
+                    color: #919191;
+                    // margin-left: 433rpx;
+                    text-align: right;
+                    width: 200rpx;
+                }
+                .arrow-right{
+                    margin-right: 32rpx;
+                }
+                // .rig_icon {
+                //     float: right;
+                //     margin-top: 39rpx;
+                //     margin-right: 10rpx;
+                //     width: 26rpx;
+                //     height: 26rpx;
+                // }
+            }
+            .details_img {
+                width: 690rpx;
+                height: 214rpx;
+                padding: 35rpx;
+                display: flex;
+                flex-direction: row;
+                background: #ffffff;
+                border-top: 1rpx solid #ededed;
+                overflow: hidden;
+                .de_img {
+                    float: left;
+                    width: 214rpx;
+                    height: 100%;
+                    margin-right: 22rpx;
+                    image {
+                        width: 214rpx;
+                        height: 100%;
+                    }
+                    &:nth-of-type(3) {
+                        margin-right: 40rpx;
+                    }
+                }
+            }
+        }
+        .clinic_time {
+            margin-top: 20rpx;
+            color: #929292;
+        }
+        .clinic_address {
+            border-top: 1rpx solid #ededed;
+        }
+        .clinic_time,
+        .clinic_address {
+            height: 100rpx;
+            line-height: 100rpx;
+            padding: 0 0 0 35rpx;
+            font-size: 28rpx;
+            color: #333333;
+            background: #ffffff;
+            display: flex;
+            flex-direction: row;
+            .details_i {
+                position: relative;
+                width: 100%;
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                justify-content: center;
+                .details_ii {
+                    width: 32rpx;
+                    height: 32rpx;
+                    // margin-top: 36rpx;
+                    margin-right: 30rpx;
+                }
+                .details_t1 {
+                    display: block;
+                    margin-top: 2rpx;
+                    overflow: hidden;
+                    /*溢出隐藏*/
+                    text-overflow: ellipsis;
+                    /*以省略号...显示*/
+                    white-space: nowrap;
+                    /*强制不换行*/
+                    // width: 560rpx;
+                    flex:1;
+                }
+                .arrow-right{
+                    margin-right: 32rpx;
+                }
+                // .rig_icon {
+                //     position: absolute;
+                //     right: 30rpx;
+                //     margin-top: 39rpx;
+                //     width: 26rpx;
+                //     height: 26rpx;
+                // }
+            }
+        }
+        .members {
+            width: 100%;
+            height: 400rpx;
+            padding: 0 0 0 35rpx;
+            margin-top: 20rpx;
+            font-size: 24rpx;
+            color: #333333;
+            background: #ffffff;
+            border-top: 1rpx solid #ededed;
+            .details_i {
+                display: flex;
+                flex-direction: row;
+                margin-top: 38rpx;
+                .details_ii {
+                    width: 30rpx;
+                    height: 30rpx;
+                    margin-right: 20rpx;
+                }
+            }
+        }
+    }
+    .box_f {
+        top: 0;
+        position: fixed;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, .5);
+        .box {
+            position: fixed;
+            top: 30rpx;
+            left: 55rpx;
+            width: 640rpx;
+            height: 800rpx;
+            text-align: center;
+            border-radius: 16rpx;
+            background: #f5f7fa url('@{imgbaseUrl}/box_bg.png') top left no-repeat;
+            background-size: 100% 100%;
+            .box_img {
+                width: 160rpx;
+                height: 160rpx;
+                margin: auto;
+                margin-top: 60rpx;
+                image {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .tatle_name {
+                display: block;
+                margin-top: 30rpx;
+                font-size: 30rpx;
+                color: #333333;
+                &:nth-of-type(2) {
+                    margin-top: 60rpx;
+                }
+            }
+            .cm_t {
+                margin-top: 20rpx;
+                font-size: 0;
+                .cm_t2 {
+                    width: 100rpx;
+                    font-size: 22rpx;
+                    display: inline-block;
+                    margin-right: 40rpx;
+                }
+                .cm_t3 {
+                    display: inline-block;
+                    font-size: 22rpx;
+                    color: #ff8c00;
+                    margin-right: 60rpx;
+                }
+            }
+            .member_s {
+                height: 400rpx;
+                padding: 0 60rpx;
+                margin-top: 40rpx;
+                font-size: 28rpx;
+                color: #333333;
+                .details_i {
+                    display: flex;
+                    flex-direction: row;
+                    margin-top: 10rpx;
+                    .details_ii {
+                        display: inline-block;
+                        margin-top: 5rpx;
+                        width: 30rpx;
+                        height: 30rpx;
+                        margin-right: 20rpx;
+                    }
+                }
+            }
+            .button_x {
+                margin: auto;
+                margin-top: 20rpx;
+                width: 83rpx;
+                height: 83rpx;
+            }
+        }
+    }
+    .dxin {
+        position: fixed;
+        top: 72%;
+        right: 70rpx;
+        width: 152rpx;
+        height: 152rpx;
+        background: rgba(255,255,255,.1) url('@{imgbaseUrl}/dxin.png') top left no-repeat;
+        background-size: 100% 100%;
+    }
+</style>

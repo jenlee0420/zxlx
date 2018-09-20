@@ -1,0 +1,231 @@
+<template>
+    <view class="cascade flex-column">
+        <view class="shade" @tap="close"></view>
+        <view class="local">
+            <div class="cb4b4b4 fs26 flex-1"><span class="location1"></span>当前位置</div>
+            <div class="flex-1">
+                <text class="flex-1">{{currentCity.city_name}}</text>
+                <div class="maincolor" @tap="reloadlocal"><span class="refresh mr12"></span>刷新</div>
+            </div>
+        </view>
+        <view class="flex">
+            <repeat for="{{zIndex}}" index="i" item="ii">
+                <scroll-view class="scrollView view{{i}}" scroll-y="true" scroll-into-view="cascade{{res[i].id}}">
+                    <ul>
+                        <repeat for="{{list[i]}}" index="index" item="item">
+                            <!-- <li id='all' wx:if="{{i==0 && index==0}}" :class="{'act':res[i].id === ''}" @tap="renderChild('all')">全国地区</li> -->
+                            <li id="cascade{{item.id}}" :class="{'act':res[i].id === item.id}" @tap.stop="renderChild({{i}}, {{index}})">{{item.name}}</li>
+                        </repeat>
+                    </ul>
+                </scroll-view>
+            </repeat>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Cascade extends wepy.component {
+        props = {
+            zIndex: {
+                type: Number,
+                default: 2
+            },
+            current: {
+                type: Array,
+                default: () => []
+            }
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {
+            list: [],
+            res: [],
+            currentCity:''
+        }
+        computed = {}
+        methods = {
+            renderChild(i, index) {
+                this.autoRenderChild(i, index)
+            },
+            close() {
+                this.$emit('cascadeClose')
+            },
+            reloadlocal() {
+                this.$parent.$parent.getLocalSetting_user()
+                this.getLocalinfo()
+            }
+        }
+        getLocalinfo() {
+            wepy.getLocation().then(res => {
+                this.$parent.$parent.getCityCode(res).then(mapdata => {
+                    wepy.request({
+                        url: '/weiappapi/promotion/getareaid',
+                        method: 'POST',
+                        data: {
+                            code: mapdata.adcode,
+                        }
+                    }).then(data => {
+                        if (data.data) {
+                            this.currentCity= data.data
+                            this.currentCity.lng = res.longitude
+                            this.currentCity.lat = res.latitude
+                            this.$apply()
+                        }
+                        let localinfo = JSON.stringify(this.currentCity)
+                        wepy.setStorageSync('localinfo', localinfo)
+                    })
+                })
+            })
+        }
+        events = {}
+        autoRenderChild(i, index) {
+            if (i === 'all'){
+                let res = [{id: '', name: "全国地区"}, {id: '', name: "全国地区"}]
+                this.$emit('selectSuccess', res)
+                return
+            }
+            let arr = this.list[0]
+            if (i > 0) {
+                arr = this.res[i - 1].city
+            }
+            this.res[i] = arr[index]
+            if (i === this.zIndex - 1) {
+                let res = this.res.map(v => {
+                    return {
+                        id: v.id,
+                        name: v.name,
+                        code: v.code ? v.code : ''
+                    }
+                })
+                //记录新的城市信息
+                let info = this.localinfobyStorage()
+                info.city_id = res[1].id
+                info.city_name = res[1].name
+                info.province_id = res[0].id
+                info.province_name = res[0].name
+                info.code = res[1].code
+                console.log('fff',info)
+                wepy.setStorageSync('localinfo', JSON.stringify(info))
+                //触发父级的回调
+                this.$emit('selectSuccess', res)
+            } else {
+                this.list[i + 1] = arr[index].city
+                this.$apply()
+            }
+        }
+        getCityJson() {
+            return new Promise((resolve, reject) => {
+                wepy.request({
+                    url: 'weiappapi/promotion/arealist',
+                    method: 'post',
+                    data: {}
+                }).then(res => {
+                    this.list[0] = res.data.list
+                    this.$apply()
+                    resolve(res)
+                }).catch(err => {
+                    reject(err)
+                })
+            })
+        }
+        onLoad() {
+            console.log('cascade show1')
+            if (wepy.getStorageSync('localinfo')) {
+                this.currentCity = JSON.parse(wepy.getStorageSync('localinfo'))
+            }
+            else {
+                this.getLocalinfo()
+            }
+            this.getCityJson().then(() => {
+                // this.res = JSON.parse(JSON.stringify(this.current))
+                // this.res.forEach((v, i) => {
+                //     if (i < 1) return
+                //     this.autoRenderChild(i, v.id)
+                // })
+            })
+        }
+        onShow(){
+        }
+    }
+</script>
+
+<style lang="less">
+    .cascade {
+        color: #666666;
+        font-size: 28rpx;
+        position: absolute;
+        display: flex;
+        flex: 1;
+        width: 100%;
+        z-index: 10;
+        top: 98rpx;
+        height: 100%;
+        left: 0;
+        .shade {
+            position: absolute;
+            height: 100vh;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            top: 98rpx;
+            margin-top: 1rpx;
+            background-color: rgba(0, 0, 0, .3);
+        }
+        .local {
+            padding: 0 32rpx;
+            height: 130rpx;
+            display: flex;
+            flex-direction: column;
+            background-color: #fff;
+            text-align: left;
+            border-bottom: 1rpx solid @bColor;
+            position: relative;
+            div {
+                display: flex;
+                align-items: center;
+            }
+        }
+        .scrollView {
+            position: relative;
+            z-index: 100;
+            background-color: #fff; // border-top: 1rpx solid #ededed;
+            padding-bottom: 10rpx;
+            height:500rpx;
+            ul {
+                position: relative;
+                display: flex;
+                flex-direction: column;
+                flex-wrap: wrap;
+                li {
+                    text-align: left;
+                    padding-left: 32rpx;
+                    color: #333;
+                    box-sizing: border-box;
+                    height: 80rpx;
+                    line-height: 80rpx;
+                    width: 100%;
+                    &.act {
+                        font-weight: bold;
+                        background-color: #fff;
+                    }
+                }
+            }
+        }
+        .view0 {
+            width: 232rpx;
+            background-color: #f8f8f8;
+        }
+        .view1 {
+            flex: 1;
+            ul {
+                li {
+                    padding-left: 0rpx;
+                    margin-left: 30rpx;
+                    border-bottom: 1rpx solid @bColor;
+                }
+            }
+        }
+    }
+</style>

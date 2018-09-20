@@ -1,0 +1,578 @@
+<template>
+    <view class="content" wx:if="{{archives}}">
+        <view class="header case{{archives.health_type.id}}">
+            <view class="l_irem">
+                <circle :perscore.sync="score" :typeid.sync="typeid"></circle>
+                <view class="l_bg">
+                    <view class="l_t">
+                        <text>{{baseScore}}</text>
+                        <text>分</text>
+                    </view>
+                    <text class="l_t2">{{archives.health_type.name}}</text>
+                </view>
+            </view>
+            <view class="r_item">
+                <view class="r_t">
+                    <view class="headbox">
+                        <view class="heardimg">
+                            <image mode="aspectFill" src="{{archives.family.avatar ? archives.family.avatar : baseHeadImg}}" @error="default_head" data-img="$parent,archives,family,avatar" />
+                        </view>
+                        <text class="fs28">{{archives.family.user_name ? archives.family.user_name : archives.family.nickname}}</text>
+                    </view>
+                    <text class="flex-1">您的口腔的健康状态</text>
+                    <span class="flex-1 flex">击败了全国<span class="fs26 b"> {{archives.rank}} </span>的用户</span>
+                    <span class="line"></span>
+                    <text class="flex-1">最近报告：{{archives.add_time}}</text>
+                </view>
+            </view>
+        </view>
+        <view class="recommend">
+            <span class="re_text">检查内容</span>
+        </view>
+        <view class="case" wx:for="{{archives.assess}}" wx:key="{{index}}" wx:for-item="item" wx:for-index="index">
+            <view class="case_i" @tap="but_case({{item.id}}, {{item.selected_child.id}})">
+                <view class="case_lg {{item.id == index+1?'case_'+(index+1): ''}}"></view>
+                <text class="p-0-32 flex-1">{{item.name}}</text>
+                <text class="btn-No">{{item.selected_child.name}}</text>
+                <view class="rig_icon"></view>
+            </view>
+        </view>
+        <!--口腔检查没有图片的样式-->
+        <view class="mt20">
+            <view class="recommend">
+                <span class="re_text">口腔全景片</span>
+            </view>
+            <view class="panorama" wx:if="{{archives.kq_ct_image}}">
+                <view class="pan_imgs">
+                    <image src="{{archives.kq_ct_image}}" mode="aspectFit" />
+                </view>
+            </view>
+            <view class="panorama" wx:else>
+                <view class="pan_img case_error"></view>
+                <text>暂无全景片,需去诊所拍CT后由专业医生提供</text>
+            </view>
+            <view class="recommend">
+                <span class="re_text">牙位图</span>
+            </view>
+            <view class="teethContent p-0-32" wx:if="{{archives.symptoms}}">
+                <view class="teethImg">
+                    <span class="label-gray mt5">上颌</span>
+                    <view class="rel">
+                        <image src="{{imgBaseUrl}}teeth_bg.png" mode="widthFix" />
+                        <span class="teeth_loc"><image mode="widthFix" src="{{imgBaseUrl}}teeth_loc.png" /></span>
+                        <block wx:for="{{archives.symptoms}}" wx:key="index">
+                            <span class="teethact t{{index}}"></span>
+                        </block>
+                    </view>
+                    <span class="label-gray mt20">下颌</span>
+                </view>
+                <view class="teethInfo">
+                    <block wx:for="{{archives.symptoms}}" wx:for-item="item" wx:for-index="index" wx:key="index">
+                        <block wx:for="{{item.partSymptom}}" wx:for-item="subitem" wx:for-index="subindex" wx:key="subindex">
+                            <block wx:for="{{subitem}}" wx:for-item="partSymptomArr" wx:for-index="subindex2" wx:key="subindex2">
+                                <block wx:for="{{partSymptomArr}}" wx:for-item="partSymptom" wx:for-index="subindex3" wx:key="subindex3">
+                                    <view class="flex mb30">
+                                        <span class="maincolor fs22 nowrap">#{{index}}-{{partSymptom.name}}：</span>
+                                        <span class="fs24 c666">{{partSymptom.remark}}</span>
+                                    </view>
+                                </block>
+                            </block>
+                        </block>
+                        <block wx:for="{{item.symptom}}" wx:for-item="subitem2" wx:for-index="subindex2" wx:key="subindex2">
+                            <view class="flex mb30">
+                                <span class="maincolor fs22 nowrap">#{{index}}-{{subitem2.name}}：</span>
+                                <span class="fs24 c666">{{subitem2.remark}}</span>
+                            </view>
+                        </block>
+                    </block>
+                </view>
+            </view>
+            <view class="panorama" wx:else>
+                <view class="pan_img case_error"></view>
+                <text>暂无牙位图,需去诊所拍CT后由专业医生提供</text>
+            </view>
+            <view wx:if="{{archives.doctor}}">
+                <view class="doct_proposal">
+                    <navigator hover-class="none" url="/pages/doctor/details?clinic_id={{archives.doctor.clinic_id}}&id={{archives.doctor.doctor_id}}" class="doct_form">
+                        <view class="docter_l">
+                            <image src="{{archives.doctor.doctor_photo}}" mode="aspectFill" />
+                        </view>
+                        <view class="docter_r flex-1">
+                            <text class="doc_r1">{{archives.doctor.doctor_name}}</text>
+                            <text class="doc_r2">{{archives.doctor.clinic_name}}</text>
+                        </view>
+                        <view class="arrow-right">
+                        </view>
+                    </navigator>
+                    <view class="proposal_t">
+                        <text>医生建议： </text>
+                        <text>{{archives.doctor.doctor_advice}}</text>
+                    </view>
+                </view>
+                <view class="foots">
+                    <text>以上诊断报告由河狸口腔合作诊所提供</text>
+                </view>
+            </view>
+            <view wx:else>
+                <view class="recommend">
+                    <span class="re_text">医生建议</span>
+                </view>
+                <view class="panorama_1">
+                    <view class="pan_img case_proposals"></view>
+                    <text>暂无建议,需去诊所预约后由专业医生提供</text>
+                </view>
+            </view>
+            <view wx:if="{{!archives.doctor.doctor_advice}}">
+                <view class="recommend">
+                    <span class="re_text">建立口腔档案</span>
+                </view>
+                <view class="panorama_2">
+                    <!-- <button class="btn_w100">河狸会员-免费建立个人口腔档案</button> -->
+                    <navigator hover-class="none" url="{{TenOral}}" class="btn_w100">
+                    立即预约-购买十项口腔检查项目
+                    </navigator>
+                    <text>以上建议仅供参考,不作为任何医疗诊断依据</text>
+                    <navigator hover-class="none" url="/pages/archives/diagnosis?family_id={{archives.family_id}}" class="again">
+                        <text>重新诊断</text>
+                        <span class="again_img"></span>
+                    </navigator>
+                </view>
+            </view>
+        </view>
+        <!--口腔检查没有图片的样式-->
+        <!-- <view>
+                                                <view class="doct_proposal">
+                                                    <view class="doct_form">
+                                                        <view class="docter_l">
+                                                            <span class="doc_mvp prompt"></span>
+                                                        </view>
+                                                        <view class="docter_r">
+                                                            <text class="doc_r1">张医生</text>
+                                                            <text class="doc_r2">皓久口腔连锁千峰路店</text>
+                                                        </view>
+                                                    </view>
+                                                    <view class="proposal_t">
+                                                        <text>医生建议： </text>
+                                                        <text>他会不断刺激牙周组织，他会不断刺激牙周组织，他会不断刺激牙周组织，他会不断刺激牙周组织，他会不断刺激牙周组织，他会不断刺激牙周组织，他会不断刺激牙周组织，他会不断刺激牙周组织。</text>
+                                                    </view>
+                                                </view>
+                                                <view class="foots">
+                                                    <text>以上诊断报告由河狸口腔合作诊所提供</text>
+                                                </view>
+                                            </view> -->
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '../mixins/global'
+    import circle from '@/components/circle'
+    export default class Presentation extends wepy.component {
+        components = {
+            circle: circle
+        }
+        props = {
+            archives: {},
+            baseScore: {}
+        }
+        mixins = [Mixin]
+        data = {
+            currentTab: 0
+        }
+        computed = {
+            score() {
+                if (this.archives) {
+                    return this.archives.score
+                }
+            },
+            typeid() {
+                if (this.archives && this.archives.health_type) {
+                    return this.archives.health_type.id
+                }
+            }
+        }
+        methods = {
+            but_case(pid, childid) {
+                var urls = '/pages/archives/case?pid=' + pid + '&' + 'childid=' + childid
+                wepy.navigateTo({
+                    url: urls
+                })
+            },
+            //跳转医生详情页
+            NavToDoc(id) {
+                wepy.navigateTo({url:'/pages/doctor/details?id=' + id})
+            }
+        }
+        onLoad() {}
+    }
+</script>
+
+<style lang="less">
+    @import '../style/teethcss.less';
+    .case1 {
+        background: url('@{imgbaseUrl}/healthystate1.png') top left no-repeat;
+    }
+    .case2 {
+        background: url('@{imgbaseUrl}/healthystate2.png') top left no-repeat;
+    }
+    .case3 {
+        background: url('@{imgbaseUrl}/healthystate3.png') top left no-repeat;
+    }
+    .case4 {
+        background: url('@{imgbaseUrl}/healthystate4.png') top left no-repeat;
+    }
+    .recommend {
+        border-bottom: 1rpx solid @bColor;
+    }
+    .content {
+        height: 100%;
+        .header {
+            display: flex;
+            flex-direction: row;
+            height: 474rpx;
+            background-size: 100% 100%;
+            font-size: 0;
+            overflow: hidden;
+            .l_irem {
+                width: 374rpx;
+                height: 100%;
+                overflow: hidden;
+                position: relative;
+                .l_bg {
+                    width: 240rpx;
+                    height: 240rpx;
+                    margin-top: 77rpx;
+                    margin-left: 64rpx;
+                    border-radius: 100%;
+                    text-align: center;
+                    overflow: hidden;
+                    .l_t {
+                        margin-top: 60rpx;
+                        font-size: 87rpx;
+                        font-weight: bold;
+                        color: #ffffff;
+                        text {
+                            &:nth-of-type(2) {
+                                font-size: 24rpx;
+                            }
+                        }
+                    }
+                    .l_t2 {
+                        display: inline-block;
+                        font-size: 22rpx;
+                        color: #ffffff;
+                    }
+                }
+            }
+            .r_item {
+                width: 376rpx;
+                height: 100%;
+                font-size: 0;
+                .r_t {
+                    margin-top: 92rpx;
+                    height: 210rpx;
+                    display: flex;
+                    flex-direction: column;
+                    font-size: 20rpx;
+                    color: #ffffff;
+                    .headbox{
+                        display: flex;
+                        align-items: center;
+                        margin-left: -10rpx;
+                        margin-bottom: 10rpx;
+                    }
+                    .heardimg {
+                        height: 64rpx;
+                        width: 64rpx;
+                        background: url('@{imgbaseUrl}/fileHeader.png') no-repeat left;
+                        background-size: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        margin-right: 12rpx;
+                        image {
+                            border-radius: 50%;
+                            height: 44rpx;
+                            width: 44rpx;
+                        }
+                    }
+                    .line {
+                        margin-bottom: 12rpx;
+                        width: 288rpx;
+                        height: 2rpx;
+                        display: block;
+                        background: rgba(255, 255, 255, .3);
+                    }
+                    text {
+                        display: block;
+                    }
+                }
+            }
+        }
+        .case {
+            background: #ffffff;
+            display: flex;
+            align-items: center;
+            .case_i {
+                height: 108rpx;
+                border-bottom: 1rpx solid @bColor;
+                display: flex;
+                align-items: center;
+                padding: 0 32rpx 0 0;
+                margin-left: 32rpx;
+                width: 100%;
+                box-sizing: border-box;
+                text {
+                    float: left;
+                    font-size: 28rpx;
+                    color: #333333;
+                }
+                .btn-No {
+                    height: 40rpx;
+                    padding: 0 10rpx;
+                    line-height: 40rpx;
+                    font-size: 26rpx;
+                    border-radius: 4rpx;
+                    color: #666;
+                }
+                .bg-cor1 {
+                    /*// 健康*/
+                    color: #33b55b;
+                    border: 1rpx solid #1ed556;
+                    background: #e7ffee;
+                }
+                .bg-cor2 {
+                    // 轻度
+                    color: #00a8ff;
+                    border: 1rpx solid #00a8ff;
+                    background: #edf8ff;
+                }
+                .bg-cor3 {
+                    // 中等
+                    color: #ff7800;
+                    border: 1rpx solid #ff9000;
+                    background: #fff4e5;
+                }
+                .bg-cor4 {
+                    // 重度
+                    color: #ff4242;
+                    border: 1rpx solid #ff5d5d;
+                    background: #feeded;
+                }
+                .rig_icon {
+                    width: 26rpx;
+                    height: 26rpx;
+                }
+            }
+            /*&:last-of-type{*/
+            /*margin-bottom: 20rpx;*/
+            /*}*/
+            &:nth-of-type(13) {
+                margin-bottom: 20rpx;
+            }
+        }
+        .panorama,
+        .panorama_1,
+        .panorama_2,
+        .teethContent {
+            height: auto;
+            font-size: 22rpx;
+            color: #666666;
+            text-align: center; // border-top: 1rpx solid #ededed;
+            background: #ffffff;
+            margin-bottom: 20rpx;
+            padding-bottom: 36rpx;
+            padding-top: 34rpx;
+            .pan_img {
+                width: 316rpx;
+                height: 240rpx;
+                margin: auto;
+                margin-bottom: 36rpx;
+                image {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .pan_imgs {
+                width: 686rpx;
+                height: 382rpx; // height: 382rpx;
+                margin: auto;
+                image {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            text {
+                display: inline-block;
+                margin-bottom: 40rpx;
+            }
+        }
+        .teethContent {
+            height: 100%;
+            box-sizing: border-box;
+        }
+        .panorama_b {
+            .pan_t {
+                display: inline-block;
+                width: 88rpx;
+                height: 30rpx;
+                background: #ededed;
+                border-radius: 8rpx;
+                font-size: 20rpx;
+                color: #666666;
+                margin-top: 36rpx;
+                margin-bottom: 0;
+                &:nth-of-type(2) {
+                    margin-top: 0;
+                    margin-bottom: 60rpx;
+                }
+            }
+            .pan_imgs {
+                width: 620rpx;
+                height: 1040rpx;
+                margin: auto;
+                margin-top: 20rpx;
+                margin-bottom: 21rpx;
+                background: #929292;
+            }
+            .pan_text {
+                width: 622rpx;
+                height: 153rpx;
+                padding: 32rpx 30rpx;
+                margin: auto;
+                text-align: left;
+                margin-bottom: 40rpx;
+                background: #ededed;
+                .pt_top {
+                    display: flex;
+                    flex-direction: row;
+                    height: 50%;
+                    &:nth-of-type(2) {
+                        margin-top: 10rpx;
+                    }
+                    text {
+                        &:nth-of-type(1) {
+                            flex: 2;
+                            font-size: 22rpx;
+                            color: #4c98ff;
+                        }
+                        &:nth-of-type(2) {
+                            flex: 8;
+                            font-size: 24rpx;
+                            color: #666666;
+                        }
+                    }
+                }
+            }
+        }
+        .panorama_1 {
+            height: 310rpx;
+            .pan_img {
+                width: 230rpx;
+                height: 160rpx;
+                margin: auto;
+                margin-bottom: 36rpx;
+            }
+        }
+        .panorama_2 {
+            height: 100%;
+            color: #929292;
+            .btn_w100 {
+                &:nth-of-type(1) {
+                    margin-top: 30rpx;
+                    margin-bottom: 30rpx;
+                }
+                &:nth-of-type(2) {
+                    margin-top: 30rpx;
+                    margin-bottom: 30rpx;
+                    border: 1rpx solid #4287ff;
+                    color: #4287ff;
+                    background: #ffffff;
+                }
+            }
+            .again {
+                height: 40rpx;
+                margin: 10rpx auto 14rpx auto;
+                width: 250rpx;
+                font-size: 28rpx;
+                color: #4287ff;
+                overflow: hidden;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                text {
+                    margin-bottom: 0rpx;
+                }
+                span {
+                    margin-left: 10rpx;
+                    display: block;
+                    width: 45rpx;
+                    height: 35rpx;
+                }
+            }
+        }
+        .doct_proposal {
+            padding: 30rpx;
+            background: #ffffff;
+            margin-bottom: 20rpx;
+            .doct_form {
+                display: flex;
+                flex-direction: row;
+                align-items:center;
+                .docter_l {
+                    width: 80rpx;
+                    height: 80rpx;
+                    margin-right: 12rpx;
+                    border: 1rpx solid #ededed;
+                    background: #f5f5f5 url('@{imgbaseUrl}/doc_I.png') top left no-repeat;
+                    background-size: 100% 100%;
+                    border-radius: 50%;
+                    image {
+                        width: 100%;
+                        height: 100%;
+                        border-radius:50%;
+                    }
+                    .doc_mvp {
+                        display: inline-block;
+                        margin-top: 54rpx;
+                        margin-left: 54rpx;
+                        width: 34rpx;
+                        height: 34rpx;
+                    }
+                }
+                .docter_r {
+                    .doc_r1 {
+                        display: block;
+                        font-size: 28rpx;
+                        font-weight: bold;
+                        color: #333333;
+                    }
+                    .doc_r2 {
+                        display: block;
+                        margin-top: 16rpx;
+                        font-size: 22rpx;
+                        color: #919191;
+                    }
+                }
+            }
+            .proposal_t {
+                margin-top: 12rpx;
+                margin-bottom: 30rpx;
+                line-height:34rpx;
+                text {
+                    font-size: 22rpx;
+                    color: #666666;
+                    &:nth-of-type(1) {
+                        font-weight: bold;
+                    }
+                }
+            }
+        }
+        .foots {
+            text-align: center;
+            font-size: 20rpx;
+            color: #929292;
+            margin-bottom: 50rpx;
+        }
+    }
+</style>

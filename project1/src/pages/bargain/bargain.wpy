@@ -1,0 +1,899 @@
+<template>
+    <view class="content" wx:if="{{isload}}">
+        <navigator url="/pages/index" hover-class="none" class="backIndex" open-type="switchTab">回到首页</navigator>
+        <view class="rule" @tap="showRule">
+            <view class="rule_logo asks"></view>
+            <text>砍价规则</text>
+        </view>
+        <view class="barg_top">
+            <view class="barg_ct1">
+                <view class="user_logo">
+                    <image src="{{goodsinfo.user_list.avatar}}" mode="aspectFill" />
+                </view>
+                <view class="user_name">{{goodsinfo.user_list.nickname}}</view>
+                <view class="user_cont">
+                    <text class="bdfh">“</text>
+                    <text class="bdfh">”</text>
+                    <text class="bdfht">{{goodsinfo.rand_title}}</text>
+                </view>
+                <view class="goods">
+                    <view class="goods_left">
+                        <image src="{{goodsinfo.product_list.images[0]}}" mode="aspectFill" />
+                    </view>
+                    <view class="goods_right">
+                        <text class="goods_title">{{goodsinfo.product_list.name}}</text>
+                        <view class="goodsPrices">
+                            <text class="prices_j">￥</text>
+                            <text class="prices_l">{{goodsinfo.product_list.dis_price}}</text>
+                            <text class="prices_r">可砍到: ￥<text class="prices_rt">{{goodsinfo.product_list.floor_price}}</text></text>
+                        </view>
+                    </view>
+                </view>
+                <!--// 成功印章-->
+                <view class="sucss_Img" wx:if="{{goodsinfo.bargain_list.total_bargain_price == goodsinfo.product_list.floor_price }}"></view>
+            </view>
+            <!--砍价信息-->
+            <view class="barg_wrap" wx:if="{{goodsinfo.status < 5}}">
+                <view class="barg_ct2" wx:if="{{goodsinfo.status == 1}}">
+                    <block wx:if="{{myId != userid && goodsinfo.is_bargain == 1}}">已帮助好友砍价</block>
+                    <block wx:else>
+                        已砍至<text class="ba_ct">{{goodsinfo.bargain_list.cut_down_price}}</text>元
+                    </block>
+                </view>
+                <view class="barg_ct2" wx:if="{{goodsinfo.status != 1 || timeout == true}}">
+                    砍价活动已结束！<text wx:if="{{myId != userid}}">请选择其它商品砍价</text>
+                </view>
+                <view class="barg_ct3" wx:if="{{myId == userid || (goodsinfo.is_bargain == 2 && goodsinfo.status == 1)}}">
+                    <block wx:if="{{goodsinfo.bargain_list.bargain_num > 1}}">已有<text class="ba_ct">{{goodsinfo.bargain_list.bargain_num - 1}}</text>位好友帮砍，
+                    </block>已砍掉<text class="ba_ct">{{goodsinfo.bargain_list.total_bargain_price}}</text>元
+                </view>
+            </view>
+            <view class="barg_wrap" wx:if="{{goodsinfo.status == 6}}">
+                <view class="barg_ct3" wx:if="{{myId == userid}}">
+                    你已经砍价成功啦，请及时支付预约金并就诊！
+                </view>
+                <view class="barg_ct3" wx:if="{{myId != userid}}">
+                    好友已砍成，即将为Ta预约就诊！
+                </view>
+            </view>
+            <!--按钮-->
+            <view class="bat_barg" @tap="artJum(0)" wx:if="{{myId != userid && goodsinfo.is_bargain == 2 && !timeout && goodsinfo.status == 1}}">
+                <view class="bt_img bar_oukd"></view>
+                <view class="bt_tx">帮Ta砍一刀</view>
+            </view>
+            <button class="bat_barg" open-type="share" wx:if="{{myId == userid && goodsinfo.status == 1}}">
+                            <text class="bt_img bar_oukd"></text>
+                            <text class="bt_tx">喊好友Ta砍一刀</text>
+                        </button>
+            <!--支付按钮-->
+            <view class="bat_barg" @tap="artJum({{goodsinfo.product_list.id}})" wx:if="{{myId == userid  && (status || timeout == true)}}">
+                <view class="bt_tx">立即支付（预约定金￥{{goodsinfo.product_list.res_price}}）</view>
+            </view>
+            <view class="bat_barg" @tap="artJumh(2)" wx:if="{{myId != userid && (goodsinfo.is_bargain == 1 || timeout || goodsinfo.status == 6)}}">
+                <view class="bt_tx">我也要参与</view>
+            </view>
+            <view class="bat_bargs" wx:if="{{myId == userid && goodsinfo.status == 1}}" @tap="artJum({{goodsinfo.product_list.id}})">
+                暂不砍价，立即购买
+            </view>
+            <!--剩余时间-->
+            <view class="bat_time" wx:if="{{goodsinfo.status == 1}}">还剩<text class="time_wh">{{datetime.hour}}:{{datetime.min}}:{{datetime.sec}}</text>结束，赶紧砍价吧~</view>
+            <view class="barg_bottom">
+                <view class="brag_title">
+                    <text class="brag_bdfh Lft1 bar_oulf"></text>
+                    <text>砍价帮帮团</text>
+                    <text class="brag_bdfh Rig2 bar_ourg"></text>
+                </view>
+                <view>
+                    <view class="user_hy" wx:key="{{index}}" wx:for="{{bfriendlist}}" wx:for-item="item" wx:for-index="index">
+                        <view class="user_hyImg">
+                            <image src="{{item.avatar}}" mode="aspectFill" />
+                        </view>
+                        <view class="user_hyName">{{item.nickname}}</view>
+                        <view class="userPrices">砍掉{{item.already_bargain_price}}元</view>
+                        <view class="user_dao bar_oud1"></view>
+                    </view>
+                </view>
+                <block wx:if="{{bfriendlistAll.length > 5}}">
+                    <view class="bar_foot" wx:if="{{More}}" @tap="More">
+                        <text>查看更多</text>
+                        <text class="xiatb more_Img"></text>
+                    </view>
+                    <view class="bar_foot" wx:if="{{!More}}" @tap="More">
+                        <view class="foot">
+                            <text class="fot_le"></text>
+                            <text>只显示最近15个好友砍价记录</text>
+                            <text class="fot_rg"></text>
+                        </view>
+                        <view class="foot">
+                            <text>收起</text>
+                            <text class="xiatbs collect_Img"></text>
+                        </view>
+                    </view>
+                </block>
+            </view>
+        </view>
+        <!--弹框-->
+        <view class="alt_bar" wx:if="{{artShow}}" @tap="artJumh(1)">
+            <view class="alt_bars">
+                <view class="alt_img">
+                    <image src="{{patientInfo.avatar}}" mode="aspectFill" />
+                </view>
+                <view class="alt_x" @tap="artJumh(1)"></view>
+                <view class="alet_ct1">谢谢你帮我砍了<text>{{bargainPrice}}</text>元</view>
+                <view class="alet_ct2">你也可以砍到最低价预约哦，快去砍价吧~</view>
+                <button class="alet_ct3" @tap="artJumh(2)">我也要参与</button>
+            </view>
+        </view>
+        <view class="alt_bar" wx:if="{{noGood}}" @tap="artJumh(1)">
+            <view class="alt_bars">
+                <view class="alet_cts">{{msgs}}</view>
+                <button class="alet_ct3" @tap="artJumh(2)">我要去发起砍价</button>
+            </view>
+        </view>
+        <view class="alt_bar1 b" wx:if="{{artShows}}" @tap="artShows">
+            <view class="alt_baImg"></view>
+            <view class="bar_jt"></view>
+            <view class="alt_bat alt_first">你已砍<text>{{bargainPrice}}</text>元啦</view>
+            <view class="alt_bat">赶快分享给好友吧！</view>
+        </view>
+        <!--砍价规则提示框-->
+        <model :content="promptsObj" wx:if="{{promptsObj.show}}"></model>
+        <!--
+                            is_bargain = 1   已经砍过
+                            is_bargain = 2   未砍过
+                            status  = 1  正在砍价中
+                            status  = 2  砍价持续时间已经到了；可跳转到支付界面；
+                            status  = 3  该商品砍价活动时间已经到了；可跳转到支付界面；
+                            status  = 4  砍价商品异常或者活动中途停止异常； 不可跳转到支付
+                            status  = 5  砍价商品未上架；
+                            status  = 6  砍价活动正常结束；可跳转到支付界面；
+                            -->
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import model from '@/components/model'
+    import Mixin from '@/mixins/global'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '砍低价'
+        }
+        components = {
+            model
+        }
+        mixins = [Mixin]
+        data = {
+            noGood: false,
+            isload: false,
+            bfriendlist: [],
+            bfriendlistAll: [],
+            goodsinfo: {},
+            artShow: false,
+            More: true,
+            artShows: false,
+            promptsObj: {
+                title: '砍价规则',
+                details: ['1. 邀请好友一起砍价，砍到满意的低价即可获得想要的商品；', '2. 对于同一个砍价，您只能帮助砍价一次；', '3. 每次砍价金额随机，参与好友越多越容易获得最低价；', '4. 河狸口腔可在法律法规允许范围内对砍价规则解释。'],
+                show: false
+            },
+            datetime: {},
+            bargainloop: null,
+            count: 0,
+            title: '',
+            Id: '',
+            goods_id: 1,
+            patientInfo: {},
+            myName: '',
+            myId: '', // 当前登录用户id
+            isbargain: false,
+            bargainPrice: 0,
+            timeout: false, // 砍价的持续时间是否已经结束
+            status: true,
+            userid: '', // 发起砍价的的用户id
+            msgs: '', //后台返回的提示
+            cutStatus: false //是否成功砍价
+        }
+        methods = {
+            artShows() {
+                this.artShows = false
+            },
+            artJum(e) {
+                if (e == 0) {
+                    this.addbargain()
+                } else {
+                    var goodId = 'id' + '=' + e
+                    var cutAble = 'cutAble' + '=' + 'true'
+                    var bargain_id = 'bargain_id' + '=' + this.goodsinfo.bargain_list.bargain_id
+                    var goodCt = cutAble + '&' + goodId + '&' + bargain_id
+                    var urls = '/pages/goods/order?' + goodCt
+                    wepy.navigateTo({
+                        url: urls
+                    })
+                }
+                clearInterval(this.bargainloop)
+            },
+            artJumh(e) {
+                if (e == 2) {
+                    wepy.navigateTo({
+                        url: '/pages/bargain/index'
+                    })
+                } else {
+                    this.artShow = false
+                }
+            },
+            More() {
+                this.More = !this.More
+                this.bfriendlist = this.bfriendlistAll
+                if (this.More) {
+                    this.bfriendlist = this.bfriendlist.slice(0, 5)
+                }
+            },
+            onShareAppMessage: function(res) {
+                this.artShows = false
+                if (res.from === 'button') {
+                    // 来自页面内转发按钮
+                    console.log(res, '00')
+                }
+                return {
+                    title: this.title,
+                    path: '/pages/bargain/bargain?id=' + this.Id + '&friendid=' + this.patientInfo.id,
+                    success: function(res) {
+                        console.log(res)
+                        // 转发成功
+                    },
+                    fail: function(res) {
+                        // 转发失败
+                    }
+                }
+            },
+            showRule() {
+                this.promptsObj.show = true
+            }
+        }
+        // 倒计时
+        countdown() {
+            // let date = '2018-03-20 14:47:00.0'
+            this.count = this.count - 1
+            let time = this.count
+            let thisTime = {
+                hour: parseInt(time / 60 / 60),
+                min: parseInt(time / 60 % 60),
+                sec: parseInt(time % 60),
+            }
+            this.datetime = thisTime
+            this.datetime.hour = thisTime.hour < 10 ? '0' + String(thisTime.hour) : thisTime.hour
+            this.datetime.min = thisTime.min < 10 ? '0' + String(thisTime.min) : thisTime.min
+            this.datetime.sec = thisTime.sec < 10 ? '0' + String(thisTime.sec) : thisTime.sec
+            if (parseInt(this.count) <= 0) {
+                this.datetime.hour = 0
+                this.datetime.min = 0
+                this.datetime.sec = 0
+                this.timeout = true
+                clearInterval(this.bargainloop)
+                let self = this
+                if (this.timeout) {
+                    wepy.redirectTo({
+                        url: '/' + self.$parent.getCurrentPageUrl()
+                    })
+                }
+            }
+            this.$apply()
+        }
+        // 获取砍价商品详情
+        bargaininfo() {
+            this.showloading()
+            var that = this
+            wepy.request({
+                url: '/weiappapi/bargain/bargaininfo',
+                method: 'POST',
+                data: {
+                    'goods_id': that.goods_id,
+                    'friend_uid': that.myId
+                }
+            }).then(res => {
+                this.isload = true
+                this.showloading(false)
+                if (res.code === '0') {
+                    this.showAlert({
+                        content: res.msg,
+                        showCancel: false,
+                        confirm: 'beback'
+                    })
+                    return
+                }
+                that.goodsinfo = res.data
+                that.title = res.data.title
+                that.count = res.data.product_list.continued_time
+                that.Id = res.data.product_list.id
+                that.goodsinfo.bargain_list.cut_down_price = this.formatCurrency(that.goodsinfo.bargain_list.cut_down_price)
+                var statusNum = res.data.status
+                if (statusNum == 2 || statusNum == 3 || statusNum == 6) {
+                    this.status = true
+                } else {
+                    this.status = false
+                }
+                if (that.count > 0 && !this.status) {
+                    // 倒计时
+                    if (!this.bargainloop) {
+                        this.bargainloop = setInterval(() => {
+                            this.countdown()
+                        }, 1000)
+                    }
+                }
+                if (that.count === -1) {
+                    this.timeout = true
+                }
+                if (that.goodsinfo.bargain_list.bargain_detail) {
+                    this.showAlert({
+                        showCancel: false,
+                        content: that.goodsinfo.bargain_list.bargain_detail
+                    })
+                    this.status = false
+                }
+                that.$apply()
+            })
+        }
+        // 获取帮砍价用户列表
+        bargainfriendlist() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/bargain/bargainfriendlist',
+                method: 'POST',
+                data: {
+                    'goods_id': that.goods_id,
+                    'friend_uid': that.myId
+                }
+            }).then(res => {
+                that.bfriendlist = res.data.slice(0, 5)
+                that.bfriendlistAll = res.data.slice(0, 15)
+                that.$apply()
+            })
+        }
+        // 砍价接口
+        addbargain() {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/bargain/addbargain',
+                method: 'POST',
+                data: {
+                    'goods_id': that.goods_id,
+                    'friend_uid': that.myId // 发起者的userid,由链接传过来
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    if (this.myId != this.userid) {
+                        this.artShow = true
+                    } else {
+                        this.isbargain = '1'
+                        this.artShows = true
+                    }
+                    this.bargainPrice = this.formatCurrency(res.data.bargain_price)
+                    this.bargaininfo()
+                    this.bargainfriendlist()
+                } else {
+                    this.msgs = res.msg
+                    this.noGood = true
+                    this.showAlert({
+                        showCancel: false,
+                        content: res.msg
+                    })
+                }
+                that.$apply()
+            })
+        }
+        beback() {
+            wepy.navigateBack()
+        }
+        PageInit() {
+            // ==2 未砍过第一刀
+            if (this.isbargain === '2') {
+                this.addbargain()
+            } else {
+                this.bargaininfo()
+                this.bargainfriendlist()
+            }
+            this.More = true
+        }
+        onUnload() {
+            clearInterval(this.bargainloop)
+        }
+        onLoad(options) {
+            console.log(options,'0000000000')
+            this.patientInfo = this.getUserInfobyStorage()
+            if (options.friendid) {
+                this.myId = options.friendid
+            } else {
+                this.myId = this.patientInfo.id
+                // if (this.myId === this.patientInfo.id) {
+                //     wepy.switchTab({
+                //         url: '/pages/index'
+                //     })
+                // }
+            }
+            this.goods_id = options.id
+            this.isbargain = this.isbargain ? this.isbargain : options.isbargain
+            this.userid = this.patientInfo.id // 当前登录人id
+            this.myName = this.patientInfo.nickname
+            console.log(options, this.myId, this.userid)
+        }
+    }
+</script>
+<style lang="less">
+    .content {
+        position: relative;
+        width: 100%;
+        min-height: 100%;
+        padding-bottom: 60rpx;
+        background: #e6324e;
+        .rule,
+        .backIndex {
+            position: absolute;
+            top: 20rpx;
+            right: 30rpx;
+            width: 144rpx;
+            height: 40rpx;
+            line-height: 40rpx;
+            border-radius: 40rpx;
+            color: #ff3a75;
+            font-size: 22rpx;
+            background: rgba(255, 255, 255, .6);
+            text {
+                margin-left: 40rpx;
+            }
+            .rule_logo {
+                position: absolute;
+                top: 10rpx;
+                left: 10rpx;
+                width: 22rpx;
+                height: 22rpx;
+                border-radius: 50%;
+            }
+        }
+        .backIndex {
+            left: 30rpx;
+            right: auto;
+            width: auto;
+            text-align: center;
+            width: 120rpx;
+        }
+        .barg_top {
+            width: 750rpx;
+            height: 100%;
+            background:url('@{imgbaseUrl}/Bargain-bgs.png') top left no-repeat;
+            background-size: 750rpx 976rpx;
+            .barg_ct1 {
+                position: relative;
+                top: 120rpx;
+                left: 30rpx;
+                width: 690rpx;
+                height: 410rpx;
+                border-radius: 10rpx;
+                background: #ffffff;
+                .user_logo {
+                    position: absolute;
+                    top: -60rpx;
+                    left: 285rpx;
+                    width: 120rpx;
+                    height: 120rpx;
+                    border-radius: 100%;
+                    background: #d9d9d9;
+                    border: 2rpx solid #fff;
+                    image {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 100%;
+                    }
+                }
+                .user_name {
+                    position: relative;
+                    top: 80rpx;
+                    width: 100%;
+                    text-align: center;
+                    color: #333333;
+                    font-size: 26rpx;
+                    line-height: 20rpx;
+                }
+                .user_cont {
+                    position: relative;
+                    left: 25rpx;
+                    top: 110rpx;
+                    width: 640rpx;
+                    height: 100rpx;
+                    text-align: center;
+                    .bdfht {
+                        display: inline-block;
+                        width: 560rpx;
+                        left: 40rpx;
+                        font-size: 30rpx;
+                        color: #000000;
+                    }
+                    .bdfh {
+                        position: absolute;
+                        width: 80rpx;
+                        height: 80rpx;
+                        font-size: 80rpx;
+                        line-height: 80rpx;
+                        color: #f3f3f3;
+                        &:nth-of-type(1) {
+                            top: -10rpx;
+                            left: -45rpx;
+                            text-align: right;
+                        }
+                        &:nth-of-type(2) {
+                            bottom: -20rpx;
+                            right: -46rpx;
+                            text-align: left;
+                        }
+                    }
+                }
+                .goods {
+                    position: absolute;
+                    bottom: 20rpx;
+                    left: 25rpx;
+                    width: 620rpx;
+                    height: 140rpx;
+                    padding: 10rpx;
+                    border-radius: 4rpx;
+                    background: #f3f3f3;
+                    .goods_left {
+                        float: left;
+                        width: 140rpx;
+                        height: 140rpx;
+                        margin-right: 14rpx;
+                        border-radius: 4rpx;
+                        background: #ffffff url('@{imgbaseUrl}/default_pic.png') top left no-repeat;
+                        background-size: 100% 100%;
+                        image {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 4rpx;
+                        }
+                    }
+                    .goods_right {
+                        float: left;
+                        width: 466rpx;
+                        height: 140rpx;
+                        .goods_title {
+                            display: inline-block;
+                            width: 460rpx;
+                            font-size: 26rpx;
+                            color: #666666;
+                            overflow: hidden;
+                            text-overflow: ellipsis;
+                            display: -webkit-box;
+                            -webkit-box-orient: vertical;
+                            -webkit-line-clamp: 2;
+                        }
+                        .goodsPrices {
+                            position: absolute;
+                            width: 466rpx;
+                            bottom: 8rpx;
+                            right: 14rpx;
+                            height: 50rpx;
+                            .prices_j {
+                                left: 0;
+                                font-size: 26rpx;
+                                color: #ff3a75;
+                            }
+                            .prices_l {
+                                left: 0;
+                                font-size: 36rpx;
+                                color: #ff3a75;
+                            }
+                            .prices_r {
+                                position: absolute;
+                                top: 14rpx;
+                                right: 20rpx;
+                                font-size: 24rpx;
+                                color: #333333;
+                                .prices_rt {
+                                    font-size: 26rpx;
+                                }
+                            }
+                        }
+                    }
+                }
+                .sucss_Img {
+                    position: absolute;
+                    top: 0rpx;
+                    right: 25rpx;
+                    width: 142rpx;
+                    height: 126rpx;
+                }
+            }
+            .barg_wrap {
+                width: 100%;
+                margin-top: 150rpx;
+                .barg_ct2,
+                .barg_ct3 {
+                    width: 100%;
+                    text-align: center;
+                    color: #ffffff;
+                    font-size: 32rpx;
+                    .ba_ct {
+                        color: #fcee00;
+                        font-size: 50rpx;
+                    }
+                }
+                .barg_ct3 {
+                    margin-top: 0;
+                    .ba_ct {
+                        font-size: 32rpx;
+                        color: #fcee00;
+                    }
+                }
+            }
+            .bat_barg {
+                width: 690rpx;
+                height: 96rpx;
+                line-height: 82rpx;
+                margin-top: 30rpx;
+                margin-left: 30rpx;
+                text-align: center;
+                border-radius: 10rpx;
+                background: #ffe56e;
+                border-bottom: 10rpx solid #fdc648;
+                box-sizing: border-box;
+                &:active {
+                    background: #fdc649;
+                }
+                .bt_img {
+                    display: inline-block;
+                    margin-right: 14rpx;
+                    width: 50rpx;
+                    height: 50rpx;
+                    border-radius: 100%;
+                    vertical-align: middle;
+                }
+                .bt_tx {
+                    display: inline-block;
+                    vertical-align: middle;
+                    font-size: 36rpx;
+                    color: #ff3a75;
+                    margin-top: 5rpx;
+                }
+            }
+            .bat_bargs {
+                margin-top: 20rpx;
+                margin-left: 30rpx;
+                width: 690rpx;
+                height: 96rpx;
+                line-height: 96rpx;
+                font-size: 36rpx;
+                color: #ffe56e;
+                border-radius: 10rpx;
+                text-align: center;
+                border: 2rpx solid #ffe56e;
+            }
+            .bat_time {
+                margin-top: 20rpx;
+                width: 100%;
+                text-align: center;
+                font-size: 26rpx;
+                line-height: 26rpx;
+                color: rgba(255, 255, 255, .8);
+                .time_wh {
+                    display: inline-block;
+                    width: 118rpx;
+                }
+            }
+            .barg_bottom {
+                position: relative;
+                top: 32rpx;
+                left: 30rpx;
+                width: 690rpx;
+                padding-bottom: 10rpx;
+                border-radius: 20rpx;
+                background: #ed425d;
+                .brag_title {
+                    padding: 30rpx 0;
+                    width: 100%;
+                    text-align: center;
+                    font-size: 30rpx;
+                    color: #ffbf8c;
+                    .brag_bdfh {
+                        display: inline-block;
+                        width: 86rpx;
+                        height: 10rpx;
+                        vertical-align: middle;
+                    }
+                    .Lft1 {
+                        margin-right: 20rpx;
+                    }
+                    .Rig2 {
+                        margin-left: 20rpx;
+                    }
+                }
+                .user_hy {
+                    width: 100%;
+                    height: 80rpx;
+                    line-height: 80rpx;
+                    margin-top: 20rpx;
+                    &:first-child {
+                        margin-top: 0;
+                    }
+                    &:last-child {
+                        margin-bottom: 30rpx;
+                    }
+                    .user_hyImg {
+                        float: left;
+                        margin-left: 50rpx;
+                        width: 80rpx;
+                        height: 100%;
+                        border-radius: 100%;
+                        background: #4287ff;
+                        image {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 100%;
+                        }
+                    }
+                    .user_hyName {
+                        float: left;
+                        margin-left: 20rpx;
+                        font-size: 26rpx;
+                        color: #ffbf8c;
+                    }
+                    .userPrices {
+                        float: right;
+                        margin-right: 50rpx;
+                        font-size: 26rpx;
+                        color: #ffe56e;
+                    }
+                    .user_dao {
+                        float: right;
+                        margin-top: 15rpx;
+                        margin-right: 10rpx;
+                        width: 50rpx;
+                        height: 50rpx;
+                    }
+                }
+                .bar_foot {
+                    width: 100%;
+                    text-align: center;
+                    font-size: 24rpx;
+                    color: rgba(255, 255, 255, .6);
+                    margin-bottom: 20rpx;
+                    .fot_le,
+                    .fot_rg {
+                        display: inline-block;
+                        width: 6rpx;
+                        height: 6rpx;
+                        vertical-align: middle;
+                        background: rgba(255, 255, 255, .5);
+                    }
+                    .fot_le {
+                        margin-right: 10rpx;
+                    }
+                    .fot_rg {
+                        margin-left: 10rpx;
+                    }
+                    .xiatb,
+                    .xiatbs {
+                        display: inline-block;
+                        margin-left: 6rpx;
+                        width: 20rpx;
+                        height: 20rpx;
+                    }
+                }
+            }
+        }
+        .alt_bar {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .5);
+            .alt_bars {
+                position: fixed;
+                top: 0;
+                left: 0;
+                right: 0;
+                bottom: 0;
+                margin: auto;
+                width: 580rpx;
+                height: 400rpx;
+                border-radius: 12rpx;
+                background: #ffffff;
+                .alt_img {
+                    position: absolute;
+                    top: -60rpx;
+                    left: 230rpx;
+                    width: 120rpx;
+                    height: 120rpx;
+                    border-radius: 50%;
+                    background: #b4b4b4;
+                    image {
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 50%;
+                    }
+                }
+                .alt_x {
+                    position: absolute;
+                    top: 12rpx;
+                    right: 16rpx;
+                    width: 40rpx;
+                    height: 40rpx;
+                    background: url('@{imgbaseUrl}/sx.png') top left no-repeat;
+                    background-size: 40rpx 40rpx;
+                }
+                .alet_ct1 {
+                    width: 100%;
+                    margin-top: 80rpx;
+                    text-align: center;
+                    font-size: 26rpx;
+                    text {
+                        color: #ff3a75;
+                    }
+                }
+                .alet_ct2 {
+                    margin: 30rpx auto 0 auto;
+                    width: 400rpx;
+                    font-size: 30rpx;
+                    text-align: center;
+                }
+                .alet_ct3 {
+                    position: absolute;
+                    left: 40rpx;
+                    bottom: 40rpx;
+                    width: 500rpx;
+                    height: 90rpx;
+                    line-height: 90rpx;
+                    border-radius: 8rpx;
+                    text-align: center;
+                    color: #ffffff;
+                    background: #ff3a75;
+                    &:active {
+                        background: #ff3a99;
+                    }
+                }
+                .alet_cts {
+                    margin-top: 104rpx;
+                    text-align: center;
+                }
+            }
+        }
+        .alt_bar1 {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, .7);
+            .alt_baImg {
+                position: fixed;
+                top: 50rpx;
+                left: 0;
+                width: 640rpx;
+                height: 360rpx;
+                background:url('@{imgbaseUrl}/alt_baImg.png') top left no-repeat;
+                background-size: 100% 100%;
+            }
+            .bar_jt {
+                position: fixed;
+                top: 20rpx;
+                right: 30rpx;
+                width: 148rpx;
+                height: 384rpx;
+                background:url('@{imgbaseUrl}/bar_jt.png') top left no-repeat;
+                background-size: 100% 100%;
+            }
+            .alt_bat {
+                width: 100%;
+                text-align: center;
+                font-size: 42rpx;
+                color: #ffda2d;
+            }
+            .alt_first {
+                margin-top: 378rpx;
+                text {
+                    font-size: 48rpx;
+                    color: #ff3a75;
+                }
+            }
+        }
+    }
+</style>

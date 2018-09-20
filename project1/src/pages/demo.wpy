@@ -1,0 +1,51 @@
+<template>
+    <view class="container">
+        <view class="a" style="top:{{scrollTop}}px">dddd
+
+        </view>
+        <input class="b" placeholder="这是一个可以自动聚焦的input" cursor-spacing="100" @tap="bb"/>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Demo extends wepy.page {
+        config = {
+            navigationBarTitleText: '河狸口腔'
+        }
+        mixins = [Mixin]
+        components = {
+        }
+        data = {
+            v:'fixed',
+            scrollTop: -100
+        }
+        computed = {}
+        methods = {
+            bb(){
+                // this.v = 'static'
+                this.scrollTop = 200
+                this.$apply()
+            }
+        }
+        events = {}
+        onLoad() {}
+    }
+</script>
+
+<style lang="less">
+    .a{
+        position: fixed;
+        height:90%;
+        background-color: aqua;
+        left: 0;
+    right: 0;
+    top: 0;
+    }
+    .b{
+        position: absolute;
+        bottom:0;
+        border:1px solid #333
+    }
+</style>

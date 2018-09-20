@@ -104,7 +104,7 @@
                                   <view class="itempay">
                                     实付：￥{{item.total_price}}
                                   </view>
-                                  <orderBtn :orderitem="item.order_status"/>
+                                  <orderBtn :orderitem="item"/>
                                   <!-- <view class="btns ">
                                     <button class="btnline mr12" wx:if="{{item.order_status.value=='40'}}">申请退款</button>
                                     <button class="btnline mr12" wx:if="{{item.order_status.value=='10'}}">取消订单</button>

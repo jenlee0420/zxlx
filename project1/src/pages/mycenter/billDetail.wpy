@@ -1,0 +1,224 @@
+<template>
+    <view class="container">
+        <div class="heard_card {{billsInfo.status.key === 2? 'arrearage_bg':'recevable_bg'}}">
+            <p class="fs28 cfff f_opacity_6">{{billsInfo.clinic_name}}</p>
+            <block wx:if="{{billsInfo.status.key == 4}}">
+                <view class="flex flex-algin-center mt30">
+                    <span class="pay_over">
+                    </span>
+                    <span class="ml30 fs28 cfff b">
+                        已结清
+                    </span>
+                </view>
+            </block>
+            <block wx:else>
+                <p class="fs72 cfff mt40 mb30" wx:if=" status != 2 "><i class="fs48">¥</i>{{billsInfo.arrears_amount}}</p>
+                <p class="fs28 cfff f_opacity_6" wx:if=" status == 2 ">欠费金额</p>
+            </block>
+        </div>
+        <div class="baseTitle">
+            账单信息
+        </div>
+        <view class="bill_info mb20">
+            <p class="fs30 c666">就诊时间<i class="fs28 fw_B c333">{{billsInfo.da_time}}</i></p>
+            <p class="fs30 c666">开单医生<i class="fs28 fw_B c333">{{billsInfo.bills_doctor}}</i></p>
+            <p class="fs30 c666">账单编号<i class="fs28 fw_B c333">{{billsInfo.bills_no}}</i></p>
+            <p class="fs30 c666">创建时间<i class="fs28 fw_B c333">{{billsInfo.add_time}}</i></p>
+        </view>
+        <div class="baseTitle">
+            收费明细
+        </div>
+        <div class="item_card mb20" wx:if="{{billsInfo.charges_type == 1}}">
+            <ul>
+                <li wx:for="{{itemList}}" wx:for-item="item" wx:key="index">
+                    <p class="fs30 c666">{{item.item.name}}<i class="fs24 fw_B">×{{item.item.count}}</i></p><i class="fs28 c333">{{item.item.price}}</i>
+                </li>
+            </ul>
+        </div>
+        <div class="item_card mb20" wx:if="{{billsInfo.charges_type == 2}}">
+            <ul>
+                <li wx:for="{{itemList}}" wx:for-item="item" wx:key="index">
+                    <p class="fs30 c666">{{item.category.name}}</p><i class="fs28 c333">{{item.actual_amount}}</i>
+                </li>
+            </ul>
+        </div>
+        <div class="baseTitle">
+            收费信息
+        </div>
+        <view class="charge_card mb20">
+            <ul class="charge_item ">
+                <li>
+                    <p class="fs30 b c333">{{billsInfo.bills_amount}}</p>
+                    <p class="fs24 c666 mt20">合计金额</p>
+                </li>
+                <li>
+                    <p class="fs30 b c5ad">-{{billsInfo.discount_amount}}</p>
+                    <p class="fs24 c666 mt20">优惠金额</p>
+                </li>
+                <li>
+                    <p class="fs30 b c333">{{billsInfo.actual_amount}}</p>
+                    <p class="fs24 c666 mt20">应付金额</p>
+                </li>
+            </ul>
+            <ul class="charge_item flex_end">
+                <li>
+                    <p class="fs30 b c333">{{billsInfo.pay_amount}}</p>
+                    <p class="fs24 c666 mt20">实付金额</p>
+                </li>
+                <li>
+                    <p class="fs30 b cfc5a">{{billsInfo.refund_amount}}</p>
+                    <p class="fs24 c666 mt20">退费金额</p>
+                </li>
+                <li>
+                </li>
+            </ul>
+        </view>
+        <navigator class="title_arrow" url="/pages/mycenter/billrecord?id={{billsInfo.id}}&paied={{billsInfo.pay_amount}}">
+            查看交易记录
+        </navigator>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class BillDetail extends wepy.page {
+        config = {
+            navigationBarTitleText: '诊疗账单'
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {
+            billid: '',
+            billsInfo: {},
+            itemList: []
+        }
+        computed = {}
+        methods = {}
+        events = {}
+        loadBillDetail() {
+            wepy.request({
+                url: 'weiappapi/finance/getbillsinfo',
+                method: 'get',
+                data: {
+                    bills_id: this.billid
+                }
+            }).then(res => {
+                console.log(res)
+                if (res.code === '1') {
+                    res.data.actual_amount = this.formatCurrency(res.data.actual_amount)
+                    res.data.pay_amount = this.formatCurrency(res.data.pay_amount)
+                    res.data.bills_amount = this.formatCurrency(res.data.bills_amount)
+                    res.data.discount_amount = this.formatCurrency(res.data.discount_amount)
+                    res.data.refund_amount = this.formatCurrency(res.data.refund_amount)
+                    if (res.data.refund_amount !== '0.00') res.data.refund_amount = '-' + res.data.refund_amount
+                    res.data.da_time = res.data.da_time.slice(0, 16)
+                    res.data.add_time = res.data.add_time.slice(0, 16)
+                    res.data.item_data.forEach(v => {
+                        v.actual_amount = this.formatCurrency(v.actual_amount)
+                        v.item.actual_price = this.formatCurrency(v.item.actual_price)
+                    })
+                    this.billsInfo = res.data
+                    this.itemList = res.data.item_data
+                     // 价格 格式化
+                    this.itemList.forEach(v => {
+                        v.item.price = this.formatCurrency(v.item.price * v.item.count)
+                    })
+                }
+                this.$apply()
+            })
+        }
+        onLoad(query) {
+            if (query.id) {
+                this.billid = query.id
+                this.loadBillDetail()
+            }
+        }
+    }
+</script>
+
+<style lang="less">
+    .container{
+        padding-bottom: 20rpx;
+    }
+    //收费明细卡片
+    .item_card {
+        box-sizing: border-box;
+        display: flex;
+        padding: 0 30rpx;
+        background: #fff;
+        ul {
+            flex-grow: 1;
+            li {
+                box-sizing: border-box;
+                height: 80rpx;
+                display: flex;
+                align-items: center;
+                justify-content: space-between;
+                width: 100%;
+                position: relative;
+                border-bottom: 1rpx dashed #dedede;
+                &:last-child {
+                    border-bottom: none;
+                }
+                p {
+                    display: flex;
+                    line-height: 1;
+                    i {
+                        padding-left: 20rpx;
+                        line-height: 30rpx;
+                    }
+                }
+            }
+        }
+    }
+    /*收费信息卡片*/
+    .charge_card {
+        display: flex;
+        flex-direction: column;
+        background: #fff;
+        box-sizing: border-box;
+        position: relative;
+        padding: 38rpx 0;
+        &:after {
+            content: " ";
+            position: absolute;
+            left: 60rpx;
+            right: 60rpx;
+            bottom: 50%;
+            height: 1rpx;
+            border-bottom: 1rpx dashed #dedede;
+            color: #dedede;
+            -webkit-transform-origin: 0 100%;
+            transform-origin: 0 100%;
+            -webkit-transform: scaleY(0.5);
+            transform: scaleY(0.5);
+        }
+        .charge_item {
+            display: flex;
+            box-sizing: border-box;
+            width: 100%;
+            justify-content: space-between;
+            align-items: center;
+            height: 138rpx;
+            li {
+                display: flex;
+                flex-direction: column;
+                align-items: center;
+                justify-content: center;
+                width: 33%;
+                height: 100%;
+                border-right: 1rpx dashed #dedede;
+                &:last-child {
+                    border-right: none;
+                }
+            }
+        }
+        .flex_end {
+            div {
+                display: flex;
+                justify-content: flex-end;
+            }
+        }
+    }
+</style>

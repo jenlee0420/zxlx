@@ -1,0 +1,180 @@
+#gopng_自我诊断_outer {
+    height: 200px;
+    width: 660px;
+    overflow: hidden;
+}
+#gopng_自我诊断 {
+    background: url(http://gopng/static/images/sprite.png) -0px -0px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_立即预约_outer {
+    height: 200px;
+    width: 660px;
+    overflow: hidden;
+}
+#gopng_立即预约 {
+    background: url(http://gopng/static/images/sprite.png) -0px -208px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_河狸会员_outer {
+    height: 200px;
+    width: 660px;
+    overflow: hidden;
+}
+#gopng_河狸会员 {
+    background: url(http://gopng/static/images/sprite.png) -0px -418px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_404错误_outer {
+    height: 240px;
+    width: 316px;
+    overflow: hidden;
+}
+#gopng_404错误 {
+    background: url(http://gopng/static/images/sprite.png) -0px -0px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_无建议_outer {
+    height: 160px;
+    width: 220px;
+    overflow: hidden;
+}
+#gopng_无建议 {
+    background: url(http://gopng/static/images/sprite.png) -21px -267px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_咬合_outer {
+    height: 37px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_咬合 {
+    background: url(http://gopng/static/images/sprite.png) -464px -73px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_牙齿松动_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_牙齿松动 {
+    background: url(http://gopng/static/images/sprite.png) -424px -73px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_色素_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_色素 {
+    background: url(http://gopng/static/images/sprite.png) -388px -73px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_牙齿磨损度_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_牙齿磨损度 {
+    background: url(http://gopng/static/images/sprite.png) -352px -73px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_牙齿裂痕_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_牙齿裂痕 {
+    background: url(http://gopng/static/images/sprite.png) -316px -26px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_牙龈炎_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_牙龈炎 {
+    background: url(http://gopng/static/images/sprite.png) -352px -26px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_牙周炎_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_牙周炎 {
+    background: url(http://gopng/static/images/sprite.png) -388px -26px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_牙齿排列_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_牙齿排列 {
+    background: url(http://gopng/static/images/sprite.png) -424px -26px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_智齿_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_智齿 {
+    background: url(http://gopng/static/images/sprite.png) -460px -26px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_龋齿_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_龋齿 {
+    background: url(http://gopng/static/images/sprite.png) -500px -26px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_牙结石_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+}
+#gopng_牙结石 {
+    background: url(http://gopng/static/images/sprite.png) -316px -73px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_返回键_outer {
+    height: 30px;
+    width: 30px;
+    overflow: hidden;
+}
+#gopng_返回键 {
+    background: url(http://gopng/static/images/sprite.png) -388px -134px no-repeat;
+    width: 100%;
+    height: 100%;
+}
+#gopng_扩展_outer {
+    height: 26px;
+    width: 26px;
+    overflow: hidden;
+}
+#gopng_扩展 {
+    background: url(http://gopng/static/images/sprite.png) -326px -134px no-repeat;
+    width: 100%;
+    height: 100%;
+}

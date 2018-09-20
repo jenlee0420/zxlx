@@ -1,0 +1,346 @@
+<template>
+    <view class="hp100 flex-column">
+        <searchbar type="clinic" defValue="请输入诊所名称"></searchbar>
+        <view class="navs_sort">
+            <view class="nav_list" @tap="showCity">
+                <text class="triangle_down {{cityStatus?'triangle_up':''}} {{nums == 1?'bgcolor':''}}">{{cityname}}</text>
+            </view>
+            <block wx:if="{{cityStatus}}">
+                <cascade :current.sync="currentCity"></cascade>
+            </block>
+            <view class="nav_list {{nums == 2?'bgcolor':''}}" @tap="btn_p">
+                <text>销量最高</text>
+            </view>
+            <view class="nav_list {{nums == 3?'bgcolor':''}}" @tap="btn_ps">
+                <text>距离最近</text>
+            </view>
+        </view>
+        <!--诊所列表-->
+        <scroll-view scroll-y @scrolltolower="nextpage" style="height: calc(100% - 192rpx);">
+            <view class="hospital_Todo" wx:if="{{hospitalTodo.length > 0}}">
+                <view class="hp_list">
+                    <view class="hp_t"  @tap="jump({{item.clinic_id}})" wx:for="{{hospitalTodo}}" wx:key="{{index}}" wx:for-item="item" wx:for-index="index">
+                        <view class="address">
+                            <view class="address_img">
+                                <image src="{{item.logo}}" mode="aspectFill" />
+                            </view>
+                            <view class="address_t">
+                                <view class="address_t1">
+                                    <text class="name">{{item.name}}</text><text class="name_img members"></text>
+                                </view>
+                                <view class="evaluate">
+                                    <view class="score mr20">
+                                        <span class="mico_star_gray">
+                                                <span  wx:if="{{item.score > 0}}" class="mico_star_all" style="width:{{(item.score / 5) * 100}}%"></span>
+                                        <span wx:if="{{item.score === 0}}" class="mico_star_all" style="width:{{(5 / 5) * 100}}%"></span>
+                                        </span>
+                                    </view>
+                                    <text class="evaluate_t">{{item.score===0?'5':item.score}}分</text>
+                                    <view class="evaluate_t"><span class="c333">{{item.sum_count}}</span>人预约</view>
+                                </view>
+                                <view class="address_ts">
+                                    <text class="address_text">{{item.province.value}}{{item.city.value}}{{item.county.value}}{{item.addr}}</text>
+                                    <text class="address_text" wx:if="{{item.distance}}">{{item.distance ? item.distance : 0}}km</text>
+                                </view>
+                            </view>
+                        </view>
+                    </view>
+                </view>
+                <view class="foots_s" wx:if="{{hospitals.total_count > hospitalTodo.length}}">
+                    <text>正在加载......</text>
+                </view>
+                <view class="foots_s" wx:if="{{hospitals.total_count === hospitalTodo.length && hospitals.total_count > page_size}}">
+                    <text class="gopng_img">没有更多了</text>
+                </view>
+            </view>
+            <view class="nodata" wx:if="{{hospitalTodo.length == 0 && initCancel}}">
+                <span class="word">暂无数据</span>
+            </view>
+        </scroll-view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import cascade from '@@/cascade'
+    import Mixin from '@/mixins/global'
+    import searchbar from '@/components/searchbar'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '诊所列表',
+            disableScroll: true
+        }
+        mixins = [Mixin]
+        components = {
+            cascade,
+            searchbar
+        }
+        data = {
+            initCancel: false,
+            nums: 1,
+            sale: '',
+            discount: [],
+            hospitals: {},
+            next: false,
+            name_num: {
+                name: '销量最高'
+            },
+            province: '',
+            city: '',
+            hospitalTodo: [],
+            cityStatus: false,
+            currentCity: [{
+                id: 2
+            }, {
+                id: 38
+            }],
+            cityid: '',
+            cityname: '',
+            current_page: 1,
+            page_size: 10,
+            total_count: 0,
+            distanc: false,
+            toView:'#',
+            nextAllow:true
+        }
+        methods = {
+            jump(id) {
+                wepy.navigateTo({
+                    url: '/pages/hospital/hospital?id=' + id
+                    // url: '/pages/hospital/hospital?id=' + id + "&"+"iscomment=" +1
+                })
+            },
+            btn_p() {
+                this.current_page = 1
+                this.nums = 2
+                this.distanc = false
+                this.cityStatus = false
+                this.sale = 'sale'
+                this.hospitalTodo = []
+                this.getCliniclist()
+            },
+            btn_ps() {
+                this.current_page = 1
+                this.nums = 3
+                this.distanc = true
+                this.sale = 'distance'
+                this.cityStatus = false
+                this.hospitalTodo = []
+                this.getCliniclist()
+            },
+            nextpage() {
+                if (this.hospitals.total_count > this.hospitalTodo.length) {
+                    if(this.nextAllow){
+                        this.nextAllow = false
+                        this.current_page += 1
+                        this.getCliniclist(true)
+                    }
+                }
+            },
+            showCity() {
+                this.current_page = 1
+                this.nums = 1
+                this.distanc = false
+                this.sale = ''
+                this.cityStatus = !this.cityStatus
+            }
+        }
+        events = {
+            selectSuccess(res) {
+                this.currentCity = [{
+                    id: res[0].id
+                }, {
+                    id: res[1].id
+                }]
+                this.cityStatus = false
+                this.province = res[0].id
+                this.cityid = res[1].id
+                this.cityname = res[1].name
+                this.toView = 0
+                this.hospitalTodo.length = 0
+                this.getCliniclist()
+            },
+            cascadeClose() {
+                this.cityStatus = false
+            }
+        }
+        // 获取诊所列表
+        getCliniclist(append) {
+            var that = this
+            this.initCancel = false
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/findclinic/cliniclist',
+                method: 'GET',
+                data: {
+                    province: this.province,
+                    city: this.cityid,
+                    flag: this.sale,
+                    lng: this.localinfobyStorage().lng,
+                    lat: this.localinfobyStorage().lat,
+                    current_page: that.current_page,
+                    page_size: 10
+                }
+            }).then(res => {
+                this.initCancel = true
+                this.showloading(false)
+                if (res.code === '1') {
+                    // 格式化距离
+                    // res.data.list.forEach(v => {
+                    //     v.distance = Math.round(v.distance * 100) / 100
+                    // })
+                    this.nextAllow = true
+                    that.hospitals = res.data
+                    if ( that.hospitalTodo.length === that.hospitals.total_count ){
+                        return
+                    }
+                    if (that.current_page > 1) {
+                        that.hospitalTodo = that.hospitalTodo.concat(res.data.list)
+                        this.page_size = that.hospitalTodo.length
+                    } else {
+                        that.hospitalTodo = res.data.list
+                    }
+                    that.$apply()
+                }
+                
+            })
+        }
+        onLoad() {
+            this.initCancel = false
+            this.province = this.localinfobyStorage().province_id
+            this.cityid = this.localinfobyStorage().city_id
+            this.cityname = this.localinfobyStorage().city_name
+            // this.getCliniclist()
+        }
+        PageInit(){
+            this.getCliniclist()
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+    .hospital_Todo {
+        overflow: hidden;
+        .hp_list {
+            .hp_t {
+                position: relative;
+                .address {
+                    padding: 30rpx 32rpx 40rpx 32rpx;
+                    display: flex;
+                    flex-direction: row;
+                    background: #ffffff;
+                    position: relative;
+                    height: 206rpx;
+                    box-sizing: border-box;
+                    &:after {
+                        content: '';
+                        width: 100%;
+                        position: absolute;
+                        bottom: 0px;
+                        left: 32rpx;
+                        height: 1rpx;
+                        border-bottom: 1rpx solid @bColor;
+                    }
+                    .address_img {
+                        width: 198rpx;
+                        height: 136rpx;
+                        margin-right: 30rpx;
+                        background: #f5f5f5 url('@{imgbaseUrl}/zensuo.png') center no-repeat;
+                        border-radius: 4rpx;
+                        border:1rpx solid @bColor;
+                        box-sizing: border-box;
+                        background-size: 100%;
+                        image {
+                            width: 100%;
+                            height: 100%;
+                            border-radius: 4rpx;
+                        }
+                    }
+                    .address_t {
+                        display:flex;
+                        flex-direction: column;
+                        flex: 1;
+                        height: 100%;
+                        font-size: 0;
+                        .address_t1 {
+                            display: flex;
+                            flex-direction: row;
+                            margin-bottom: 10rpx;
+                            .name {
+                                margin-right: 12rpx;
+                                font-size: 30rpx;
+                                font-weight: 700;
+                                color: #333333;
+                                max-width: 310rpx;
+                                overflow: hidden;
+                                /*溢出隐藏*/
+                                text-overflow: ellipsis;
+                                /*以省略号...显示*/
+                                white-space: nowrap;
+                                /*强制不换行*/
+                            }
+                            .name_img {
+                                display: inline-block;
+                                margin-top: 6rpx;
+                                width: 60rpx;
+                                height: 30rpx;
+                            }
+                        }
+                        .evaluate {
+                            display: flex;
+                            flex-direction: row;
+                            align-items: center;
+                            .evaluate_i {
+                                width: 150rpx;
+                                height: 21rpx;
+                                margin-top: 5rpx;
+                                margin-right: 20rpx;
+                                background: #ffbc00;
+                            }
+                            .evaluate_t {
+                                font-size: 22rpx;
+                                margin-right: 20rpx;
+                                color: #ff8c00;
+                                &:nth-of-type(2) {
+                                    color: #929292;
+                                }
+                            }
+                        }
+                        .address_ts {
+                            width: 100%;
+                            height: 30rpx;
+                            display: flex;
+                            align-items: flex-end;
+                            flex: 1; // margin-top: 26rpx;
+                            font-size: 24rpx;
+                            color: #929292;
+                            .address_text {
+                                &:nth-of-type(1) {
+                                    display: block;
+                                    width: 380rpx;
+                                    white-space: nowrap;
+                                    text-overflow: ellipsis;
+                                    overflow: hidden;
+                                }
+                                &:nth-of-type(2) {
+                                    width: 95rpx;
+                                    text-align: right;
+                                }
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .foots_s {
+            color: #929292;
+            margin: 20rpx 0;
+            font-size: 22rpx;
+            display: flex;
+            flex-direction: row;
+            text {
+                width: 100%;
+                text-align: center;
+            }
+        }
+    }
+</style>

@@ -1,0 +1,73 @@
+<template>
+    <view class="container">
+        <presentation :archives.sync="archives" :baseScore.sync="baseScore"></presentation>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import presentation from '@/components/presentation'
+    import circle from '@/components/circle'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '诊断报告'
+        }
+        components = {
+            circle: circle,
+            presentation: presentation
+        }
+        mixins = [Mixin]
+        data = {
+            currentTab: 0,
+            archives: {},
+            baseScore: 0
+        }
+        computed = {}
+        methods = {}
+        //  诊断报告
+        getArchives() {
+            var that = this
+            var param = {}
+            if (this.family_id) {
+                param.family_id = this.family_id
+            }
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/diagnosis/archives',
+                method: 'GET',
+                data: param
+            }).then(res => {
+                this.showloading(false)
+                if (res.code === '1') {
+                    that.archives = res.data
+                    this.scoreAni()
+                } else {
+                    this.showAlert({showCancel: false, content: res.msg})
+                }
+            })
+        }
+        scoreAni() {
+            var timer = setInterval(() => {
+                if (this.baseScore < this.archives.score) {
+                    this.baseScore += 1
+                    this.$apply()
+                } else {
+                    clearInterval(timer)
+                }
+            }, 40)
+        }
+        onLoad(query) {
+            if (query.family_id) {
+                this.family_id = query.family_id
+            }
+            this.getArchives()
+        }
+    }
+</script>
+
+<style lang="less">
+    .container {
+        height: 100%;
+    }
+</style>

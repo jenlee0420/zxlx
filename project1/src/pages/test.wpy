@@ -1,0 +1,57 @@
+<template>
+    <view class="full">
+        <cascade class="test" :list="list">
+        </cascade>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import Cascade from '@@/cascade'
+
+    export default class Text extends wepy.page {
+        config = {
+            navigationBarTitleText: '测试页面'
+        }
+        components = {
+            cascade: Cascade
+        }
+        data = {
+            list: [
+                {
+                    name: '专场',
+                    id: 1,
+                    data: {
+                        title: '韩国进口种植牙套餐',
+                        subTitle: '深圳河狸口腔连锁',
+                        count: 8223,
+                        price: 488,
+                        truePrice: 2000
+                    }
+                },
+                {
+                    name: '洗牙',
+                    id: 2,
+                    data: {
+                        title: '十项全面检查口腔',
+                        subTitle: '深圳河狸口腔连锁',
+                        count: 5223,
+                        price: 500,
+                        truePrice: 1000
+                    }
+                }
+            ]
+        }
+        computed = {}
+        methods = {}
+        events = {}
+
+        onLoad() {
+        }
+    }
+</script>
+
+<style lang="less">
+    page, .full{
+        height: 100%;
+    }
+</style>

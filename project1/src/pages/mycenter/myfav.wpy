@@ -1,0 +1,63 @@
+<template>
+    <view class="container mt20" wx:if="{{initCancel}}">
+        <repeat for="{{doctlist}}" index="index" item="item" key="key">
+            <navigator hover-class="none" url="/pages/doctor/details?id={{item.doctor_id}}&clinic_id={{item.clinic_id}}">
+            <doctcard :docdata.sync="item" :nolocal="false"></doctcard>
+            </navigator>
+        </repeat>
+        <view class="nodata" wx:if="{{doctlist.length == 0}}">
+            <span class="word">暂无数据</span>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import DoctCard from '@/components/doctCard'
+    export default class Myfav extends wepy.page {
+        config = {
+            navigationBarTitleText: '我的关注'
+        }
+        mixins = [Mixin]
+        components = {
+            doctcard: DoctCard
+        }
+        data = {
+            initCancel: false,
+            doctlist: []
+        }
+        computed = {}
+        methods = {}
+        events = {}
+        loadDoclist() {
+            this.initCancel = false
+            this.showloading()
+            // 取我的关注列表
+            wepy.request({
+                url: 'weiappapi/doctor/focuslist',
+                method: 'get',
+                data: {}
+            }).then(res => {
+                this.initCancel = true
+                this.showloading(false)
+                if (res.code === '1') {
+                    this.doctlist = res.data
+                }
+                this.$apply()
+            })
+        }
+        onLoad() {
+
+        }
+        onShow() {
+            this.loadDoclist()
+        }
+    }
+</script>
+
+<style lang="less">
+    .container{
+        overflow-x: hidden;
+    }
+</style>

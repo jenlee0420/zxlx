@@ -1,0 +1,285 @@
+<template>
+    <view class="mypicker">
+        <view class="mask"></view>
+        <view class="main_box">
+            <view class="picker_head">
+                <span @tap="cancel">取消</span>
+                <span @tap="submit">确定</span>
+            </view>
+            <view class="picker_main">
+                <picker-view class="picker_content" indicator-class="pickerItem" value="{{originValue}}" bindchange="bindchange">
+                    <picker-view-column wx:if="_options.type === 'default'" wx:for="{{list}}" wx:key="index" wx:for-item="dataitem">
+                        <view class="pickerItem" wx:for="{{dataitem}}" wx:key="item[_options.key]" wx:for-item="item">
+                            {{item[_options.label]}}
+                        </view>
+                    </picker-view-column>
+                </picker-view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+    /* picker-view 是通过索引来选中某项的 */
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Mypicker extends wepy.component {
+        config = {
+        }
+        mixins = [Mixin]
+        components = {}
+        props = {
+            datalist: {
+                type: Array,
+                default: () => {
+                    return [
+                        []
+                    ]
+                }
+            },
+            options: {
+                type: Object
+            }
+        }
+        data = {
+            yearBase: new Date().getFullYear(),
+            briYear: 1900,
+            originValue: [],
+            value: [],
+            list: [],
+            submitVal: [],
+            /* key 是默认唯一标识字段, label 是默认显示的字段 */
+            _options: {
+                show: false,
+                value: [0],
+                key: 'id',
+                label: 'label',
+                type: 'default',
+                timeStep: 30,
+                timeRange: {
+                    start: '00:00',
+                    end: '24:00'
+                }
+            }
+        }
+        computed = {}
+        methods = {
+            bindchange(e) {
+                this.value = e.detail.value
+                let c = this.timeToCount(this._options.timeRange.start) + this.value[0]
+                // this.resetEndRange(this.countToTime(c))
+                this.setEndTime()
+                if (this.value.length > 1) {
+                    let arr = this.getValueArr(this.value)
+                    this.resetDays(arr[0].label, this.value[1], 'index')
+                }
+            },
+            submit() {
+                this.submitVal = this.value
+                let res = this.getValueArr(this.value)
+                if (res.length === 0) {
+                    res = [this.list[0][0]]
+                }
+                this.$emit('output', res, this._options.type)
+            },
+            cancel() {
+                this.value = this.originValue
+                let c = this.timeToCount(this._options.timeRange.start) + this.value[0]
+                if (this.value.length > 1) {
+                    let arr = this.getValueArr(this.value)
+                    this.resetDays(arr[0].label, this.value[1], 'index')
+                }
+                this.$emit('output', '')
+            }
+        }
+        watch = {
+            originValue(n, o) {
+                // console.log(n, o, '1111')
+            }
+        }
+        events = {}
+        reload_init(list, opt) {
+            this.init(list, opt)
+        }
+        setEndTime() {
+            console.log(this.value, this.originValue)
+            if (this._options.type === 'time') {
+                if (this.value[0] >= this.value[1]) {
+                    if (this.originValue[0] === this.value[0]) {
+                        this.originValue[0] = this.value[1]
+                        this.originValue[1] = this.value[1]
+                    } else {
+                        this.originValue[0] = this.value[0]
+                        this.originValue[1] = this.value[0]
+                    }
+                    this.value = this.originValue
+                }
+            }
+        }
+        /* 通过标识 key 取索引 */
+        getIndexArr(keyArr) {
+            let res = []
+            this.resetDays(keyArr[0], keyArr[1])
+            // this.resetEndRange(keyArr[0])
+            if (this.list.length > 0) {
+                keyArr.forEach((v, i) => {
+                    this.list[i].some((item, index) => {
+                        if (item[this._options.key] === v) {
+                            res.push(index)
+                            return true
+                        }
+                    })
+                })
+            }
+            return res
+        }
+        /* 通过索引取item */
+        getValueArr(indexArr) {
+            let res = []
+            indexArr.forEach((v, i) => {
+                res.push(this.list[i][v])
+            })
+            return res
+        }
+        /* 获取一个区间内的自增数组 */
+        getRange(start, end) {
+            let res = []
+            if (!end) {
+                end = (new Date()).getFullYear() + 1
+            }
+            for (let i = start; i <= end; i++) {
+                res.push({
+                    id: i,
+                    label: i
+                })
+            }
+            return res
+        }
+        /* 获取时间段内的time数组 */
+        getTimeRange(start = '00:00', end = '24:00', isEnd) {
+            start = this.timeToCount(start)
+            end = this.timeToCount(end)
+            if (isEnd) {
+                start++
+            } else {
+                end--
+            }
+            let res = []
+            for (let i = start; i <= end; i++) {
+                let val = this.countToTime(i)
+                res.push({
+                    id: val,
+                    label: val
+                })
+            }
+            if (this._options.value[1] === 0 && isEnd) {
+                this._options.value[1] = res[0].id
+            }
+            return res
+        }
+        timeToCount(time) {
+            let arr = time.split(':')
+            let h = 60 / this._options.timeStep * arr[0]
+            let m = arr[1] / this._options.timeStep
+            let count = h + m
+            return count
+        }
+        countToTime(count) {
+            let h = parseInt(count / (60 / this._options.timeStep))
+            let m = (count - h * (60 / this._options.timeStep)) * this._options.timeStep
+            h < 10 && (h = '0' + h)
+            m < 10 && (m = '0' + m)
+            return h + ':' + m
+        }
+        /* 重新计算天数的可选范围 */
+        resetDays(year, month, type) {
+            let monthBse = 0
+            if (type === 'index') {
+                monthBse++
+            }
+            if (this._options.type === 'date') {
+                if (year === new Date().getFullYear()) {
+                    if (month === 0) {
+                        month = new Date().getMonth() + 1
+                    }
+                    let date = new Date(year + '/' + month + '/1')
+                    date.setMonth(month)
+                    date.setDate(0)
+                    let count = date.getDate()
+                    this.list[1] = this.getRange(new Date().getMonth() + 1, 12)
+                    if (month === new Date().getMonth() + 1) {
+                        // 判断是否当月，是则开始日期为明天、否则从1号开始
+                        this.list[2] = this.getRange(new Date().getDate() + 1, count)
+                    } else {
+                        this.list[2] = this.getRange(1, count)
+                    }
+                } else {
+                    if (month === 0) {
+                        month++
+                        monthBse = 0
+                    }
+                    let date = new Date(year + '/' + month + '/1')
+                    date.setMonth(month)
+                    date.setDate(0)
+                    let count = date.getDate()
+                    this.list[1] = this.getRange(1, 12)
+                    this.list[2] = this.getRange(1, count)
+                }
+                this.$apply()
+            }
+        }
+        /* 根据开始时间更新结束时间 */
+        resetEndRange(start) {
+            if (this._options.type === 'time') {
+                let end = this._options.timeRange.end
+                this.list[1] = this.getTimeRange(start, end, true)
+            }
+        }
+        init(data, opt) {
+            this._options = Object.assign({}, this._options, opt, this.options)
+            /* 如果是 type = date 改变 datalist 数据 */
+            if (this._options.type === 'date') {
+                // 预约日期 可选日期不可小天今天
+                this.list[0] = this.getRange(this.yearBase)
+                this.list[1] = this.getRange(1, 12)
+                this.list[2] = this.getRange(new Date().getDate(), 31)
+            } else if (this._options.type === 'time') {
+                let start = this._options.timeRange.start
+                let end = this._options.timeRange.end
+                this.list[0] = this.getTimeRange(start, end)
+                this.list[1] = this.getTimeRange(start, end, true)
+                this.$apply()
+            } else {
+                /*  数据再次渲染时，取最新的数据 */
+                if (data) {
+                    this.list = data
+                } else {
+                    this.list = this.datalist
+                }
+            }
+            /* 赋初始值 */
+            this.originValue = this.getIndexArr(this._options.value)
+            this.value = this.getIndexArr(this._options.value)
+            // console.log(this.originValue, 'init')
+        }
+        onLoad() {
+            this.init()
+        }
+    }
+</script>
+
+<style lang="less">
+    .mypicker {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        overflow: hidden;
+        .main_box {
+            /*height: 38%;*/
+            max-height: 45%;
+        }
+    }
+</style>

@@ -1,0 +1,133 @@
+<template>
+    <view class="picker">
+        <view class="mask"></view>
+        <view class="main_box">
+            <view class="picker_head">
+                <span @tap="close">取消</span>
+                <span @tap="submit">确定</span>
+            </view>
+            <view class="picker_main">
+                <!-- <view wx:for="{{doctorlist}}" wx:key="key" class="pickerDoc"> -->
+                <view class="docList" @tap="select_doc('0', '未指定医生')">
+                    <view class="doctors">
+                        <view class="doctor_img mr40">
+                        </view>
+                        <view class="doctor_text flex-column flex-1">
+                            <view class="doc_t">
+                                <text class="doct_name">未指定医生</text>
+                            </view>
+                            <view class="doc_t1">
+                                <text class="doc_t11">没有指定医生诊治的就诊者请选择此项</text>
+                            </view>
+                        </view>
+                        <!-- <view class="selectbox">
+                            <span class="no_sel"></span>
+                        </view> -->
+                    </view>
+                    <span class="{{thisValue === '0' ? 'patient_sel' : 'no_sel'}}"></span>
+                </view>
+                <repeat for="{{doctorlist}}" index="index" key="key">
+                    <view class="docList" @tap="select_doc({{item.doctor.key}}, {{item.doctor.value}})">
+                        <doctcard :docdata="item" :docselect="docselect"></doctcard>
+                        <span class="{{thisValue === item.doctor.key ? 'patient_sel' : 'no_sel'}}"></span>
+                    </view>
+                </repeat>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import DoctCard from '@/components/doctCard1'
+    export default class Docpicker extends wepy.component {
+        config = {
+        }
+        mixins = [Mixin]
+        components = {
+            doctcard: DoctCard
+        }
+        props = {
+            doctorlist: {}
+        }
+        data = {
+            docselect: true,
+            value: '',
+            output: '',
+            thisValue: '',
+            thisName: '',
+            submitData: {
+                thisValue: '',
+                thisName: ''
+            }
+        }
+        computed = {}
+        methods = {
+            submit() {
+                this.submitData.thisValue = this.thisValue
+                this.submitData.thisName = this.thisName
+                this.$emit('doctOutput', this.submitData.thisValue, this.submitData.thisName)
+            },
+            close() {
+                this.thisValue = this.submitData.thisValue
+                this.thisName = this.submitData.thisName
+                this.$emit('doctOutput', false, false)
+            },
+            select_doc(id, name) {
+                this.thisValue = id
+                this.thisName = name
+            }
+        }
+        events = {
+            card1_check() {}
+        }
+        onLoad() {
+            // console.log('array', this.datalist)
+        }
+    }
+</script>
+
+<style lang="less">
+    .picker {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        overflow: hidden;
+        .main_box {
+            height: 55%;
+            max-height: 65%;
+            background-color: #fff;
+            display: flex;
+            flex-direction: column;
+        }
+        .picker_main {
+            flex: 1;
+            overflow-y: auto;
+            overflow-x: hidden;
+        }
+        .docList {
+            position: relative;
+            &::after {
+                content: '';
+                border-bottom: 1rpx solid #ededed;
+                width: 100%;
+                height: 1rpx;
+                position: absolute;
+                bottom: 0;
+                left: 32rpx;
+            }
+            .patient_sel,.no_sel {
+                position: absolute;
+                margin: auto;
+                right: 32rpx;
+                top: 0;
+                bottom: 0rpx;
+                background-color: #fff;
+            }
+        }
+    }
+</style>

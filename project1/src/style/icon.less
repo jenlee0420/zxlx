@@ -1,0 +1,762 @@
+@import 'var';
+// 首页小图标
+.sprite_home{
+    background-image: url('@{imgbaseUrl}/sprite_home.png');
+    background-repeat: no-repeat;
+    background-size: 598rpx;
+    overflow: hidden;
+}
+
+// 首页-当前位置小图标
+.icon_local{
+    background-image: url('@{imgbaseUrl}/icon_local.png');
+    background-repeat: no-repeat;
+    background-size: 22rpx;
+    width: 22rpx;
+    height: 22rpx;
+}
+
+//首页导航图片
+.service , .clinic , .doctor , .member,.bargain_ico{
+    display: block;
+    margin: auto;
+    margin-top: 34rpx;
+    height: 80rpx;
+    width: 82rpx;
+}
+.service{
+    &:extend(.sprite_home);
+    background-position: -240rpx -0rpx ;
+}
+.clinic{
+    &:extend(.sprite_home);
+    background-position: -80rpx -0rpx ;
+}
+.doctor{
+    &:extend(.sprite_home);
+    background-position: -320rpx -0rpx ;
+}
+.member{
+    &:extend(.sprite_home);
+    background-position: -160rpx -0rpx ;
+}
+// 砍价活动
+.bargain_ico{
+    &:extend(.sprite_home);
+    background-position: -9rpx -135rpx ;
+}
+//认证
+.members{
+    &:extend(.sprite_home);
+    background-position: -262rpx -80rpx ;
+}
+//头条
+.friends_title{
+    &:extend(.sprite_home);
+    background-position: -0rpx -0rpx ;
+    float: left;
+    margin: 28rpx  0 0 30rpx;
+    width: 80rpx;
+    height: 80rpx;
+    &:nth-of-type(2){
+        margin-right: 20rpx;
+    }
+}
+
+//右边图标">"
+.rig_icon{
+    &:extend(.sprite_home);
+    background-position: -481rpx -48rpx ;
+}
+
+//会员
+.l_vip{
+    &:extend(.sprite_home);
+    background-position: -166rpx -80rpx ;
+}
+//标志
+.prompt{
+    &:extend(.sprite_home);
+    background-position: -131rpx -78rpx ;
+}
+//感叹号
+.sign{
+    &:extend(.sprite_home);
+    background-position: -198rpx -79rpx ;
+}
+//没有更多了
+.gopng_img{
+    &:extend(.sprite_home);
+    background-position: -576rpx 6rpx ;
+    width: 100%;
+    height: 100%;
+    padding-left: 44rpx;
+    &:after{
+        display: inline-block;
+        width: 22rpx;
+        height: 22rpx;
+    }
+
+}
+//专场
+.tab_i{
+    width: 180rpx;
+    height: 100rpx;
+    line-height: 100rpx;
+    text-align: left;
+    background: #f8f8f8;
+    font-size: 28rpx;
+    color: #666666;
+    padding-left: 32rpx;
+    box-sizing: border-box;
+}
+//专场 icon
+.special_0 {
+    &:extend(.sprite_home);
+    background-position: -228rpx -80rpx;
+    width: 32rpx;
+    height: 32rpx;
+}
+//会员 icon
+.special_1 {
+    &:extend(.sprite_home);
+    background-position: -230rpx -80rpx;
+    width: 32rpx;
+    height: 32rpx;
+}
+//下单支付
+.place {
+    &:extend(.sprite_home);
+    background-position: -48rpx -80rpx ;
+}
+//预约就诊
+.make {
+    &:extend(.sprite_home);
+    background-position: -0rpx -80rpx ;
+}
+//确认诊所
+.confirm {
+    &:extend(.sprite_home);
+    background-position: -528rpx -0rpx ;
+}
+//诊所就诊
+.clinic_doc {
+    &:extend(.sprite_home);
+    background-position: -480rpx -0rpx ;
+}
+//中间的箭头
+.arrow {
+    background-image:url('@{imgbaseUrl}/arrow.png');
+    background-size: 67rpx 7rpx;
+    width:67rpx;
+    height:7rpx
+}
+//档案
+.archives{
+    background-image: url('@{imgbaseUrl}/start_img.png');
+    background-size: 730rpx 900rpx;
+    background-repeat: no-repeat;
+}
+//自我诊断
+.archives_01{
+    &:extend(.archives);
+    background-position: -0rpx -4rpx ;
+}
+//自我预约
+.archives_02{
+    &:extend(.archives);
+    background-position: -0rpx -450rpx ;
+}
+//河狸会员
+.my_vip{
+    &:extend(.archives);
+    background-position: -0rpx -208rpx ;
+    background-size: 100%;
+}
+//病情
+.case_img{
+    background-image: url('@{imgbaseUrl}/case_img.png');
+    background-repeat: no-repeat;
+    background-size: 598rpx;
+    overflow: hidden;
+}
+.case_ico{
+    background-image: url('@{imgbaseUrl}/case_ico.png');
+    background-repeat: no-repeat;
+    background-size: 65rpx;
+    overflow: hidden;
+}
+//检查内容
+.case_lg{
+    width: 43rpx;
+    height: 43rpx;
+}
+//牙周炎
+.case_1{
+    &:extend(.case_ico);
+    background-position: -5rpx -2rpx ;
+}
+//牙龈
+.case_2{
+    &:extend(.case_ico);
+    background-position: -5rpx -48rpx ;
+}
+//龋齿
+.case_3{
+    &:extend(.case_ico);
+    background-position: -5rpx -96rpx ;
+}
+//智齿
+.case_4{
+    &:extend(.case_ico);
+    background-position: -5rpx -141rpx ;
+}
+//牙结石
+.case_5{
+    &:extend(.case_ico);
+    background-position: -5rpx -190rpx ;
+}
+//色素
+.case_6{
+    &:extend(.case_ico);
+    width: 41rpx;
+    background-position: -5rpx -236rpx ;
+}
+//牙齿磨耗度
+.case_7{
+    &:extend(.case_ico);
+    background-position: -5rpx -282rpx ;
+}
+//牙齿松动
+.case_8{
+    &:extend(.case_ico);
+    background-position: -5rpx -330rpx ;
+}
+//牙齿裂痕
+// .case_7{
+//     &:extend(.case_img);
+//     background-position: -350rpx -30rpx ;
+// }
+//咬牙
+.case_9{
+    &:extend(.case_ico);
+    background-position: -5rpx -375rpx ;
+}
+//牙齿排列
+.case_10{
+    &:extend(.case_ico);
+    background-position: -5rpx -421rpx ;
+}
+//重新判断
+.again_img{
+    &:extend(.case_img);
+    background-position: -432rpx -150rpx ;
+}
+//错误
+.case_error{
+    &:extend(.case_img);
+    background-position: -0rpx -0rpx ;
+}
+//无建议
+.case_proposals{
+    &:extend(.case_img);
+    background-position: -30rpx -310rpx;
+}
+
+
+
+// 标题左边箭头
+.title-left-arrow{
+    &:extend(.sprite_home);
+    background-position: -506rpx -55rpx;
+    height: 6rpx;
+    width: 84rpx;
+}
+// 标题左边箭头
+.title-right-arrow{
+    &:extend(.sprite_home);
+    background-position: -506rpx -67rpx;
+    height: 6rpx;
+    width: 84rpx;
+}
+
+
+
+// 我的中心小图标
+.sprite_my{
+    background-image: url('@{imgbaseUrl}/sprite_my.png');
+    background-repeat: no-repeat;
+    background-size: 150rpx;
+    overflow: hidden;
+}
+.my_headBg{
+    &:extend(.sprite_my);
+    background-position: -0rpx -0rpx;
+    height: 150rpx;
+    width: 150rpx;
+}
+.my_mycar{
+    &:extend(.sprite_my);
+    background-position: -0rpx -289rpx;
+}
+.my_bill{
+    &:extend(.sprite_my);
+    background-position: -0rpx -289rpx;
+}
+.my_sch{
+    &:extend(.sprite_my);
+    background-position: -47rpx -198rpx;
+}
+.my_family{
+    &:extend(.sprite_my);
+    background-position: -98rpx -247rpx;
+}
+.my_doc{
+    &:extend(.sprite_my);
+    background-position: -98rpx -197rpx
+}
+.my_fav{
+    &:extend(.sprite_my);
+    background-position: -47rpx -249rpx;
+}
+.contact{
+    &:extend(.sprite_my);
+    background-position: -0rpx -198rpx
+}
+.tel400{
+    &:extend(.sprite_my);
+    background-position: -96rpx -288rpx
+}
+
+.my_arrow{
+    &:extend(.sprite_my);
+    background-position: -38rpx -288rpx;
+    height: 26rpx;
+    width: 26rpx;
+    display: inline-block;
+}
+// 订单图标
+.my_topay{
+    &:extend(.sprite_my);
+    background-position: -48rpx -150rpx;
+    height: 48rpx;
+    width: 48rpx;
+    display: inline-block;
+}
+.my_paied{
+    &:extend(.sprite_my);
+    background-position: -0rpx -150rpx;
+    height: 48rpx;
+    width: 48rpx;
+    display: inline-block;
+}
+.my_evaluation{
+    &:extend(.sprite_my);
+    background-position: -96rpx -150rpx;
+    height: 48rpx;
+    width: 48rpx;
+    display: inline-block;
+}
+.arrow-right{
+    &:extend(.sprite_my);
+    background-position: -38rpx -289rpx;
+    height: 26rpx;
+    width: 26rpx;
+    display: inline-block;
+}
+// 我的订单小图标
+.sprite_myOrder{
+    background-image: url('@{imgbaseUrl}/sprite_my1.png');
+    background-repeat: no-repeat;
+    background-size: 160rpx 1209rpx;
+    overflow: hidden;
+}
+.star{
+    &:extend(.sprite_myOrder);
+    background-position: -0rpx -231rpx;
+    height: 51rpx;
+    width: 50rpx;
+    display: inline-block;
+    &.star_half{
+        background-position: -0rpx -180rpx;
+    }
+    &.star_gray{
+        background-position: -0rpx -282rpx;
+    }
+}
+
+.star_mini{
+    &:extend(.sprite_myOrder);
+    background-position: -0rpx -649rpx;
+    height: 30rpx;
+    width: 30rpx;
+    display: inline-block;
+    &.star_half{
+        background-position: -0rpx -619rpx;
+    }
+    &.star_gray{
+        background-position: -0rpx -589rpx;
+    }
+}
+
+.add_pic{
+    background-image: url('@{imgbaseUrl}/addimage.png');
+    // &:extend(.sprite_myOrder);addimage.png
+    // background-position: -39rpx -429rpx;
+    background-size: 120rpx;
+    height: 120rpx;
+    width: 120rpx;
+    display: inline-block;
+}
+// 性别图标 男
+.man{
+    &:extend(.sprite_myOrder);
+    background-position: -0rpx -333rpx;
+    width: 30rpx;
+    height: 30rpx;
+    display: inline-block;
+}
+// 性别图标 女
+.woman{
+    &:extend(.sprite_myOrder);
+    background-position: -0rpx -363rpx;
+    width: 30rpx;
+    height: 30rpx;
+    display: inline-block;
+}
+// 选择就诊人
+.patient_sel{
+    &:extend(.sprite_myOrder);
+    background-position: -0rpx -946rpx;
+    width: 50rpx;
+    height: 48rpx;
+    display: inline-block;
+}
+// 待选就诊人
+.no_sel{
+    &:extend(.sprite_myOrder);
+    background-position: -0rpx -1005rpx;
+    width: 50rpx;
+    height: 50rpx;
+    display: inline-block;
+}
+// 专属牙医图标
+.doc_phone,.doc_wechat{
+    &:extend(.sprite_myOrder);
+    background-position: -69rpx -890rpx;
+    width: 64rpx;
+    height: 66rpx;
+    display: inline-block;
+}
+.doc_wechat{
+    background-position: -69rpx -991rpx;
+}
+
+
+//退款成功图标
+.refund-ico{
+    &:extend(.sprite_myOrder);
+    background-position: -0rpx -545rpx;
+    height: 40rpx;
+    width: 40rpx;
+    display: inline-block;
+    vertical-align:middle;
+}
+
+//家庭档案图标
+.family_ico{
+    &:extend(.sprite_myOrder);
+    background-position: -0rpx -1059rpx;
+    height: 150rpx;
+    width: 150rpx;
+    display: inline-block;
+}
+//在线预约图标
+.sch_item, .sch_clinic, .sch_date, .sch_time, .sch_doc, .sch_remark{
+    &:extend(.sprite_myOrder);
+    height: 36rpx;
+    width: 36rpx;
+    display: inline-block;
+}
+.sch_item{
+    background-position: -0rpx -106rpx;
+}
+.sch_clinic{
+    background-position: -0rpx -144rpx;
+}
+.sch_date{
+    background-position: -0rpx -72rpx;
+}
+.sch_time{
+    background-position: -0rpx -393rpx ;
+}
+.sch_doc{
+    background-position: -0rpx -0rpx;
+}
+.sch_remark{
+    background-position: -0rpx -36rpx;
+}
+
+
+// *******************************************
+// 我的账单
+.sprite_pay{
+    background-image: url('@{imgbaseUrl}/sprite_paytype.png');
+    background-repeat: no-repeat;
+    background-size: 80rpx 450rpx;
+    overflow: hidden;
+}
+.wehcat{
+    &:extend(.sprite_pay);
+    background-position: -0rpx -239rpx;
+    height: 78rpx;
+    width: 78rpx;
+    display: inline-block;
+}
+.alipay{
+    &:extend(.sprite_pay);
+    background-position: -0rpx -80rpx;
+    height: 78rpx;
+    width: 78rpx;
+    display: inline-block;
+}
+.cashpay{
+    &:extend(.sprite_pay);
+    background-position: -0rpx -0rpx;
+    height: 80rpx;
+    width: 80rpx;
+    display: inline-block;
+}
+.heliwallet{
+    &:extend(.sprite_pay);
+    background-position: -0rpx -158rpx;
+    height: 80rpx;
+    width: 80rpx;
+    display: inline-block;
+}
+//已结清
+.pay_over{
+    &:extend(.sprite_pay);
+    background-position: -0rpx -318rpx;
+    height: 61rpx;
+    width: 62rpx;
+    display: inline-block;
+}
+
+//绑定手机小图标
+.bindphone-ico,.bindphone-ico2{
+    &:extend(.sprite_pay);
+    background-position: -0px -378rpx;
+    height: 36rpx;
+    width: 36rpx;
+    display: inline-block;
+}
+.bindphone-ico2{
+    background-position: -0px -414rpx;
+}
+// 诊所小图片
+.hospital_img{
+    background-image: url('@{imgbaseUrl}/hospital_img.png');
+    background-repeat: no-repeat;
+    background-size: 598rpx;
+    overflow: hidden;
+}
+//诊所
+.hospital_icon{
+    &:extend(.hospital_img);
+    background-position: -284rpx -85rpx;
+}
+//诊所环境
+.hos_i{
+    &:extend(.hospital_img);
+    background-position: -246rpx -85rpx;
+}
+//营业时间
+.business{
+    &:extend(.hospital_img);
+    background-position: -154rpx -85rpx;
+}
+//定位
+.location{
+    &:extend(.hospital_img);
+    background-position: -187rpx -86rpx;
+}
+//医保
+.medical {
+    &:extend(.hospital_img);
+    background-position: -216rpx -85rpx;
+}
+//医
+.doct {
+    &:extend(.hospital_img);
+    background-position:-563rpx -0;
+}
+//关闭按钮
+.b_close {
+    &:extend(.hospital_img);
+    background-position:-75px -0px;
+}
+
+/*全国地区 小三角*/
+.triangle_down{
+    position: relative;
+    display: inline-block;
+    &:after{
+        content: '';
+        border-right:8rpx solid transparent ;
+        border-left:8rpx solid transparent;
+        border-top:10rpx solid rgb(153, 153, 153);
+        width: 1rpx;
+        height: 0rpx;
+        position: absolute;
+        right:-22rpx;
+        top:0;
+        bottom:0;
+        margin: auto;
+    }
+}
+.triangle_up{
+    &:after{
+        transform: rotate(180deg);
+        transition: all .3s;
+    }
+}
+//空心三角形
+.triangle1_down{
+    position: relative;
+    display: inline-block;
+    &:after{
+        content: '';
+        border-left: 2rpx solid transparent;
+        border-top: 2rpx solid transparent;
+        border-right: 3rpx solid #333;
+        border-bottom: 3rpx solid #333;
+        transform: rotate(45deg);
+        transition: all .3s;
+        width: 14rpx;
+        height: 14rpx;
+        position: absolute;
+        right:-22rpx;
+        top:0rpx;
+        bottom:8rpx;
+        margin: auto;
+    }
+}
+.triangle1_up{
+    &:after{
+        transform: rotate3d(0,0,-45deg);
+    }
+}
+
+//定位
+.location1,.refresh{
+    background-image: url('@{imgbaseUrl}/location1.png');
+    background-repeat: no-repeat;
+    background-size: 30rpx;
+    overflow: hidden;
+    display: inline-block;
+    width: 30rpx;
+    height: 30rpx;
+}
+.refresh{
+    background-image: url('@{imgbaseUrl}/refresh.png');
+}
+
+//评价
+.close_ico{
+    background-image: url('@{imgbaseUrl}/close_ico.png');
+    background-repeat: no-repeat;
+    background-size: 56rpx;
+    width: 56rpx;
+    height: 56rpx;
+    display: inline-block;
+}
+
+
+
+//***************************************
+// 砍价全部小图标
+
+//************************
+.bar_all{
+    background-image: url('@{imgbaseUrl}/bar_all.png');
+    background-repeat: no-repeat;
+    background-size: 202rpx 714rpx;
+    overflow: hidden;
+}
+// 左右箭头图标
+.bar_oulf{
+    &:extend(.bar_all);
+    background-position: -0rpx -228rpx;
+    width: 100%;
+    height: 100%;
+}
+.bar_ourg{
+    &:extend(.bar_all);
+    background-position: -0rpx -220rpx;
+    width: 100%;
+    height: 100%;
+}
+// 青龙刀
+.bar_oud1{
+    &:extend(.bar_all);
+    background-position: -0rpx -516rpx;
+    width: 100%;
+    height: 100%;
+}
+// 砍刀
+.bar_oukd{
+    &:extend(.bar_all);
+    background-position: -0rpx -436rpx;
+    width: 100%;
+    height: 100%;
+}
+// 问号
+.asks{
+    &:extend(.bar_all);
+    background-position: -0rpx -564rpx;
+    width: 100%;
+    height: 100%;
+}
+// 砍价成功
+.sucss_Img{
+    &:extend(.bar_all);
+    background-position: -0rpx -588rpx;
+    width: 100%;
+    height: 100%;
+}
+// 更多 收起
+.more_Img{
+    &:extend(.bar_all);
+    background-position: -0rpx -0rpx;
+    width: 100%;
+    height: 100%;
+}
+.collect_Img{
+    &:extend(.bar_all);
+    background-position: -0rpx -20rpx;
+    width: 100%;
+    height: 100%;
+}
+// 标签三角形
+.jiags_Img{
+    &:extend(.bar_all);
+    background-position: -0rpx -485rpx;
+    width: 100%;
+    height: 100%;
+}
+// 分隔节点
+.division{
+    &:extend(.bar_all);
+    background-position: -0rpx -40rpx;
+    width: 100%;
+    height: 100%;
+    background-size: 205rpx
+}
+// 砍价悬浮图标
+.bag_xf{
+    &:extend(.bar_all);
+    background-position: -0rpx -236rpx;
+    width: 202rpx;
+    height: 199rpx;
+}

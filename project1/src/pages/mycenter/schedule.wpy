@@ -1,0 +1,330 @@
+<template>
+    <view class="orderMain">
+        <view class="order_nav">
+            <!-- <span wx:for="{{TypeList}}" wx:for-item="item" wx:key="index">{{item.name}}</span> -->
+            <repeat for="{{TypeList}}" index="index" item="item" key="key">
+                <span class="{{currType == item.key ? 'act' : ''}}" @tap="changeType({{item.key}})">{{item.name}}</span>
+            </repeat>
+        </view>
+        <swiper indicator-dots="{{false}}" autoplay="{{false}}" class="swiper" bindchange="changeType_swiper" current="{{currentIndex}}">
+            <block wx:for="{{TypeList}}" wx:for-item="item" wx:key="index">
+                <swiper-item>
+                    <scroll-view scroll-y @scrolltolower="nextpage" style="height: 100%;">
+                        <view class="main-scroll" wx:if="{{currType === item.key}}">
+                            <block wx:if="{{item.list.length > 0}}">
+                                <repeat for="{{item.list}}" index="index" item="itemb" key="key">
+                                    <!--订单内容-->
+                                    <view class="appointCont">
+                                        <view class="TitleHeader">
+                                            <span>{{itemb.create_time}}</span><span class="maincolor">{{itemb.status.value}}</span>
+                                        </view>
+                                        <view class="appointInfo fs28">
+                                            <ul>
+                                                <li>
+                                                    <span class="c999">就诊人</span>
+                                                    <span class="c333">{{itemb.patient_name}}</span>
+                                                </li>
+                                                <li>
+                                                    <span class="c999">预约时间</span>
+                                                    <span class="c333">{{itemb.appointment_time}}</span>
+                                                </li>
+                                                <li>
+                                                    <span class="c999">预约医生</span>
+                                                    <span class="c333">{{itemb.doctor_name}}</span>
+                                                </li>
+                                                <li>
+                                                    <span class="c999">病情描述</span>
+                                                    <span class="c333">{{itemb.remark}}</span>
+                                                </li>
+                                            </ul>
+                                        </view>
+                                        <view class="btns-foot">
+                                            <sapn class="btn-Cancel" @tap="openConfire({{itemb}})" wx:if="{{itemb.status.key === 1}}">取消预约</sapn>
+                                            <sapn class="btn-Cancel" @tap="openConfire({{itemb}})" wx:if="{{itemb.status.key === 3}}">删除预约</sapn>
+                                        </view>
+                                    </view>
+                                    <!--订单内容结束-->
+                                </repeat>
+                                <view class="list-foot foot" wx:if="{{loading}}">
+                                    加载中......
+                                </view>
+                                <view class="list-foot foot" wx:if="{{item.list.length == item.total_count && item.list.length > page_size && !loading}}">
+                                    <span class="gopng_img">没有更多了</span>
+                                </view>
+                            </block>
+                            <block wx:if="{{isload && item.list.length == 0}}">
+                                <view class="nodata">
+                                    <span class="word">暂无数据</span>
+                                </view>
+                            </block>
+                        </view>
+                    </scroll-view>
+                </swiper-item>
+            </block>
+        </swiper>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Schedule extends wepy.page {
+        config = {
+            navigationBarTitleText: '我的预约',
+            enablePullDownRefresh: true,
+            backgroundTextStyle: 'dark',
+            disableScroll: true
+        }
+        components = {}
+        mixins = [Mixin]
+        data = {
+            isload: false,
+            loading: false,
+            TypeList: [{
+                name: '全部',
+                key: '10',
+                list: [],
+                current_page: 1
+            }, {
+                name: '待确认',
+                key: '20',
+                current_page: 1,
+                list: []
+            }, {
+                name: '已确认',
+                key: '30',
+                current_page: 1,
+                list: []
+            }, {
+                name: '已取消',
+                key: '40',
+                current_page: 1,
+                list: []
+            }],
+            currType: '10',
+            schlist: [],
+            currSchid: '',
+            page_size: 10,
+            currentIndex: 0,
+            cur: 0
+        }
+        computed = {}
+        methods = {
+            changeType(index) {
+                this.currentIndex = this.getTypeIndex(index)
+                console.log(this.currentIndex)
+            },
+            // 左右滑动时切换当前列表
+            changeType_swiper(e) {
+                if (e.detail) {
+                    let index = e.detail.current
+                    this.currType = this.TypeList[index].key
+                }
+                this.getschlist()
+            },
+            // 确认取消预约
+            openConfire(obj) {
+                let msg = ''
+                let confirmFun
+                this.currSchid = obj.id
+                if (obj.status.key === 1) {
+                    msg = '是否确认取消该预约'
+                    confirmFun = 'cancelSch'
+                } else if (obj.status.key === 3) {
+                    msg = '是否确认删除该预约'
+                    confirmFun = 'delSch'
+                }
+                let showdata = {
+                    confirm: confirmFun,
+                    content: msg
+                }
+                this.showAlert(showdata)
+            },
+            nextpage() {
+                let index = this.getTypeIndex(this.currType)
+                if (this.TypeList[index].list.length > 0) {
+                    if (this.TypeList[index].list.length < this.TypeList[index].total_count) {
+                        this.TypeList[index].current_page += 1
+                        this.getschlist(true)
+                    }
+                }
+            }
+        }
+        events = {}
+        // 取消预约
+        cancelSch(arg) {
+            wepy.request({
+                url: '/weiappapi/order/cancelappointment',
+                method: 'POST',
+                data: {
+                    appointment_id: this.currSchid
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    this.getschlist()
+                } else {
+                    this.showAlert({
+                        showCancel: false,
+                        content: res.msg
+                    })
+                }
+            })
+        }
+        // 删除预约
+        delSch(arg) {
+            wepy.request({
+                url: '/weiappapi/order/deleteappointment',
+                method: 'POST',
+                data: {
+                    appointment_id: this.currSchid
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    this.getschlist()
+                } else {
+                    this.showAlert({
+                        showCancel: false,
+                        content: res.msg
+                    })
+                }
+            })
+        }
+        getschlist(append) {
+            this.loading = true
+            let index = this.getTypeIndex(this.currType)
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/order/appointmentlist',
+                method: 'POST',
+                data: {
+                    status: this.currType,
+                    current_page: this.TypeList[index].current_page,
+                    page_size: this.page_size
+                }
+            }).then(res => {
+                this.showloading(false)
+                if (res.code === '1') {
+                    this.TypeList[index].total_count = res.data.total_count
+                    let arr = this.TypeList[index].list
+                    if (append) {
+                        arr = arr.concat(res.data.list)
+                    } else {
+                        arr = res.data.list
+                    }
+                    this.TypeList[index].list = arr
+                }
+                this.loading = false
+                this.isload = true
+                this.$apply()
+            }).catch(err => {
+                console.log(err)
+            })
+        }
+        getTypeIndex(status) {
+            let reIndex = null
+            for (let i = 0; i < this.TypeList.length; i++) {
+                if (status === this.TypeList[i].key) {
+                    reIndex = i
+                }
+            }
+            return reIndex
+        }
+        onLoad(option) {
+            if (option.type) {
+                this.currType = option.type
+                this.currentIndex = this.getTypeIndex(this.currType)
+            }
+            this.getschlist()
+        }
+        onPullDownRefresh() {}
+        // onReachBottom() {
+        //     console.log('errere')
+        //     this.nextpage()
+        // }
+    }
+</script>
+
+<style lang="less">
+    .appointCont {
+        background: #fff;
+        margin: 20rpx 0;
+        /*padding-bottom: c(90);*/
+        .TitleHeader {
+            display: flex;
+            height: 90rpx;
+            font-size: 30rpx;
+            padding: 0 32rpx;
+            color: #333;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .appointInfo {
+            background-color: #f5f7fa;
+            padding: 30rpx 20rpx 10rpx 20rpx;
+            margin: 0 32rpx;
+            li {
+                display: flex;
+                margin-bottom: 30rpx;
+                .c999 {
+                    display: inline-block;
+                    width: 150rpx;
+                }
+            }
+        }
+        .btns-foot {
+            border: none;
+        }
+    }
+    .orderMain {
+        height: 100%; // position: relative;
+    }
+    .swiper {
+        height: 100%;
+        box-sizing: border-box;
+        padding-top: 80rpx;
+    }
+    .order_nav {
+        position: fixed;
+        top: 0px;
+        display: flex;
+        font-size: 28rpx;
+        width: 100%;
+        color: #666;
+        height: 80rpx;
+        line-height: 80rpx;
+        background-color: #fff;
+        border-bottom: 1rpx solid @bColor;
+        z-index: 10;
+        span {
+            margin: auto;
+            box-sizing: content-box;
+            display: flex;
+            &:first-child {
+                padding-left: 14rpx;
+                &.act:after {
+                    left: 12rpx;
+                }
+            }
+            &.act {
+                position: relative;
+                font-weight: bold;
+                &:after {
+                    content: '';
+                    position: absolute;
+                    width: 60rpx;
+                    height: 2px;
+                    background-color: @theme;
+                    left: 0;
+                    right: 0;
+                    bottom: 0;
+                    margin: auto;
+                }
+            }
+        }
+    }
+    .main-scroll {
+        // overflow-y: auto;
+        max-height: 100%;
+        -webkit-overflow-scrolling: touch;
+    }
+</style>

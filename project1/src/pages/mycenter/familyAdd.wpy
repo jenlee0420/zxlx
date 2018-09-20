@@ -1,0 +1,496 @@
+<template>
+    <view class="container mt20 mb30">
+        <form bindsubmit="bindFormSubmit" wx:if="{{isload}}">
+            <view>
+                <view class="family_info">
+                    <repeat for="{{array}}" item="item">
+                        <view class="{{item.class}} flex" @tap="showPicker({{item.object}}, {{item.disabled}})">
+                            <span class="fs34 c333">{{item.name}}</span>
+                            <span class="t_r flex-1 fs30 c929292" wx:if="{{item.type=='image'}}" @tap="chooseheadimg">
+                                                            <image src="{{item.value ? item.value : baseHeadImg}}" @error="default_head" data-img="array,0,value"/>
+                                                        </span>
+                            <span class="t_r flex-1 fs30 c929292" wx:elif="{{item.type=='select'}}">
+                                                            {{item.value ? item.value : item.default}}
+                                                        </span>
+                            <span class="t_r flex-1 fs30 c929292" wx:else>
+                                                            <input @input="setArray({{index}})" disabled="{{item.disabled}}" name="{{item.object}}" type="{{item.type}}" value="{{item.value}}" placeholder="{{item.default}}"/>
+                                                        </span>
+                            <span wx:if="{{(item.type=='select' || item.type=='image') && !item.disabled}}" class="arrow-right"></span>
+                        </view>
+                    </repeat>
+                    <view class="flex">
+                        <span class="fs34 c333">验证码</span>
+                        <span class="t_r flex-1 fs30 c929292">
+                                <input name="code" type="number" value="" placeholder="请输入验证码"/>
+                            </span>
+                        <span class="codeBtn">
+                                <button class="btn-sendcode btn_fff" disabled="{{code_disabled}}" @tap="sendSms">{{waitInfo}}</button>
+                            </span>
+                    </view>
+                </view>
+                <view class="family_info mt20" wx:if="{{thisType=='edit'}}">
+                    <view class="flex" @tap="navtoFile">
+                        <span class="fs34 c333 flex-1">查看个人口腔档案</span>
+                        <span class="fs28 c929292" wx:if="{{is_diagnosis != 1}}">未创建档案</span>
+                        <span class="arrow-right"></span>
+                    </view>
+                </view>
+            </view>
+            <view class="mt30 flex-column p-0-32">
+                <!--<text class="fs24 c666">温馨提示</text>
+                    <text class="fs24 c929292 mt20 lh32">应国家卫生计委要求，预约挂号需使用实名信息，账号未填写实名信息不可预约挂号。</text>
+                    <text class="fs24 c929292 mt20 lh32">姓名、身份证号等信息一经填写不可更改，请谨慎填写。</text>-->
+            </view>
+            <button class="btn_w100 mb30" form-type="submit">保存</button>
+            <view class="spaceBox"></view>
+        </form>
+        <mypicker :datalist="gender" :options.sync="genderOptions" wx:if="{{genderOptions.show}}"></mypicker>
+        <mypickerdate :options.sync="pcikerDate" wx:if="{{pcikerDate.show}}"></mypickerdate>
+        <shippicker :datalist.sync="familyShip" :options.sync="ShipOptions" wx:if="{{ShipOptions.show}}"></shippicker>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import mypicker from '@/components/mypicker'
+    import bripicker from '@/components/bripicker'
+    export default class FamilyAdd extends wepy.page {
+        config = {
+            navigationBarTitleText: '添加家人'
+        }
+        mixins = [Mixin]
+        components = {
+            mypicker: mypicker,
+            shippicker: mypicker,
+            mypickerdate: bripicker
+        }
+        data = {
+            code_disabled: true,
+            smsCode: '',
+            waitInfo: '获取验证码',
+            oldphone: '',
+            pcikerDate: {
+                show: false,
+                type: 'date',
+                value: [new Date().getFullYear() - 3, new Date().getMonth() + 1, new Date().getDate()],
+                defYear: new Date().getFullYear() - 3
+            },
+            DateVal: '',
+            gender: [
+                [{
+                    id: 1,
+                    label: '男'
+                }, {
+                    id: 2,
+                    label: '女'
+                }]
+            ],
+            genderVal: '',
+            genderOptions: {
+                show: false,
+                // value: ['1'],
+                type: 'default'
+            },
+            relationVal: '',
+            familyShip: [],
+            ShipOptions: {
+                show: false,
+                // value: ['2'],
+                type: 'default',
+                key: 'key',
+                label: 'value'
+            },
+            showgender: false,
+            showDoct: false,
+            thisId: '', // 修改家庭成员信息 id
+            thisType: '',
+            isload: false,
+            array: {
+                'head': {
+                    name: '头像',
+                    value: '',
+                    type: 'image',
+                    class: 'h170'
+                },
+                'name': {
+                    name: '姓名',
+                    default: '请输入真实姓名',
+                    type: 'text',
+                    object: 'truename'
+                },
+                'gender': {
+                    name: '性别',
+                    default: '请选择',
+                    type: 'select',
+                    object: 'gender',
+                    disabled: false,
+                    value: ''
+                },
+                'bri': {
+                    name: '出生日期',
+                    default: '请选择',
+                    type: 'select',
+                    object: 'age',
+                    disabled: false,
+                    value: ''
+                },
+                'ship': {
+                    name: '成员关系',
+                    default: '请选择',
+                    type: 'select',
+                    object: 'ship',
+                    disabled: false,
+                    value: ''
+                },
+                'phone': {
+                    name: '手机号码',
+                    default: '用于接收就诊短信',
+                    type: 'number',
+                    object: 'phone',
+                    value: ''
+                }
+            },
+            // {
+            //     name: '昵称',
+            //     default: '请输入昵称',
+            //     type: 'text',
+            //     object: 'username'
+            // },
+            // {
+            //     name: '身份证号',
+            //     default: '请输入身份证号',
+            //     type: 'text',
+            //     object: 'cardid'
+            // },
+            currPicker: '',
+            is_diagnosis: 0,
+            loop: null
+        }
+        computed = {}
+        methods = {
+            // 发送验证码
+            sendSms() {
+                this.code_disabled = true
+                let wait = 60
+                wepy.request({
+                    url: 'weiappapi/familyarchives/familysendsms',
+                    method: 'POST',
+                    data: {
+                        'mobile': this.array.phone.value
+                    }
+                }).then(res => {
+                    if (res.code === '1') {
+                        this.loop = setInterval(() => {
+                            wait--
+                            this.waitInfo = '重新发送(' + wait + ')'
+                            if (wait === 0) {
+                                clearInterval(this.loop)
+                                this.waitInfo = '重新发送'
+                                this.code_disabled = false
+                            }
+                            this.$apply()
+                        }, 1000)
+                        this.showSuccess('发送成功')
+                    } else {
+                        this.code_disabled = false
+                        this.showAlert({
+                            showCancel: false,
+                            content: res.msg
+                        })
+                        return false
+                    }
+                })
+            },
+            // 跳转档案模块
+            navtoFile() {
+                if (this.is_diagnosis === 1) {
+                    wepy.navigateTo({
+                        url: '/pages/archives/presentation?family_id=' + this.thisId
+                    })
+                } else {
+                    wepy.navigateTo({
+                        url: '/pages/archives/diagnosis?family_id=' + this.thisId
+                    })
+                }
+            },
+            // 选择头像
+            chooseheadimg() {
+                this.chooseImage({
+                    count: 1
+                }).then(res => {
+                    console.log(res)
+                    this.array.head.value = res[0]
+                    this.$apply()
+                })
+            },
+            // 显示选择列表
+            showPicker(object, disabled) {
+                if (disabled) {
+                    return
+                }
+                this.currPicker = object
+                switch (object) {
+                    case 'gender':
+                        this.genderOptions.show = true
+                        break
+                    case 'ship':
+                        this.ShipOptions.show = true
+                        break
+                    case 'age':
+                        this.pcikerDate.show = true
+                        break
+                    default:
+                        break
+                }
+            },
+            closeDoc() {
+                this.showDoct = false
+            },
+            // 提交表单
+            bindFormSubmit(e) {
+                let eValue = e.detail.value
+                let msg = ''
+                let param = {
+                    avatar: this.array.head.value,
+                    user_name: eValue.truename,
+                    birthday: this.DateVal,
+                    gender: this.genderVal,
+                    relation: this.relationVal,
+                    mobile: eValue.phone,
+                    id_card: eValue.cardid,
+                    sms_code: eValue.code
+                    // nickname: eValue.username
+                }
+                let regphone = new RegExp(this.reg.phone)
+                if (!param.user_name) {
+                    msg = '请输入姓名'
+                } else if (!param.birthday) {
+                    msg = '请输入出生日期'
+                } else if (!param.gender) {
+                    msg = '请选择性别'
+                } else if (!param.relation) {
+                    msg = '请选择成员关系'
+                } else if (!param.mobile) {
+                    msg = '请输入手机号'
+                } else if (!regphone.test(param.mobile)) {
+                    msg = '请输入正确手机号'
+                }
+                console.log(param, e)
+                let url = ''
+                if (this.thisType === 'edit') {
+                    url = 'weiappapi/familyarchives/editArchives'
+                    param.id = this.thisId
+                    if (this.oldphone !== param.mobile) {
+                        if (!param.sms_code) {
+                            msg = '请输入验证码'
+                        }
+                    }
+                } else {
+                    url = 'weiappapi/familyarchives/addArchives'
+                    if (!param.sms_code) {
+                        msg = '请输入验证码'
+                    }
+                }
+                if (msg) {
+                    this.showAlert({
+                        showCancel: false,
+                        content: msg
+                    })
+                    return false
+                }
+                wepy.request({
+                    url: url,
+                    method: 'POST',
+                    data: param
+                }).then(res => {
+                    if (res.code === '1') {
+                        this.reSetUserInfo([param])
+                        this.showSuccess()
+                        wepy.navigateBack()
+                    } else {
+                        this.showAlert({
+                            showCancel: false,
+                            content: res.msg
+                        })
+                    }
+                })
+            },
+            setArray(index, e) {
+                this.array[index].value = e.detail.value
+                if (index === 'phone') {
+                    // 校验手机号
+                    if (this.regPhone(e.detail.value)) {
+                        this.code_disabled = false
+                    } else {
+                        this.code_disabled = true
+                    }
+                }
+            }
+        }
+        events = {
+            output(res) {
+                console.log(res)
+                switch (this.currPicker) {
+                    case 'gender':
+                        this.genderOptions.show = false
+                        if (res.length > 0) {
+                            this.array.gender.value = res[0].label
+                            this.genderOptions.value = [res[0].id]
+                            this.genderVal = res[0].id
+                            this.$invoke('mypicker', 'reload_init', false, this.genderOptions)
+                        }
+                        break
+                    case 'ship':
+                        this.ShipOptions.show = false
+                        if (res.length > 0) {
+                            let _key = this.ShipOptions.key
+                            let _val = this.ShipOptions.label
+                            this.array.ship.value = res[0][_val]
+                            this.ShipOptions.value = [res[0][_key]]
+                            this.relationVal = res[0][_key]
+                            this.$invoke('shippicker', 'reload_init', this.familyShip, this.ShipOptions)
+                        }
+                        break
+                    case 'age':
+                        this.pcikerDate.show = false
+                        if (res.length > 0) {
+                            this.DateVal = res[0].id + '-' + res[1].id + '-' + res[2].id
+                            this.array.bri.value = this.DateVal
+                            this.pcikerDate.value = [res[0].id, res[1].id, res[2].id]
+                            this.$invoke('mypickerdate', 'reload_init', false, this.pcikerDate)
+                        }
+                        break
+                    default:
+                        break
+                }
+                // this.$apply()
+            }
+        }
+        // 取关系列表的数据字典
+        getRelationship() {
+            wepy.request({
+                url: 'weiappapi/familyarchives/relationship',
+                method: 'get',
+                data: {}
+            }).then(res => {
+                if (res.code === '1') {
+                    let data = res.data.slice(1)
+                    this.familyShip = [data]
+                    // this.ShipOptions.value = [res.data[0].key]
+                }
+                this.$invoke('shippicker', 'reload_init', this.familyShip)
+                this.$apply()
+            })
+        }
+        getFamilyData() {
+            this.showloading()
+            wepy.request({
+                url: 'weiappapi/familyarchives/familydata',
+                method: 'get',
+                data: {
+                    family_id: this.thisId
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    let arrayinfo = res.data[0]
+                    this.array.head.value = arrayinfo.avatar
+                    // this.array[1].value = arrayinfo.nickname
+                    this.array.name.value = arrayinfo.user_name
+                    // this.array[2].value = arrayinfo.id_card
+                    this.array.gender.value = arrayinfo.gender.value
+                    this.array.bri.value = arrayinfo.birthday
+                    this.array.ship.value = arrayinfo.relation.value
+                    this.array.phone.value = arrayinfo.mobile
+                    this.oldphone = arrayinfo.mobile
+                    this.is_diagnosis = res.data.is_diagnosis
+                    this.genderOptions.value = [arrayinfo.gender.key]
+                    this.ShipOptions.value = [arrayinfo.relation.key]
+                    let tmpBri = new Date(arrayinfo.birthday)
+                    this.pcikerDate.value = [tmpBri.getFullYear(), tmpBri.getMonth() + 1, tmpBri.getDate()]
+                    this.DateVal = arrayinfo.birthday
+                    this.genderVal = arrayinfo.gender.key
+                    this.relationVal = arrayinfo.relation.key
+
+                    // 本人关系不可修改
+                    this.array.ship.disabled = arrayinfo.relation.key === 1 ? true : false
+
+                    this.$invoke('shippicker', 'reload_init', false, this.ShipOptions)
+                    this.$invoke('mypicker', 'reload_init', false, this.genderOptions)
+                    this.$invoke('mypickerdate', 'reload_init', false, this.pcikerDate)
+                    if (arrayinfo.relation.key === 1) {
+                        wepy.setNavigationBarTitle({
+                            title: '我的信息'
+                        })
+                    }
+                }
+                this.isload = true
+                this.$apply()
+                this.showloading(false)
+            })
+        }
+        onUnload() {
+            clearInterval(this.loop)
+            this.waitInfo = '获取验证码'
+            this.code_disabled = false
+        }
+        onLoad(query) {
+            console.log(query)
+            if (query) {
+                if (query.type === 'edit') {
+                    wepy.setNavigationBarTitle({
+                        title: '家人信息'
+                    })
+                    this.thisType = 'edit'
+                } else {
+                    this.isload = true
+                    this.$apply()
+                }
+                if (query.id) {
+                    this.thisId = query.id
+                    this.getFamilyData()
+                }
+            }
+            this.getRelationship()
+        }
+        onShow() {
+            if (this.thisId) {
+                this.getFamilyData()
+            }
+        }
+    }
+</script>
+
+<style lang="less">
+    input {
+        font-size: 30rpx;
+        color: #929292;
+    }
+    .family_info {
+        padding-left: 32rpx;
+        background-color: #fff;
+        height: auto; // box-sizing: border-box;
+        view {
+            height: 100rpx; // line-height: 100rpx;
+            border-bottom: 1rpx solid @bColor;
+            padding-right: 32rpx;
+            justify-content: center;
+            align-items: center;
+            &:last-child {
+                border-bottom: none;
+            }
+        }
+        .h170 {
+            height: 170rpx;
+            line-height: 170rpx;
+        }
+        image {
+            width: 108rpx;
+            height: 108rpx;
+            border-radius: 50%
+        }
+        .codeBtn {
+            margin-left: 20rpx;
+        }
+    }
+</style>

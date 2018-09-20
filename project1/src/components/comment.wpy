@@ -1,0 +1,179 @@
+
+<template>
+    <view class="wrp">
+        <view class="comments">
+            <view class="herder_l">
+                <view class="doc_portrait">
+                    <image src="{{comments.avatar}}"></image>
+                </view>
+            </view>
+            <view class="herder_b">
+                <view class="doc_name">
+                    <text class="doc_n">{{comments.user_name}}</text>
+                    <text class="herder_r">{{comments.comment_time}}</text>
+                </view>
+                <view class="doc_p flex-algin-center flex">
+                    <text class="doc_xt mr12">评分</text>
+                    <view class="score mr12">
+                        <span class="mico_star_gray">
+                            <span class="mico_star_all" style="width:{{(comments.score / 5) * 100}}%"></span>
+                        </span>
+                    </view>
+                </view>
+                <view class="doc_type">
+                    <text>{{comments.comment}}</text>
+                </view>
+                <view class="{{comments.pic.length === 1 ? 'doc_img' : 'doc_imgs'}}">
+                    <image mode="aspectFill" wx:for="{{comments.pic}}" wx:key="{{index}}" wx:for-item="item" wx:for-index="id" src="{{item}}" @tap="number({{item}})"></image>
+                </view>
+                <!-- <view class="doc_imgs" wx:if="{{comments.pic.length > 1}}">
+                    <image @tap="number({{item}})" wx:for="{{comments.pic}}" wx:key="{{index}}" wx:for-item="item" wx:for-index="id" src="{{item}}"></image>
+                </view> -->
+                <view class="doc_tt" wx:if="{{comments.reply.length > 0}}">
+                    <text>诊所回复： {{comments.reply}}</text>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import viewStar from '@/components/viewStar'
+    import Mixin from '@/mixins/global'
+    export default class DoctCard extends wepy.component {
+        props = {
+            comments: {
+                type: Object
+            },
+            contact: {}
+        }
+        data = {
+            cliniccomment: []
+        }
+        components = {
+            viewstar: viewStar
+        }
+        mixins = [Mixin]
+        methods = {
+            number (e) {
+                wepy.previewImage({
+                    current: e,
+                    urls: this.comments.pic
+                })
+            }
+        }
+        computed = {
+            starNum() {
+                if (this.comments && this.comments.score) {
+                    if (this.comments.score >= 0) {
+                        return this.comments.score
+                    } else {
+                        return 0
+                    }
+                }
+            }
+        }
+        onLoad() {
+        }
+    }
+</script>
+<style lang="less">
+    .wrp{
+        .comments{
+            display: flex;
+            padding: 40rpx 32rpx 0rpx 32rpx;
+            width: 690rpx;
+            background: #ffffff;
+            .herder_l{
+                flex: 1;
+                margin-right: 10rpx;
+                .doc_portrait{
+                    width: 100rpx;
+                    height: 100rpx;
+                    border-radius: 100%;
+                    border: 1rpx solid  #f5f5f5;
+                    background: #f5f5f5 url('@{imgbaseUrl}/default_head.png') top left no-repeat ;
+                    background-size: 100% 100%;
+                    image{
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 100%;
+                    }
+                }
+            }
+            .herder_b{
+                flex: 5;
+                font-size: 0;
+                .doc_name{
+                    display: flex;
+                    font-size: 28rpx;
+                    align-content: space-between;
+                    .doc_n{
+                        max-width: 15em;
+                        overflow: hidden;
+                        text-overflow: ellipsis;
+                        white-space: nowrap;
+                    }
+                    .herder_r{
+                        position: absolute;
+                        right: 35rpx;
+                        text-align: right;
+                        font-size: 22rpx;
+                        color: #919191;
+                    }
+                }
+                .doc_p{
+                    margin-top: 10rpx;
+                    .doc_x{
+                        width: 130rpx;
+                        height: 22rpx;
+                        margin-left: 20rpx;
+                        display: inline-block;
+                    }
+                    .doc_xt{
+                        font-size: 24rpx;
+                        color: #929292;
+                    }
+                }
+                .doc_type{
+                    flex-basis:600rpx;
+                    margin-top: 10rpx;
+                    font-size: 28rpx;
+                    color: #333333;
+                }
+                .doc_img{
+                    margin-top: 25rpx;
+                    /*margin: 0rpx 0 20rpx 0;*/
+                    width: 360rpx;
+                    height: 360rpx;
+                    image{
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .doc_imgs{
+                    margin-top: 15rpx;
+                    width: 100%;
+                    image{
+                        display: inline-block;
+                        margin-top: 10rpx;
+                        width: 182rpx;
+                        height: 182rpx;
+                        margin-right: 11rpx;
+                        &:nth-of-type(3) , &:nth-of-type(6) , &:nth-of-type(9) {
+                            margin-right: 0;
+                        }
+                    }
+                }
+                .doc_tt{
+                    margin-top: 20rpx;
+                    padding: 30rpx;
+                    flex-basis:600rpx;
+                    font-size: 24rpx;
+                    color: #929292;
+                    background: #f5f7fa;
+                }
+            }
+        }
+    }
+</style>

@@ -1,0 +1,139 @@
+
+<template>
+    <view class="hp_t">
+        <view class="address">
+            <view class="address_img">
+                <image src="{{item.logo}}"></image>
+            </view>
+            <view class="address_t">
+                <view class="address_t1">
+                    <text class="name">{{item.name}}</text>
+                    <view class="name_img members"></view>
+                </view>
+                <view class="evaluate">
+                    <view class="evaluate_i"></view>
+                    <text class="evaluate_t">{{item.score}}分</text>
+                    <text class="evaluate_t">{{item.sale_count}}人预约</text>
+                </view>
+                <view class="address_ts">
+                    <text class="address_text">{{item.addr}}</text>
+                    <text class="address_text" wx:if="{{item.id==items.id}}" wx:for="{{discount}}" wx:key="{{index}}" wx:for-item="items" wx:for-index="id">{{items.distance}}km</text>
+                </view>
+            </view>
+        </view>
+    </view>
+</template>
+<script>
+    import wepy from 'wepy'
+    import viewStar from '@/components/viewStar'
+    import Mixin from '@/mixins/global'
+    export default class DoctCard extends wepy.component {
+        props = {
+            item: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            nolocal: {},
+            scorevvvv: {}
+        }
+        components = {
+            viewstar: viewStar
+        }
+        mixins = [Mixin]
+        computed = {
+            // good_project() {
+            //     if (this.docdata && this.docdata.good_project) {
+            //         return this.arrView(this.docdata.good_project, 'value')
+            //     }
+            // }
+        }
+        onLoad() {
+        }
+    }
+</script>
+<style lang="less">
+    .hp_list{
+        .hp_t{
+            position: relative;
+            .address{
+                padding: 30rpx 30rpx 40rpx 30rpx;
+                display: flex;
+                flex-direction: row;
+                border-top: 1rpx solid #ededed;
+                background: #ffffff;
+                &:nth-of-type(1){
+                    border-top: 0px solid #fff;
+                }
+                .address_img{
+                    width: 198rpx;
+                    height: 136rpx;
+                    margin-right: 30rpx;
+                    background: #f5f5f5 url('@{imgbaseUrl}/zensuo.png') center no-repeat;
+                    background-size: 100%;
+                    image{
+                        width: 100%;
+                        height: 100%;
+                        border-radius: 4rpx;
+                    }
+                }
+                .address_t{
+                    flex: 6;
+                    height: 100%;
+                    font-size: 0;
+                    .address_t1{
+                        display: flex;
+                        flex-direction: row;
+                        .name{
+                            margin-right: 12rpx;
+                            font-size: 30rpx;
+                            font-weight: 700;
+                            color: #333333;
+                        }
+                        .name_img{
+                            margin-top: 6rpx;
+                            width: 60rpx;
+                            height: 30rpx;
+                        }
+                    }
+                    .evaluate{
+                        margin-top: 20rpx;
+                        display: flex;
+                        flex-direction: row;
+                        .evaluate_i{
+                            width: 150rpx;
+                            height: 21rpx;
+                            margin-top: 5rpx;
+                            margin-right: 20rpx;
+                            background: #ffbc00;
+                        }
+                        .evaluate_t{
+                            font-size: 22rpx;
+                            margin-right: 20rpx;
+                            color: #ff8c00;
+                            &:nth-of-type(2){
+                                color: #929292;
+                            }
+                        }
+                    }
+                    .address_ts{
+                        width: 400rpx;
+                        margin-top: 20rpx;
+                        .address_text{
+                            font-size: 24rpx;
+                            color: #929292;
+                            &:nth-of-type(2){
+                                position: absolute;
+                                top: 144rpx;
+                                right: 60rpx;
+                                width: 30rpx;
+                                font-size: 22rpx;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+    }
+</style>

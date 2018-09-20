@@ -1,0 +1,325 @@
+<template>
+    <view id="paypage" class="container">
+        <ul class="mt20 topcontent">
+            <!-- 诊所名称 -->
+            <li class="clname">{{clname}}</li>
+            <li>
+                <view class="menoybox">
+                    <div>
+                        <text>诊疗费用（元）</text><input type="digit" placeholder="询问医生后输入" auto-focus value="{{price}}" @input="bindPrice" confirm-type="done" />
+                    </div>
+                    <div>
+                        <text>不参与优惠金额（元）</text><input type="digit" placeholder="询问医生后输入" value="{{exPrice}}" @input="bindExPrice" confirm-type="done" />
+                    </div>
+                </view>
+            </li>
+        </ul>
+        <ul class="mt20 payinfo">
+            <li class="flex flex-algin-center flex-between">
+                <view class="flex-column">
+                    <text class="fs30 c333 mb20">商家优惠</text>
+                    <view class="fs24 c666" wx:if="{{isSale}}">
+                        <block wx:if="{{saleType == 1 }}">
+                            满 {{Fullred.condition}} 减 {{Fullred.credit}} <span wx:if="{{Fullred.is_series === '1'}}">(可叠加)</span>
+                        </block>
+                        <block wx:else>
+                            整单折扣 {{Fullred.credit * 10}} 折
+                        </block>
+                    </view>
+                    <text class="fs24 c666" wx:else>
+                            暂无优惠信息
+                        </text>
+                </view>
+                <view class="algin_r">
+                    <text class="fs36 cfc5a5a" wx:if="{{disPrice}}">-{{disPrice}}</text>
+                </view>
+            </li>
+            <li class="flex flex-algin-center flex-between">
+                <text>实际支付</text>
+                <text class="fs36">{{amount}}</text>
+            </li>
+        </ul>
+        <button class="btn_w100 mb30" form-type="submit" @tap="submit">确认支付</button>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class pay extends wepy.page {
+        config = {
+            navigationBarTitleText: '河狸口腔'
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {
+            price: '',
+            exPrice: '',
+            inPrice: 0,
+            disPrice: '',
+            amount: '',
+            saleType: '1',
+            Fullred: {
+                condition: 0,
+                credit: 0,
+                is_series: '-1'
+            },
+            clid: '189',
+            isSale: false,
+            clname: ''
+        }
+        computed = {}
+        methods = {
+            bindPrice(e) {
+                if (Number(e.detail.value) >= 0) {
+                    this.price = this.Verify(e.detail.value,'money1')
+                    // this.price = this.Verify(this.price, 'money')
+                }else if(e.detail.value == '') {
+                    this.price = ''
+                }
+                this.compTotal()
+                return {
+                    value: this.price
+                }
+            },
+            bindExPrice(e) {
+                if (Number(e.detail.value) >= 0) {
+                    this.exPrice = this.Verify(e.detail.value,'money1')
+                    // this.price = this.Verify(this.price, 'money')
+                }else if(e.detail.value == '') {
+                    this.exPrice = ''
+                }
+                this.compTotal()
+                return {
+                    value: this.exPrice
+                }
+            },
+            submit() {
+                // wepy.redirectTo({url: '/pages/mycenter/orderlist?type=40'})
+                this.createOrder().then(res => {
+                    if (res.code === '1') {
+                        this.getWxpaydata(res.data.order_id)
+                    } else {
+                        console.log(res)
+                        this.showAlert({
+                            content: res.msg,
+                            showCancel: false
+                        })
+                    }
+                })
+            }
+        }
+        createOrder() {
+            // 创建订单
+            var that = this
+            return new Promise((resolve, reject) => {
+                wepy.request({
+                    url: 'weiapp/order/createclinicorder',
+                    method: 'POST',
+                    data: {
+                        'clinic_id': this.clid,
+                        'amount': this.price,
+                        'not_discount_amount': this.exPrice,
+                        'validate_amount': this.amount
+                    }
+                }).then(res => {
+                    resolve(res)
+                })
+            })
+        }
+        events = {}
+        // 微信支付
+        getWxpaydata(order_id) {
+            var that = this
+            wepy.request({
+                url: '/weiappapi/order/wxpaydata',
+                method: 'POST',
+                data: {
+                    // 交易单号 交易金额 交易标题 交易内容
+                    'order_id': order_id,
+                    'amount': that.amount,
+                    'body': '河狸口腔在线扫码支付',
+                    'detail': ''
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    that.wxpaydata = res.data
+                    let data = {
+                        'timeStamp': this.wxpaydata.timestamp,
+                        'nonceStr': this.wxpaydata.nonceStr,
+                        'package': this.wxpaydata.package,
+                        'signType': this.wxpaydata.signType,
+                        'paySign': this.wxpaydata.paySign
+                    }
+                    wepy.requestPayment(data).then(wxdata => {
+                        console.log(res, 'success')
+                        wepy.redirectTo({
+                            url: '/pages/mycenter/orderlist?type=40'
+                        })
+                    }).catch(err => {
+                        console.log(err, 'complete')
+                    })
+                    that.$apply()
+                } else {
+                    this.showAlert({
+                        content: res.msg,
+                        showCancel: false
+                    })
+                }
+            })
+        }
+        compTotal() {
+            
+            if (parseFloat(this.exPrice ? this.exPrice : 0) >= parseFloat(this.price ? this.price : 0)) {
+                this.exPrice = ''
+                // this.showAlert({
+                //     showCancel: false,
+                //     content: '金额输入有误'
+                // })
+            }
+            // 参与优惠的金额 
+            this.inPrice = parseFloat(this.price ? this.price : 0) - parseFloat(this.exPrice ? this.exPrice : 0)
+            this.disPrice = 0
+            if (this.saleType === '1') {
+                // 达到满减条件
+                if (this.inPrice >= this.Fullred.condition) {
+                    this.disPrice = this.Fullred.credit
+                    //是否可叠加使用
+                    if (this.Fullred.is_series === '1') {
+                        this.disPrice = parseInt(this.inPrice / this.Fullred.condition) * this.Fullred.credit
+                    }
+                }
+            } else {
+                //折扣
+                this.disPrice = (this.inPrice * (1 - this.Fullred.credit)).toFixed(2)
+            }
+            this.amount = (this.price - this.disPrice).toFixed(2)
+            // this.amount = this.formatCurrency(this.amount)
+            this.$apply()
+        }
+        init() {
+            this.showloading()
+            wepy.request({
+                url: 'weiapp/order/getclinicdiscountinfo',
+                method: 'POST',
+                data: {
+                    'clinic_id': this.clid,
+                }
+            }).then(res => {
+                this.showloading(false)
+                this.isSale = false
+                let data = res.data
+                console.log(data, res.code === '1')
+                if (res.code === '1') {
+                    this.clname = data.clinic_name
+                    this.discount_info = data.discount_info
+                    if (data.status === '1') {
+                        this.isSale = true
+                        this.saleType = data.discount_type // 优惠类型（1：满减，2：折扣）
+                        this.Fullred.condition = data.over_amount
+                        this.Fullred.credit = data.discount_amount
+                        this.Fullred.is_series = data.is_series
+                        if (this.saleType === '2') {
+                            this.Fullred.credit = (data.discount_rate / 10).toFixed(2)
+                        }
+                    }
+                }
+                this.$apply()
+            })
+        }
+        onLoad(options) {
+            console.log('0000', options)
+            if (options.q) {
+                let str = decodeURIComponent(options.q)
+                str = str.slice(str.indexOf('?clinic_id=') + 11)
+                this.clid = str
+            }
+            if (options.clinic_id) {
+                this.clid = options.clinic_id
+            }
+            if (wepy.getStorageSync('token')) {
+                this.PageInit()
+            } else {
+                this.$parent.userInfoReadyCallback = res => {
+                    this.PageInit()
+                }
+            }
+        }
+        PageInit() {
+            this.init()
+        }
+    }
+</script>
+
+<style lang="less">
+    .cfc5a5a {
+        color: #fc5a5a
+    }
+    .cff8c00 {
+        color: #ff8c00
+    }
+     ::-webkit-input-placeholder {
+        color: #b5b5b5 !important;
+    }
+    #paypage {
+        ul.topcontent {
+            display: block;
+            padding: 0 32rpx;
+            background: #fff; //  width: 100%;
+            li {
+                display: block;
+                padding-bottom: 50rpx;
+            }
+            .clname {
+                font-size: 30rpx;
+                color: #333;
+                padding: 40rpx 0 30rpx 0;
+            }
+        }
+        .menoybox {
+            width: 100%;
+            border: 1rpx solid #d9d9d9;
+            border-radius: 6rpx; // margin: 0 30rpx;
+            div {
+                border-bottom: 1rpx solid #d9d9d9;
+                padding: 0 32rpx;
+                height: 120rpx;
+                line-height: 120rpx;
+                font-size: 28rpx;
+                color: #666;
+                display: flex;
+                justify-content: center;
+                align-items: center;
+                &:last-child {
+                    border-bottom: none;
+                }
+                text {
+                    text-align: left;
+                    flex: 1;
+                }
+                input {
+                    flex: 1;
+                    text-align: right;
+                    color: #333;
+                    font-size: 30rpx;
+                    height: 60rpx;
+                }
+            }
+        }
+        .payinfo {
+            display: block;
+            padding: 0 32rpx;
+            background: #fff;
+            margin-bottom: 80rpx;
+            li {
+                height: 160rpx;
+                border-bottom: 1px solid #d9d9d9;
+                font-size: 30rpx;
+                color: #333;
+                &:last-child {
+                    border-bottom: none;
+                }
+            }
+        }
+    }
+</style>

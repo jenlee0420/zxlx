@@ -1,0 +1,197 @@
+<template>
+    <view class="picker">
+        <view class="mask"></view>
+        <view class="main_box">
+            <view class="picker_head">
+                <span @tap="cancel">取消</span>
+                <span @tap="submit">确定</span>
+            </view>
+            <view class="picker_main">
+                <picker-view class="picker_content" indicator-class="pickerItem" value="{{originValue}}" bindchange="bindchange">
+                    <picker-view-column wx:if="_options.type === 'default'" wx:for="{{list}}" wx:key="index" wx:for-item="dataitem">
+                        <view class="pickerItem" wx:for="{{dataitem}}" wx:key="item[_options.key]" wx:for-item="item">
+                            {{item[_options.label]}}
+                        </view>
+                    </picker-view-column>
+                </picker-view>
+            </view>
+        </view>
+    </view>
+</template>
+
+<script>
+    /* picker-view 是通过索引来选中某项的 */
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Mypicker extends wepy.component {
+        config = {
+        }
+        mixins = [Mixin]
+        components = {}
+        props = {
+            datalist: {
+                type: Array,
+                default: () => {
+                    return [
+                        []
+                    ]
+                }
+            },
+            options: {
+                type: Object
+            }
+        }
+        data = {
+            yearBase: new Date().getFullYear(),
+            briYear: 1900,
+            originValue: [],
+            value: [],
+            submitVal: [],
+            list: [],
+            /* key 是默认唯一标识字段, label 是默认显示的字段 */
+            _options: {
+                show: false,
+                value: [0],
+                key: 'id',
+                label: 'label',
+                type: 'default',
+                timeStep: 30,
+                timeRange: {
+                    start: '00:00',
+                    end: '24:00'
+                }
+            }
+        }
+        computed = {}
+        methods = {
+            bindchange(e) {
+                this.value = e.detail.value
+                if (this.value.length > 1) {
+                    this.resetDays(this.value[0], this.value[1], 'index')
+                }
+            },
+            submit() {
+                this.submitVal = this.value
+                let res = this.getValueArr(this.submitVal)
+                if (res.length === 0) {
+                    res = [this.list[0][0]]
+                }
+                this.$emit('output', res, this._options.type)
+            },
+            cancel() {
+                this.value = this.originValue
+                if (this.value.length > 1) {
+                    this.resetDays(this.value[0], this.value[1], 'index')
+                }
+                this.$emit('output', '')
+            }
+        }
+        watch = {}
+        events = {}
+        reload_init(list, opt) {
+            this.init(list, opt)
+        }
+        /* 通过标识 key 取索引 */
+        getIndexArr(keyArr) {
+            let res = []
+            this.resetDays(keyArr[0], keyArr[1])
+            if (this.list.length > 0) {
+                keyArr.forEach((v, i) => {
+                    this.list[i].some((item, index) => {
+                        if (item[this._options.key] === v) {
+                            res.push(index)
+                            return true
+                        }
+                    })
+                })
+            }
+            return res
+        }
+        /* 通过索引取item */
+        getValueArr(indexArr) {
+            let res = []
+            indexArr.forEach((v, i) => {
+                res.push(this.list[i][v])
+            })
+            return res
+        }
+        /* 获取一个区间内的自增数组 */
+        getRange(start, end) {
+            let res = []
+            if (!end) {
+                end = (new Date()).getFullYear() + 1
+            }
+            for (let i = start; i <= end; i++) {
+                res.push({
+                    id: i,
+                    label: i
+                })
+            }
+            return res
+        }
+        /* 重新计算天数的可选范围 */
+        resetDays(year, month, type) {
+            let monthBse = 0
+            if (type === 'index') {
+                // 出生日期 年月日显示 不可大于今天
+                year = this.briYear + year
+                this.list[0] = this.getRange(this.briYear, this._options.defYear)
+                monthBse++
+            }
+            if (month === 0) {
+                month++
+                monthBse = 0
+            }
+            if (this._options.type === 'date') {
+                if (year === this._options.defYear) {
+                    let date = new Date(year + '/' + month + '/1')
+                    date.setMonth(month + monthBse)
+                    date.setDate(0)
+                    let count = date.getDate()
+                    // 出生日期 年月日显示 不可大于今天
+                    this.list[1] = this.getRange(1, new Date().getMonth() + 1)
+                    if (new Date().getMonth() + 1 === month + monthBse) {
+                        this.list[2] = this.getRange(1, new Date().getDate())
+                    } else {
+                        this.list[2] = this.getRange(1, count)
+                    }
+                } else {
+                    let date = new Date(year + '/' + month + '/1')
+                    date.setMonth(month + monthBse)
+                    date.setDate(0)
+                    let count = date.getDate()
+                    this.list[1] = this.getRange(1, 12)
+                    this.list[2] = this.getRange(1, count)
+                }
+                this.$apply()
+            }
+        }
+        init(data, opt) {
+            this._options = Object.assign({}, this._options, opt, this.options)
+            // 出生日期显示 可选日期不可大于今天
+            this.list = [[],[],[]]
+            this.list[0] = this.getRange(this.briYear, this._options.defYear)
+            this.list[1] = this.getRange(this._options.value[1], 12)
+            this.list[2] = this.getRange(this._options.value[2], 31)
+            /* 赋初始值 */
+            this.originValue = this.getIndexArr(this._options.value)
+            this.value = this.getIndexArr(this._options.value)
+            // console.log(this.originValue, this.list, this._options.value, 'init')
+        }
+        onLoad() {
+            this.init()
+        }
+    }
+</script>
+
+<style lang="less">
+    .picker {
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        left: 0;
+        right: 0;
+        z-index: 50;
+        overflow: hidden;
+    }
+</style>

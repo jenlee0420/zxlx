@@ -1,0 +1,86 @@
+<template>
+    <view class="wrap">
+       <view class="img_style">
+           <ul>
+               <li @tap="number({{item}})" wx:for="{{hospitalTodo}}" wx:key="{{index}}" wx:for-item="item" wx:for-index="id">
+                   <image src="{{item}}" mode="aspectFill"></image>
+               </li>
+           </ul>
+       </view>
+    </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+export default class Index extends wepy.page {
+    config = {
+      navigationBarTitleText: '诊所环境'
+    }
+    mixins = [Mixin]
+    components = {
+    }
+    data = {
+        clinic_id: 14,
+        hospitalTodo: []
+    }
+    methods = {
+        number (e) {
+            var cur = e
+            var curimg = this.hospitalTodo
+            wepy.previewImage({
+                current: cur,
+                urls: curimg
+            })
+        }
+    }
+    // 诊所详情-诊所
+    getCliniclist() {
+        var that = this
+        this.showloading()
+        wepy.request({
+            url: '/weiappapi/findclinic/clinicdetail',
+            method: 'GET',
+            data: {
+                'clinic_id': that.clinic_id
+            }
+        }).then(res => {
+            this.showloading(false)
+            that.hospitalTodo = res.data.clinic_photo
+            that.$apply()
+        })
+    }
+    onLoad(options) {
+        this.clinic_id = options.id
+        this.getCliniclist()
+    }
+}
+</script>
+
+<style lang="less" scoped>
+    .wrap{
+        padding: 30rpx 32rpx;
+        .img_style{
+            ul{
+                display: inline-block;
+                width: 100%;
+                overflow: hidden;
+                li{
+                    float: left;
+                    width: 332rpx;
+                    height: 332rpx;
+                    margin-bottom: 22rpx;
+                    margin-right: 22rpx;
+                    /*width: 345rpx;*/
+                    image{
+                        width: 332rpx;
+                        height: 332rpx;
+                    }
+                    &:nth-of-type(2) , &:nth-of-type(4) ,&:nth-of-type(6) ,&:nth-of-type(8) {
+                        margin-right: 0;
+                    }
+                }
+            }
+        }
+    }
+</style>

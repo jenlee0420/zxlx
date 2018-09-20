@@ -1,0 +1,149 @@
+<template>
+    <view class="container mt20">
+        <orderitem :orderdata.sync="orderdata" :oprable.sync="oprable" :isDetail="isDetail" callbackStr="$parent,orderdata,product_img"></orderitem>
+        <view class="orderDetail fs28">
+            <!-- 使用在线支付的订单 -->
+            <block wx:if="{{orderdata.type == 2}}">
+                <ul class="flex-column">
+                    <li><text class="c929292">订单编号：</text><text class="c666">{{orderdata.order_no}}</text></li>
+                    <li><text class="c929292">手机号：</text><text class="c666">{{orderdata.mobile}}</text></li>
+                    <li><text class="c929292">下单时间：</text><text class="c666">{{create_time}}</text></li>
+                </ul>
+            </block>
+            <block wx:else>
+                <ul class="flex-column">
+                    <li><text class="c929292">订单编号：</text><text class="c666">{{orderdata.order_no}}</text></li>
+                    <li><text class="c929292">订单合计：</text><text class="c666">￥{{fomtPre}}</text></li>
+                    <li><text class="c929292">商品数量：</text><text class="c666">{{orderdata.product_num}}</text></li>
+                    <li><text class="c929292">到院支付：</text><text class="c666">￥{{fomtTo}}</text></li>
+                    <li><text class="c929292">下单时间：</text><text class="c666">{{create_time}}</text></li>
+                </ul>
+            </block>
+        </view>
+        <button class="btn_w100" wx:if="{{refund_page && orderdata.status.key != 5}}" @tap="refundOrder({{orderdata.id}})">确定退款</button>
+        <!-- <navigator class="btn_w100" wx:if="{{refund_page}}" url="">确定退款</navigator> -->
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import Orderitem from '@/components/orderitem'
+    export default class OrderDetail extends wepy.page {
+        config = {
+            navigationBarTitleText: '订单详情'
+        }
+        mixins = [Mixin]
+        components = {
+            orderitem: Orderitem
+        }
+        data = {
+            id: '',
+            orderdata: {},
+            refund_page: null,
+            oprable: true,
+            isDetail:true
+        }
+        computed = {
+            fomtPre() {
+                return this.formatCurrency(this.orderdata.pre_amount)
+            },
+            fomtTo() {
+                return this.formatCurrency(this.orderdata.to_amount)
+            },
+            create_time() {
+                return this.transTime(this.orderdata.create_time)
+            }
+        }
+        methods = {
+            refundOrder(id) {
+                wepy.request({
+                    url: 'weiappapi/order/refundorder',
+                    method: 'POST',
+                    data: {
+                        order_id: id
+                    }
+                }).then(res => {
+                    if (res.code === '1') {
+                        wepy.navigateTo({
+                            url: '/pages/mycenter/refund'
+                        })
+                    } else {
+                        this.showAlert({
+                            showCancel: false,
+                            content: res.msg
+                        })
+                    }
+                })
+            }
+        }
+        events = {
+            navToDetail(item) {
+                if(item.product_id == 0){
+                    return
+                }
+                var backDelta = this.BackToDelta('goods/index')
+                if (backDelta) {
+                    wepy.navigateBack({
+                        delta: backDelta
+                    })
+                } else {
+                    wepy.navigateTo({
+                        url: '/pages/goods/index?id=' + item.product_id
+                    })
+                }
+            },
+            orderlist() {
+                wepy.navigateTo({
+                        url: '/pages/mycenter/orderlist'
+                })
+            }
+        }
+        getorderInfo() {
+            wepy.request({
+                url: '/weiappapi/order/orderinfo',
+                method: 'POST',
+                data: {
+                    order_id: this.id
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    this.orderdata = res.data
+                }
+                this.$apply()
+            })
+        }
+        onLoad(option) {
+            this.id = option.id
+            this.getorderInfo()
+            if (option.type === 'refund') {
+                this.refund_page = true
+                this.oprable = false
+                wepy.setNavigationBarTitle({
+                    title: '申请退款'
+                })
+            } else {
+                wepy.setNavigationBarTitle({
+                    title: '订单详情'
+                })
+            }
+        }
+        onShow() {
+            this.getorderInfo()
+        }
+    }
+</script>
+
+<style lang="less">
+    .orderDetail {
+        background-color: #fff;
+        margin: 20rpx 0 60rpx 0;
+        padding: 32rpx;
+        li {
+            margin-bottom: 20rpx;
+            &:last-child {
+                margin-bottom: 0;
+            }
+        }
+    }
+</style>

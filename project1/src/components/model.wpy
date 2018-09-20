@@ -1,0 +1,94 @@
+<template>
+    <view class="prompts">
+        <view class="fullscreen shadow" @tap="closeModel"></view>
+        <view class="prompts_content">
+            <text class="prompts_t1">{{content.title}}</text>
+            <view class="prompts_t2">
+                <text wx:for="{{content.details}}" wx:key="index">{{item}}</text>
+                <!-- <text>既： 预约金+项目尾款=河狸价格</text> -->
+            </view>
+            <text class="prompts_t3" @tap="closeModel">知道了</text>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Model extends wepy.component {
+        config = {
+        }
+        props = {
+            content: {}
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {}
+        computed = {}
+        methods = {
+            closeModel() {
+                this.content.show = false
+                this.$parent.$apply()
+            }
+        }
+        events = {}
+        onLoad() {}
+    }
+</script>
+
+<style lang="less">
+    .prompts {
+        height: 100%;
+        width: 100%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        top:0;
+        position: fixed;
+        z-index: 10;
+        .fullscreen {
+            background-color: rgba(0, 0, 0, .5);
+        }
+        .prompts_content {
+            z-index: 1;
+            margin: auto;
+            width: 630rpx;
+            text-align: center;
+            font-size: 0;
+            border-radius: 12rpx;
+            background: #ffffff;
+            display: flex;
+            flex-direction: column;
+            .prompts_t1 {
+                display: inline-block;
+                margin: 40rpx 0;
+                font-size: 30rpx;
+                color: #333333;
+            }
+            ;
+            .prompts_t2 {
+                padding: 0 40rpx;
+                text-align: left;
+                flex: 1;
+                text {
+                    display: block;
+                    font-size: 28rpx;
+                    line-height: 36rpx;
+                    color: #666666;
+                    margin-bottom: 30rpx;
+                }
+            }
+            .prompts_t3 {
+                border-top: 1rpx solid #ededed;
+                width: 100%;
+                height: 96rpx;
+                line-height: 96rpx;
+                font-size: 30rpx;
+                color: #4287ff;
+                &:active {
+                    background: #d9d9d9;
+                }
+            }
+        }
+    }
+</style>

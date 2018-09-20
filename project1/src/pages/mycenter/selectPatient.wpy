@@ -1,0 +1,102 @@
+<template>
+    <view class="container">
+        <view class="ml32 fs24 cb4b4b4 h80">
+            选择就诊人
+        </view>
+        <view class="family_list">
+            <ul>
+                <li wx:for="{{Patientlist}}" wx:key="index" @tap="selectReturn({{item}})">
+                    <span class="img"><image src="{{item.avatar ? item.avatar : baseHeadImg}}" @error="default_head" data-img="Patientlist,{{index}},avatar" /></span>
+                    <view class="flex-column flex-1">
+                        <view class="flex mb20"><text class="fs30 c333 mr12">{{item.user_name?item.user_name:item.nickname}}</text><span class="mr12 {{item.gender.key === 1?'man':'woman'}}"></span>
+                            <text class="ml12 fs22 relationship mainCorlor">{{item.relation.value}}</text></view>
+                        <view class="fs24 c929292">{{item.age}}岁 {{item.mobile}}</view>
+                    </view>
+                    <span class="patient_sel" wx:if="{{currPatient === item.id}}">
+                                    </span>
+                </li>
+            </ul>
+        </view>
+        <view class="nodata" wx:if="{{Patientlist.length == 0 && initCancel}}">
+            <span class="word">暂无数据</span>
+        </view>
+        <view class="spaceBox"></view>
+        <navigator url="/pages/mycenter/familyAdd?type=add" class="btn_wpe100 fixed-bottom">添加就诊人</navigator>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class SelectPatient extends wepy.page {
+        config = {
+            navigationBarTitleText: '在线预约'
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {
+            initCancel: false,
+            currPatient: '', // 当前被选就诊人的就诊id
+            Patientlist: [], // 就诊人列表
+            userData: {} // 当前就诊人的信息
+        }
+        computed = {}
+        methods = {
+            selectReturn(obj) {
+                let visit = {
+                    id: obj.id,
+                    gender: obj.gender,
+                    avatar: obj.avatar,
+                    mobile: obj.mobile,
+                    user_name: obj.user_name,
+                    nickname: obj.user_name ? obj.user_name : obj.nickname
+                }
+                wepy.setStorageSync('visit', JSON.stringify(visit))
+                wepy.navigateBack()
+            }
+        }
+        events = {}
+        getlist() {
+            this.initCancel = false
+            this.showloading()
+            // 取就诊人列表
+            wepy.request({
+                url: 'weiappapi/familyarchives/lists',
+                method: 'get',
+                data: {}
+            }).then(res => {
+                this.initCancel = true
+                this.showloading(false)
+                if (res.code === '1') {
+                    this.Patientlist = res.data
+                    // 重写缓存中的用户信息
+                    this.reSetUserInfo(this.Patientlist)
+                    if (res.data.length === 0) {
+                        this.showAlert({
+                            showCancel: false,
+                            content: '请选添加就诊人'
+                        })
+                    }
+                }
+                this.$apply()
+            })
+        }
+        onLoad() {
+            this.userData = JSON.parse(wepy.getStorageSync('visit'))
+            this.currPatient = this.userData.id
+        }
+        onShow() {
+            this.getlist()
+        }
+    }
+</script>
+
+<style lang="less">
+    .h80 {
+        height: 80rpx;
+        line-height: 80rpx
+    }
+    .mainCorlor {
+        background-color: @theme !important;
+    }
+</style>

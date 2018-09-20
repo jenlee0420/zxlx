@@ -1,0 +1,295 @@
+<template>
+    <view class="container">
+        <view class="mianContent" wx:if="{{currentTab === 0}}" @touchstart="touchstart" @touchend="touchend">
+            <view class="ah_herder">
+                <view class="h_content">
+                    <text class="title">互联网首个全面口腔检查标准化产品</text>
+                    <trxt class="ah_user">已有用户档案数</trxt>
+                    <view class="user_number">
+                        <ul>
+                            <li class="user_t">7</li>
+                            <li class="user_t">7</li>
+                            <li class="user_t">2</li>
+                            <li class="user_t">3</li>
+                            <li class="user_t">5</li>
+                        </ul>
+                    </view>
+                </view>
+            </view>
+            <view class="foots">
+                <text>滑动开启我的健康之旅</text>
+                <span class="foots_img"></span>
+            </view>
+        </view>
+        <view wx:if="{{currentTab === 1}}" class="star" @touchstart="touchstart_back" @touchend="touchend_back">
+            <view class="recommend">
+                <span class="re_text">选择开启方式</span>
+            </view>
+            <view class="star_cart">
+                <view @tap="but_jum({{item.id}})" class="star_i {{item.img}}" wx:for="{{star_content}}" wx:for-item="item" wx:for-index="id">
+                    <view class="star_t">
+                        <text>{{item.content}}</text>
+                    </view>
+                </view>
+            </view>
+        </view>
+        <block wx:if="{{currentTab === 2}}">
+            <presentation :archives.sync="archives" :baseScore.sync="baseScore"></presentation>
+        </block>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import presentation from '@/components/presentation'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '档案'
+        }
+        components = {
+            presentation: presentation
+        }
+        mixins = [Mixin]
+        data = {
+            star_content: [{
+                    id: 1,
+                    img: 'archives_01',
+                    name: '自我诊断',
+                    content: '在线自助诊断牙齿问题'
+                },
+                {
+                    id: 2,
+                    img: 'archives_02',
+                    name: '立即预约',
+                    content: '购买十项口腔检查项目'
+                }
+                // ,
+                // {
+                //     id: 3,
+                //     img: 'my_vip',
+                //     name: '河狸会员',
+                //     content: '免费建立个人口腔档案'
+                // }
+            ],
+            currentTab: 2,
+            touchTop: 0,
+            archives: {},
+            baseScore: 0
+        }
+        computed = {}
+        methods = {
+            touchstart(e) {
+                this.touchTop = e.changedTouches[0].pageY
+            },
+            touchend(e) {
+                let thisx = e.changedTouches[0].pageY
+                if (this.touchTop - thisx > 50) {
+                    this.currentTab = 1
+                }
+            },
+            touchstart_back(e) {
+                this.touchTop = e.changedTouches[0].pageY
+            },
+            touchend_back(e) {
+                let thisx = e.changedTouches[0].pageY
+                if (thisx - this.touchTop > 50) {
+                    this.currentTab = 0
+                }
+            },
+            but_jum(id) {
+                if (id === 1) {
+                    wepy.navigateTo({
+                        url: '/pages/archives/diagnosis'
+                    })
+                } else if (id === 2) {
+                    wepy.navigateTo({
+                        url: this.TenOral
+                    })
+                }
+            },
+            butt_01() {
+                this.currentTab = 1
+            }
+        }
+        checkUserFile() {
+            this.showloading()
+            wepy.request({
+                url: 'weiappapi/diagnosis/archives',
+                method: 'get',
+                data: {}
+            }).then(res => {
+                this.showloading(false)
+                if (res.code === '1') {
+                    this.archives = res.data
+                    this.currentTab = 2
+                    wepy.setNavigationBarTitle({
+                        title: '诊断报告'
+                    })
+                    this.scoreAni() // 数字动画
+                } else if (res.code === '-1') {
+                    this.currentTab = 0
+                } else {
+                    this.showAlert({
+                        showCancel: false,
+                        content: res.msg
+                    })
+                }
+                this.$apply()
+            })
+        }
+        events = {}
+        scoreAni() {
+            var timer = setInterval(() => {
+                if (this.baseScore < this.archives.score) {
+                    this.baseScore += 1
+                    this.$apply()
+                } else {
+                    clearInterval(timer)
+                }
+            }, 40)
+        }
+        onLoad() {}
+        onShow() {
+            this.checkUserFile()
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+    .container {
+        height: 100%;
+    }
+    .mianContent {
+        background: #f5f7fa url('@{imgbaseUrl}/dan_bg.png') top left no-repeat;
+        height: 100%;
+        background-size: 100% 100%;
+        font-size: 0;
+        overflow: hidden;
+        .ah_herder {
+            position: relative;
+            background: url('@{imgbaseUrl}/ah_bg.png') top left no-repeat;
+            top: 104rpx;
+            height: 100%;
+            background-size: 100% auto;
+            .h_content {
+                position: absolute;
+                top: 324rpx;
+                width: 100%;
+                font-weight: bold;
+                text-align: center;
+                .title {
+                    margin-top: 30rpx;
+                    font-size: 30rpx;
+                    color: #ffffff;
+                    display: inline-block;
+                    border-bottom: 1rpx solid #fff;
+                    padding-bottom: 10rpx
+                }
+                .ah_user {
+                    margin-top: 20rpx;
+                    font-size: 30rpx;
+                    color: #fff5b3;
+                    text-shadow: 2px 2px 8px #549df6;
+                    display: block;
+                }
+                .user_number {
+                    margin-top: 30rpx;
+                    ul {
+                        overflow: hidden;
+                        .user_t {
+                            display: inline-block;
+                            width: 90rpx;
+                            line-height: 90rpx;
+                            height: 90rpx;
+                            font-size: 62rpx;
+                            color: #4287ff;
+                            background:url('@{imgbaseUrl}/filecount_bg.png') center no-repeat;
+                            background-size: 90rpx;
+                            margin-right: 4rpx;
+                            &:last-child {
+                                margin-right: 0;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        .foots {
+            position: absolute;
+            bottom: 34rpx;
+            width: 100%;
+            font-size: 22rpx;
+            color: #929292;
+            text-align: center;
+            text {
+                display: inline-block;
+                margin-bottom: 20rpx;
+            }
+            .foots_img {
+                display: block;
+                margin: auto;
+                width: 56rpx;
+                height: 68rpx;
+                background:url('@{imgbaseUrl}/a_jian.png') top left no-repeat;
+                background-size: 100% 100%;
+                animation: mymove linear 1s infinite;
+            }
+        }
+    }
+    .star {
+        background: #f5f7fa url('@{imgbaseUrl}/start_bg.png') top left no-repeat;
+        width: 100%;
+        height: 100%;
+        background-size: 100% 100%;
+        font-size: 0;
+        overflow: hidden;
+        display: flex;
+        flex-direction: column;
+        .recommend {
+            margin: 30rpx auto;
+            background: 0, 0, 0, 0;
+            border-bottom: none;
+            .re_text {
+                font-weight: bold;
+                display: inline-block;
+            }
+        }
+        .star_cart {
+            width: 100%;
+            padding: 0 22rpx;
+            flex: 1;
+            display: flex;
+            flex-direction: column;
+            box-sizing: border-box;
+            .star_i {
+                height: 446rpx;
+                width: 100%;
+                margin-bottom: 6rpx;
+                .star_t {
+                    text-align: center;
+                    margin: 0 auto;
+                    margin-top: 220rpx;
+                    text {
+                        color: rgba(255, 255, 255, .8);
+                        font-size: 30rpx;
+                    }
+                }
+                &:last-child {
+                    margin-bottom: 0;
+                }
+            }
+        }
+    }
+    @keyframes mymove {
+        0% {
+            transform: translateY(0rpx);
+        }
+        50% {
+            transform: translateY(8rpx);
+        }
+        100% {
+            transform: translateY(0rpx);
+        }
+    }
+</style>

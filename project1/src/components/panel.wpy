@@ -1,0 +1,54 @@
+<style lang="less">
+  .panel {
+    width: 100%;
+    text-align: left;
+    background-color: #fff;
+    .panel-head{border-bottom: 1rpx solid @bColor;}
+    .title {
+      font-weight: bold;
+      font-size: 30rpx;
+      height: 90rpx;
+      line-height: 90rpx;
+      padding-left: 30rpx;
+      flex:1;
+    }
+    .lable-right {
+      float: right;
+      font-weight:normal;
+      font-size: 28rpx;
+      padding-right: 30rpx;
+      line-height: 90rpx;
+      padding-left: 30rpx;
+      color: #999;
+      display: flex;
+      align-items: center;
+    }
+    .info {
+      padding: 15rpx;
+    }
+    .testcounter {
+      margin-top: 15rpx;
+      position: absolute;
+    }
+    .counterview {
+      margin-left: 120rpx;
+    }
+  }
+</style>
+<template>
+  <view class="panel">
+    <p class="panel-head flex">
+      <slot name="title">
+        Title
+      </slot>
+      <slot name="lable-right">
+      </slot>
+    </p>
+    <slot>
+    </slot>
+  </view>
+</template>
+<script>
+  import wepy from 'wepy'
+  export default class Panel extends wepy.component {}
+</script>

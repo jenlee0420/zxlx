@@ -1,0 +1,370 @@
+<template>
+    <view class="container">
+        <orderitem :orderdata.sync="orderdata" :oprable="oprable" callbackStr="$parent,orderdata,product_img"></orderitem>
+        <form bindsubmit="bindFormSubmit">
+            <view class="review_detail">
+                <ul class="flex-column">
+                    <li class="doctors">
+                        <view class="doctor_img" wx:if="{{doctorShow}}">
+                            <image src="{{docInfo.photo}}" />
+                            <view class="doctor_mvp" wx:if="{{docInfo.status.key === 2}}"></view>
+                        </view>
+                        <view class="doctor_img" wx:else>
+                            <image src="{{orderdata.clinic_logo}}" />
+                        </view>
+                    </li>
+                    <li class="mb30 mt30">
+                        <text wx:if="{{doctorShow}}" class="fs30 c333 lh-1">{{docInfo.name}}</text>
+                        <text wx:else class="fs30 c333 lh-1">{{orderdata.clinic_name}}</text>
+                    </li>
+                    <li wx:if="{{doctorShow}}">
+                        <text class="fs20 cb4b4b4">您的评价让医生做的更好</text>
+                    </li>
+                    <li wx:if="{{!doctorShow}}">
+                        <text class="fs20 cb4b4b4">您的评价让诊所做的更好</text>
+                    </li>
+                    <li class="mb40 mt50" wx:if="{{doctorShow}}">
+                        <star callback="doctor_star"></star>
+                    </li>
+                    <li class="fs24 cff8c00" wx:if="{{doctorShow}}">
+                        {{starStr[doctor_star - 1]}}
+                    </li>
+                    <li class="select_box">
+                        <repeat for="{{selArr}}" index="index" item="item" key="key">
+                            <span class="select_label {{item.checked?'act':''}}" @tap="selectItem({{index}})">{{item.name}}</span>
+                        </repeat>
+                    </li>
+                    <li>
+                        <textarea name="comment" class="tArea h180" placeholder="写下您对这次就诊服务和诊所的评价吧~" />
+                    </li>
+                    <li class="mt20 mb30 flex flexwrap comment_pic">
+                        <view wx:for="{{piclist}}" wx:key="key" class="pic_view">
+                            <image src="{{item}}" />
+                            <span class="Topcorner" @tap="removeImage({{index}})">
+                                    <span class="close-ico"></span>
+                            </span>
+                        </view>
+                        <span class="add_pic" wx:if="{{piclist.length < 9}}" @tap="addImage"></span>
+                    </li>
+                </ul>
+            </view>
+            <view class="comp_score mb60">
+                <view class="recommend border-b">
+                    <span class="re_text">诊所综合评分</span>
+                </view>
+                <view class="score">
+                    <ul>
+                        <li>
+                            <text>服务态度</text>
+                            <view class="star_view">
+                                <starmini startype="mini" callback="service_star"></starmini>
+                            </view>
+                        </li>
+                        <li>
+                            <text>诊所态度</text>
+                            <view class="star_view">
+                                <starmini2 startype="mini" callback="env_star"></starmini2>
+                            </view>
+                        </li>
+                        <li>
+                            <text>医生专业</text>
+                            <view class="star_view">
+                                <starmini3 startype="mini" callback="skill_star"></starmini3>
+                            </view>
+                        </li>
+                    </ul>
+                </view>
+            </view>
+            <button class="btn_w100" form-type="submit"> 提交评价 </button>
+        </form>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import Orderitem from '@/components/orderitem'
+    import star from '@/components/star'
+    export default class Review extends wepy.page {
+        config = {
+            navigationBarTitleText: '评价'
+        }
+        mixins = [Mixin]
+        components = {
+            orderitem: Orderitem,
+            star: star,
+            starmini: star,
+            starmini2: star,
+            starmini3: star
+        }
+        data = {
+            id: '',
+            doctor_star: 5,
+            service_star: 5,
+            env_star: 5,
+            skill_star: 5,
+            oprable: false,
+            orderdata: {},
+            piclist: [], // 上传的图片列表
+            info: {
+                comment: ''
+            },
+            starStr: ['非常差', '差', '一般', '好', '非常好'],
+            selected: [],
+            selArr: [{
+                    name: '服务态度好',
+                    checked: false
+                },
+                {
+                    name: '技术好',
+                    checked: false
+                },
+                {
+                    name: '很耐心',
+                    checked: false
+                },
+                {
+                    name: '很专业',
+                    checked: false
+                },
+                {
+                    name: '其他',
+                    checked: false
+                }
+            ],
+            docInfo: {},
+            doctorShow:false
+        }
+        computed = {}
+        methods = {
+            /* 选择文件并上传 */
+            addImage() {
+                let v = this.piclist.length
+                let count = 9 - v
+                this.chooseImage({
+                    count: count
+                }).then(res => {
+                    res.forEach(e => {
+                        console.log(e)
+                        this.piclist.push(e)
+                    })
+                    this.$apply()
+                })
+            },
+            getAct(str) {
+                let index = this.selected.indexOf(str)
+                if (index > -1) {
+                    return true
+                } else {
+                    return false
+                }
+            },
+            selectItem(index) {
+                if (this.selArr[index].checked === false) {
+                    this.selArr[index].checked = true
+                } else {
+                    this.selArr[index].checked = false
+                }
+            },
+            // 提交评价
+            bindFormSubmit(e) {
+                let eValue = e.detail.value
+                let tags = []
+                for (let i = 0; i < this.selArr.length; i++) {
+                    if (this.selArr[i].checked) {
+                        tags.push(this.selArr[i].name)
+                    }
+                }
+                if (eValue.comment === '') {
+                    this.showAlert({
+                        showCancel: false,
+                        content: '请填写评价内容'
+                    })
+                    return
+                }
+                let param = {
+                    order_id: this.id,
+                    clinic_id: this.orderdata.clinic_id,
+                    doctor_id: this.docInfo.doctor_id,
+                    doctor_star: this.doctor_star,
+                    service_star: this.service_star,
+                    env_star: this.env_star,
+                    skill_star: this.skill_star,
+                    tags: tags.join(','),
+                    comment: eValue.comment,
+                    pic: this.piclist
+                }
+
+                // console.log(param)
+                // return
+                wepy.request({
+                    url: '/weiappapi/order/comment',
+                    method: 'POST',
+                    data: param
+                }).then(res => {
+                    if (res.code === '1') {
+                        this.showAlert({
+                            showCancel: false,
+                            content: '感谢你的评价',
+                            confirm: 'closeMsg'
+                        })
+                    } else {
+                        this.showAlert({
+                            showCancel: false,
+                            content: res.msg
+                        })
+                    }
+                    this.$apply()
+                })
+            },
+            // 移除图片
+            removeImage(index) {
+                this.piclist.splice(index, 1)
+            }
+        }
+        closeMsg() {
+            wepy.navigateTo({url: '/pages/mycenter/orderlist?type=10'})
+        }
+        events = {
+            docstar(num, obj) {
+                // this.doctor_star = num
+                if (this[obj]) {
+                    this[obj] = num
+                }
+            }
+        }
+        disablescroll(e) {
+            console.log(e)
+            return false
+        }
+        getorderInfo() {
+            wepy.request({
+                url: '/weiappapi/order/orderinfo',
+                method: 'POST',
+                data: {
+                    order_id: this.id
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    this.orderdata = res.data
+                    if(this.orderdata.type == 2){
+                        this.doctorShow = false
+                    }
+                }
+                this.$apply()
+            })
+        }
+        getdocInfo() {
+            wepy.request({
+                url: '/weiappapi/order/getdoctordata',
+                method: 'POST',
+                data: {
+                    order_id: this.id
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    this.docInfo = res.data
+                }
+                this.$apply()
+            })
+        }
+        onLoad(option) {
+            if (option.id) {
+                this.id = option.id
+            }
+            this.getorderInfo()
+            this.getdocInfo()
+        }
+    }
+</script>
+
+<style lang="less">
+    .fullscreen {
+        background-color: transparent;
+        position: fixed;
+        .messageBox {
+            height: 421rpx;
+            width: 520rpx;
+            margin: auto;
+            position: relative;
+            margin-top: 35%;
+            image {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .shadow {
+            background-color: rgba(0, 0, 0, .5);
+        }
+    }
+    .container {
+        padding-bottom: 50rpx;
+    }
+    .doctors {
+        padding: 40rpx 0 0 0;
+    }
+    .comment_pic {
+        .pic_view {
+            width: 120rpx;
+            height: 120rpx;
+            margin-right: 15rpx;
+            position: relative;
+        }
+        .Topcorner {
+            top: -5rpx;
+            background-color: rgba(0, 0, 0, .5);
+            border-radius: 50%;
+            width: 30rpx;
+            height: 30rpx;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            line-height: 30rpx;
+            .close-ico {
+                font-size: 35rpx;
+                color: #fff;
+            }
+        }
+        image {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .review_detail {
+        margin: 20rpx 0;
+        padding: 0rpx 32rpx;
+        background-color: #fff;
+        li {
+            text-align: center;
+        }
+        .select_box {
+            display: flex;
+            justify-content: space-between;
+            margin-top: 60rpx;
+            margin-bottom: 30rpx;
+        }
+        .doctors {
+            &:after {
+                content: none;
+            }
+        }
+    }
+    .comp_score {
+        background-color: #fff;
+        font-size: 28rpx;
+        color: #929292;
+        .score {
+            padding: 40rpx 32rpx;
+            padding-bottom: 10rpx;
+            li {
+                display: flex;
+                margin-bottom: 30rpx;
+            }
+            .star_view {
+                display: flex;
+                align-items: center;
+                margin-left: 60rpx;
+            }
+        }
+    }
+</style>

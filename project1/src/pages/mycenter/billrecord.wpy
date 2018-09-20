@@ -1,0 +1,115 @@
+<template>
+    <view class="container">
+        <div class="heard_card recevable_bg">
+            <p class="fs28 cfff f_opacity_6 mb40">缴费金额</p>
+            <p class="fs72 cfff"><i class="fs48">¥</i>{{paied}}</p>
+        </div>
+        <view class="title_none">
+            交易记录
+        </view>
+        <view wx:if="{{recordlist.length > 0}}">
+            <view class="trade_card bg_fff" wx:for="{{recordlist}}" wx:for-item="item" wx:key="index">
+                <view class="icon">
+                    <span class="cashpay" wx:if="{{item.pay_type.key == 1}}"></span>
+                    <!-- 现金 -->
+                    <span class="alipay" wx:if="{{item.pay_type.key == 2}}"></span>
+                    <!-- 支付宝 -->
+                    <span class="wehcat" wx:if="{{item.pay_type.key == 3}}"></span>
+                    <!-- 微信 -->
+                    <span class="cashpay" wx:if="{{item.pay_type.key == 4}}"></span>
+                    <!-- 银联 -->
+                    <span class="heliwallet" wx:if="{{item.pay_type.key == 5}}"></span>
+                    <!-- 河狸钱包 -->
+                </view>
+                <view class="trade_info">
+                    <p class="fs30">
+                        <view class="c333">{{item.pay_type.value}}支付 
+                            <text class="tui_fei" wx:if="{{item.action_type.key == 3}}">退费</text>
+                            <text class="zuo_fei" wx:if="{{item.status.key == -1}}">作废</text>
+                        </view>
+                    </p>
+                    <p class="fs24 c999">{{item.add_time}}</p>
+                </view>
+                <i class="b cfc5a fs30" wx:if="{{item.action_type.key == 3}}">-{{item.pay_amount}}</i>
+                <i class="b cb5b5b5 fs30" wx:elif="{{item.status.key == -1}}">{{item.pay_amount}}</i>
+                <i class="b fs30" wx:else>{{item.pay_amount}}</i>
+            </view>
+        </view>
+        <view class="nodata" wx:if="{{recordlist.length == 0 && initCancel }}">
+            <span class="word">暂无数据</span>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Bindphone extends wepy.page {
+        config = {
+            navigationBarTitleText: '交易记录'
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {
+            initCancel: false,
+            recordlist: [],
+            billid: '',
+            paied: ''
+        }
+        computed = {}
+        methods = {}
+        events = {}
+        loadlist() {
+            this.initCancel = false
+            this.showloading()
+            wepy.request({
+                url: 'weiappapi/finance/gettradelistbybills',
+                method: 'get',
+                data: {
+                    bills_id: this.billid
+                }
+            }).then(res => {
+                this.initCancel = true
+                this.showloading(false)
+                // console.log(res)
+                if (res.code === '1') {
+                    // 价格 格式化
+                    res.data.list.forEach(v => {
+                        v.pay_amount = this.formatCurrency(v.pay_amount)
+                        v.add_time = v.add_time.slice(0, 16)
+                    })
+                    this.recordlist = res.data.list
+                }
+                this.isload = true
+                this.$apply()
+            })
+        }
+        onLoad(query) {
+            if (query.id) {
+                this.billid = query.id
+                this.paied = query.paied
+                this.loadlist()
+            }
+        }
+    }
+</script>
+
+<style lang="less">
+    .tui_fei,.zuo_fei{
+        height: 35rpx;
+        padding: 0 12rpx;
+        color: #fff;
+        background-color:#fc5a5a;
+        border-radius:4rpx;
+        font-size:26rpx;
+        line-height:35rpx;
+        margin-left:25rpx;
+    }
+    .zuo_fei{
+        background-color:#b8b8b8;
+    }
+    .cb5b5b5{
+        color: #b5b5b5;
+        text-decoration:line-through;
+    }
+</style>

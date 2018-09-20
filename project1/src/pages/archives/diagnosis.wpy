@@ -1,0 +1,281 @@
+<template>
+    <view class="container" wx:if="{{!isload}}">
+        <block wx:if="{{subject.length > 0}}">
+            <!--1.牙龈-->
+            <view class="diagonosis" wx:for="{{subject}}" wx:key="{{item.id}}" wx:for-item="item" wx:for-index="id">
+                <view class="dia_title">
+                    <text>{{item.id}}. {{item.name}}</text>
+                </view>
+                <view class="dia_img" wx:if="{{item.image_desc != ''}}">
+                    <view class="dia_i">
+                        <image src="{{item.image_desc}}" mode="widthFix" />
+                    </view>
+                    <!-- <view class="dia_it">
+                                <text>健康的牙龈</text>
+                                <text>牙龈炎</text>
+                                <text>牙周炎早期</text>
+                                <text>牙周炎</text>
+                                <text>牙周炎晚期</text>
+                            </view> -->
+                </view>
+                <view class="dia_text">
+                    <text class="dia_t1 {{itemb.Checkedid === itemb.id?'dia_t2':''}}" @tap="case_type({{id}},{{index}},{{itemb}})" wx:for="{{item.children}}" wx:key="{{itemb.id}}" wx:for-item="itemb" wx:for-index="index">{{itemb.name}}</text>
+                </view>
+            </view>
+            <!--11.口腔全景片-->
+            <view class="diagonosis">
+                <view class="dia_title">
+                    <text>{{subject.length + 1}}. 口腔全景片</text> </view>
+                <view class="dia_img11" @tap="chooseImg">
+                    <block wx:if="{{img}}">
+                        <image src="{{img}}" mode="aspectFill" />
+                    </block>
+                    <block wx:else>
+                        <image src="{{imgBaseUrl}}panorama.png" mode="aspectFill" />
+                    </block>
+                </view>
+                <text class="dia_t11">Tips:需去诊所拍CT后由专业医生提供，如无，请跳过</text>
+            </view>
+            <!--提交-->
+            <button class="btn_w100" @tap="btn_w">提交</button>
+            <view class="spaceBox"></view>
+        </block>
+        <block wx:else>
+            <view class="nodata">
+                <span class="word">数据为空</span>
+            </view>
+        </block>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import Goodinfo from '../../components/goodinfo'
+    export default class Index extends wepy.page {
+        config = {
+            navigationBarTitleText: '自我诊断'
+        }
+        components = {
+            goodinfo: Goodinfo
+        }
+        mixins = [Mixin]
+        data = {
+            num: 1000,
+            isChecked: false,
+            subject: [],
+            subjects: [],
+            params: [],
+            submitanswer: {},
+            family_id: '', // family_id有值时，为家庭成员,否为本人
+            img: '',
+            isload: true
+        }
+        computed = {}
+        methods = {
+            // 上传图片
+            chooseImg() {
+                this.chooseImage({
+                    count: 1
+                }).then(res => {
+                    // 获取上传成功的图片路径，并进行相关操作
+                    this.img = res
+                    this.$apply()
+                })
+            },
+            // 选择牙齿情况
+            case_type(id, index, item) {
+                if (item.select_type === 3 || item.select_type === 1) {
+                    (this.subject[id].children).forEach((v) => {
+                        v.Checkedid = ''
+                    })
+                } else {
+                    (this.subject[id].children).forEach((v) => {
+                        if (v.select_type === 3) {
+                            v.Checkedid = ''
+                        }
+                    })
+                }
+                if (this.subject[id].children[index].Checkedid) {
+                    this.subject[id].children[index].Checkedid = ''
+                } else {
+                    this.subject[id].children[index].Checkedid = item.id
+                }
+                this.subjects = this.subject
+            },
+            // 提交自我诊断
+            btn_w() {
+                var arr = this.subjects
+                this.params = []
+                for (var i = 0; i < arr.length; i++) {
+                    var arr_children = arr[i].children
+                    console.log(arr[i].name)
+                    var code = {
+                        "subject_id": arr[i].id,
+                        "subject_name": arr[i].name,
+                        "option": []
+                    }
+                    for (var j = 0; j < arr_children.length; j++) {
+                        if (arr_children[j].Checkedid === arr_children[j].id) {
+                            console.log(arr_children[j])
+                            var option_id = arr_children[j].id
+                            var option_name = arr_children[j].name
+                            code.option.push({
+                                "option_id": option_id,
+                                "option_name": option_name
+                            })
+
+                        }
+                    }
+                    if (code.option.length > 0){
+                        this.params.push(code)
+                    }
+                }
+                if (this.params.length === this.subject.length) {
+                    this.getSubmitanswer()
+                } else {
+                    this.showAlert({
+                        showCancel: false,
+                        content: '请选择牙齿情况'
+                    })
+                }
+            }
+        }
+        // 提交自我诊断接口
+        getSubmitanswer() {
+            console.log(this.params)
+            wepy.request({
+                url: '/weiappapi/diagnosis/submitanswer',
+                method: 'POST',
+                data: {
+                    'family_id': this.family_id,
+                    'params': JSON.stringify(this.params),
+                    'kq_ct_image': this.img[0]
+                }
+            }).then(res => {
+                this.submitanswer = res
+                if (res.code === '1') {
+                    wepy.redirectTo({
+                        url: '/pages/archives/presentation?family_id=' + this.family_id
+                    })
+                } else {
+                    this.showAlert({
+                        showCancel: false,
+                        content: res.msg
+                    })
+                }
+                this.$apply()
+            })
+        }
+        //  自我诊断题库
+        getSubject() {
+            var that = this
+            this.showloading()
+            wepy.request({
+                url: '/weiappapi/diagnosis/subject',
+                method: 'GET',
+                data: {}
+            }).then(res => {
+                this.showloading(false)
+                this.isload = false
+                if (res.data) {
+                    that.subject = res.data
+                    that.$apply()
+                }
+            })
+        }
+        onLoad(query) {
+            if (query.family_id) {
+                this.family_id = query.family_id
+            }
+            this.getSubject()
+        }
+    }
+</script>
+
+<style lang="less" scoped>
+    .container {
+        .diagonosis {
+            margin-top: 20rpx;
+            height: 100%;
+            background: #ffffff;
+            .dia_title {
+                font-size: 28rpx;
+                font-weight: bold;
+                padding: 30rpx 0;
+                margin-left: 32rpx;
+                border-bottom: 1rpx solid #ededed;
+            }
+            .dia_img {
+                background: #ffffff;
+                border-bottom: 1rpx solid #ededed;
+                margin-left: 32rpx;
+                .dia_i {
+                    width: 100%;
+                    margin-left: -32rpx;
+                    text-align: center;
+                    image {
+                        width: 100%;
+                        height: 100%;
+                    }
+                }
+                .dia_it {
+                    display: flex;
+                    text {
+                        flex: 1;
+                        font-size: 22rpx;
+                        text-align: center;
+                        color: #333333;
+                    }
+                }
+            }
+            .dia_img11 {
+                width: 686rpx;
+                height: 352rpx;
+                margin: auto;
+                margin-top: 20rpx;
+                margin-bottom: 0rpx;
+                image {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .dia_t11 {
+                display: inline-block;
+                margin-left: 124rpx;
+                margin-bottom: 30rpx;
+                margin-top: 30rpx;
+                font-size: 22rpx;
+                line-height: 22rpx;
+                color: #666666;
+            }
+            .dia_text {
+                padding: 0 30rpx 30rpx 30rpx;
+                .dia_t1 {
+                    display: inline-block;
+                    margin-right: 20rpx;
+                    margin-top: 20rpx;
+                    padding: 18rpx 24rpx;
+                    font-size: 28rpx;
+                    color: #666666;
+                    border: 1rpx solid #c8c8c8;
+                    border-radius: 4rpx;
+                    background: #ffffff;
+                    /*&:active{*/
+                    /*background: #4287ff;*/
+                    /*color: #ffffff;*/
+                    /*}*/
+                }
+                .dia_t2 {
+                    background: #4287ff;
+                    color: #ffffff;
+                    border: 1rpx solid #4287ff;
+                }
+            }
+        }
+        .btn_w100 {
+            margin-top: 30rpx;
+            margin-bottom: 30rpx;
+        }
+    }
+</style>

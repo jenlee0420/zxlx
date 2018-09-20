@@ -1,0 +1,58 @@
+<template>
+    <view class="container mt20">
+        <repeat wx:if="{{initCancel}}" for="{{datalist}}" index="index" item="item" key="key">
+            <navigator hover-class="none" url="/pages/doctor/details?id={{item.doctor_id}}&clinic_id={{item.clinic_id}}">
+                <doctcard :docdata.sync="item" :contact="true"></doctcard>
+            </navigator>
+        </repeat>
+        <view class="nodata" wx:if="{{datalist.length == 0}}">
+            <span class="word">暂无数据</span>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import DoctCard from '@/components/doctCard1'
+    export default class MyDoctor extends wepy.page {
+        config = {
+            navigationBarTitleText: '专属牙医'
+        }
+        mixins = [Mixin]
+        components = {
+            doctcard: DoctCard
+        }
+        data = {
+            initCancel: false,
+            datalist: []
+        }
+        computed = {}
+        methods = {}
+        events = {}
+        loadDoclist() {
+            this.initCancel = false
+            this.showloading()
+            // 取专属牙医列表
+            wepy.request({
+                url: 'weiappapi/doctor/exclusive', // exclusive focuslist
+                method: 'get',
+                data: {}
+            }).then(res => {
+                this.initCancel = true
+                this.showloading(false)
+                if (res.code === '1') {
+                    this.datalist = res.data
+                }
+                this.$apply()
+            })
+        }
+        onLoad() {
+            this.loadDoclist()
+        }
+    }
+</script>
+
+<style lang="less">
+
+</style>

@@ -1,0 +1,113 @@
+#gopng_现金支付_outer {
+height: 80px;
+width: 80px;
+overflow: hidden;
+}
+#gopng_现金支付 {
+background: url(http://gopng/static/images/sprite.png) -0px -0px no-repeat;
+width: 100%;
+height: 100%;
+_background: none;
+_padding-left: 0px;
+_margin-left: -0px;
+_padding-top: 0px;
+_margin-top: -0px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="http://gopng/static/images/sprite.png");
+}
+#gopng_支付宝支付_outer {
+height: 80px;
+width: 80px;
+overflow: hidden;
+}
+#gopng_支付宝支付 {
+background: url(http://gopng/static/images/sprite.png) -0px -80px no-repeat;
+width: 100%;
+height: 100%;
+_background: none;
+_padding-left: 0px;
+_margin-left: -0px;
+_padding-top: 80px;
+_margin-top: -80px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="http://gopng/static/images/sprite.png");
+}
+#gopng_河狸钱包_outer {
+height: 80px;
+width: 80px;
+overflow: hidden;
+}
+#gopng_河狸钱包 {
+background: url(http://gopng/static/images/sprite.png) -0px -160px no-repeat;
+width: 100%;
+height: 100%;
+_background: none;
+_padding-left: 0px;
+_margin-left: -0px;
+_padding-top: 160px;
+_margin-top: -160px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="http://gopng/static/images/sprite.png");
+}
+#gopng_微信支付_outer {
+height: 78px;
+width: 78px;
+overflow: hidden;
+}
+#gopng_微信支付 {
+background: url(http://gopng/static/images/sprite.png) -0px -240px no-repeat;
+width: 100%;
+height: 100%;
+_background: none;
+_padding-left: 0px;
+_margin-left: -0px;
+_padding-top: 240px;
+_margin-top: -240px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="http://gopng/static/images/sprite.png");
+}
+#gopng_结清icon_outer {
+height: 60px;
+width: 60px;
+overflow: hidden;
+}
+#gopng_结清icon {
+background: url(http://gopng/static/images/sprite.png) -0px -318px no-repeat;
+width: 100%;
+height: 100%;
+_background: none;
+_padding-left: 0px;
+_margin-left: -0px;
+_padding-top: 318px;
+_margin-top: -318px;
+_filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="http://gopng/static/images/sprite.png");
+}
+
+#gopng_手机号_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+    }
+    #gopng_手机号 {
+    background: url(http://gopng/static/images/sprite.png) -0px -378px no-repeat;
+    width: 100%;
+    height: 100%;
+    _background: none;
+    _padding-left: 0px;
+    _margin-left: -0px;
+    _padding-top: 378px;
+    _margin-top: -378px;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="http://gopng/static/images/sprite.png");
+    }
+    #gopng_验证码_outer {
+    height: 36px;
+    width: 36px;
+    overflow: hidden;
+    }
+    #gopng_验证码 {
+    background: url(http://gopng/static/images/sprite.png) -0px -414px no-repeat;
+    width: 100%;
+    height: 100%;
+    _background: none;
+    _padding-left: 0px;
+    _margin-left: -0px;
+    _padding-top: 414px;
+    _margin-top: -414px;
+    _filter: progid:DXImageTransform.Microsoft.AlphaImageLoader(sizingMethod=crop,src="http://gopng/static/images/sprite.png");
+    }

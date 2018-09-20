@@ -1,0 +1,534 @@
+<template>
+    <view class="container">
+        <view class="searchbar">
+            <view class="searchinput">
+                <text class="search"></text>
+                <input @input="bindkeyword" value="{{keyword}}" confirm-type="search" bindconfirm="search" placeholder="{{placeholder}}" auto-focus />
+                <text class="clean" wx:if="{{isClean}}" @tap="cleanKeyword"></text>
+            </view>
+            <text class="cancel_w" @tap="goback">取消</text>
+        </view>
+        <view class="tabs" wx:if="{{searchAll == 'true'}}">
+            <span class="{{searchType == 'clinic' ?'act':''}}" @tap="changeType('clinic')">
+                诊所
+            </span>
+            <span class="{{searchType == 'goods' ?'act':''}}"  @tap="changeType('goods')">
+                服务
+            </span>
+            <span class="{{searchType == 'doctors' ?'act':''}}"  @tap="changeType('doctors')">
+                医生
+            </span>
+        </view>
+        <view class="his_keyword" wx:if="{{hisShow && historyList.length > 0}}">
+            <!--历史搜索记录-->
+            <view class="flex"><text class="flex-1">历史记录</text> <text class="del" wx:if="{{historyList.length > 0}}" @tap="delhistory"></text></view>
+            <view>
+                <repeat for="{{historyList}}" item="item">
+                    <text class="his_item" @tap="searchKeyWord({{item}})">{{item}}</text>
+                </repeat>
+            </view>
+        </view>
+        
+            <view class="contant">
+                <scroll-view scroll-y @scrolltolower="nextpage" wx:if="{{tab_item.length>0}}">
+            <repeat for="{{tab_item}}" item="item">
+                <!--搜索商品-->
+                <view class="items" @tap="ShowDetail({{item.id}}, {{item.name}})" wx:if="{{searchType == 'goods'}}">
+                    <view class="itemname">
+                        <text class="hide_txt">{{item.name}}（{{item.clinic_info.name}}）</text>
+                    </view>
+                    <view>
+                        <text class="items_price">￥{{item.dis_price}}</text><text>{{item.sale_count}}</text><text class="c929292">人预约</text>
+                    </view>
+                    <text class="distance" wx:if="{{item.distance}}">{{item.distance}}km</text>
+                </view>
+                <!--搜索诊所-->
+                <view class="items" @tap="ShowDetail({{item.clinic_id}}, {{item.name}})" wx:if="{{searchType == 'clinic'}}">
+                    <view class="itemname">
+                        <text class="hide_txt">{{item.name}}</text>
+                    </view>
+                    <view class="flex">
+                        <view class="score mr20">
+                            <span class="mico_star_gray">
+                                        <span  wx:if="{{item.score > 0}}" class="mico_star_all" style="width:{{(item.score / 5) * 100}}%"></span>
+                            <span wx:if="{{item.score === 0}}" class="mico_star_all" style="width:{{(5 / 5) * 100}}%"></span>
+                            </span>
+                        </view><text>{{item.sum_count}}</text><text class="c929292">人预约</text>
+                    </view>
+                    <text class="distance" wx:if="{{item.distance}}">{{item.distance}}km</text>
+                </view>
+                <!--搜索医生-->
+                <view class="items" @tap="ShowDetail({{item.doctor.key}}, {{item.doctor.value}}, {{item.clinic_id}})" wx:if="{{searchType == 'doctors'}}">
+                    <text class="">{{item.doctor.value}}</text>
+                    <text class="distance" wx:if="{{item.distance}}">{{item.distance}}km</text>
+                </view>
+            </repeat>
+             </scroll-view>
+            <view class="nodata" wx:if="{{tab_item.length == 0 && !isload && !hisShow}}">
+                <span class="word">抱歉，未能找到您搜索的{{defValue}}</span>
+            </view>
+        </view>
+       
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Searchpage extends wepy.page {
+        config = {
+            navigationBarTitleText: '搜索',
+            disableScroll: true
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {
+            keyword: '',
+            defValue: '商品',
+            placeholder:'',
+            tab_item: [],
+            isload: true,
+            hisShow: true,
+            isClean: false,
+            searchType: 'clinic',
+            hisType: 1,
+            historyList: [],
+            focus: true,
+            NavToUrl: '',
+            page_size:20,
+            current_page:1,
+            nextAllow: true,
+            totalCount: 0,
+            requestUrl:'',
+            searchAll:false,
+            setHistoryType:'2'
+        }
+        computed = {}
+        methods = {
+            nextpage(){
+                if(this.nextAllow && this.tab_item.length < this.totalCount){
+                    this.nextAllow = false
+                    this.current_page += 1
+                    this.initSearch()
+                }
+            },
+            bindkeyword(e) {
+                this.keyword = e.detail.value
+                this.tab_item = []
+                this.current_page = 1
+                this.searchSwitch()
+            },
+            cleanKeyword() {
+                this.keyword = ''
+                this.searchSwitch()
+                this.gethistory()
+            },
+            goback() {
+                wepy.navigateBack()
+            },
+            // 记录搜索的关键字
+            ShowDetail(id, name, clid) {
+                wepy.request({
+                    url: 'weiappapi/searchhistory/writehistory',
+                    method: 'POST',
+                    data: {
+                        type: this.setHistoryType,
+                        name: name
+                    }
+                }).then(res => {
+                    this.NavTo(id, clid)
+                })
+            },
+            //点击历史记录关键字后直接搜索
+            searchKeyWord(str) {
+                this.keyword = str
+                this.searchSwitch()
+            },
+            changeType(type){
+                this.searchType = type
+                this.tab_item = []
+                this.current_page = 1
+                this.init()
+                this.searchSwitch()
+            }
+        }
+        events = {}
+        searchSwitch() {
+            if (this.keyword) {
+                this.isClean = true
+                this.initSearch()
+                this.hisShow = false
+            } else if (this.keyword === '') {
+                this.tab_item = []
+                this.isClean = false
+                this.hisShow = true
+            }
+        }
+        // 跳转相应详情页
+        NavTo(id, clid) {
+            let params = ''
+            if (id) {
+                params += '?id=' + id
+            }
+            if (clid) {
+                params += '&clinic_id=' + clid
+            }
+            wepy.navigateTo({
+                url: this.NavToUrl + params
+            })
+        }
+        //  获取商品列表
+        getGoodslist() {
+            this.isload = true
+            var that = this
+            wepy.request({
+                url: this.requestUrl,
+                method: 'GET',
+                data: {
+                    flag: 'distance',
+                    lng: this.localinfobyStorage().lng,
+                    lat: this.localinfobyStorage().lat,
+                    province: this.localinfobyStorage().province_id,
+                    city: this.localinfobyStorage().city_id,
+                    keyword: this.keyword,
+                    page_size: this.page_size,
+                    current_page: this.current_page
+                }
+            }).then(res => {
+                this.isload = false
+                this.nextAllow = true
+                that.totalCount = res.data.total_count
+                if ( that.tab_item.length === that.totalCount ){
+                    return
+                }
+                if (that.current_page > 1) {
+                    that.tab_item = that.tab_item.concat(res.data.list)
+                } else {
+                    that.tab_item = res.data.list
+                }
+                that.$apply()
+            })
+        }
+        //  获取医生列表
+        getdoctorlist() {
+            this.isload = true
+            var that = this
+            wepy.request({
+                url: '/weiappapi/finddoctor/doctorlist',
+                method: 'GET',
+                data: {
+                    flag: 'distance',
+                    province: this.localinfobyStorage().province_id,
+                    city: this.localinfobyStorage().city_id,
+                    lng: this.localinfobyStorage().lng,
+                    lat: this.localinfobyStorage().lat,
+                    keyword: this.keyword,
+                    page_size: this.page_size,
+                    current_page: this.current_page
+                }
+            }).then(res => {
+                this.isload = false
+                this.nextAllow = true
+                that.totalCount = res.data.total_count
+                if ( that.tab_item.length === that.totalCount ){
+                    return
+                }
+                if (that.current_page > 1) {
+                    that.tab_item = that.tab_item.concat(res.data.list)
+                } else {
+                    that.tab_item = res.data.list
+                }
+                that.$apply()
+            })
+        }
+        //  获取诊所列表
+        getcliniclist() {
+            this.isload = true
+            var that = this
+            wepy.request({
+                url: '/weiappapi/findclinic/cliniclist',
+                method: 'GET',
+                data: {
+                    flag: 'distance',
+                    province: this.localinfobyStorage().province_id,
+                    city: this.localinfobyStorage().city_id,
+                    lng: this.localinfobyStorage().lng,
+                    lat: this.localinfobyStorage().lat,
+                    keyword: this.keyword,
+                    page_size: this.page_size,
+                    current_page: this.current_page
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    this.isload = false
+                    this.nextAllow = true
+                    
+                    that.totalCount = res.data.total_count
+                    if ( that.tab_item.length === that.totalCount ){
+                        return
+                    }
+                    if (that.current_page > 1) {
+                        that.tab_item = that.tab_item.concat(res.data.list)
+                    } else {
+                        that.tab_item = res.data.list
+                    }
+                    that.$apply()
+                }
+            })
+        }
+        //  获取搜索历史
+        gethistory() {
+            var that = this
+            wepy.request({
+                url: 'weiappapi/searchhistory/historylist',
+                method: 'GET',
+                data: {
+                    type: this.hisType
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    that.historyList = res.data
+                    that.$apply()
+                } else {
+                    this.showAlert({
+                        content: res.msg,
+                        showCancel: false
+                    })
+                }
+            })
+        }
+        // 清除历史记录
+        delhistory() {
+            var that = this
+            this.showloading()
+            wepy.request({
+                url: 'weiappapi/searchhistory/clearhistory',
+                method: 'POST',
+                data: {
+                    type: this.hisType
+                }
+            }).then(res => {
+                this.showloading(false)
+                if (res.code === '1') {
+                    that.historyList = []
+                    that.showSuccess('操作成功')
+                    that.$apply()
+                } else {
+                    this.showAlert({
+                        content: res.msg,
+                        showCancel: false
+                    })
+                }
+            })
+        }
+        initSearch() {
+            switch (this.searchType) {
+                case 'goods':
+                    this.requestUrl = 'weiappapi/goods/goodslist'
+                    break
+                case 'doctors':
+                    this.requestUrl = 'weiappapi/finddoctor/doctorlist'
+                    // this.getdoctorlist()
+                    break
+                case 'clinic':
+                    this.requestUrl = 'weiappapi/findclinic/cliniclist'
+                    // this.getcliniclist()
+                    break
+            }
+            this.getGoodslist()
+        }
+        init() {
+            switch (this.searchType) {
+                case 'goods':
+                    this.defValue = '商品'
+                    this.placeholder = '请输入商品名称'
+                    this.hisType = 1
+                    this.NavToUrl = '/pages/goods/index'
+                    this.setHistoryType = 1
+                    break
+                case 'doctors':
+                    this.defValue = '医生'
+                    this.placeholder = '请输入医生姓名'
+                    this.hisType = 3
+                    this.NavToUrl = '/pages/doctor/details'
+                    this.setHistoryType = 3
+                    break
+                case 'clinic':
+                    this.defValue = '诊所'
+                    this.placeholder = '请输入诊所名称'
+                    this.hisType = 2
+                    this.NavToUrl = '/pages/hospital/hospital'
+                    this.setHistoryType = 2
+                    break
+            }
+            if (this.searchAll) {
+                this.hisType = 4
+                this.placeholder = '请输入诊所名字、产品或者医生名字'
+            }
+        }
+        onLoad(opation) {
+            if (opation.type) {
+                this.searchType = opation.type
+            }
+            if (opation.searchAll) {
+                this.searchAll = opation.searchAll
+            }
+            console.log(opation)
+            this.init()
+            this.gethistory()
+        }
+    }
+</script>
+
+<style lang="less">
+    .container {
+        background-color: #fff;
+        padding: 0 32rpx;
+        display: flex;
+        flex-direction: column;
+        height: 100%;
+        overflow:hidden;
+        .tabs{
+            width: 100%;
+            display: flex;
+            height: 90rpx;
+            padding-bottom:20rpx;
+            span{
+                font-size: 28rpx;
+                line-height: 90rpx;
+                flex:1;
+                margin: 0 44rpx;
+                color: #666;
+                text-align: center;
+                &.act{
+                    color: #333;
+                    font-weight: bold;
+                    border-bottom:4rpx solid #4287ff;
+                }
+            }
+        }
+        .his_keyword {
+            flex:1;
+            // margin: 0 32rpx;
+            margin-top: 32rpx;
+            padding-bottom: 16rpx;
+            font-size: 24rpx;
+            view {
+                margin-bottom: 24rpx;
+                color: #888;
+            }
+            .his_item {
+                color: #666;
+                padding: 0 20rpx;
+                height: 54rpx;
+                line-height: 54rpx;
+                background-color: #f6f6f6;
+                display: inline-block;
+                margin-right: 20rpx;
+                margin-bottom: 10rpx;
+                max-width: 8em;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+            }
+        }
+        .searchbar {
+            padding: 18rpx 0;
+            // margin: 0 32rpx;
+            height: 96rpx;
+            box-sizing: border-box;
+            display: flex;
+            align-items: center;
+            .searchinput {
+                flex: 1;
+                border-radius: 30rpx;
+                background-color: #f3f3f3;
+                display: flex;
+                align-items: center;
+                height: 60rpx;
+                color: #333;
+                input {
+                    flex: 1;
+                    height: 60rpx;
+                    font-size: 26rpx;
+                    line-height: 60rpx;
+                }
+            }
+        }
+        .contant{
+            flex:1;
+            display: flex;
+            // padding-left: 32rpx;
+            // box-sizing: border-box;
+        }
+        .items {
+            height: 100rpx;
+            color: #333;
+            font-size: 26rpx;
+            border-bottom: 1rpx solid #ededed;
+            width: 100%;
+            // padding-right: 32rpx;
+            box-sizing: border-box;
+            display: flex; // align-items:center;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            .itemname {
+                padding-bottom: 10rpx;
+            }
+            .items_price {
+                margin-right: 60rpx;
+                color: #ff8c00;
+            }
+            .hide_txt {
+                max-width: 22em;
+                text-overflow: ellipsis;
+                white-space: nowrap;
+                overflow: hidden;
+                display: block;
+            }
+            .distance {
+                position: absolute;
+                right: 26rpx;
+                top: 0;
+                bottom: 0;
+                margin: auto;
+                height: 34rpx;
+                line-height: 34rpx;
+                font-size: 26rpx;
+                color: #929292;
+            }
+        }
+        .cancel_w {
+            padding-left: 32rpx;
+            font-size: 30rpx;
+            color: #333;
+        }
+    }
+    .del {
+        background-image: url('@{imgbaseUrl}/searchico/del.png');
+        background-repeat: no-repeat;
+        background-size: 26rpx;
+        overflow: hidden;
+        width: 26rpx;
+        height: 26rpx;
+    }
+    .clean {
+        background-image: url('@{imgbaseUrl}/searchico/clean.png');
+        background-repeat: no-repeat;
+        background-size: 30rpx;
+        overflow: hidden;
+        width: 30rpx;
+        height: 30rpx;
+        margin-right: 20rpx;
+    }
+    .search {
+        background-image: url('@{imgbaseUrl}/searchico/search.png');
+        background-repeat: no-repeat;
+        background-size: 26rpx;
+        overflow: hidden;
+        margin: 0 20rpx;
+        width: 26rpx;
+        height: 26rpx;
+    }
+</style>

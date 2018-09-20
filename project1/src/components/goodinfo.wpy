@@ -1,0 +1,148 @@
+<template>
+    <!-- 首页 推荐商品 -->
+    <view class="recom_goods" wx:if="{{goodlist.length > 0}}">
+        <repeat for="{{goodlist}}" item="item">
+            <view class="goodsDetail flex" @tap="jump({{item.goods_id}})">
+                <view class="goodsimg">
+                    <image src="{{item.img[0]}}" mode="aspectFill" />
+                </view>
+                <ul class="goodsinfo fs24 flex-1">
+                    <li class="goodname">{{item.goods_name}}</li>
+                    <li class="clinicname">{{item.clinic_name}}</li>
+                    <li wx:if="{{isIndex == 'false'}}" class="goods_t8 flex-1">
+                        <div>已有<span class="goods_t7">{{item.sale_count}}</span>人预约</div>
+                        <div class="distance" wx:if="{{item.distance}}">{{item.distance}}km</div>
+                    </li>
+                    <li class="al-bottom flex-1">
+                        <span class="goods_t3">￥</span>
+                        <span class="goods_t4">{{item.dis_price}}</span>
+                        <span class="goods_t5">￥{{item.price}}</span>
+                        <span wx:if="{{isIndex == 'true'}}" class="goods_t6 flex-1">已有<span class="goods_t7">{{item.sale_count}}</span>人预约</span>
+                    </li>
+                </ul>
+            </view>
+        </repeat>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    export default class Goodinfo extends wepy.component {
+        props = {
+            goodlist: {},
+            isIndex:{}
+        }
+        components = {}
+        data = {
+            current: {
+                id: 0,
+                index: 0
+            }
+        }
+        methods = {
+            jump(id) {
+                wepy.navigateTo({
+                    url: '/pages/goods/index?id=' + id
+                })
+            }
+        }
+    }
+</script>
+
+<style lang="less">
+    .recom_goods {
+        width: 750rpx;
+        box-sizing: border-box;
+        background: #fff;
+        overflow: hidden;
+        .goodsDetail {
+            padding: 0 32rpx;
+            background-color: #fff;
+            height: 220rpx;
+            .goodsinfo {
+                margin: 30rpx auto;
+                display: flex;
+                flex-direction: column;
+                .goodname {
+                    font-size: 30rpx;
+                    line-height: 42rpx;
+                    margin-bottom: 8rpx;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 2;
+                    overflow: hidden;
+                    font-weight: bold;
+                }
+                .clinicname {
+                    font-size: 24rpx;
+                    line-height: 31rpx;
+                    color: #929292;
+                    display: -webkit-box;
+                    -webkit-box-orient: vertical;
+                    -webkit-line-clamp: 1;
+                    overflow: hidden;
+                }
+                .flex-1 {
+                    display: block;
+                }
+                .al-bottom {
+                    display: flex;
+                    align-items: flex-end;
+                }
+                .goods_t3 {
+                    margin-right: 2rpx;
+                    color: #ff8c00;
+                    font-size: 26rpx;
+                    line-height:28rpx;
+                }
+                .goods_t4 {
+                    margin-right: 20rpx;
+                    font-size: 34rpx;
+                    color: #ff8c00;
+                    line-height: 34rpx;
+                }
+                .goods_t5 {
+                    font-size: 20rpx;
+                    color: #929292;
+                    text-decoration: line-through
+                }
+                .goods_t6,.goods_t8 {
+                    text-align: right;
+                    font-size: 22rpx;
+                    color: #929292;
+                    .goods_t7 {
+                        color: #333;
+                    }
+                }
+                .goods_t8{
+                    text-align: left;
+                    margin-top:6rpx
+                }
+                .distance {
+                    font-size: 22rpx;
+                    color: #929292;
+                    flex: 1;
+                    text-align:right;
+                    float:right;
+                }
+            }
+            .goodsimg {
+                margin-right: 30rpx;
+                margin-top: auto;
+                margin-bottom: auto;
+                width: 160rpx;
+                height: 160rpx;
+                border-radius: 6rpx;
+                background-color: #f5f5f5;
+                line-height: 1;
+                image {
+                    border-radius: 6rpx;
+                    width: 160rpx;
+                    height: 160rpx;
+                    max-width: 100%;
+                    max-height: 100%;
+                }
+            }
+        }
+    }
+</style>

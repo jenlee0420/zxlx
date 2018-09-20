@@ -1,0 +1,481 @@
+<template>
+    <view class="container">
+        <navigator url="/pages/mycenter/selectPatient?goodsid={{goodsid}}" hover-class="none">
+            <view class="header mt20">
+                <div class="head">
+                    <image src="{{patientInfo.avatar ? patientInfo.avatar : baseHeadImg}}" @error="default_head" data-img="patientInfo,value" />
+                </div>
+                <div class="info flex-1">
+                    <p><span class="mr12">{{patientInfo.nickname}}</span><i class="{{patientInfo.gender.key === 1 ?'man':'woman'}}"></i></p>
+                    <p>{{patientInfo.mobile}}</p>
+                </div>
+                <span class="arrow-right"></span>
+            </view>
+        </navigator>
+        <form bindsubmit="bindFormSubmit">
+            <view class="appintcont mt20">
+                <block wx:if="{{goodsid != ''}}">
+                    <view class="flex bottomLine">
+                        <span class="sch_item"></span>
+                        <text class="flex-1 ml32">预约项目</text>
+                        <text class="hidetext fs30 cb4b4b4">{{itemInfo.service_name}}</text>
+                    </view>
+                    <view class="flex">
+                        <span class="sch_clinic"></span>
+                        <text class="flex-1 ml32">预约诊所</text>
+                        <text class="hidetext fs30 cb4b4b4">{{itemInfo.clinic_name}}</text>
+                    </view>
+                </block>
+                <view class="flex bottomLine" @tap="showDateSelect">
+                    <span class="sch_date"></span>
+                    <text class="flex-1 ml32">预约日期</text>
+                    <text class="fs30 w200 t_r c929292">{{schData.date}}</text>
+                    <span class="arrow-right"></span>
+                </view>
+                <view class="flex" @tap="showTimeSelect">
+                    <span class="sch_time"></span>
+                    <text class="flex-1 ml32">预约时段</text>
+                    <text class="fs30 w200 t_r c929292">{{schData.time}}</text>
+                    <span class="arrow-right"></span>
+                </view>
+                <view class="flex" @tap="showDocSelect">
+                    <span class="sch_doc"></span>
+                    <text class="flex-1 ml32">预约医生</text>
+                    <text class="hidetext fs30 c929292">{{schData.doctor}}</text>
+                    <span class="arrow-right"></span>
+                </view>
+            </view>
+            <view class="appintcont flex-column mt20 mb40">
+                <ul class="mb40">
+                    <li class="flex h100 flex-algin-center">
+                        <span class="sch_remark"></span>
+                        <text class="flex-1 ml32">预约备注</text>
+                    </li>
+                    <li class="flex flexwrap ">
+                        <repeat for="{{selArr}}" index="index" item="item" key="key">
+                            <span class="select_label {{item.checked?'act':''}}" @tap="appendto({{item.name}})">{{item.name}}</span>
+                        </repeat>
+                    </li>
+                    <li class="mt30">
+                        <textarea name="remark" value="{{remarkValue}}" @input="appendto" class="tArea h180 {{isShow?'':'hidden'}}" placeholder="请输入备注~" />
+                    </li>
+                </ul>
+            </view>
+            <button class="btn_w100" form-type="submit">确认预约</button>
+        </form>
+        <view class="fs22 c929292 t_c mt20 mb60">确认预约后请耐心等待诊所确认您的预约</view>
+        <!-- modal -->
+        <mypicker :options="pcikerOptions" wx:if="{{pcikerOptions.show}}"></mypicker>
+        <mypickertime :options="pcikerTime" wx:if="{{pcikerTime.show}}"></mypickertime>
+        <docpicker :doctorlist.sync="doctlist" wx:if="{{pcikerdoc.show}}"></docpicker>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import mypicker from '@/components/mypicker'
+    import docpicker from '@/components/docpicker'
+    export default class SchdeuleAdd extends wepy.page {
+        config = {
+            navigationBarTitleText: '在线预约'
+        }
+        mixins = [Mixin]
+        components = {
+            mypicker: mypicker,
+            mypickertime: mypicker,
+            docpicker: docpicker
+        }
+        data = {
+            second: false,
+            clinic_id: '',
+            patientInfo: {}, // 当前用户信息
+            itemInfo: {}, // 通过goodsid取得的就诊项目、诊所信息
+            goodsid: '',
+            remarkValue: '',
+            selArr: [{
+                    value: 1,
+                    name: '牙痛'
+                },
+                {
+                    value: 2,
+                    name: '牙酸'
+                },
+                {
+                    value: 3,
+                    name: '口腔溃疡'
+                },
+                {
+                    value: 4,
+                    name: '牙龈出血'
+                },
+                {
+                    value: 5,
+                    name: '牙齿松动'
+                },
+                {
+                    value: 6,
+                    name: '牙黄'
+                },
+                {
+                    value: 7,
+                    name: '蛀牙'
+                }
+            ],
+            pcikerOptions: {
+                show: false,
+                type: 'date',
+                value: [] // 后一天
+            },
+            pcikerTime: {
+                show: false,
+                type: 'time',
+                value: [],
+                timeRange: {
+                    start: '',
+                    end: ''
+                }
+            },
+            pcikerdoc: {
+                show: false
+            },
+            doctlist: {},
+            schData: {
+                date: '请选择',
+                time: '请选择',
+                doctor: '请选择',
+                doctid: ''
+            },
+            isShow: true
+        }
+        computed = {}
+        methods = {
+            // 显示预约日期列表
+            showDateSelect() {
+                this.pcikerOptions.show = true
+                this.isShow = false
+            },
+            // 添加标签到备注中
+            appendto(str) {
+                if (str.detail) {
+                    this.remarkValue = str.detail.value
+                } else {
+                    this.remarkValue += str
+                }
+            },
+            // 显示时段列表
+            showTimeSelect() {
+                this.pcikerTime.show = true
+                this.isShow = false
+            },
+            // 显示医生列表
+            showDocSelect() {
+                this.pcikerdoc.show = true
+                this.isShow = false
+            },
+            // 提交预约
+            bindFormSubmit(e) {
+                let eValue = e.detail.value
+                let msg = ''
+                if (!this.patientInfo.mobile || !this.patientInfo.user_name) {
+                    msg = '请到家庭档案中填写手机号或姓名'
+                } else if (this.schData.date === '请选择' || !this.schData.date) {
+                    msg = '请选择预约日期'
+                } else if (this.schData.time === '请选择' || !this.schData.time) {
+                    msg = '请选择预约时段'
+                } else if (this.schData.doctor === '请选择' || !this.schData.doctor) {
+                    msg = '请选择预约医生'
+                }
+                if (!this.patientInfo.mobile) {
+                    msg = '手机号不能为空'
+                }
+                if (msg) {
+                    this.showAlert({
+                        showCancel: false,
+                        content: msg
+                    })
+                    return false
+                }
+                let param = {
+                    order_id: this.goodsid,
+                    clinic_id: this.itemInfo.clinic_id,
+                    visit_id: this.schData.visit_id,
+                    clinic_name: this.itemInfo.clinic_name,
+                    doctor_id: this.schData.doctid,
+                    doctor_name: this.schData.doctor,
+                    service_name: this.itemInfo.service_name,
+                    appointment_day: this.schData.date,
+                    start_hour: this.schData.time.split('-')[0],
+                    end_hour: this.schData.time.split('-')[1],
+                    remark: eValue.remark
+                }
+                // console.log(param)
+                // return
+                let url = '/weiappapi/order/submitappointment'
+                if (this.second) {
+                    url = 'weiappapi/order/submitsecondappointment'
+                }
+                wepy.request({
+                    url: url,
+                    method: 'POST',
+                    data: param
+                }).then(res => {
+                    if (res.code === '1') {
+                        // 清除当前已选就诊人的信息
+                        wepy.removeStorage({
+                            key: 'visit'
+                        })
+                        this.showAlert({
+                            showCancel: false,
+                            content: '您的预约已提交成功，请等待诊所确认！',
+                            confirm: 'Navto'
+                        })
+                    } else {
+                        this.showAlert({
+                            showCancel: false,
+                            content: res.msg
+                        })
+                    }
+                })
+            }
+        }
+        events = {
+            output(res, type) {
+                if (type === 'date') {
+                    this.schData.date = res[0].id + '-' + res[1].id + '-' + res[2].id
+                    this.pcikerOptions.value = [res[0].id, res[1].id, res[2].id]
+                    this.$invoke('mypicker', 'reload_init', false, this.pcikerOptions)
+                }
+                if (type === 'time') {
+                    this.schData.time = res[0].id + '-' + res[1].id
+                    this.pcikerTime.value = [res[0].id, res[1].id]
+                    this.$invoke('mypickertime', 'reload_init', false, this.pcikerTime)
+                }
+                this.pcikerOptions.show = false
+                this.pcikerTime.show = false
+                this.isShow = true
+            },
+            doctOutput(doctid, doctname) {
+                this.pcikerdoc.show = false
+                if (doctid) {
+                    this.schData.doctor = doctname
+                    this.schData.doctid = doctid
+                }
+                this.isShow = true
+            }
+        }
+        Navto() {
+            wepy.redirectTo({
+                url: '/pages/mycenter/schedule?type=20'
+            })
+        }
+        getGoodinfo() {
+            this.showloading()
+            let url = 'weiappapi/order/appointment'
+            if (this.second) {
+                url = 'weiappapi/order/secondappointment'
+            }
+            wepy.request({
+                url: url,
+                method: 'POST',
+                data: {
+                    order_id: this.goodsid,
+                    clinic_id: this.clinic_id
+                }
+            }).then(res => {
+                this.showloading(false)
+                if (res.code === '1') {
+                    this.itemInfo = res.data
+                    this.schData.visit_id = res.data.visit_id
+                    this.validateData()
+                    this.loadDoctor(this.itemInfo.clinic_id)
+                    if (!wepy.getStorageSync('visit')) {
+                        let visit = {
+                            id: res.data.visit_id,
+                            gender: this.patientInfo.gender,
+                            avatar: this.patientInfo.avatar,
+                            mobile: this.patientInfo.mobile,
+                            user_name: this.patientInfo.user_name,
+                            nickname: this.patientInfo.user_name ? this.patientInfo.user_name : this.patientInfo.nickname
+                        }
+                        wepy.setStorageSync('visit', JSON.stringify(visit))
+                    }
+                    // 取出诊所营业时间
+                    this.pcikerTime.timeRange = {
+                        start: this.itemInfo.start_time,
+                        end: this.itemInfo.end_time
+                    }
+                    this.pcikerTime.value = [this.itemInfo.start_time, 0]
+                    this.$invoke('mypickertime', 'reload_init', false, this.pcikerTime)
+                }
+                this.$apply()
+            })
+        }
+        loadDoctor(id) {
+            wepy.request({
+                url: 'weiappapi/findclinic/clinicdoctorlist',
+                method: 'get',
+                data: {
+                    clinic_id: id
+                }
+            }).then(res => {
+                if (res.code === '1') {
+                    this.doctlist = res.data.list
+                }
+                this.$apply()
+            })
+        }
+        onLoad(query) {
+            if (query.goodsid) {
+                this.goodsid = query.goodsid
+            }
+            if (query.second) {
+                this.second = true
+                this.clinic_id = query.clid
+            }
+            this.getGoodinfo()
+        }
+        onUnload() {
+            // 后退时清除选择的就诊人信息
+            if (wepy.getStorageSync('visit')) {
+                wepy.removeStorage({
+                    key: 'visit'
+                })
+            }
+        }
+        validateData() {
+            // 检查当前就诊用户是否已完善个人信息
+            wepy.request({
+                url: 'weiappapi/familyarchives/checkFamily',
+                method: 'post',
+                data: {
+                    family_id: this.schData.visit_id
+                }
+            }).then(res => {
+                if (res.code === '0') {
+                    this.showAlert({
+                        content: '请完善就诊人信息',
+                        showCancel: false,
+                        confirm: 'Edituserinfo'
+                    })
+                } else {
+                    this.patientInfo.nickname = res.data.user_name
+                    this.patientInfo.user_name = res.data.user_name
+                    this.patientInfo.mobile = res.data.mobile
+                    this.$apply()
+                }
+            })
+        }
+        Edituserinfo() {
+            /* 修改指定人信息的 ID */
+            wepy.navigateTo({
+                url: '/pages/mycenter/familyAdd?type=edit&id=' + this.schData.visit_id
+            })
+        }
+        onShow() {
+            if (wepy.getStorageSync('visit')) {
+                this.patientInfo = JSON.parse(wepy.getStorageSync('visit'))
+                this.schData.visit_id = this.patientInfo.id
+                // 切换就诊人时再判断一次
+                this.validateData()
+            } else {
+                this.patientInfo = this.getUserInfobyStorage()
+            }
+            let nextDays = new Date(new Date().getTime() + 24 * 60 * 60 * 1000)
+            this.pcikerOptions.value = [nextDays.getFullYear(), nextDays.getMonth() + 1, nextDays.getDate()]
+            this.$invoke('mypicker', 'init')
+        }
+    }
+</script>
+
+<style lang="less">
+    .hidden {
+        display: none;
+    }
+    .hidetext {
+        width: 13em;
+        overflow: hidden;
+        white-space: nowrap;
+        text-align: right;
+        text-overflow: ellipsis;
+    }
+    .container {
+        overflow-x: hidden
+    }
+    .h100 {
+        height: 100rpx;
+        line-height: 100rpx;
+    }
+    .appintcont {
+        background-color: #fff;
+        font-size: 30rpx;
+        padding: 0 32rpx;
+        &>view {
+            min-height: 100rpx;
+            padding: 10rpx 0; // line-height: 100rpx;
+            align-items: center;
+            position: relative;
+            &::after {
+                content: '';
+                position: absolute;
+                left: 68rpx;
+                height: 1rpx;
+                width: 100%;
+                border-bottom: 1rpx solid @bColor;
+                bottom: 0;
+            }
+            &:last-child {
+                &::after {
+                    content: none;
+                }
+            }
+        }
+        .select_label {
+            margin-right: 12rpx;
+            margin-bottom: 20rpx;
+        }
+    }
+    .header {
+        height: 170rpx;
+        background: #fff;
+        display: flex;
+        align-items: center;
+        padding-left: 32rpx;
+        padding-top: 0;
+        padding-right: 32rpx;
+        .head {
+            height: 108rpx;
+            width: 108rpx;
+            border-radius: 50%;
+            image {
+                width: 100%;
+                height: 100%;
+                display: block;
+                border-radius: inherit;
+            }
+            margin-right: 32rpx;
+        }
+        .info {
+            display: flex;
+            justify-content: center;
+            flex-direction: column;
+            align-items: flex-start;
+            line-height: c(41);
+            p {
+                color: #666;
+                font-size: 28rpx;
+                &:first-child {
+                    display: flex;
+                    align-items: center;
+                    color: #333;
+                    font-size: 30rpx;
+                    em {
+                        color: #666;
+                        font-size: 28rpx;
+                        font-style: normal;
+                    }
+                }
+            }
+        }
+    }
+</style>

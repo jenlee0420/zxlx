@@ -1,0 +1,285 @@
+<template>
+    <view class="container" id="myBill" wx:if="{{isload}}">
+        <block wx:if="{{bill_list.length > 0}}">
+        <view class="bill_heard">
+            <p class="fs28 cfff f_opacity_6">累计欠费</p>
+            <p class="fs72 cfff mb30"><i class="fs48">¥</i>{{total_arrearsamount}}</p>
+            <p class="fs24 cfff f_opacity_8">累计消费：¥{{total_actualamount}}</p>
+        </view>
+        <!--<button class="bt150 cfff" @click = "wxPay"> 缴费</button>-->
+        <view class="billItem"
+            wx:if="{{bill_list.length > 0}}"
+            wx:for="{{bill_list}}" wx:for-item="item" wx:key="index"
+            @tap="showDetail({{item.id}})">
+            <div class="biHeader fs28 c333">
+                <p>{{item.clinic_name}}</p>
+                <p class="b">
+                    {{item.status.key === 2 ? '欠费金额：' : '已结清'}}<span wx:if="{{item.status.key === 2 }}">{{item.arrears_amount}}</span></p>
+            </div>
+            <div class="bill_info fs30 c929292">
+                <p>就诊时间<i class="c333">{{item.da_time}}</i></p>
+                <p>开单医生<i class="c333">{{item.doctor.value}}</i></p>
+                <p>账单编号<i class="c333">{{item.bills_no}}</i></p>
+                <p>应付金额<i class="c333">{{item.actual_amount}}</i></p>
+                <p>实付金额<i class="c333">{{item.pay_amount}}</i></p>
+            </div>
+        </view>
+        </block>
+        <view class="nodata flex-1" wx:if="{{bill_list.length == 0}}">
+            <span class="word">暂无数据</span>
+        </view>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Bindphone extends wepy.page {
+        config = {
+            navigationBarTitleText: '诊疗账单'
+        }
+        mixins = [Mixin]
+        components = {}
+        data = {
+            bill_list: [],
+            total_arrearsamount: '0.00',
+            total_actualamount: '0.00',
+            isload: false
+        }
+        computed = {}
+        methods = {
+            showDetail(id) {
+                wepy.navigateTo({url: '/pages/mycenter/billDetail?id=' + id})
+            }
+        }
+        events = {}
+        loadbillslist() {
+            wepy.request({
+                url: 'weiappapi/finance/getbillslist',
+                method: 'get',
+                data: {}
+            }).then(res => {
+                // console.log(res)
+                if (res.code === '1' && res.data.list.length > 0) {
+                    // 价格 格式化
+                    res.data.list.forEach(v => {
+                        v.actual_amount = this.formatCurrency(v.actual_amount)
+                        v.arrears_amount = this.formatCurrency(v.arrears_amount)
+                        v.pay_amount = this.formatCurrency(v.pay_amount)
+                        v.add_time = v.add_time.slice(0, 16)
+                    })
+                    this.bill_list = res.data.list
+                    this.total_actualamount = this.formatCurrency(res.data.total.total_pay_amount)
+                    this.total_arrearsamount = this.formatCurrency(res.data.total.total_arrears_amount)
+                }
+                this.isload = true
+                this.$apply()
+            })
+        }
+        onLoad() {
+            this.loadbillslist()
+        }
+    }
+</script>
+
+<style lang="less">
+    .container{
+        padding-bottom: 20rpx;
+    }
+    .billItem {
+        background: #fff;
+        margin: 0 30rpx 19rpx 30rpx;
+        border-radius: 12rpx;
+        display: flex;
+        flex-direction: column;
+        position: relative;
+        box-shadow: 0px 0px 40rpx rgba(150, 150, 150, 0.1);
+        .biHeader {
+            height: 90rpx;
+            border-bottom: 1rpx solid @bColor;
+            display: flex;
+            box-sizing: border-box;
+            padding: 0 62rpx 0 30rpx;
+            justify-content: space-between;
+            align-items: center;
+            position: relative;
+            border-radius: 12rpx 12rpx 0 0;
+            p {
+                display: inline-block;
+                position: relative;
+                height: 30rpx;
+                &:first-child {
+                    &:before {
+                        width: 40rpx;
+                        height: 40rpx;
+                        transform: scale(0.5);
+                        border-radius: 50%;
+                        background: #f5f5f5;
+                        content: '';
+                        position: absolute;
+                        left: -30rpx;
+                        top: -30rpx;
+                        z-index: 1;
+                    }
+                    &:after {
+                        width: 6rpx;
+                        height: 55rpx;
+                        background: #fff;
+                        border-radius: 0 0 3rpx 3rpx;
+                        content: '';
+                        position: absolute;
+                        left: -12rpx;
+                        top: -65rpx;
+                        z-index: 2;
+                    }
+                }
+                &:last-child {
+                    &:before {
+                        width: 40rpx;
+                        height: 40rpx;
+                        transform: scale(0.5);
+                        border-radius: 50%;
+                        background: #f5f5f5;
+                        content: '';
+                        position: absolute;
+                        right: -62rpx;
+                        top: -30rpx;
+                        z-index: 1;
+                    }
+                    &:after {
+                        width: 6rpx;
+                        height: 55rpx;
+                        background: #fff;
+                        border-radius: 0 0 3rpx 3rpx;
+                        content: '';
+                        position: absolute;
+                        right: -44rpx;
+                        top: -65rpx;
+                        z-index: 2;
+                    }
+                }
+            }
+            &:after {
+                width: 16rpx;
+                height: 16rpx;
+                border: 1rpx solid #9d9d9d;
+                border-top: none;
+                border-left: none;
+                background: #fff;
+                position: absolute;
+                right: 30rpx;
+                top: 36rpx;
+                content: '';
+                transform: rotate(-45deg);
+            }
+        }
+        .biFooter {
+            height: 90rpx;
+            border-top: 1rpx dashed #dedede;
+            color: #418fff;
+            font-size: 30rpx;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            &.act {
+                color: #ccc;
+            }
+            &:before {
+                width: 6rpx;
+                height: 31rpx;
+                background: #fff;
+                border-radius: 3rpx 3rpx 0 0;
+                content: '';
+                position: absolute;
+                left: 17rpx;
+                bottom: -10rpx;
+                z-index: 1;
+            }
+            &:after {
+                width: 6rpx;
+                height: 31rpx;
+                background: #fff;
+                border-radius: 3rpx 3rpx 0 0;
+                content: '';
+                position: absolute;
+                right: 17rpx;
+                bottom: -10rpx;
+                z-index: 1;
+            }
+        }
+        &:before {
+            width: 40rpx;
+            height: 40rpx;
+            transform: scale(0.5);
+            border-radius: 50%;
+            background: #f5f5f5;
+            content: '';
+            position: absolute;
+            left: 0rpx;
+            bottom: 0rpx;
+        }
+        &:after {
+            width: 40rpx;
+            height: 40rpx;
+            transform: scale(0.5);
+            border-radius: 50%;
+            background: #f5f5f5;
+            content: '';
+            position: absolute;
+            right: 0rpx;
+            bottom: 0rpx;
+        }
+        &:last-child {
+            &:before,
+            &:after {
+                background-color: transparent;
+            }
+            .biFooter {
+                &:before,
+                &:after {
+                    background-color: transparent;
+                }
+            }
+        }
+    }
+    .bill_heard {
+        height: 392rpx;
+        display: flex;
+        box-sizing: border-box;
+        flex-direction: column;
+        align-items: center;
+        margin: 0 auto;
+        position: relative;
+        background: url('@{imgbaseUrl}/bill_bg.png') center no-repeat;
+        background-size: 100%;
+        p {
+            display: block;
+            box-sizing: border-box;
+            line-height: 1;
+            &:first-child {
+                margin-top: 70rpx;
+                margin-bottom: 40rpx;
+                img {
+                    width: 90rpx;
+                    height: 90rpx;
+                    border-radius: 50%;
+                }
+            }
+        }
+        i {
+            padding-right: 20rpx;
+        }
+        &+view {
+            .biHeader {
+                p:first-child,
+                p:last-child,
+                {
+                    &:before,
+                    &:after {
+                        background-color: transparent;
+                    }
+                }
+            }
+        }
+    }
+</style>
