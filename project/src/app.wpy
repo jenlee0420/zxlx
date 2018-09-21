@@ -22,8 +22,9 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        'pages/mycenter/orderdetail',
         'pages/mycenter/orderlist',
+        'pages/mycenter/orderdetail',
+
         'pages/search_page',
         'pages/index',
         'pages/mycenter/index',

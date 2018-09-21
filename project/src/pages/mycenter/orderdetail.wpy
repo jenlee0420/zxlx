@@ -146,7 +146,7 @@
 </style>
 
 <template>
-    <view class="container" id="orderdetail">
+    <view class="container" id="orderdetail" wx:if="{{!loading}}">
         <view class="orderstatus">
             <text wx:if="{{order_status=='10'}}">等待买家付款</text>
             <span class="public_icon_order_wait_pay" wx:if="{{order_status=='10'}}"></span>
@@ -222,7 +222,7 @@
                 </view>
             </view>
             <!-- 评价信息 end -->
-            <view class="contact"><span class="public_icon4_contact mr10"></span>联系客服</view>
+            <view class="contact"><button class="public_icon4_contact mr10" open-type="contact" />联系客服</view>
         </view>
         <view class="orderinfo" wx:if="{{order_status=='10'}}">
             <text>订单编号：{{detail.order_no}}</text>
@@ -265,20 +265,17 @@
           }
         }
         onLoad(options) {
-//          if(options.order_id==undefined){
-//            this.showAlert({title:"错误"});
-//            return
-//          }
+          if(options.order_id==undefined){
+            this.showAlert({title:"错误"});
+            return
+          }
 
-        }
-
-        PageInit(){
           wepy.request({
             url: "api/order/detail",
             method: 'POST',
-            data: {order_id:41},
+            data: {order_id:options.order_id},
           }).then(res => {
-              this.loading= false
+            this.loading= false;
             if(res.code != "1"){
               this.showAlert({title: "警告", content: res.msg});
             }else{
@@ -287,6 +284,10 @@
             }
             this.$apply();
           })
+        }
+
+        PageInit(){
+
         }
     }
 </script>

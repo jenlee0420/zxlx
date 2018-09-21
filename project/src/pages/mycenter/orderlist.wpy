@@ -78,9 +78,10 @@
                               <!-- <block wx:for="{{itemb.list}}" wx:key="{{index}}" > -->
                                 <repeat for="{{itemb.list}}" index="index" item="item" key="key">
                                 <!-- 订单内容 -->
-                                <view class="itemContent">
+
+                                <view class="itemContent"  @tap="to_detail({{item.order_id}})">
                                   <view class="itemtop">
-                                    <image src="{{item.image.file_path}}" mode="aspectFill"/><span class="fs25 c333 flex-1 ml20">供应商</span>
+                                    <image src="{{item.source_image}}" mode="aspectFill"/><span class="fs25 c333 flex-1 ml20">{{item.source_name}}</span>
                                     <text class="fs25 ce02e24">{{item.order_status.text}}</text>
                                   </view>
                                   <block wx:for="{{item.goods}}" wx:key="{{index}}">
@@ -174,7 +175,7 @@
             }],
             currType: 'all',
             currentIndex: 0,
-            page_size: 2,
+            page_size: 3,
         }
         methods = {
             changeType(index){
@@ -189,6 +190,13 @@
                   page:this.TypeList[e.detail.current].current_page,
                   data_type:this.TypeList[e.detail.current].key,
                 }, e.detail.current)
+            },
+
+            to_detail(order_id){
+              console.log(order_id)
+              wx.navigateTo({
+                url:"orderdetail?order_id="+order_id
+              })
             },
 
             nextpage(index) {
@@ -207,7 +215,7 @@
                 // }
             }
         }
-        loadorderlist(data,index){
+        loadorderlist(data,index,feedback){
             wepy.request({
               url: 'api/order/lists',
               method: 'POST',
@@ -221,7 +229,7 @@
                 this.TypeList[index].list=[];
               }
 
-              this.TypeList[index].current_page = res.data.list.current_page+1;
+              this.TypeList[index].current_page = data.page+1;
               this.currentIndex=index;
               this.currType = this.TypeList[index].key;
               this.TypeList[index].total_page=res.data.list.last_page;
@@ -234,6 +242,10 @@
               res=res.data.list;
               for(var i=0;i<res.data.length;i++){
                 this.TypeList[index].list.push(res.data[i])
+              }
+
+              if(feedback){
+                feedback();
               }
 
               this.$apply();
@@ -257,9 +269,11 @@
         onPullDownRefresh(e){
             this.loadorderlist({
               per_page:this.page_size,
-              page:this.TypeList[0].current_page,
-              data_type:this.TypeList[0].key,
-            },0);
+              page:1,
+              data_type:this.TypeList[this.currentIndex].key,
+            },this.currentIndex,function(){
+              wx.stopPullDownRefresh();
+            });
         }
     }
 
