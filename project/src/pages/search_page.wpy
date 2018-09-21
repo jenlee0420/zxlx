@@ -67,6 +67,10 @@
             <listFooter loading="{{loading}}" item="{{goodslist}}" pagesize="{{page_size}}"></listFooter>
         </view>
     </scroll-view>
+    
+    <view class="searchView">
+      <text>历史搜索</text>
+    </view>
   </view>
 </template>
 
