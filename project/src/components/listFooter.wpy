@@ -4,6 +4,7 @@
 
 <template>
     <view>
+        .. {{item.list.length}} {{pagesize}}
         <view class="list-foot foot" wx:if="{{loading}}">
             加载中......
         </view>
@@ -24,8 +25,18 @@
         components = {}
         props = {
             loading: '',
-            item: {},
-            pagesize:''
+            item: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            },
+            pagesize: {
+                type: Object,
+                default: () => {
+                    return {}
+                }
+            }
         }
         mixins = [Mixin]
         data = {}

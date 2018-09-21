@@ -33,9 +33,6 @@
       }
     }
     watch={
-        'orderitem':function(){
-            console.log('eeee')
-        }
     }
     mixins = [Mixin]
     data = {}

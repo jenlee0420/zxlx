@@ -72,20 +72,20 @@
                 <swiper-item>
                     <div class="navTablist">
                         <span wx:for="{{catelist1}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
-                            <view class="icon">
-                                <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
-                            </view>
-                            {{item.name}}
-                        </span>
+                                <view class="icon">
+                                    <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
+                                </view>
+                                {{item.name}}
+                            </span>
                     </div>
                 </swiper-item>
                 <swiper-item wx:if="{{cateShow}}">
                     <div class="navTablist">
-                        <span wx:for="{{catelist2}}" wx:key="{{index}}"  @tap="gotolist({{item.id}})">
-                            <view class="icon">
-                                <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
-                            </view>
-                            {{item.name}}</span>
+                        <span wx:for="{{catelist2}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
+                                <view class="icon">
+                                    <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
+                                </view>
+                                {{item.name}}</span>
                     </div>
                 </swiper-item>
             </swiper>
@@ -117,17 +117,18 @@
             catelist1: [],
             catelist2: [],
             navIndex: 0,
-           cateShow:false
+            cateShow: false
         }
         methods = {
             changenav(index) {
                 // console.log(index)
                 this.navIndex = index.detail.current
             },
-            gotolist(id){
-                wx.navigateTo({
-                    url:"/pages/"
-                    })
+            gotolist(id) {
+                wepy.setStorageSync('cateid', id)
+                wepy.switchTab({
+                    url: "/pages/search_page"
+                })
             }
         }
         getAD() {
@@ -141,19 +142,18 @@
                 method: 'POST',
             }).then(res => {
                 if (res.code == 1) {
-                    console.log(res.data.list.slice(0,10))
-                    this.catelist1 = res.data.list.slice(0,10)
-                    if(res.data.list.length > 10){
+                    this.catelist1 = res.data.list.slice(0, 10)
+                    if (res.data.list.length > 10) {
                         this.catelist2 = res.data.list.slice(10)
                         this.cateShow = true
                     }
-                    // 
                 } else {
                     wepy.showModal({
                         content: res.msg,
                         showCancel: false
                     })
                 }
+                this.$apply()
             })
         }
         onLoad() {

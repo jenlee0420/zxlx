@@ -22,9 +22,10 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-        'pages/mycenter/orderdetail',
-        'pages/mycenter/orderlist',
+        // 'pages/mycenter/orderdetail',
+        // 'pages/mycenter/orderlist',
         'pages/search_page',
+        'pages/search',
         'pages/index',
         'pages/mycenter/index',
         'pages/member/list_member',
@@ -52,17 +53,17 @@
           'iconPath': 'images/home.png',
           'selectedIconPath': 'images/home_act.png'
         }, {
+          'pagePath': 'pages/search_page',
+          'text': '搜索',
+          'iconPath': 'images/search.png',
+          'selectedIconPath': 'images/search_act.png'
+        }, {
           'pagePath': 'pages/custom',
           'text': '定制',
           'iconPath': 'images/custom.png',
           'selectedIconPath': 'images/custom_act.png'
 
         },{
-          'pagePath': 'pages/search_page',
-          'text': '搜索',
-          'iconPath': 'images/search.png',
-          'selectedIconPath': 'images/search_act.png'
-        }, {
           'pagePath': 'pages/mycenter/index',
           'text': '我的',
           'iconPath': 'images/mycenter.png',
