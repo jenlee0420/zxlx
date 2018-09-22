@@ -81,9 +81,9 @@
       </view>
       <view class="searchcontent">
         <view class="flex flex-jbetween"> <text class="fs28">历史搜索</text> <text class="fs23 maincolor" @tap="clearkeyword">清除</text></view>
-        <view class="keywordslist"><span>游学</span> </view>
+        <view class="keywordslist"><span  wx:for="{{keywordlist}}" wx:key="{{index}}" bindtap="gotoSearch({{item}})">{{item}}</span> </view>
         <view class="flex flex-jbetween"> <text class="fs28">热门搜索</text> <text class="fs23 maincolor" @tap="changehot">换一批</text></view>
-        <view class="keywordslist"><span></span> </view>
+        <view class="keywordslist"><span wx:for="{{hotlist}}"  wx:key="{{index}}" bindtap="gotoSearch({{item.keyword}})">{{item.keyword}}</span> </view>
       </view>
     </view>
   </view>
@@ -107,70 +107,73 @@
       },
       keywordlist: [],
       keyword: '',
-      hotlist: []
+      hotlist: [],
+      hotpage: 1
     }
     methods = {
       changeView() {
         if (this.keyword) {
-          wepy.setStorageSync('keyword', this.keyword)
+          this.setKeywordList()
+          wepy.setStorageSync('keyword', this.keyword)          
           wepy.navigateBack()
         } else {
           this.showToast('请输入关键字！')
         }
+      },
+      gotoSearch(keyword){
+        this.keyword = keyword
+        this.setKeywordList()
+          wepy.setStorageSync('keyword', this.keyword)          
+          wepy.navigateBack()
       },
       setKeyword(e) {
         this.keyword = e.detail.value
       },
       //清除关键字
       clearkeyword() {
-        wepy.request({
-          url: 'api/goods/lists',
-          method: 'POST',
-          data: {}
-        }).then(res => {
-          if (res.code == 1) {
-            this.keywordlist = []
-            this.showSuccess()
-          } else {
-            wepy.showModal({
-              content: res.msg,
-              showCancel: false
-            })
-          }
-          this.$apply()
+        wepy.removeStorage({
+          key: 'keywordlist'
         })
+        this.keywordlist = []
+        this.$apply()
       },
       changehot() {
+        this.hotpage += 1
         this.gethotlist()
       }
     }
+    /* 保存关键字在历史搜索中 */
+    setKeywordList(){
+      let repeatData = this.keywordlist.indexOf(this.keyword)
+      console.log(repeatData)
+      if(repeatData>-1){
+        this.keywordlist.splice(repeatData,1)
+      }
+      this.keywordlist.push(this.keyword)
+      wepy.setStorageSync('keywordlist', JSON.stringify(this.keywordlist))
+    }
     //取历史搜索记录
     getlist() {
-      wepy.request({
-        url: 'api/goods/lists',
-        method: 'POST',
-        data: {}
-      }).then(res => {
-        if (res.code == 1) {
-          this.keywordlist = res.data.list
-        } else {
-          wepy.showModal({
-            content: res.msg,
-            showCancel: false
-          })
-        }
-        this.$apply()
-      })
+      let list = wepy.getStorageSync('keywordlist')
+      if (list) {
+        this.keywordlist = JSON.parse(list)
+      }
+      this.$apply()
     }
     //取热门搜索记录
     gethotlist() {
       wepy.request({
-        url: 'api/goods/lists',
+        url: 'api/index/hotsearch',
         method: 'POST',
-        data: {}
+        data: {
+          per_page: 10,
+          page: this.hotpage
+        }
       }).then(res => {
         if (res.code == 1) {
-          this.hotlist = res.data.list
+          if(res.data.list.data.length){
+            this.hotlist = res.data.list.data
+          }
         } else {
           wepy.showModal({
             content: res.msg,
@@ -180,10 +183,14 @@
         this.$apply()
       })
     }
-    onLoad(opation) {
-      if (opation.val) {
+    onLoad() {
+    }
+    onShow(opation) {
+      if (opation && opation.val) {
         this.category.val = opation.val
       }
+      this.getlist()
+      this.gethotlist()
     }
   }
 </script>

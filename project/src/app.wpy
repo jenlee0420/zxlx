@@ -22,12 +22,11 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
-
+        'pages/index',
         'pages/mycenter/orderlist',
         'pages/mycenter/orderdetail',
         'pages/search_page',
         'pages/search',
-        'pages/index',
         'pages/mycenter/index',
         'pages/member/list_member',
         'pages/member/add_member',

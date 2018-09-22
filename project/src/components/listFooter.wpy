@@ -4,7 +4,6 @@
 
 <template>
     <view>
-        .. {{item.list.length}} {{pagesize}}
         <view class="list-foot foot" wx:if="{{loading}}">
             加载中......
         </view>
@@ -24,7 +23,12 @@
         config = {}
         components = {}
         props = {
-            loading: '',
+            loading: {
+                type: String,
+                default: () => {
+                    return ''
+                }
+            },
             item: {
                 type: Object,
                 default: () => {
@@ -32,9 +36,9 @@
                 }
             },
             pagesize: {
-                type: Object,
+                type: Number,
                 default: () => {
-                    return {}
+                    return ''
                 }
             }
         }

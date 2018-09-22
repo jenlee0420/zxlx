@@ -109,16 +109,16 @@
       <view class="list_bg">
         <view  class="list_menber_view_list">
           <icon class="public_icon2_location2 list_mg_35"></icon>
-          <view class="flex-1">
+          <view class="flex-1 list_mg_35">
             <view>
-              <text class="list_mg_35">{{item.name}}</text>
+              <text class="">{{item.name}}</text>
               <text class="list_mg_35">{{item.phone}}</text>
             </view>
             <view class="list_address">
-              <text class="list_mg_35 ">{{item.adress}}</text>
+              <text class=" ">{{item.adress}}</text>
             </view>
           </view>
-          <span class="zan-icon-success zan-icon list_choice"></span>
+          <!-- <span class="zan-icon-success zan-icon list_choice"></span> -->
         </view>
 
         <view class="list_do">

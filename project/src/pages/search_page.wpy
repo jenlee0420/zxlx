@@ -75,7 +75,7 @@
     <block wx:if="{{!searchview}}">
       <view class="toppanel">
         <view class="seachinput" @tap="changeView">
-          <span class="zan-icon zan-icon-search"></span> 搜索{{category.val}}
+          <span class="zan-icon zan-icon-search"></span> 搜索{{category.val}} {{search}} <span @tap="clearsearch" wx:if="{{search!=''}}" class="r mr20 zan-icon zan-icon-clear"></span>
         </view>
       </view>
       <scroll-view scroll-x style="width: 100%;" class="cateTap" scroll-left="{{scrollleft}}">
@@ -86,10 +86,10 @@
       <view class="mb30"></view>
       <scroll-view scroll-y style="height: cala(100% - 143rpx);">
         <view class="p-0-32">
-          <repeat for="{{goodslist}}" index="index" item="item" key="key">
+          <repeat for="{{goodslist.list}}" index="index" item="item" key="key">
             <gooditem :goodsitem="item">
           </repeat>
-          <listfooter :loading="loading" :item.sync="goodslist" :pagesize="pagesize"></listfooter>
+          <listfooter :loading.sync="loading" :item.sync="goodslist" :pagesize="pagesize"></listfooter>
         </view>
       </scroll-view>
     </block>
@@ -110,20 +110,21 @@
     mixins = [Mixin]
     data = {
       catelist: [],
-      goodslist: [],
+      goodslist: {list:[],total_count:0},
       page: 1,
       category: {
         id: 0,
         val: '全部'
       },
-      pagesize:{val:10},
+      pagesize:10,
       loading: true,
       searchview: false,
-      scrollleft:0
+      scrollleft:0,
+      search:''
     }
     methods = {
       changeCate(obj) {
-        if (obj) {
+        if (obj.id) {
           this.category.id = obj.id
           this.category.val = obj.name
         } else {
@@ -138,6 +139,11 @@
         wepy.navigateTo({
           url: '/pages/search?val=' + this.category.val
         })
+      },
+      clearsearch(){
+        this.search='';
+        this.page = 1
+        this.getlist()
       }
     }
     getCate() {
@@ -157,12 +163,11 @@
       })
     }
     getlist() {
-      this.scrollleft = this.category.id * 40
       wepy.request({
         url: 'api/goods/lists',
         method: 'POST',
         data: {
-          per_page: this.pagesize.val,
+          per_page: this.pagesize,
           page: this.page,
           category_id: this.category.id,
           search: this.search
@@ -170,7 +175,8 @@
       }).then(res => {
         this.loading = false
         if (res.code == 1) {
-          this.goodslist = res.data.list.data
+          this.goodslist.list = res.data.list.data
+          this.goodslist.total_count = res.data.list.total
         } else {
           wepy.showModal({
             content: res.msg,
@@ -186,6 +192,7 @@
     onShow() {
       if (wepy.getStorageSync('cateid')) {
         this.category.id = wepy.getStorageSync('cateid')
+        this.scrollleft = this.category.id * 40
         wepy.removeStorage({
           key: 'cateid'
         })

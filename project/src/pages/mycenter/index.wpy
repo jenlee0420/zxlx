@@ -56,7 +56,7 @@
     <view class="container" id="mycenter">
         <view class="tophead">
             <view class="flex flex-algin-center">
-                <image src="{{ userinfo.avatarUrl? userinfo.avatarUrl : baseHeadImg }}" mode="aspectFit" />
+                <image src="{{ userinfo.avatarUrl? userinfo.avatarUrl : baseHeadImg }}" mode="aspectFill" />
                 <view class="flex-column">
                     <text class="fs30 c333 mb10">{{userinfo.nickName}}</text>
                     <text class="pinkbtn">更新资料</text>
@@ -142,14 +142,16 @@
                     content: this.content
                 },
             }).then(res => {
-                if (res.code == "1") {
-                    this.userinfo = res.data
-                    this.orderCount = this.userinfo
+                if (res.code == 1) {
+                    this.userinfo = res.data.userInfo
+                    this.orderCount = res.data.orderCount
                 }
+                this.$apply()
             })
         }
         onLoad() {
             console.log(this.baseHeadImg)
+            this.getuserinfo()
             // this.showSuccess('需求已成功提交')
         }
     }
