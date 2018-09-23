@@ -79,13 +79,13 @@
                                 <repeat for="{{itemb.list}}" index="index" item="item" key="key">
                                 <!-- 订单内容 -->
 
-                                <view class="itemContent"  @tap="to_detail({{item.order_id}})">
+                                <view class="itemContent" >
                                   <view class="itemtop">
                                     <image src="{{item.source_image}}" mode="aspectFill"/><span class="fs25 c333 flex-1 ml20">{{item.source_name}}</span>
                                     <text class="fs25 ce02e24">{{item.order_status.text}}</text>
                                   </view>
                                   <block wx:for="{{item.goods}}" wx:key="{{index}}">
-                                    <view class="itemdetail">
+                                    <view class="itemdetail"  @tap="to_detail({{item.order_id}})">
                                       <view class="mr20">
                                         <image src="{{item.image.file_path}}" mode="aspectFill" />
                                       </view>
@@ -177,6 +177,18 @@
             currentIndex: 0,
             page_size: 3,
         }
+
+        events = {
+          flush(){
+            console.log(this.TypeList[this.currentIndex].key),
+            this.loadorderlist({
+              per_page:this.page_size,
+              page:1,
+              data_type:this.TypeList[this.currentIndex].key,
+            },this.currentIndex);
+          },
+        }
+
         methods = {
             changeType(index){
                 this.TypeList[index].current_page = 1;
@@ -257,6 +269,8 @@
         onLoad() {
 
         }
+
+
 
         PageInit(){
           this.loadorderlist({

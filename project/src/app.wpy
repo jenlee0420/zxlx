@@ -27,8 +27,7 @@
         'pages/paypage',
         'pages/friendpay',
         'pages/mycenter/collection',
-        
-        'pages/mycenter/orderlist',
+
         'pages/mycenter/orderdetail',
         'pages/search_page',
         'pages/search',
@@ -38,10 +37,10 @@
         'pages/mycenter/collaborate',
         'pages/mycenter/feedback',
         'pages/kefu',
-        
+
         'pages/mycenter/about',
         'pages/mycenter/dianpin',
-        
+
         'pages/goodsDetail',
         'pages/custom',
         'pages/refund'

@@ -5,16 +5,16 @@
 <template>
   <view class="btns">
     <!--10待支付 20已取消 30 已完成 40未使用  50已删除 60退款中、70已退款、80退款失败-->
-    <button class="btnline mr12" wx:if="{{orderitem.order_status.value=='40'}}">申请退款</button>
-    <button class="btnline mr12" wx:if="{{orderitem.order_status.value=='10'}}">取消订单</button>
+    <button class="btnline mr12" @tap="to_refund({{orderitem}})" wx:if="{{orderitem.order_status.value=='40'}}">申请退款</button>
+    <button class="btnline mr12" @tap="cancle_order({{orderitem}})" wx:if="{{orderitem.order_status.value=='10'}}">取消订单</button>
     <button class="btnline mr12" wx:if="{{orderitem.order_status.value=='30'}}">再次购买</button>
-    <button class="btn" wx:if="{{orderitem.order_status.value=='40'}}">完善出行人</button>
+    <button class="btn" @tap="to_member" wx:if="{{orderitem.order_status.value=='40'}}">完善出行人</button>
     <button class="btn" wx:if="{{orderitem.order_status.value=='noused'}}" disabled>已评价</button>
     <button class="btn" wx:if="{{orderitem.order_status.value=='30'}}">我要评价</button>
     <button class="btn" wx:if="{{orderitem.order_status.value=='10'}}">去支付</button>
     <button class="btn" wx:if="{{orderitem.order_status.value=='all'}}">发给好友</button>
-    <button class="btn" wx:if="{{orderitem.order_status.value=='20'}}">删除订单</button>
-    <button class="btn" wx:if="{{orderitem.order_status.value=='20'}}">再次购买</button>
+    <button class="btn" @tap="del_order({{orderitem}})" wx:if="{{orderitem.order_status.value=='20'}}">删除订单</button>
+    <button class="btn" @tap="to_good_detail({{orderitem}})" wx:if="{{orderitem.order_status.value=='20'}}">再次购买</button>
   </view>
 </template>
 
@@ -36,7 +36,55 @@
     }
     mixins = [Mixin]
     data = {}
-    methods = {}
+    methods = {
+      to_good_detail(order){
+        wx.navigateTo({
+          url:"/pages/goodsDetail?good_id="+order.goods[0].goods_id
+        })
+      },
+
+      to_refund(order){
+        wx.navigateTo({
+          url:"/pages/refund?order_id="+order.order_id
+        })
+      },
+
+      to_member(){
+        wx.navigateTo({
+          url:"/pages/member/list_member"
+        })
+      }
+
+      cancle_order(order){
+          wepy.request({
+            url: "api/order/cancel",
+            method: 'POST',
+            data: {order_id:order.order_id},
+          }).then(res => {
+            this.loading= false;
+          if(res.code != "1"){
+            this.showAlert({title: "警告", content: res.msg});
+          }else{
+            this.$emit('flush')
+          }
+        })
+      },
+
+      del_order(order){
+        wepy.request({
+          url: "api/order/delete",
+          method: 'POST',
+          data: {order_id:order.order_id},
+        }).then(res => {
+          this.loading= false;
+          if(res.code != "1"){
+            this.showAlert({title: "警告", content: res.msg});
+          }else{
+            this.$emit('flush');
+          }
+        })
+      },
+    }
     onLoad() {}
   }
 </script>
