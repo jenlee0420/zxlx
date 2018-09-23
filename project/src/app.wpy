@@ -21,8 +21,7 @@
     config = {
       pages: [
         // 'pages/icon',
-        // 'pages/test',
-        // 'pages/mycenter/history',
+        'pages/test',
         'pages/search_page',
         'pages/search',
         'pages/index',
@@ -31,7 +30,6 @@
         'pages/mycenter/orderlist',
         'pages/paypage',
         'pages/friendpay',
-
         'pages/mycenter/orderdetail',
         'pages/mycenter/index',
         'pages/member/list_member',
@@ -41,9 +39,9 @@
         'pages/kefu',
         'pages/mycenter/about',
         'pages/mycenter/dianpin',
+        'pages/goodsDetail',
         'pages/custom',
         'pages/refund'
-
       ],
       tabBar: {
         color: '#949393',

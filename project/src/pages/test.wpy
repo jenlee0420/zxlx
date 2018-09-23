@@ -59,6 +59,7 @@
     <!--&lt;!&ndash; <button @tap="addressinfo">收货地址</button> &ndash;&gt;-->
     <!--<button open-type="getPhoneNumber" @getphonenumber="getPhoneNumber"> eee</button>-->
     <!--<backtoHome />-->
+    <shareBox></shareBox>
   </view>
 </template>
 
@@ -69,13 +70,15 @@
   import gooditem from '@@/gooditem'
   import zanpopup from '@@/zan-popup'
   import backtoHome from '@@/backtoHome'
+  import shareBox from '@@/shareBox'
   export default class Index extends wepy.page {
     config = {}
     components = {
       popwin,
       zanpopup,
       gooditem,
-      backtoHome
+      backtoHome,
+      shareBox
     }
     mixins = [Mixin]
     data = {

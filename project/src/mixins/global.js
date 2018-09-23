@@ -394,7 +394,7 @@ export default class Global extends wepy.mixin {
     event() {
 
     }
-    onShow() {
+    onShow(opation) {
         // if(this.__route__ === 'pages/index'){
         //     return
         // }
@@ -421,11 +421,11 @@ export default class Global extends wepy.mixin {
         //     }
         // }
         if (wepy.getStorageSync('token')){
-            if (typeof(this.PageInit) === 'function') {this.PageInit()}
+            if (typeof(this.PageInit) === 'function') {this.PageInit(opation)}
         }else{
         this.$parent.userInfoReadyCallback = res => {
             if (typeof(this.PageInit) === 'function') {
-                this.PageInit()
+                this.PageInit(opation)
             }
         }
     }
