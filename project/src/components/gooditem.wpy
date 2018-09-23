@@ -42,7 +42,7 @@
 </style>
 
 <template>
-  <view id="proditem">
+  <view id="proditem" bindtap="navDetail({{goodsitem.goods_id}})">
     <view class="photoview">
         <text class="toptext abs">{{goodsitem.subtitle_goods_name}}</text>
         <span class="public_icon1_hot_sale abs" wx:if="{{goodsitem.propaganda == 1}}"></span>
@@ -64,7 +64,7 @@
             <text class="redlabel" wx:if="{{goodsitem.is_own_business == 1}}">知兮乐兮自营</text>
             <text class="redlabel">{{goodsitem.category.name}}</text>
             <repeat for="{{goodsitem.label_name}}" index="index" item="item" key="key">
-            <text class="greenlabel">{{item.name}}</text>
+              <text class="greenlabel">{{item.name}}</text>
             </repeat>
         </view>
     </view>
@@ -89,9 +89,13 @@ export default class gooditem extends wepy.component {
     }
   data = {
   }
-  methods = {}
+  methods = {
+    navDetail(id){
+      console.log(id,'////')
+      wepy.navigateTo({url:'/pages/goods_detail?id='+id})
+    }
+  }
   onLoad() {
-    console.log(this.imgBaseUrl)
   }
 }
 </script>

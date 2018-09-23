@@ -32,24 +32,31 @@
         color: #333;
         display: -webkit-box;
     }
+    .itemlabel{
+        display:flex;
+        flex-flow:wrap;
+        text{white-space: nowrap;margin-top: 10rpx}
+    }
 }
 </style>
 
 <template>
   <view class="container" id="collectionItem">
     <view class="imgbox">
-        <image src="{{baseServerImg}}" mode="aspectFill"/>
+        <image src="{{goodsitem.image.length>0?goodsitem.image[0].file_path:baseServerImg}}" mode="aspectFill"/>
     </view>
     <view class="flex-1">
-        <text class="itemname">20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】20天军事特训营打算方法嘎达范德大股东【北京】</text>
-        <text class="fs22 c929292">已拼3500人次 · 3人拼单</text>
+        <text class="itemname">{{goodsitem.source_name}}</text>
+        <text class="fs22 c929292">已拼{{goodsitem.goods_sales}}人次 · {{goodsitem.combination}}人拼单</text>
         <view class="itemlabel">
-            <text class="redlabel">知兮乐兮自营</text>
-            <text class="greenlabel">不限年龄</text>
+            <text class="redlabel" wx:if="{{goodsitem.is_own_business == 1}}">知兮乐兮自营</text>
+            <repeat for="{{goodsitem.label_name}}" index="index" item="item" key="key">
+              <text class="greenlabel">{{item.name}}</text>
+            </repeat>
         </view>
         <view class="flex flex-between flex-algin-center">
-            <text class="maincolor fs30">￥3000.00起</text>
-            <button class="btn">发起拼单</button>
+            <text class="maincolor fs30">￥{{goodsitem.goods_price}}起</text>
+            <button class="btn h60">发起拼单</button>
         </view>
     </view>
   </view>
@@ -67,7 +74,7 @@ export default class collectionItem extends wepy.component {
       goodsitem: {
         type: Object,
         default: () => {
-          return ''
+          return {}
         }
       }
     }

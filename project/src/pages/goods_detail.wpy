@@ -473,21 +473,36 @@
     <scroll-view scroll-y style="height: calc(100% - 108rpx);">
       <!-- 介绍卡部分 S -->
       <view class="content">
-        <view class="video-container">图片或视频</view>
+        <view class="video-container">
+            <swiper style="height:572rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
+              <block wx:for="{{good_detail.image}}" wx:key="{{index}}">
+                <swiper-item>
+                  <image src="{{item.file_path}}" class="slide-image" />
+                </swiper-item>
+              </block>
+          </swiper>
+        </view>
         <view class="des-container">
           <view class="price-row">
-            <text class="price">￥3000.00起</text>
-            <text class="des">已拼3500人次 · 3人拼单</text>
+            <text class="price">￥{{good_detail.goods_min_price}}起</text>
+            <text class="des">已拼{{good_detail.meed_num}}人次 · {{good_detail.now_collage_num}}人拼单</text>
           </view>
-          <text class="shop-name">20天军事特训营打算方法嘎达范德大股东【北京】</text>
-          <text class="content-des">知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文知兮乐兮大语文游知兮乐兮 大语文育人平台 以“大语文”游学方式，知兮乐兮大语文游</text>
+          <text class="shop-name">{{good_detail.goods_name}}</text>
+          <text class="content-des">{{good_detail.describe}}</text>
           <view class="tag-container">
-            <view class="tag bg-orange">知兮乐兮自营</view>
-            <view class="tag bg-orange">红色经典</view>
-            <view class="tag bg-green">武术</view>
-            <view class="tag bg-green">军事迷</view>
-            <view class="tag bg-green">不限年龄</view>
+            <text class="tag bg-orange" wx:if="{{good_detail.is_own_business == 1}}">知兮乐兮自营</text>
+            <text class="tag bg-orange">{{good_detail.category.name}}</text>
+            <repeat for="{{good_detail.label_name}}" index="index" item="item" key="key">
+              <text class="tag bg-green">{{item.name}}</text>
+            </repeat>
           </view>
+          <!--<view class="tag-container">-->
+            <!--<view class="tag bg-orange">知兮乐兮自营</view>-->
+            <!--<view class="tag bg-orange">红色经典</view>-->
+            <!--<view class="tag bg-green">武术</view>-->
+            <!--<view class="tag bg-green">军事迷</view>-->
+            <!--<view class="tag bg-green">不限年龄</view>-->
+          <!--</view>-->
         </view>
       </view>
       <!-- 介绍卡部分 E -->
@@ -543,12 +558,14 @@
     </scroll-view>
     <!-- 底部导航 S -->
     <view class="nav-bottom">
+      <view class="flex1" @tap="to_home">
+        <span class="public_icon1_to_home2"></span><text>首页</text></view>
+      <view class="flex1" @tap="do_collection">
+        <span wx:if="{{!collection}}" class="public_icon1_collection"></span><text wx:if="{{!collection}}">收藏</text>
+        <span wx:if="{{collection}}" class="public_icon_already_collection"></span><text wx:if="{{collection}}">取消收藏</text>
+      </view>
       <view class="flex1">
-        <image src="../resource/img/home.png" class="icon"></image><text>首页</text></view>
-      <view class="flex1">
-        <image src="../resource/img/aixin.png" class="icon"></image><text>收藏</text></view>
-      <view class="flex1">
-        <image src="../resource/img/kefu.png" class="icon"></image><text>客服</text></view>
+        <span class="public_icon1_custom"></span><text>客服</text></view>
       <view class="flex2"><text>￥10</text><text>单独购买</text></view>
       <view class="flex3"><text>￥9</text><text>发起拼单</text></view>
       <!-- <view class="flex5"><text>报名已满</text></view> -->
@@ -612,7 +629,9 @@
   import wepy from 'wepy'
   import TopNav from '@/components/TopNav'
   import comments from '@/components/comments'
-  export default class goodsDetail extends wepy.page {
+  import Mixin from '@/mixins/global'
+  export default class goodsdetail extends wepy.page {
+    mixins = [Mixin]
     data = {
       modalIsShow: false,
       goods_detal: [{
@@ -637,11 +656,16 @@
       min_good_number: 1,
       plus_max: false,
       sub_min: true,
-    };
+
+      good_id:0,
+      good_detail:{},
+
+      collection:true,
+    }
     components = {
       TopNav,
       comments
-    };
+    }
     methods = {
       goods_detal_tip(index) {
         for (var i = 0; i < this.goods_detal.length; i++) {
@@ -683,6 +707,22 @@
         this.good_number = this.good_number - 1;
         this.$apply();
       },
+
+      to_home(){
+        wx.navigateTo({
+          url:"/pages/index"
+        })
+      },
+
+      do_collection(){
+        if(this.collection){
+
+        }else{
+
+        }
+        this.collection=!this.collection;
+        this.$apply()
+      }
     }
     good_num(e) {
       console.log(e)
@@ -708,5 +748,33 @@
       };
       this.$apply();
     }
+
+    onLoad(options){
+      if(!options.id){
+        return
+      }
+
+      this.good_id=options.id;
+      wepy.request({
+        url: "api/goods/detail",
+        method: 'POST',
+        data: {goods_id:this.good_id},
+      }).then(res => {
+        this.loading= false;
+        if(res.code != "1"){
+          this.showAlert({title: "警告", content: res.msg});
+        }else{
+          this.good_detail=res.data.detail
+        }
+        this.$apply();
+      })
   }
+
+  }
+
+
+
+//  PageInit(){
+//
+//  }
 </script>

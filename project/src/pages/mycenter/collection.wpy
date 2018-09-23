@@ -4,9 +4,9 @@
 
 <template>
   <view class="container">
-    <block wx:for="{{favlist.list}}" wx:key="{{index}}">
-      <item :goodsitem="item">
-    </block>
+    <repeat for="{{favlist.list}}" index="index" item="item" key="key">
+      <collectionitem :goodsitem.sync="item"></collectionitem>
+    </repeat>
     <listfooter :loading.sync="loading" :item.sync="favlist" :pagesize="page_size"></listfooter>
   </view>
 </template>
@@ -14,14 +14,14 @@
 <script>
 import wepy from 'wepy'
 import Mixin from '@/mixins/global'
-import item from '@/components/collectionItem'
+import collectionitem from '@/components/collectionItem'
 import listfooter from '@/components/listFooter'
 export default class collection extends wepy.page {
   config = {
       navigationBarTitleText: '我的收藏',
   }
   components = {
-      item,
+      collectionitem,
       listfooter
   }
   mixins = [Mixin]
@@ -50,8 +50,9 @@ export default class collection extends wepy.page {
           if(this.currentpage == 1){
             this.favlist.list = res.data.list.data
           }else{
-            this.favlist.list = this.favlist.list.concat(res.data.list)
+            this.favlist.list = this.favlist.list.concat(res.data.list.data)
           }
+
           this.favlist.total_count = res.data.list.total
           this.favlist.total_page = res.data.list.last_page
         }
@@ -64,6 +65,9 @@ export default class collection extends wepy.page {
   onReachBottom(){
     console.log('bottom')
     this.currentpage+=1
+    if(this.currentpage>this.favlist.total_page){
+      return
+    }
     this.getlist()
   }
 }

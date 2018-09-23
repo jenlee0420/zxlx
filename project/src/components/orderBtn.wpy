@@ -53,7 +53,7 @@
         wx.navigateTo({
           url:"/pages/member/list_member"
         })
-      }
+      },
 
       cancle_order(order){
           wepy.request({

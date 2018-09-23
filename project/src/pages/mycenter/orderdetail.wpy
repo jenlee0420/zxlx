@@ -257,8 +257,8 @@
           order_status:"",
           detail:{},
           pay_type:1,
-          loading:true
-          order_id:0;
+          loading:true,
+          order_id:0,
         }
 
         events={

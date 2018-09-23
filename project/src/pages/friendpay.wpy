@@ -1,0 +1,25 @@
+<style lang="less">
+
+</style>
+
+<template>
+  <view class="container">
+    
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+import Mixin from '@/mixins/global'
+export default class friendpay extends wepy.page {
+  config = {
+  }
+  components = {}
+  mixins = [Mixin]
+  data = {
+  }
+  methods = {}
+  onLoad() {
+  }
+}
+</script>

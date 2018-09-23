@@ -23,15 +23,16 @@
         // 'pages/icon',
         // 'pages/test',
         // 'pages/mycenter/history',
-        'pages/index',
-        'pages/goodsDetail',
-        'pages/mycenter/collection',
-        'pages/mycenter/orderlist',
-
-
-        'pages/mycenter/orderdetail',
         'pages/search_page',
         'pages/search',
+        'pages/index',
+        'pages/goods_detail',
+        'pages/mycenter/collection',
+        'pages/mycenter/orderlist',
+        'pages/paypage',
+        'pages/friendpay',
+
+        'pages/mycenter/orderdetail',
         'pages/mycenter/index',
         'pages/member/list_member',
         'pages/member/add_member',
