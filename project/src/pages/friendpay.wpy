@@ -1,25 +1,73 @@
 <style lang="less">
+#friendpay{
+ 
+  .myhead{
+    width:102rpx;
+    height: 102rpx;
+    border-radius: 50%;
+    overflow: hidden;
+  }
+  .graybox{
+    margin: 32rpx;
+    border-radius: 10rpx;
+    background-color: #f2f2f2;
+    padding: 15rpx 30rpx;
+    color:#333;
+    font-size: 28rpx;
+  }
+  .goodsinfo{
 
+  }
+}
 </style>
 
 <template>
-  <view class="container">
-    
+  <view class="container" id="friendpay">
+    <view>
+      <view class="myhead">
+        <image src="{{baseServerImg}}" mode="aspectFill">
+      </view>
+      <view class="graybox">
+        <text>David Yu,我在知兮乐兮上找到了很赞的游学，快来帮我付款吧~</text>
+        <view class="goodsinfo">
+          <view class="imgbox">
+            <image src="{{baseServerImg}}" mode="aspectFill" />
+          </view>
+          <view class="flex-1">
+            <text class="itemname">{{goodsitem.source_name}}</text>
+            <text class="itemdesc fs22 cb4b4b4">{{goodsitem.describe}}</text>
+          </view>
+        </view>
+      </view>
+    </view>
+    <text>￥3000</text>
+    <view>
+      <text>剩余支付时间</text>
+      <text>2天</text><text class="timebox">23</text>:<text class="timebox">23</text>:<text class="timebox">23</text>
+    </view>
+    <view>
+      <button class="btn w600">立即支付</button>
+    </view>
+    <view>
+      <view>· 付款前请务必与好友确认无误，避免受骗哦</view>
+      <view>· 如果发起退款，钱将原路退还您</view>
+    </view>
+    <guess></guess>
   </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-export default class friendpay extends wepy.page {
-  config = {
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  import guess from '@/components/guess'
+  export default class friendpay extends wepy.page {
+    config = {}
+    components = {
+      guess
+    }
+    mixins = [Mixin]
+    data = {}
+    methods = {}
+    onLoad() {}
   }
-  components = {}
-  mixins = [Mixin]
-  data = {
-  }
-  methods = {}
-  onLoad() {
-  }
-}
 </script>

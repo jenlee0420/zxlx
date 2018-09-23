@@ -91,7 +91,6 @@ export default class gooditem extends wepy.component {
   }
   methods = {
     navDetail(id){
-      console.log(id,'////')
       wepy.navigateTo({url:'/pages/goodsDetail?id='+id})
     }
   }
