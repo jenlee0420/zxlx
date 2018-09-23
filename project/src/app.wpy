@@ -23,8 +23,11 @@
         // 'pages/icon',
         // 'pages/test',
         // 'pages/mycenter/history',
-        'pages/mycenter/collection',
         'pages/index',
+        'pages/paypage',
+        'pages/friendpay',
+        'pages/mycenter/collection',
+        
         'pages/mycenter/orderlist',
         'pages/mycenter/orderdetail',
         'pages/search_page',
