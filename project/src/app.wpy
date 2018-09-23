@@ -21,7 +21,7 @@
     config = {
       pages: [
         // 'pages/icon',
-        // 'pages/test',
+        'pages/test',
         // 'pages/mycenter/history',
         'pages/friendpay',
         'pages/index',
