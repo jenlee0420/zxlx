@@ -18,12 +18,13 @@ export default class Global extends wepy.mixin {
         licenseno:/^[0-9a-zA-Z]*$/,		//许可证号 只能是字母或数字
         price:/^\d+(\.{0,1}\d+){0,1}$/ // 只能是正数
     },
-    loadloop:true
+    loadloop:true,
+    page_size:10
   }
   methods = {
 
   }
-
+  
     // 数组显示
     arrView(val, key) {
         if (val == undefined) {

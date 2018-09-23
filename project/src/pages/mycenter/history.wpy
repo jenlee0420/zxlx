@@ -1,38 +1,91 @@
 <style lang="less">
-.container{
-    .datetxt{
-        font-size:22rpx;
-        color:#c0bebe;
-        line-height:50rpx;
-        padding-left:20rpx;
+  .container {
+    .datetxt {
+      font-size: 22rpx;
+      color: #c0bebe;
+      line-height: 50rpx;
+      padding-left: 20rpx;
     }
-}
+  }
 </style>
 
 <template>
   <view class="container">
-    <view class="datetxt">9月26号</view>
-    <gooditem></gooditem>
-    <gooditem></gooditem>
+    <block wx:for="{{dateArr}}" wx:key="{{indexa}}" wx:item="{{itema}}" wx:index="{{indexa}}">
+      <view class="datetxt">{{itema}}</view>
+      <block wx:for="{{list.list}}" wx:key="{{index}}">
+        <gooditem :goodsitem="item">
+      </block>
+    </block>
+    <listfooter :loading.sync="loading" :item.sync="goodslist" :pagesize="page_size"></listfooter>
     <guess></guess>
   </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-import gooditem from '@/components/collectionItem'
-import guess from '@/components/guess'
-export default class history extends wepy.page {
-  config = {
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  import gooditem from '@/components/collectionItem'
+  import guess from '@/components/guess'
+  import listfooter from '@/components/listFooter'
+  export default class history extends wepy.page {
+    config = {
       navigationBarTitleText: '我的浏览',
+    }
+    components = {
+      gooditem,
+      guess,
+      listfooter
+    }
+    mixins = [Mixin]
+    data = {
+      currentpage: 1,
+      list: {
+        list: [],
+        total_count: 0,
+        total_page: 0,
+      },
+      loading: true,
+      dateArr: []
+    }
+    methods = {}
+    getlist() {
+      wepy.request({
+        url: 'api/user_browse_records/lists',
+        method: 'GET',
+        data: {
+          per_page: this.page_size,
+          page: this.currentpage
+        }
+      }).then(res => {
+        this.loading = false
+        if (res.code == 1) {
+          let data = this.groupDate(res.data.list.data)
+          this.list.list = data[0]
+          this.dateArr = data[1]
+          this.list.total_count = res.data.list.total
+          this.total_page = res.data.list.last_page
+        }
+      })
+    }
+    groupDate(list) {
+      let date = []
+      let data = {}
+      list.forEach(e => {
+        let browse_time = this.transTime(e.browse_time, 'MM月dd号')
+        let dateindex = date.indexOf(browse_time)
+        if (dateindex == -1) {
+          // data[index].push(e)
+          date.push(browse_time)
+          data[browse_time] = []
+        }
+        data[browse_time].push(e)
+      });
+      // console.log(data,date)
+      return [data, date]
+    }
+    onLoad() {
+      this.getlist()
+    }
   }
-  components = {gooditem,guess}
-  mixins = [Mixin]
-  data = {
-  }
-  methods = {}
-  onLoad() {
-  }
-}
 </script>

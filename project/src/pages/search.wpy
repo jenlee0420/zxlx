@@ -108,7 +108,8 @@
       keywordlist: [],
       keyword: '',
       hotlist: [],
-      hotpage: 1
+      hotpage: 1,
+      hottotalpage:1,
     }
     methods = {
       changeView() {
@@ -137,15 +138,18 @@
         this.keywordlist = []
         this.$apply()
       },
+      /* 换一批 */
       changehot() {
         this.hotpage += 1
+        if(this.hotpage >= this.hottotalpage){
+          this.hotpage = 1
+        }
         this.gethotlist()
       }
     }
     /* 保存关键字在历史搜索中 */
     setKeywordList(){
       let repeatData = this.keywordlist.indexOf(this.keyword)
-      console.log(repeatData)
       if(repeatData>-1){
         this.keywordlist.splice(repeatData,1)
       }
@@ -173,6 +177,7 @@
         if (res.code == 1) {
           if(res.data.list.data.length){
             this.hotlist = res.data.list.data
+            this.hottotalpage = res.data.list.last_page
           }
         } else {
           wepy.showModal({

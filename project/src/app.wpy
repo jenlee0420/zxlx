@@ -22,6 +22,8 @@
       pages: [
         // 'pages/icon',
         // 'pages/test',
+        // 'pages/mycenter/history',
+        'pages/mycenter/collection',
         'pages/mycenter/orderlist',
         'pages/index',
 
@@ -34,10 +36,10 @@
         'pages/mycenter/collaborate',
         'pages/mycenter/feedback',
         'pages/kefu',
-        'pages/mycenter/history',
+
         'pages/mycenter/about',
         'pages/mycenter/dianpin',
-        'pages/mycenter/collection',
+
         'pages/goodsDetail',
         'pages/custom',
         'pages/refund'

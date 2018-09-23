@@ -63,6 +63,14 @@ export default class collectionItem extends wepy.component {
   }
   components = {}
   mixins = [Mixin]
+  props = {
+      goodsitem: {
+        type: Object,
+        default: () => {
+          return ''
+        }
+      }
+    }
   data = {
   }
   methods = {}
