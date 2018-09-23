@@ -21,7 +21,7 @@
                 line-height: 35rpx;
                 font-size: 26rpx;
                 color: #333;
-                display: inline-block;
+                display: inline;
             }
         }
         .payment{
@@ -149,7 +149,9 @@
     <view class="container" id="orderdetail" wx:if="{{!loading}}">
         <view class="orderstatus">
             <text wx:if="{{order_status=='10'}}">等待买家付款</text>
+            <text wx:if="{{order_status=='20'}}">订单已取消</text>
             <span class="public_icon_order_wait_pay" wx:if="{{order_status=='10'}}"></span>
+            <span class="public_icon_order_cancel" wx:if="{{order_status=='20'}}"></span>
         </view>
         <view class="address">
             <span class="public_icon2_location2"></span>
@@ -157,12 +159,12 @@
                 <text>{{detail.address.name}}   {{detail.address.phone}}</text>
                 <text>{{detail.address.region.province+detail.address.region.city+detail.address.region.region+detail.address.detail}}</text>
             </view>
-            <view>
+            <view wx:if="{{order_status=='10'}}">
                 <button class="btnRdline" @tap="to_address_list">修改</button>
             </view>
         </view>
         <!-- 待支付 -->
-        <view class="payment">
+        <view class="payment" wx:if="{{order_status=='10'}}">
             <text class="fs24">请选择支付方式</text>
             <view class="paylist">
                 <ul>
@@ -199,7 +201,7 @@
                 实付：￥{{detail.total_price}}
             </view>
             <!-- 出行人信息 -->
-            <view class="members" wx:if="{{order_status=='20'}}">
+            <view class="members" wx:if="{{order_status=='30'}}">
                 <view class="c555545"><text >出行人信息（2人）</text></view>
                 <view class="memberinfo">
                     <text class="c333">李佳</text>
@@ -224,14 +226,18 @@
             <!-- 评价信息 end -->
             <view class="contact"><button class="public_icon4_contact mr10" open-type="contact" />联系客服</view>
         </view>
-        <view class="orderinfo" wx:if="{{order_status=='10'}}">
+        <view class="orderinfo" wx:if="{{order_status=='10'||order_status=='20'}}">
             <text>订单编号：{{detail.order_no}}</text>
             <text wx:if="{{pay_type==1}}">支付方式：微信</text>
             <text wx:if="{{pay_type==2}}">支付方式：好友代付</text>
             <text>下单时间：{{detail.create_time}}</text>
-            <text wx:if="{{order_status=='20'}}">完成时间：2018-12-19  </text>
+            <text wx:if="{{order_status=='30'}}">完成时间：2018-12-19  </text>
         </view>
         <orderbtn :orderitem.sync="detail"></orderbtn>
+        <view  style="margin-top: 20rpx">
+          <guess></guess>
+        </view>
+
     </view>
 </template>
 
@@ -240,18 +246,40 @@
     import Mixin from '@/mixins/global'
     import orderbtn from '@/components/orderBtn'
     import Star from '@/components/StarRatine'
+    import guess from '@@/guess'
     export default class orderdetail extends wepy.page {
         config = {
             navigationBarTitleText: '订单详情',
         }
-        components = {orderbtn,Star}
+        components = {orderbtn,Star,guess}
         mixins = [Mixin]
         data = {
           order_status:"",
           detail:{},
           pay_type:1,
           loading:true
+          order_id:0;
         }
+
+        events={
+          flush(){
+            wepy.request({
+              url: "api/order/detail",
+              method: 'POST',
+              data: {order_id:this.order_id},
+            }).then(res => {
+              this.loading= false;
+              if(res.code != "1"){
+                this.showAlert({title: "警告", content: res.msg});
+              }else{
+                this.order_status=res.data.order_status.value;
+                this.detail=res.data
+              }
+              this.$apply();
+            })
+          },
+        }
+
         methods = {
           to_address_list(){
             wx.navigateTo({
@@ -269,7 +297,7 @@
             this.showAlert({title:"错误"});
             return
           }
-
+          this.order_id=options.order_id;
           wepy.request({
             url: "api/order/detail",
             method: 'POST',
