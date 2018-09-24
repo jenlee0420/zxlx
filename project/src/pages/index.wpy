@@ -97,7 +97,9 @@
         <!-- 热门推荐 -->
         <text class="sutitle">热门推荐</text>
         <view class="p-0-32">
-            <recommend></recommend>
+            <repeat for="{{recommend}}" index="index" item="item" key="key">
+            <recommend :goodsitem.sync="item"></recommend>
+            </repeat>
         </view>
     </view>
 </template>
@@ -117,7 +119,8 @@
             catelist1: [],
             catelist2: [],
             navIndex: 0,
-            cateShow: false
+            cateShow: false,
+            recommend:[]
         }
         methods = {
             changenav(index) {
@@ -135,6 +138,16 @@
             this.imgUrls.push(this.baseServerImg)
             this.imgUrls.push(this.baseServerImg)
             this.imgUrls.push(this.baseServerImg)
+        }
+        getremmend(){
+             wepy.request({
+                url: 'api/index/recommend',
+                method: 'POST',
+            }).then(res => {
+                if (res.code == 1) {
+                    this.recommend = res.data.list.data
+                }
+            })
         }
         getCate() {
             wepy.request({
@@ -162,6 +175,7 @@
         PageInit() {
             this.getCate()
             this.getAD()
+            this.getremmend()
         }
     }
 </script>
