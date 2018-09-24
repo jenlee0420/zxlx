@@ -28,57 +28,69 @@
             right: -10rpx;
             color: @theme;
         }
-        .imageitems{
+        .imageitems {
             margin-top: 30rpx;
             min-height: 200rpx;
             display: flex;
-            .imageitem{
-            position: relative;
-            flex-wrap: wrap;
-            width: 82rpx;
-            height: 82rpx;
-            margin-right: 35rpx;
-            margin-bottom: 20rpx;
+            .imageitem {
+                position: relative;
+                flex-wrap: wrap;
+                width: 82rpx;
+                height: 82rpx;
+                margin-right: 35rpx;
+                margin-bottom: 20rpx;
+            }
         }
-        }
-        
     }
-    .my_picker{
+    .my_picker {
         flex-direction: column;
-        >label{margin-bottom: 20rpx; display: flex;align-items: center;}
+        >label {
+            margin-bottom: 20rpx;
+            display: flex;
+            align-items: center;
+        }
     }
-    .mr75{margin-right: 75rpx;}
-    .bordernone{border: none !important;}
+    .mr75 {
+        margin-right: 75rpx;
+    }
+    .bordernone {
+        border: none !important;
+    }
 </style>
 
 <template>
     <view class="container" id="dianpin">
         <view>
-            <text>游学名称</text><text>西双版纳7日游孩子加床【云南】</text>
+            <text>游学名称</text><text>{{detail.source_name}}</text>
         </view>
         <view class="flex">
             <text class="mr75">评分</text>
             <view>
                 <radio-group class="my_picker" bindchange="getpicker">
                     <label>
-                        <radio value="5" checked="checked"/>
-                        <label class="public_icon3_not_choise"></label><Star num="5" total="5" class="mr12"/>5分
+                            <radio value="5" checked="checked"/>
+                            <label class="public_icon3_not_choise"></label>
+                    <Star num="5" total="5" class="mr12" />5分
                     </label>
                     <label>
-                        <radio value="4"/>
-                        <label class="public_icon3_not_choise"></label><Star1 num="4" total="5" class="mr12"/>4分
+                            <radio value="4"/>
+                            <label class="public_icon3_not_choise"></label>
+                    <Star1 num="4" total="5" class="mr12" />4分
                     </label>
                     <label>
-                        <radio value="3"/>
-                        <label class="public_icon3_not_choise"></label><Star2 num="3" total="5" class="mr12"/>3分
+                            <radio value="3"/>
+                            <label class="public_icon3_not_choise"></label>
+                    <Star2 num="3" total="5" class="mr12" />3分
                     </label>
                     <label>
-                        <radio value="2"/>
-                        <label class="public_icon3_not_choise"></label><Star3 num="2" total="5" class="mr12"/>2分
+                            <radio value="2"/>
+                            <label class="public_icon3_not_choise"></label>
+                    <Star3 num="2" total="5" class="mr12" />2分
                     </label>
                     <label>
-                        <radio value="1"/>
-                        <label class="public_icon3_not_choise"></label><Star4 num="1" total="5" class="mr12"/>1分
+                            <radio value="1"/>
+                            <label class="public_icon3_not_choise"></label>
+                    <Star4 num="1" total="5" class="mr12" />1分
                     </label>
                 </radio-group>
             </view>
@@ -87,22 +99,17 @@
             <textarea placeholder-style="color:#bbb" placeholder="请您描述您的评价内容。（最多500字）" />
         </view>
         <view class="bordernone">
-            <view class="flex flex-between"> <text>上传照片</text><text class="c929292">(最多9张)</text></view> 
+            <view class="flex flex-between"> <text>上传照片</text><text class="c929292">(最多9张)</text></view>
             <view class="imageitems">
-                
-                <view class="imageitem">
+                <view class="imageitem" wx:for="{{imglist}}" wx:key="{{index}}">
                     <span class="Topcorner zan-icon-close zan-icon"></span>
-                    <image src="{{baseServerImg}}" mode="aspectFill" />
+                    <image src="{{item}}" mode="aspectFill" />
                 </view>
-                <view class="imageitem">
-                    <span class="Topcorner zan-icon-close zan-icon"></span>
-                    <image src="{{baseServerImg}}" mode="aspectFill" />
-                </view>
-                <view class="public_icon4_upload_picture"></view>
+                <view class="public_icon4_upload_picture" @tap="addImage"></view>
             </view>
         </view>
         <view class="t_c bordernone pb30">
-            <button class="w600 btn">提交</button>
+            <button class="w600 btn" @tap="submit">提交</button>
         </view>
     </view>
 </template>
@@ -115,14 +122,93 @@
         config = {}
         components = {
             Star,
-            Star1:Star,
-            Star2:Star,
-            Star3:Star,
-            Star4:Star
+            Star1: Star,
+            Star2: Star,
+            Star3: Star,
+            Star4: Star
         }
         mixins = [Mixin]
-        data = {}
-        methods = {}
-        onLoad() {}
+        data = {
+            order_id: '42',
+            order_goods_id:'27',
+            detail: {},
+            imgcount: 0,
+            imglist:[],
+            content:'',
+            star:'5'
+        }
+        events = {
+            
+        }
+        methods = {
+            getpicker(e){
+                console.log(e)
+                this.star = e.detail.value
+            },
+            /* 选择文件并上传 */
+            addImage() {
+                let v = this.imglist.length
+                let count = 9 - v
+                this.chooseImage({
+                    count: count
+                }).then(res => {
+                    res.forEach(e => {
+                        this.imglist.push(e)
+                    })
+                    this.$apply()
+                })
+            },
+            submit(){
+                this.showloading()
+                let imgsrc = this.imglist.length>0 ? this.imglist.split(','):''
+                wepy.request({
+                url: "api/order/comment",
+                method: 'POST',
+                data: {
+                    order_id: this.order_id,
+                    order_goods_id: this.order_goods_id,
+                    comment: this.content,
+                    pic: imgsrc ,
+                    score:this.star
+                },
+            }).then(res => {
+                this.showloading(false)
+                if (res.code == 1) {
+                    this.showSuccess(res.msg)
+                    setTimeout(() => {
+                        wepy.navigateBack()
+                    }, 500);
+                }
+                else{
+                    this.showToast(res.msg)
+                }
+                this.$apply();
+            })
+            }
+        }
+        getinfo() {
+            wepy.request({
+                url: "api/order/detail",
+                method: 'POST',
+                data: {
+                    order_id: this.order_id
+                },
+            }).then(res => {
+                this.loading = false;
+                if (res.code == 1) {
+                    this.detail = res.data
+                }
+                this.$apply();
+            })
+        }
+        onLoad(opation) {
+            if (opation && opation.orderid) {
+                this.order_id = opation.orderid
+            }
+            if (opation && opation.goodsid) {
+                this.order_goods_id = opation.goodsid
+            }
+            this.getinfo()
+        }
     }
 </script>
