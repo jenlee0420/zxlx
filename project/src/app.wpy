@@ -21,11 +21,10 @@
     config = {
       pages: [
         // 'pages/icon',
-        'pages/test',
+        //'pages/test',
         'pages/search_page',
         'pages/search',
         'pages/index',
-        'pages/goods_detail',
         'pages/mycenter/collection',
         'pages/mycenter/orderlist',
         'pages/paypage',
@@ -39,7 +38,7 @@
         'pages/kefu',
         'pages/mycenter/about',
         'pages/mycenter/dianpin',
-        'pages/goodsDetail',
+        'pages/goods_detail',
         'pages/custom',
         'pages/refund'
       ],

@@ -633,6 +633,7 @@
   export default class goodsdetail extends wepy.page {
     mixins = [Mixin]
     data = {
+      loading:true,
       modalIsShow: false,
       goods_detal: [{
           "name": "商品1",
@@ -660,7 +661,12 @@
       good_id:0,
       good_detail:{},
 
+      current_page:1,
+      per_page:3,
+
       collection:true,
+
+      comment_list:[],
     }
     components = {
       TopNav,
@@ -760,13 +766,27 @@
         method: 'POST',
         data: {goods_id:this.good_id},
       }).then(res => {
-        this.loading= false;
         if(res.code != "1"){
           this.showAlert({title: "警告", content: res.msg});
-        }else{
-          this.good_detail=res.data.detail
+          return
         }
-        this.$apply();
+        this.good_detail=res.data.detail
+        console.log("111111111111")
+        wepy.request({
+          url: "api/goods/comment",
+          method: 'POST',
+          data: {goods_id:this.good_id,per_page:this.per_page,page:this.current_page},
+        }).then(res => {
+          this.loading= false;
+          if(res.code != "1"){
+            this.showAlert({title: "警告", content: res.msg});
+            return
+          }
+          this.comment_list=res.data.list.data;
+
+
+          this.$apply();
+        })
       })
   }
 
