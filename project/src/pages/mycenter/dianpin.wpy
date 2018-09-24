@@ -96,7 +96,7 @@
             </view>
         </view>
         <view><text>点评内容</text>
-            <textarea placeholder-style="color:#bbb" placeholder="请您描述您的评价内容。（最多500字）" />
+            <textarea placeholder-style="color:#bbb" placeholder="请您描述您的评价内容。（最多500字）" @input="changecontent"/>
         </view>
         <view class="bordernone">
             <view class="flex flex-between"> <text>上传照片</text><text class="c929292">(最多9张)</text></view>
@@ -141,6 +141,9 @@
             
         }
         methods = {
+            changecontent(e){
+                this.content = e.detail.value
+            },
             getpicker(e){
                 console.log(e)
                 this.star = e.detail.value
