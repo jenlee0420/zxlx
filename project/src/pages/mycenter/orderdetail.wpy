@@ -150,8 +150,10 @@
         <view class="orderstatus">
             <text wx:if="{{order_status=='10'}}">等待买家付款</text>
             <text wx:if="{{order_status=='20'}}">订单已取消</text>
+            <text wx:if="{{order_status=='30'}}">买家已完成</text>
             <span class="public_icon_order_wait_pay" wx:if="{{order_status=='10'}}"></span>
             <span class="public_icon_order_cancel" wx:if="{{order_status=='20'}}"></span>
+            <span class="public_icon4_complete_buy" wx:if="{{order_status=='30'}}"></span>
         </view>
         <view class="address">
             <span class="public_icon2_location2"></span>
