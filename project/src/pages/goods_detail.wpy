@@ -554,7 +554,7 @@
       <!-- 须知 -->
       <view class="">
       </view>
-      <comments></comments>
+      <comments :comment_list.sync="comment_list"></comments>
     </scroll-view>
     <!-- 底部导航 S -->
     <view class="nav-bottom">
@@ -666,7 +666,7 @@
 
       collection:true,
 
-      comment_list:[],
+      comment_list:{},
     }
     components = {
       TopNav,
@@ -782,7 +782,7 @@
             this.showAlert({title: "警告", content: res.msg});
             return
           }
-          this.comment_list=res.data.list.data;
+          this.comment_list=res.data.list;
 
 
           this.$apply();

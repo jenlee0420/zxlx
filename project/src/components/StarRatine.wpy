@@ -33,7 +33,12 @@
 
     props = {
       total: String,
-      num: String,
+      num: {
+        type: Number,
+        default: () => {
+        return 0
+      }
+      },
       containerStyle: String
     };
 

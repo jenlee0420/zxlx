@@ -7,7 +7,7 @@
     <!--10待支付 20已取消 30 已完成 40未使用  50已删除 60退款中、70已退款、80退款失败-->
     <button class="btnline mr12" @tap="to_refund({{orderitem}})" wx:if="{{orderitem.order_status.value=='40'}}">申请退款</button>
     <button class="btnline mr12" @tap="cancle_order({{orderitem}})" wx:if="{{orderitem.order_status.value=='10'}}">取消订单</button>
-    <button class="btnline mr12" wx:if="{{orderitem.order_status.value=='30'}}">再次购买</button>
+    <button class="btnline mr12" @tap="to_good_detail({{orderitem}})" wx:if="{{orderitem.order_status.value=='30'}}">再次购买</button>
     <button class="btn" @tap="to_member" wx:if="{{orderitem.order_status.value=='40'}}">完善出行人</button>
     <button class="btn" wx:if="{{orderitem.order_status.value=='noused'}}" disabled>已评价</button>
     <button class="btn" @tap="todianpin{{orderitem}}" wx:if="{{orderitem.order_status.value=='30'}}">我要评价</button>
@@ -39,7 +39,7 @@
     methods = {
       to_good_detail(order){
         wx.navigateTo({
-          url:"/pages/goods_detail?good_id="+order.goods[0].goods_id
+          url:"/pages/goods_detail?id="+order.goods[0].goods_id
         })
       },
 

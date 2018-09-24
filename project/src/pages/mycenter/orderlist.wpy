@@ -162,7 +162,7 @@
                 list: []
             }, {
                 name: '已完成',
-                key: 'received',
+                key: 'finish',
                 current_page: 1,
                 total_page:1,
                 list: []

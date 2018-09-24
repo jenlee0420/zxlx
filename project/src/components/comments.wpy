@@ -133,10 +133,15 @@
   <view class="bg_fff">
     <!-- 总评分 S -->
     <view class="totalPin">
-      <view class="total-num"><text>299</text>条评价</view>
+      <view class="total-num"><text>{{comment_list.total}}</text>条评价</view>
       <view class="rating">
         整体评分
-        <Star4 containerStyle="margin: 0 20rpx 4rpx 10rpx;"></Star4>4</view>
+        <view class="starContainer" style="{{containerStyle ? containerStyle : ''}}">
+
+            <span wx:for="{{comment_list.data.avg_score}}" wx:key="{{index}}" class="public_icon2_star_light"></span>
+            <span wx:for="{{5-comment_list.data.avg_score}}" wx:key="{{index}}" class="public_icon2_star_dark"></span>
+        </view>
+        {{comment_list.data.avg_score}}</view>
     </view>
     <!-- 总评分 E -->
     <!-- 评价块 S -->
@@ -162,63 +167,31 @@
       </view>
     </view>
     <!-- 评价块 E -->
-    <!-- 评价块 S -->
-    <view class="ping-card">
-      <view class="head">
-        <view class="avatar"><image src="../resource/img/avatar.png"></image></view>
-        <view class="info">
-          <view class="name">张扬文<text class="bg-purple">潮爸</text></view>
-          <text>2018-08-22</text>
-        </view>
-        <view class="star">
-          <Star total="5" num="4" ></Star>
-        </view>
-      </view>
-      <view class="content">
-        <text>九岁女儿参加第一次夏利九岁女儿参加第一次夏利
-九岁女儿参加第一次夏利九岁女儿参加第一次夏利
-九岁女儿参加第一次夏利
-九岁女儿参加第一次夏利</text>
-        <image src='../resource/img/photo1.png'></image>
-        <image src='../resource/img/photo1.png'></image>
-        <view class="extra-text">全英语系列+中文国学夏令营8期加床</view>
-      </view>
-    </view>
-    <!-- 评价块 E -->
-    <!-- 评价块 S -->
-    <view class="ping-card">
-      <view class="head">
-        <view class="avatar"><image src="../resource/img/avatar.png"></image></view>
-        <view class="info">
-          <view class="name">张扬文<text class="bg-purple">潮爸</text></view>
-          <text>2018-08-22</text>
-        </view>
-        <view class="star">
-          <Star total="5" num="5" ></Star>
-        </view>
-      </view>
-      <view class="content">
-        <text>九岁女儿参加第一次夏利九岁女儿参加第一次夏利
-九岁女儿参加第一次夏利九岁女儿参加第一次夏利
-九岁女儿参加第一次夏利
-九岁女儿参加第一次夏利</text>
-        <image src='../resource/img/photo1.png'></image>
-        <image src='../resource/img/photo1.png'></image>
-        <view class="extra-text">全英语系列+中文国学夏令营8期加床</view>
-      </view>
-    </view>
-    <!-- 评价块 E -->
   </view>
 </template>
 <script>
   import wepy from 'wepy'
   import Star from '@/components/StarRatine'
-
   export default class comments extends wepy.component {
     components = {
-      Star:Star,
+      Star
     };
-
+    props = {
+      comment_list: {
+          type: Object,
+          default: () => {
+            return {}
+          }
+      }
+    }
+  computed={
+    starnum(){
+    if(this.comment_list.data){
+      console.log('dfff',this.comment_list.data.avg_score)
+      return this.comment_list.data.avg_score
+    }
+  }
+  }
     data = {
 
     };

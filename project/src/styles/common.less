@@ -33,7 +33,19 @@
 .f_opacity_8{
     opacity:0.8
 }
-
+.starContainer {
+  display: flex;
+  flex-direction: row;
+  justify-content: flex-start;
+  align-items: center;
+  image {
+    width: 32rpx;
+    height: 32rpx;
+  }
+  image + image {
+    margin-left: 6rpx;
+  }
+}
 .bg_fff{background-color: #fff;}
 
 .fs18{font-size: 18rpx;}
