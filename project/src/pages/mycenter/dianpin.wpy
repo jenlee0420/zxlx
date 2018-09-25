@@ -11,7 +11,7 @@
             box-sizing: border-box;
             border-bottom: 1rpx solid @bColor;
             &:last-child {
-                padding: auto 0;
+                padding: auto 0 !important;;
             }
             >text:last-child {
                 margin-left: 30rpx;
@@ -102,8 +102,8 @@
             <view class="flex flex-between"> <text>上传照片</text><text class="c929292">(最多9张)</text></view>
             <view class="imageitems">
                 <view class="imageitem" wx:for="{{imglist}}" wx:key="{{index}}">
-                    <span class="Topcorner zan-icon-close zan-icon"></span>
-                    <image src="{{item}}" mode="aspectFill" />
+                    <span class="Topcorner zan-icon-close zan-icon" bindtap="delimg({{index}})"></span>
+                    <image src="{{item.url}}" mode="aspectFill" />
                 </view>
                 <view class="public_icon4_upload_picture" @tap="addImage"></view>
             </view>
@@ -161,9 +161,13 @@
                     this.$apply()
                 })
             },
+            delimg(index){
+                this.imglist.splice(index,1)
+                this.$apply()
+            },
             submit(){
                 this.showloading()
-                let imgsrc = this.imglist.length>0 ? this.imglist.split(','):''
+                let imgsrc = this.getImgid(this.imglist)
                 wepy.request({
                 url: "api/order/comment",
                 method: 'POST',
@@ -188,6 +192,13 @@
                 this.$apply();
             })
             }
+        }
+        getImgid(list){
+            let re =[]
+            list.forEach(e => {
+                re.push(e.id)
+            });
+            return re.join(',')
         }
         getinfo() {
             wepy.request({

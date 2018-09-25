@@ -39,7 +39,8 @@
             text-align: center;
             margin-top: 50rpx;
             box-sizing: border-box;
-            >navigator,>span {
+            >navigator,
+            >span {
                 position: relative;
                 >span {
                     margin-bottom: 20rpx;
@@ -59,27 +60,27 @@
                 <image src="{{ userinfo.avatarUrl? userinfo.avatarUrl : baseHeadImg }}" mode="aspectFill" />
                 <view class="flex-column">
                     <text class="fs30 c333 mb10">{{userinfo.nickName}}</text>
-                    <text class="pinkbtn">更新资料</text>
+                    <button class="pinkbtn" open-type="getUserInfo" bindgetuserinfo="editinfo">更新资料</button>
                 </view>
             </view>
         </view>
         <view class="panel">
             <view class="flex flex-between"><text class="fs30 c333">我的订单</text>
-               <navigator class="fs24 c888" url="/pages/mycenter/orderlist?type=0" hover-class="none">查看全部 <span class="c999 zan-icon zan-icon-arrow"></span></navigator>
+                <navigator class="fs24 c888" url="/pages/mycenter/orderlist?type=0" hover-class="none">查看全部 <span class="c999 zan-icon zan-icon-arrow"></span></navigator>
             </view>
             <view class="ordertype">
                 <navigator class="flex-column" url="/pages/mycenter/orderlist?type=1" hover-class="none">
-                        <span class="public_icon3_waite_pay"><span class="zan-badge__count" wx:if="{{orderCount.payment}}">{{orderCount.payment}}</span></span>
-                待付款
+                    <span class="public_icon3_waite_pay"><span class="zan-badge__count" wx:if="{{orderCount.payment}}">{{orderCount.payment}}</span></span>
+                    待付款
                 </navigator>
                 <navigator class="flex-column" url="/pages/mycenter/orderlist?type=2" hover-class="none">
-                        <span class="public_icon3_not_use"><span class="zan-badge__count" wx:if="{{orderCount.noused}}">{{orderCount.noused}}</span></span> 未使用
+                    <span class="public_icon3_not_use"><span class="zan-badge__count" wx:if="{{orderCount.noused}}">{{orderCount.noused}}</span></span> 未使用
                 </navigator>
                 <navigator class="flex-column" url="/pages/mycenter/orderlist?type=3" hover-class="none">
-                        <span class="public_icon3_complete"><span class="zan-badge__count" wx:if="{{orderCount.finish}}">{{orderCount.finish}}</span></span> 已完成
+                    <span class="public_icon3_complete"><span class="zan-badge__count" wx:if="{{orderCount.finish}}">{{orderCount.finish}}</span></span> 已完成
                 </navigator>
                 <navigator class="flex-column" url="/pages/mycenter/orderlist?type=4" hover-class="none">
-                        <span class="public_icon3_not_complete"><span class="zan-badge__count" wx:if="{{orderCount.cancel}}">{{orderCount.cancel}}</span></span> 已取消
+                    <span class="public_icon3_not_complete"><span class="zan-badge__count" wx:if="{{orderCount.cancel}}">{{orderCount.cancel}}</span></span> 已取消
                 </navigator>
             </view>
         </view>
@@ -131,9 +132,35 @@
                 }
             ],
             userinfo: {},
-            orderCount:[]
+            orderCount: []
         }
-        methods = {}
+        methods = {
+            editinfo(e) {
+                let detail = e.detail
+                console.log(e.detail)
+                wepy.request({
+                    url: "api/user/edit",
+                    method: 'POST',
+                    data: detail,
+                    // {
+                    //     // nick_name: detail.nickName,
+                    //     // avatar_url: detail.avatarUrl,
+                    //     // gender: detail.gender,
+                    //     // iv:e.detail.iv,
+                    //     // encryptedData:e.detail.encryptedData,
+                    //     // rawData:e.detail.rawData,
+                    //     // signature:e.detail.signature
+                    // },
+                }).then(res => {
+                    if (res.code == 1) {
+                        this.userinfo.nickName = detail.nickName
+                        this.userinfo.avatarUrl = detail.avatarUrl
+                        this.showSuccess('更新成功')
+                    }
+                    this.$apply()
+                })
+            }
+        }
         getuserinfo() {
             wepy.request({
                 url: "api/user/detail",
