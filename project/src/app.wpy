@@ -22,6 +22,7 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
+        'pages/mycenter/dianpin',
         'pages/search_page',
         'pages/search',
         'pages/index',
@@ -37,7 +38,7 @@
         'pages/mycenter/feedback',
         'pages/kefu',
         'pages/mycenter/about',
-        'pages/mycenter/dianpin',
+        
         'pages/goods_detail',
         'pages/custom',
         'pages/refund'
@@ -125,7 +126,7 @@
       }
       // 是否为测试
       if (debug.debug == 'test' || this.globalData.mode == 'dev') {
-        data.is_bug = 'test'
+        // data.is_bug = 'test'
       }
       wepy.request({
         url: 'api/user/login',

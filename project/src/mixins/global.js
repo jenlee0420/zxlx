@@ -175,23 +175,49 @@ export default class Global extends wepy.mixin {
             wepy.chooseImage(obj).then(res => {
                 let fileArr = res.tempFiles
                 let pathArr = res.tempFilePaths
-                let resArr = []
+                let resUrl = []
                 pathArr.forEach((v, i) => {
                     let data = {
                         filePath: v,
                         file: fileArr[i]
                     }
-                    this.getuploadsign(1, data).then(data => {
-                        if (data.res.statusCode === 200) {
-                            resArr.push(JSON.parse(data.res.data).data.source_url)
+                    this.imgupfile(data).then(res =>{
+                        
+                        if (res.statusCode === 200) {
+                            let tmp = JSON.parse(res.data).data
+                            resUrl.push({id:tmp.file_id, url:tmp.file_path})
                         } else {
-                            reject(data.res)
+                            reject(res.errMsg)
                         }
-                        if (resArr.length === pathArr.length) {
-                            resolve(resArr)
+                        if (resUrl.length === pathArr.length) {
+                            resolve(resUrl)
                         }
                     })
+                    // this.getuploadsign(1, data).then(data => {
+                    //     if (data.res.statusCode === 200) {
+                    //         resArr.push(JSON.parse(data.res.data).data.source_url)
+                    //     } else {
+                    //         reject(data.res)
+                    //     }
+                    //     if (resArr.length === pathArr.length) {
+                    //         resolve(resArr)
+                    //     }
+                    // })
                 })
+            })
+        })
+    }
+    imgupfile(file){
+        return new Promise((resolve, reject) => {
+            let data = {
+                url: 'http://wxapi.zxlx123.com/api/upload/image',
+                filePath: file.filePath,
+                name: 'iFile'
+            }
+            wepy.uploadFile(data).then(res => {
+                resolve(res)
+            }).catch(err => {
+                reject(err)
             })
         })
     }
