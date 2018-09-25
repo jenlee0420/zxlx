@@ -138,32 +138,27 @@
         整体评分
         <view class="starContainer" style="{{containerStyle ? containerStyle : ''}}">
 
-            <span wx:for="{{comment_list.data.avg_score}}" wx:key="{{index}}" class="public_icon2_star_light"></span>
-            <span wx:for="{{5-comment_list.data.avg_score}}" wx:key="{{index}}" class="public_icon2_star_dark"></span>
+            <span wx:for="{{comment_list.avg_score}}" wx:key="{{index}}" class="public_icon2_star_light"></span>
+            <span wx:for="{{5-comment_list.avg_score}}" wx:key="{{index}}" class="public_icon2_star_dark"></span>
         </view>
         {{comment_list.data.avg_score}}</view>
     </view>
     <!-- 总评分 E -->
     <!-- 评价块 S -->
-    <view class="ping-card">
+    <view class="ping-card" wx:for="{{comment_list.data}}" index="index">
       <view class="head">
-        <view class="avatar"><image src="../resource/img/avatar.png"></image></view>
+        <view class="avatar"><image src="{{item.avatarUrl}}"></image></view>
         <view class="info">
-          <view class="name">张扬文<text class="bg-orange">辣妈</text></view>
-          <text>2018-08-22</text>
+          <view class="name">{{item.nickName}}<text class="bg-orange">{{item.gender}}</text></view>
+          <text>{{item.create_time}}</text>
         </view>
         <view class="star">
           <Star5></Star5>
         </view>
       </view>
       <view class="content">
-        <text>九岁女儿参加第一次夏利九岁女儿参加第一次夏利
-九岁女儿参加第一次夏利九岁女儿参加第一次夏利
-九岁女儿参加第一次夏利
-九岁女儿参加第一次夏利</text>
-        <image src='../resource/img/photo1.png'></image>
-        <image src='../resource/img/photo1.png'></image>
-        <view class="extra-text">全英语系列+中文国学夏令营8期加床</view>
+        <text>{{item.comment}}</text>
+        <view class="extra-text">{{item.goods_attr}}</view>
       </view>
     </view>
     <!-- 评价块 E -->
