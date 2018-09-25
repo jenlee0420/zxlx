@@ -395,6 +395,7 @@ export default class Global extends wepy.mixin {
 
     }
     onShow(opation) {
+        console.log(opation,'ererwwewwww')
         // if(this.__route__ === 'pages/index'){
         //     return
         // }

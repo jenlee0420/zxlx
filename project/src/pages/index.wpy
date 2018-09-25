@@ -120,7 +120,8 @@
             catelist2: [],
             navIndex: 0,
             cateShow: false,
-            recommend:[]
+            recommend:[],
+            recommendpage:1
         }
         methods = {
             changenav(index) {
@@ -143,6 +144,11 @@
              wepy.request({
                 url: 'api/index/recommend',
                 method: 'POST',
+                data:{
+                    type:1,
+                    per_page: this.page_size,
+                    page: this.recommendpage
+                }
             }).then(res => {
                 if (res.code == 1) {
                     this.recommend = res.data.list.data

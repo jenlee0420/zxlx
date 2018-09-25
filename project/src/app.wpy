@@ -22,12 +22,11 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
-        'pages/mycenter/orderlist',
         'pages/search_page',
         'pages/search',
         'pages/index',
         'pages/mycenter/collection',
-        // 'pages/mycenter/orderlist',
+        'pages/mycenter/orderlist',
         'pages/paypage',
         'pages/friendpay',
         'pages/mycenter/orderdetail',

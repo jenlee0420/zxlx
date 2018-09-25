@@ -65,20 +65,20 @@
         </view>
         <view class="panel">
             <view class="flex flex-between"><text class="fs30 c333">我的订单</text>
-               <navigator class="fs24 c888" url="/pages/mycenter/orderlist?type=all" hover-class="none">查看全部 <span class="c999 zan-icon zan-icon-arrow"></span></navigator>
+               <navigator class="fs24 c888" url="/pages/mycenter/orderlist?type=0" hover-class="none">查看全部 <span class="c999 zan-icon zan-icon-arrow"></span></navigator>
             </view>
             <view class="ordertype">
-                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=payment" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=1" hover-class="none">
                         <span class="public_icon3_waite_pay"><span class="zan-badge__count" wx:if="{{orderCount.payment}}">{{orderCount.payment}}</span></span>
                 待付款
                 </navigator>
-                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=noused" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=2" hover-class="none">
                         <span class="public_icon3_not_use"><span class="zan-badge__count" wx:if="{{orderCount.noused}}">{{orderCount.noused}}</span></span> 未使用
                 </navigator>
-                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=finish" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=3" hover-class="none">
                         <span class="public_icon3_complete"><span class="zan-badge__count" wx:if="{{orderCount.finish}}">{{orderCount.finish}}</span></span> 已完成
                 </navigator>
-                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=cancel" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=4" hover-class="none">
                         <span class="public_icon3_not_complete"><span class="zan-badge__count" wx:if="{{orderCount.cancel}}">{{orderCount.cancel}}</span></span> 已取消
                 </navigator>
             </view>
