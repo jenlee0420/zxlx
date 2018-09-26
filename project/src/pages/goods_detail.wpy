@@ -466,6 +466,12 @@
     position: fixed;
     z-index: 0;
   }
+
+  .rich_text{
+    background-color: #fff;
+    padding: 30rpx;
+    margin-bottom: 30rpx;
+  }
 </style>
 <template>
   <view class="{{modalIsShow ? 'modalShow' : ''}}">
@@ -549,11 +555,11 @@
       </view>
       <!-- 去拼单部分 E -->
       <!-- 详情部分 -->
-      <view id="">
-      </view>
+      <view class="rich_text"><rich-text  nodes="{{good_detail.content}}">
+      </rich-text></view>
       <!-- 须知 -->
-      <view class="">
-      </view>
+      <view class="rich_text"><rich-text nodes="{{good_detail.notice}}" >
+      </rich-text></view>
       <comments :comment_list.sync="comment_list"></comments>
     </scroll-view>
     <!-- 底部导航 S -->
@@ -561,13 +567,13 @@
       <view class="flex1" @tap="to_home">
         <span class="public_icon1_to_home2"></span><text>首页</text></view>
       <view class="flex1" @tap="do_collection">
-        <span wx:if="{{!collection}}" class="public_icon1_collection"></span><text wx:if="{{!collection}}">收藏</text>
-        <span wx:if="{{collection}}" class="public_icon_already_collection"></span><text wx:if="{{collection}}">取消收藏</text>
+        <span wx:if="{{collection!=1}}" class="public_icon1_collection"></span><text wx:if="{{collection!=1}}">收藏</text>
+        <span wx:if="{{collection==1}}" class="public_icon_already_collection"></span><text wx:if="{{collection==1}}">取消收藏</text>
       </view>
       <view class="flex1">
         <span class="public_icon1_custom"></span><text>客服</text></view>
-      <view class="flex2"><text>￥10</text><text>单独购买</text></view>
-      <view class="flex3"><text>￥9</text><text>发起拼单</text></view>
+      <view class="flex2" @tap="open_good_class"><text>￥10</text><text>单独购买</text></view>
+      <view class="flex3" @tap="open_good_class"><text>￥9</text><text>发起拼单</text></view>
       <!-- <view class="flex5"><text>报名已满</text></view> -->
     </view>
     <!-- 底部导航 E -->
@@ -584,32 +590,35 @@
       </view> -->
     <!-- 邀请分享 E -->
     <!-- 购买选择 S -->
-    <view class="modal" wx:if="{{false}}">
-      <view class="m-body">
+    <view class="modal" wx:if="{{open_class}}"  @tap="close_good_class">
+      <view class="m-body" @tap.stop="tmp">
         <view class="close-btn">
           <image src="../resource/img/close2.png"></image>
         </view>
         <view class="intro">
           <view class="goods-img">
-            <image src="../resource/img/goods_img.png"></image>
+            <image src="{{good_detail.image[0].file_path}}"></image>
           </view>
           <view class="goods-picked">
-            <text class="price">￥3000</text>
-            <text class="picked-text">请选择 游学组合</text>
+            <text class="price">￥{{total_price}}</text>
+            <text class="picked-text">请选择 {{class_group}}</text>
           </view>
         </view>
         <scroll-view scroll-y="{{true}}" class="scroll-h">
-          <view class="pick-block">
-            <text>游学组合</text>
-            <view class="btn-box">
-              <block wx:for="{{goods_detal}}" wx:key="{{index}}">
-                <view class="btn {{item.pick ? 'picked' : ''}}" @tap="goods_detal_tip({{index}})">{{item.name}}</view>
-              </block>
-              <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
-              <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
-              <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+          <block  wx:for="{{goods_detal}}" wx:key="index1" wx:for-index="index1">
+            <view class="pick-block">
+              <text>{{item.name}}</text>
+              <view class="btn-box">
+                <block wx:for="{{item.data}}"  wx:key="index2" wx:for-index="index2">
+                  <view class="btn {{item.pick ? 'picked' : ''}}" @tap="goods_detal_tip({{index1}},{{index2}})">{{item.name}}</view>
+                </block>
+                <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+                <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+                <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+              </view>
             </view>
-          </view>
+          </block>
+
           <view class="count-block">
             <view class="title">数量</view>
             <view class="counter">
@@ -635,23 +644,28 @@
     data = {
       loading:true,
       modalIsShow: false,
-      goods_detal: [{
-          "name": "商品1",
-          "pick": true
-        },
+      goods_detal: [
         {
-          "name": "商品2",
-          "pick": false
-        },
-        {
-          "name": "商品3",
-          "pick": false
-        },
-        {
-          "name": "商品4",
-          "pick": false
+          "name": "分类1",
+          "data":[{
+            "name": "商品1",
+            "pick": true,
+          },
+          {
+            "name": "商品2",
+            "pick": false,
+          },
+          {
+            "name": "商品3",
+            "pick": false,
+          },
+          {
+            "name": "商品4",
+            "pick": false,
+          }]
         },
       ],
+      spec:[],
       good_number: 1,
       max_good_number: 9,
       min_good_number: 1,
@@ -664,22 +678,31 @@
       current_page:1,
       per_page:3,
 
-      collection:true,
+      collection:1,
 
       comment_list:{},
+
+      open_class:false,
+
+      total_price:0,
+      class_group:"",
     }
     components = {
       TopNav,
       comments
     }
     methods = {
-      goods_detal_tip(index) {
+      goods_detal_tip(index1,index2) {
         for (var i = 0; i < this.goods_detal.length; i++) {
-          if (i == index) {
-            this.goods_detal[i].pick = true;
-          } else {
-            this.goods_detal[i].pick = false;
-          };
+          if (i==index1){
+            for (var n=0;n<this.goods_detal[i].data.length;n++){
+              if (n == index2) {
+                this.goods_detal[i].data[n].pick = true;
+              } else {
+                this.goods_detal[i].data[n].pick = false;
+              };
+            }
+          }
         }
         this.$apply();
       },
@@ -721,14 +744,51 @@
       },
 
       do_collection(){
-        if(this.collection){
-
+        if(this.collection==1){
+          wepy.request({
+            url: "api/user_favorites/delete",
+            method: 'POST',
+            data: {goods_id:this.good_id},
+          }).then(res => {
+            if(res.code != "1"){
+              this.showAlert({title: "警告", content: res.msg});
+              return
+            }
+            this.collection=-1;
+            this.$apply();
+          })
         }else{
-
+          wepy.request({
+            url: "api/user_favorites/add",
+            method: 'POST',
+            data: {goods_id:this.good_id},
+          }).then(res => {
+            if(res.code != "1"){
+                this.showAlert({title: "警告", content: res.msg});
+                return
+            }
+            this.collection=1;
+            this.$apply();
+          })
         }
-        this.collection=!this.collection;
+
         this.$apply()
+      },
+
+      open_good_class(){
+          this.open_class=true;
+          this.$apply();
+      },
+
+      close_good_class(){
+          this.open_class=false;
+          this.$apply();
+      },
+
+      tmp(){
+
       }
+
     }
     good_num(e) {
       console.log(e)
@@ -770,8 +830,56 @@
           this.showAlert({title: "警告", content: res.msg});
           return
         }
-        this.good_detail=res.data.detail
-        console.log("111111111111")
+        this.good_detail=res.data.detail;
+        this.collection=res.data.detail.is_favorites;
+
+        this.goods_detal=[];
+        if(res.data.detail.spec_type==10){
+          this.goods_detal.push({
+            "name": res.data.detail.goods_name,
+            "data":[
+              {
+                "name": res.data.detail.goods_name,
+                "pick": true,
+                "goods_id": res.data.detail.goods_id,
+                "item_id":res.data.detail.goods_id,
+              }
+            ],
+          });
+
+          this.spec.push({
+            "spec_sku_id":res.data.detail.goods_id,
+            "goods_price":res.data.detail.spec[0].goods_price,
+            "line_price":res.data.detail.spec[0].line_price,
+          })
+        }else{
+          for(var i=0;i<res.data.specData.spec_attr.length;i++){
+            var tmp = {
+              "name": res.data.specData.spec_attr[i].group_name,
+              "data":[],
+            }
+            var p=false;
+            for(var n=0;n<res.data.specData.spec_attr[i].spec_items.length;n++){
+                if(n==0){
+                  p=true;
+                }else{
+                  p=false;
+                };
+                console.log(res.data.specData.spec_attr[i].spec_items[n])
+                tmp.data.push(
+                  {
+                    "name": res.data.specData.spec_attr[i].spec_items[n].spec_value,
+                    "pick": p,
+                    "item_id":res.data.specData.spec_attr[i].spec_items[n].item_id,
+                  }
+                )
+            }
+            console.log(i,tmp)
+            console.log(i,this.goods_detal)
+            this.goods_detal.push(tmp);
+          }
+        }
+
         wepy.request({
           url: "api/goods/comment",
           method: 'POST',
