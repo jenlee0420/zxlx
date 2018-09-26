@@ -572,8 +572,8 @@
       </view>
       <view class="flex1">
         <span class="public_icon1_custom"></span><text>客服</text></view>
-      <view class="flex2" @tap="open_good_class"><text>￥10</text><text>单独购买</text></view>
-      <view class="flex3" @tap="open_good_class"><text>￥9</text><text>发起拼单</text></view>
+      <view class="flex2" @tap="open_good_class"><text>￥{{total_price}}</text><text>单独购买</text></view>
+      <view class="flex3" @tap="open_good_class"><text>￥{{pin_price}}</text><text>发起拼单</text></view>
       <!-- <view class="flex5"><text>报名已满</text></view> -->
     </view>
     <!-- 底部导航 E -->
@@ -685,6 +685,8 @@
       open_class:false,
 
       total_price:0,
+      pin_price:0,
+
       class_group:"",
     }
     components = {
@@ -705,6 +707,7 @@
           }
         }
         this.$apply();
+        this.price_count();
       },
       good_plus() {
         if (this.good_number + 1 > this.max_good_number) {
@@ -719,7 +722,9 @@
         };
         this.sub_min = false;
         this.good_number = this.good_number + 1;
+
         this.$apply();
+        this.price_count();
       },
       good_sub() {
         if (this.good_number - 1 < this.min_good_number) {
@@ -734,7 +739,9 @@
         };
         this.plus_max = false;
         this.good_number = this.good_number - 1;
+
         this.$apply();
+        this.price_count();
       },
 
       to_home(){
@@ -791,7 +798,6 @@
 
     }
     good_num(e) {
-      console.log(e)
       this.good_number = e.detail.value;
       if (this.good_number >= this.max_good_number) {
         //   setTimeout(() => {
@@ -815,6 +821,32 @@
       this.$apply();
     }
 
+    price_count(){
+      var id = "";
+      for (var i=0;i<this.goods_detal.length;i++){
+        for(var n=0;n<this.goods_detal[i].data.length;n++){
+          if(this.goods_detal[i].data[n].pick){
+            console.log(this.goods_detal[i].data[n])
+            if(i==0){
+              id=this.goods_detal[i].data[n].item_id;
+            }else{
+              id=id+"_"+this.goods_detal[i].data[n].item_id;
+            }
+          }
+
+        }
+      }
+
+      for(var i=0;i<this.spec.length;i++){
+        if(this.spec[i].spec_sku_id==id){
+            this.total_price=this.spec[i].line_price*this.good_number;
+            this.pin_price=this.spec[i].goods_price*this.good_number;
+        }
+      }
+
+      this.$apply();
+    }
+
     onLoad(options){
       if(!options.id){
         return
@@ -834,6 +866,7 @@
         this.collection=res.data.detail.is_favorites;
 
         this.goods_detal=[];
+        this.spec=[];
         if(res.data.detail.spec_type==10){
           this.goods_detal.push({
             "name": res.data.detail.goods_name,
@@ -865,7 +898,6 @@
                 }else{
                   p=false;
                 };
-                console.log(res.data.specData.spec_attr[i].spec_items[n])
                 tmp.data.push(
                   {
                     "name": res.data.specData.spec_attr[i].spec_items[n].spec_value,
@@ -874,11 +906,19 @@
                   }
                 )
             }
-            console.log(i,tmp)
-            console.log(i,this.goods_detal)
             this.goods_detal.push(tmp);
           }
+
+          for(var i=0;i<res.data.specData.spec_list.length;i++){
+            this.spec.push({
+              "spec_sku_id":res.data.specData.spec_list[i].spec_sku_id,
+              "goods_price":res.data.specData.spec_list[i].form.goods_price,
+              "line_price":res.data.specData.spec_list[i].form.line_price,
+            })
+          }
+
         }
+        this.price_count();
 
         wepy.request({
           url: "api/goods/comment",
