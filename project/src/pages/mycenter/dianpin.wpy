@@ -14,7 +14,7 @@
                 padding: auto 0 !important;;
             }
             >text:last-child {
-                margin-left: 30rpx;
+                margin-left: 30rpx; 
                 color: #4e4d4d;
             }
         }

@@ -22,7 +22,6 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
-
         'pages/search_page',
         'pages/mycenter/dianpin',
         'pages/search',
@@ -39,7 +38,6 @@
         'pages/mycenter/feedback',
         'pages/kefu',
         'pages/mycenter/about',
-
         'pages/goods_detail',
         'pages/custom',
         'pages/refund'

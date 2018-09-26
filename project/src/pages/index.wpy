@@ -52,6 +52,13 @@
             }
         }
     }
+    .notice{
+        position: fixed;
+        left: 0;
+        top: 30rpx;
+        background-color: rgba(0, 0, 0, .5);
+        border-radius: 10rpx;
+    }
 </style>
 
 <template>
@@ -60,8 +67,10 @@
         <div class="topSwiper">
             <swiper style="height:306rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
                 <block wx:for="{{imgUrls}}" wx:key="{{index}}">
-                    <swiper-item>
-                        <image src="{{item}}" class="slide-image" />
+                    <swiper-item wx:if="{{item.status == 1}}">
+                        <navigator url="{{item.target_url}}" hover-class="none">
+                            <image src="{{item.url}}" class="slide-image" />
+                        </navigator>
                     </swiper-item>
                 </block>
             </swiper>
@@ -72,20 +81,20 @@
                 <swiper-item>
                     <div class="navTablist">
                         <span wx:for="{{catelist1}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
-                                <view class="icon">
-                                    <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
-                                </view>
-                                {{item.name}}
-                            </span>
+                                    <view class="icon">
+                                        <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
+                                    </view>
+                                    {{item.name}}
+                                </span>
                     </div>
                 </swiper-item>
                 <swiper-item wx:if="{{cateShow}}">
                     <div class="navTablist">
                         <span wx:for="{{catelist2}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
-                                <view class="icon">
-                                    <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
-                                </view>
-                                {{item.name}}</span>
+                                    <view class="icon">
+                                        <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
+                                    </view>
+                                    {{item.name}}</span>
                     </div>
                 </swiper-item>
             </swiper>
@@ -98,9 +107,10 @@
         <text class="sutitle">热门推荐</text>
         <view class="p-0-32">
             <repeat for="{{recommend}}" index="index" item="item" key="key">
-            <recommend :goodsitem.sync="item"></recommend>
+                <recommend :goodsitem.sync="item"></recommend>
             </repeat>
         </view>
+        <view class="notice">{{noticemess}}</view>
     </view>
 </template>
 
@@ -120,8 +130,9 @@
             catelist2: [],
             navIndex: 0,
             cateShow: false,
-            recommend:[],
-            recommendpage:1
+            recommend: [],
+            recommendpage: 1,
+            noticemess:''
         }
         methods = {
             changenav(index) {
@@ -136,16 +147,24 @@
             }
         }
         getAD() {
-            this.imgUrls.push(this.baseServerImg)
-            this.imgUrls.push(this.baseServerImg)
-            this.imgUrls.push(this.baseServerImg)
+            wepy.request({
+                url: 'api/advertisingposition/getAd',
+                method: 'POST',
+                data: {
+                    sign: 'home_ad',
+                }
+            }).then(res => {
+                if (res.code == 1) {
+                    this.imgUrls = res.data.list
+                }
+            })
         }
-        getremmend(){
-             wepy.request({
+        getremmend() {
+            wepy.request({
                 url: 'api/index/recommend',
                 method: 'POST',
-                data:{
-                    type:1,
+                data: {
+                    type: 1,
                     per_page: this.page_size,
                     page: this.recommendpage
                 }
@@ -174,6 +193,20 @@
                 }
                 this.$apply()
             })
+        }
+        // 取首页通知
+        getNotice() {
+            setTimeout(() => {
+                wepy.request({
+                    url: 'api/label/getlist',
+                    method: 'POST',
+                }).then(res => {
+                    if (res.code == 1) {
+                        this.noticeshow = true
+                        this.noticemess = res.data.list
+                    }
+                })
+            }, 3000);
         }
         onLoad() {
             this.PageInit()
