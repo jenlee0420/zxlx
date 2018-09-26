@@ -22,9 +22,8 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
-        'pages/mycenter/dianpin',
-        'pages/search_page',
-        'pages/search',
+        
+        
         'pages/index',
         'pages/mycenter/collection',
         'pages/mycenter/orderlist',
@@ -38,7 +37,9 @@
         'pages/mycenter/feedback',
         'pages/kefu',
         'pages/mycenter/about',
-        
+        'pages/mycenter/dianpin',
+        'pages/search_page',
+        'pages/search',
         'pages/goods_detail',
         'pages/custom',
         'pages/refund'
