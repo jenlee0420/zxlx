@@ -102,7 +102,9 @@
   import gooditem from '@/components/gooditem'
   import listfooter from '@/components/listFooter'
   export default class searchpage extends wepy.page {
-    config = {}
+    config = {
+      navigationBarTitleText: '知兮乐兮',
+    }
     components = {
       gooditem,
       listfooter
@@ -186,6 +188,14 @@
         this.$apply()
       })
     }
+    getValbyId(){
+      this.catelist.forEach(e => {
+        if(e.id == this.category.id){
+          this.category.val = e.name
+          wepy.setNavigationBarTitle({title: e.name})
+        }
+      });
+    }
     onLoad() {
       this.getCate()
     }
@@ -196,6 +206,7 @@
         wepy.removeStorage({
           key: 'cateid'
         })
+        this.getValbyId()
       }
       
       if (wepy.getStorageSync('keyword')) {
