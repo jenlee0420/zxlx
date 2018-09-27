@@ -572,8 +572,8 @@
       </view>
       <view class="flex1">
         <span class="public_icon1_custom"></span><text>客服</text></view>
-      <view class="flex2" @tap="open_good_class"><text>￥{{total_price}}</text><text>单独购买</text></view>
-      <view class="flex3" @tap="open_good_class"><text>￥{{pin_price}}</text><text>发起拼单</text></view>
+      <view class="flex2" @tap="open_good_class(2)"><text>￥{{total_price}}</text><text>单独购买</text></view>
+      <view class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起拼单</text></view>
       <!-- <view class="flex5"><text>报名已满</text></view> -->
     </view>
     <!-- 底部导航 E -->
@@ -628,7 +628,7 @@
             </view>
           </view>
         </scroll-view>
-        <view class="btn-ok">确定</view>
+        <view class="btn-ok" @tap="buynow">确定</view>
       </view>
     </view>
     <!-- 购买选择 E -->
@@ -686,6 +686,8 @@
 
       total_price:0,
       pin_price:0,
+      goods_sku_id:"",
+      buy_type:1,
 
       class_group:"",
     }
@@ -782,7 +784,8 @@
         this.$apply()
       },
 
-      open_good_class(){
+      open_good_class(bType){
+          this.buy_type=bType;
           this.open_class=true;
           this.$apply();
       },
@@ -793,6 +796,17 @@
       },
 
       tmp(){
+
+      },
+
+      buynow(){
+          wepy.navigateTo({
+            url: '/pages/paypage?goods_id=' + this.good_detail.goods_id+
+            '&good_number='+this.good_number+
+            '&goods_sku_id='+this.goods_sku_id+
+            '&buy_type='+this.buy_type+
+            '&order_collage_id=0'
+          })
 
       }
 
@@ -843,6 +857,8 @@
             this.pin_price=this.spec[i].goods_price*this.good_number;
         }
       }
+
+      this.goods_sku_id=id;
 
       this.$apply();
     }
