@@ -118,7 +118,7 @@
               <text class=" ">{{item.adress}}</text>
             </view>
           </view>
-          <!-- <span class="zan-icon-success zan-icon list_choice"></span> -->
+          <span wx:if="{{choice_address==item.address_id}}" class="zan-icon-success zan-icon list_choice"></span>
         </view>
 
         <view class="list_do">
@@ -153,12 +153,11 @@
     mixins = [Mixin]
     data = {
       list:[
-        {name:"我是谁",phone:"13724241455",adress:"湖南长沙1231231",address_id:""},
-        {name:"你是谁",phone:"13724241465",adress:"广东省深圳市123",address_id:""},
-        {name:"他是谁",phone:"13724241475",adress:"湖南长沙刘老师shuai",address_id:""}
       ],
 
       default_addree:0,
+
+      choice_address:"",
     }
     methods = {
       go_to_add(){
@@ -216,51 +215,44 @@
         })
       }
     }
-    onLoad() {
-      // wx.request({
-      //   url:"api/address/lists",
-      //   method: 'POST',
-      //   data:{},
-      //   header: {
-      //     'content-type': 'application/json' // 默认值
-      //   },
-      //   success: function(res) {
-      //     console.log(res.data)
-      //   }
-      // })
-      //this.PageInit()
-
-    }
-    PageInit(){
-      wepy.request({
-        url: "api/address/lists",
-        method: 'POST',
-        data: {},
-      }).then(res => {
-        if(res.code!="1"){
-        this.showAlert({title:"警告",content:res.msg});
-      }else {
-          var index=0;
-          this.list=[];
-        for(var i=0;i<res.data.list.length;i++){
-          var thisdata=res.data.list[i];
-          this.list.push({
-            address_id:thisdata.address_id,
-            name:thisdata.name,
-            user_id:thisdata.user_id,
-            adress:thisdata.region.province+thisdata.region.city+thisdata.region.region+thisdata.detail,
-            phone:thisdata.phone,
-          })
-
-          if(res.data.default_id==thisdata.address_id){
-            index=i;
-          }
+    onLoad(options) {
+    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
+    console.log(!options)
+        if(options){
+          this.choice_address=options.address_id;
         }
 
-        this.default_addree=index;
-        this.$apply();
-      }
-    })
-  }
+        wepy.request({
+          url: "api/address/lists",
+          method: 'POST',
+          data: {},
+        }).then(res => {
+          if(res.code!="1"){
+          this.showAlert({title:"警告",content:res.msg});
+        }else {
+          var index=0;
+          this.list=[];
+          for(var i=0;i<res.data.list.length;i++){
+            var thisdata=res.data.list[i];
+            this.list.push({
+              address_id:thisdata.address_id,
+              name:thisdata.name,
+              user_id:thisdata.user_id,
+              adress:thisdata.region.province+thisdata.region.city+thisdata.region.region+thisdata.detail,
+              phone:thisdata.phone,
+            })
+
+            if(res.data.default_id==thisdata.address_id){
+              index=i;
+            }
+          }
+
+          this.default_addree=index;
+          this.$apply();
+        }
+      })
+
+    }
+
   }
 </script>

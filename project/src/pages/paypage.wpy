@@ -212,27 +212,27 @@
   <view>
 
     <!-- 地址信息 S -->
-    <!-- <view class="flexRow locWrap">
-      <image class="icon-loc" src="../resource/img/location.png"></image>
+    <view class="flexRow locWrap" wx:if="{{detail.address}}" @tap="to_addresslist({{detail.address.address_id}})">
+      <icon class="public_icon2_location2 list_mg_35"></icon>
       <view class="flex flex-astretch info-wrap">
         <view class="flexRow nandt">
-          <text class="name">李佳</text>
-          <text class="tel">17727982525</text>
+          <text class="name">{{detail.address.name}}</text>
+          <text class="tel">{{detail.address.phone}}</text>
         </view>
-        <text class="flexRow flex-acenter address">广东省深圳市南山区海王大厦12层</text>
+        <text class="flexRow flex-acenter address">{{detail.address.region.province+detail.address.region.city+detail.address.region.region+detail.address.detail}}</text>
       </view>
       <image class="right_arrow" src="../resource/img/right_arrow.png"></image>
-    </view> -->
+    </view>
     <!-- 地址信息 E -->
     <!-- 按钮列表 S -->
-    <view class="flexCol flex-astretch listWrap">
-      <view class="flexRow">
-        <image class="icon-44" src="../resource/img/red_plus.png"></image>
+    <view class="flexCol flex-astretch listWrap" wx:if="{{!detail.address}}">
+      <view class="flexRow" @tap="to_addresslist('')">
+        <span class="public_icon_manual_add_address"></span>
         <text>手动添加联系信息</text>
         <image class="right_arrow" src="../resource/img/right_arrow.png"></image>
       </view>
       <view class="flexRow">
-        <image class="icon-44" src="../resource/img/wx_02.png"></image>
+        <span class="public_icon2_weixin"></span>
         <text>一键获取微信联系信息</text>
         <image class="right_arrow" src="../resource/img/right_arrow.png"></image>
       </view>
@@ -282,8 +282,9 @@
     </view>
     <!-- 支付方式 E -->
     <!-- 确认协议按钮 S -->
-    <view class="x-btns flexRow">
-      <image src="../resource/img/not_choose_gou.png"></image>
+    <view class="x-btns flexRow" @tap="do_user_term">
+      <span wx:if="{{!user_term}}" class="public_icon_user_term"></span>
+      <span wx:if="{{user_term}}" class="public_icon_user_term_select"></span>
       <view>我已阅读并同意用户条款</view>
     </view>
     <!-- 确认协议按钮 E -->
@@ -292,16 +293,18 @@
       <view class="price-part flexRow flex-jend">
         实付款:<text>￥{{detail.order_total_price}}</text>
       </view>
-      <view class="pay-btn">立即支付</view>
+      <view class="pay-btn" @tap="pay_now">立即支付</view>
     </view>
     <!-- 底部按钮 E -->
+    <notice />
   </view>
 </template>
 <script>
   import wepy from 'wepy'
-
+  import notice from '@/components/notice'
   export default class paypage extends wepy.page {
     data = {
+      user_term:false,
       detail:{},
       pay_type:1,
 
@@ -310,8 +313,32 @@
       plus_max: false,
       sub_min: true,
     };
-
+    components = {
+      notice
+    }
     methods = {
+      pay_now(){
+
+      },
+
+      to_addresslist(address_id){
+        if(address_id==""){
+          wx.navigateTo({
+            url:"/pages/member/list_member"
+          })
+        }else{
+          wx.navigateTo({
+            url:"/pages/member/list_member?address_id="+address_id
+          })
+        }
+
+      },
+
+      do_user_term(){
+        this.user_term= !this.user_term;
+        this.$apply();
+      },
+
       select_pay_type(value){
         this.pay_type=value;
         this.$apply();
