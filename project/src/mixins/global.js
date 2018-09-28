@@ -19,7 +19,8 @@ export default class Global extends wepy.mixin {
         price:/^\d+(\.{0,1}\d+){0,1}$/ // 只能是正数
     },
     loadloop:true,
-    page_size:10
+    page_size:10,
+    messageTimer:null
   }
   methods = {
 
@@ -417,11 +418,17 @@ export default class Global extends wepy.mixin {
         })
         return bool
     }
+    // 定时取拼团或评论成功消息
+    getMessage(){
+        this.$invoke('notice','getNotice')
+    }
     event() {
 
     }
     onShow(opation) {
-        console.log(opation,'ererwwewwww')
+        if(this.$com.notice){
+            this.getMessage()
+        }
         // if(this.__route__ === 'pages/index'){
         //     return
         // }

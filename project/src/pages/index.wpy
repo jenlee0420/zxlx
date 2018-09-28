@@ -52,13 +52,6 @@
             }
         }
     }
-    .notice{
-        position: fixed;
-        left: 0;
-        top: 30rpx;
-        background-color: rgba(0, 0, 0, .5);
-        border-radius: 10rpx;
-    }
 </style>
 
 <template>
@@ -110,7 +103,7 @@
                 <recommend :goodsitem.sync="item"></recommend>
             </repeat>
         </view>
-        <view class="notice">{{noticemess}}</view>
+        <notice></notice>
     </view>
 </template>
 
@@ -118,10 +111,12 @@
     import wepy from 'wepy'
     import Mixin from '@/mixins/global'
     import recommend from '@/components/gooditem'
+    import notice from '@/components/notice'
     export default class Index extends wepy.page {
         config = {}
         components = {
-            recommend
+            recommend,
+            notice
         }
         mixins = [Mixin]
         data = {
@@ -193,20 +188,6 @@
                 }
                 this.$apply()
             })
-        }
-        // 取首页通知
-        getNotice() {
-            setTimeout(() => {
-                wepy.request({
-                    url: 'api/label/getlist',
-                    method: 'POST',
-                }).then(res => {
-                    if (res.code == 1) {
-                        this.noticeshow = true
-                        this.noticemess = res.data.list
-                    }
-                })
-            }, 3000);
         }
         onLoad() {
             this.PageInit()

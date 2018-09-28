@@ -632,6 +632,7 @@
       </view>
     </view>
     <!-- 购买选择 E -->
+    <notice />
   </view>
 </template>
 <script>
@@ -639,6 +640,7 @@
   import TopNav from '@/components/TopNav'
   import comments from '@/components/comments'
   import Mixin from '@/mixins/global'
+  import notice from '@/components/notice'
   export default class goodsdetail extends wepy.page {
     mixins = [Mixin]
     data = {
@@ -693,7 +695,8 @@
     }
     components = {
       TopNav,
-      comments
+      comments,
+      notice
     }
     methods = {
       goods_detal_tip(index1,index2) {

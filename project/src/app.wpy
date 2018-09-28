@@ -22,10 +22,11 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
+        'pages/index',
         'pages/search_page',
         'pages/mycenter/dianpin',
         'pages/search',
-        'pages/index',
+        
         'pages/mycenter/collection',
         'pages/mycenter/orderlist',
         'pages/paypage',

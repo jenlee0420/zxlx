@@ -1,0 +1,90 @@
+<style lang="less">
+    #notice {
+        height: 50rpx;
+        font-size: 18rpx;
+        color: #fff;
+        display: flex;
+        align-items: center;
+        position: fixed;
+        left: -200rpx;
+        top: 30rpx;
+        background-color: rgba(0, 0, 0, .5);
+        border-radius: 10rpx;
+        min-width: 200rpx;
+        padding: 0 19rpx;
+        opacity: 0;
+        visibility: hidden;
+        image {
+            width: 38rpx;
+            height: 38rpx;
+            border-radius: 50%;
+            margin-right: 10rpx;
+        }
+        &.popup-show {
+            visibility: visible;
+            opacity: 1;
+            left: 5rpx;
+            transform-origin: center;
+            transition: all 0.4s ease;
+        }
+    }
+</style>
+
+<template>
+    <view wx:if="{{noticeshow}}" id="notice" class="{{noticeshow?'popup-show':''}}">
+        <image src="{{noticemess.avatarUrl ? noticemess.avatarUrl: baseHeadImg}}" mode="aspectFill" /> {{noticemess.message}}
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class Notice extends wepy.component {
+        config = {}
+        components = {}
+        props = {
+            goods_id: {
+                type: String,
+                default: ''
+            }
+        }
+        mixins = [Mixin]
+        data = {
+            noticeshow: false,
+            noticemess: '',
+            messageTimer: null
+        }
+        methods = {
+            getNotice() {
+                this.messageTimer = setInterval(() => {
+                    this.getNoticedata()
+                }, 10000)
+            }
+        }
+        // 取首页通知
+        getNoticedata() {
+            wepy.request({
+                url: 'api/message/getmessage',
+                method: 'POST',
+                data: {
+                    goods_id: this.goods_id
+                }
+            }).then(res => {
+                if (res.code == 1) {
+                    this.noticeshow = true
+                    this.noticemess = res.data
+                    this.$apply()
+                    this.closemessage()
+                }
+            })
+        }
+        closemessage() {
+            setTimeout(() => {
+                this.noticeshow = false
+                this.messageTimer = null
+                this.$apply()
+            }, 3000);
+        }
+        onLoad() {}
+    }
+</script>
