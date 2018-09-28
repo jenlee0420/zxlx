@@ -93,6 +93,7 @@
         </view>
       </scroll-view>
     </block>
+    <notice />
   </view>
 </template>
 
@@ -101,12 +102,14 @@
   import Mixin from '@/mixins/global'
   import gooditem from '@/components/gooditem'
   import listfooter from '@/components/listFooter'
+  import notice from '@/components/notice'
   export default class searchpage extends wepy.page {
     config = {
       navigationBarTitleText: '知兮乐兮',
     }
     components = {
       gooditem,
+      notice,
       listfooter
     }
     mixins = [Mixin]
