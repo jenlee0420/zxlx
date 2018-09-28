@@ -92,17 +92,19 @@
             <span>手机号</span><input type="number" />
         </view>
         <button class="fullbtn btn mb30">提交定制需求</button>
+        <notice />
     </view>
 </template>
 
 <script>
     import wepy from 'wepy'
+    import notice from '@/components/notice'
     import Mixin from '@/mixins/global'
     export default class custom extends wepy.page {
         config = {
             navigationBarTitleText: '定制游学',
         }
-        components = {}
+        components = {notice}
         mixins = [Mixin]
         data = {
             sdate: '',

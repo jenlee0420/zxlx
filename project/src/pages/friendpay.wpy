@@ -94,6 +94,7 @@
       </view>
     </view>
     <guess class="mt20"></guess>
+    <notice />
   </view>
 </template>
 
@@ -101,10 +102,12 @@
   import wepy from 'wepy'
   import Mixin from '@/mixins/global'
   import guess from '@/components/guess'
+  import notice from '@/components/notice'
   export default class friendpay extends wepy.page {
     config = {}
     components = {
-      guess
+      guess,
+      notice
     }
     mixins = [Mixin]
     data = {}
