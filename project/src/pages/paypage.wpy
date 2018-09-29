@@ -307,18 +307,50 @@
       user_term:false,
       detail:{},
       pay_type:1,
+      goods_sku_id:"",
 
       max_good_number: 9,
       min_good_number: 1,
       plus_max: false,
       sub_min: true,
+      buy_type:2,
     };
     components = {
       notice
     }
     methods = {
       pay_now(){
+        var data={
+          goods_id:this.detail.goods_list[0].goods_id,
+          goods_num:this.detail.goods_list[0].total_num,
+          goods_sku_id:this.goods_sku_id,
+          address_id:this.detail.address.address_id,
+          address:{
+            name:this.detail.address.name ,
+            phone :this.detail.address.phone ,
+            province_id :this.detail.address.region.province_id,
+            city_id :this.detail.address.region.city_id,
+            region_id : this.detail.address.region.region_id,
+            detail :this.detail.address.detail,
+          },
+          buy_type:this.buy_type,
+          pay_type:this.pay_type
+        };
+        console.log(data);
 
+        wepy.request({
+          url: "api/order/paynow",
+          method: 'POST',
+          data: data,
+        }).then(res => {
+          if(res.code != "1"){
+            this.showAlert({title: "警告", content: res.msg});
+            return
+          }
+
+
+          wx.setStorageSync("address","");
+        });
       },
 
       to_addresslist(address_id){
@@ -400,9 +432,11 @@
         return;
       }
       if(!options.goods_sku_id){
+        this.goods_sku_id=options.goods_sku_id;
         return;
       }
       if(!options.buy_type){
+        this.buy_type=options.buy_type;
         return;
       }
       if(!options.order_collage_id){
@@ -427,8 +461,28 @@
           return
         }
         this.detail=res.data;
+        if(wx.getStorageSync("address")!=""){
+          var obj=JSON.parse(wx.getStorageSync("address"));
+          this.detail.address.address_id=obj.address_id;
+          this.detail.address.name=obj.name;
+          this.detail.address.phone=obj.phone;
+          this.detail.address.region=obj.region;
+          this.detail.address.detail=obj.detail;
+        }
         this.$apply();
       })
+    };
+
+    onShow(){
+      if(wx.getStorageSync("address")!=""){
+        var obj=JSON.parse(wx.getStorageSync("address"));
+        this.detail.address.address_id=obj.address_id;
+        this.detail.address.name=obj.name;
+        this.detail.address.phone=obj.phone;
+        this.detail.address.region=obj.region;
+        this.detail.address.detail=obj.detail;
+      }
+      this.$apply();
     }
   }
 </script>

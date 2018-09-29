@@ -107,7 +107,7 @@
     <block wx:for="{{list}}" wx:key="{{index}}">
       <!-- <view class="list_member_view_flex"> -->
       <view class="list_bg">
-        <view  class="list_menber_view_list">
+        <view  class="list_menber_view_list" @tap="choice_address({{index}})">
           <icon class="public_icon2_location2 list_mg_35"></icon>
           <view class="flex-1 list_mg_35">
             <view>
@@ -160,6 +160,27 @@
       choice_address:"",
     }
     methods = {
+      choice_address(index){
+        if(!this.choice_address){
+          return;
+        }
+
+        wx.setStorageSync("address",JSON.stringify({
+          address_id:this.data.list[index].address_id,
+          name:this.data.list[index].name,
+          user_id:this.data.list[index].user_id,
+          detail:this.data.list[index].detail,
+          phone:this.data.list[index].phone,
+          region:{
+            province:this.data.list[index].region.province,
+            city:this.data.list[index].region.city,
+            region:this.data.list[index].region.region,
+          },
+        }))
+
+        wx.navigateBack();
+      },
+
       go_to_add(){
         wx.navigateTo({
           url:"add_member"
@@ -216,8 +237,6 @@
       }
     }
     onLoad(options) {
-    console.log("!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
-    console.log(!options)
         if(options){
           this.choice_address=options.address_id;
         }
@@ -240,6 +259,12 @@
               user_id:thisdata.user_id,
               adress:thisdata.region.province+thisdata.region.city+thisdata.region.region+thisdata.detail,
               phone:thisdata.phone,
+              region:{
+                province:thisdata.region.province,
+                city:thisdata.region.city,
+                region:thisdata.region.region,
+              },
+              detail:thisdata.detail,
             })
 
             if(res.data.default_id==thisdata.address_id){
