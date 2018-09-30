@@ -1,0 +1,39 @@
+<style lang="less">
+    #recommend {
+        width: 100%;
+        .sutitle {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+    }
+</style>
+
+<template>
+    <view class="container" id="recommend">
+        <view class="sutitle">{{title}}</view>
+        <gooditem></gooditem>
+    </view>
+</template>
+
+<script>
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    import gooditem from '@/components/collectionItem'
+    export default class recommend extends wepy.page {
+        config = {}
+        components = {
+            gooditem
+        }
+        props = {
+            title: {
+                type: String,
+                default: '精品推荐'
+            }
+        }
+        mixins = [Mixin]
+        data = {}
+        methods = {}
+        onLoad() {}
+    }
+</script>

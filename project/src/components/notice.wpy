@@ -14,6 +14,9 @@
         padding: 0 19rpx;
         opacity: 0;
         visibility: hidden;
+        transform-origin: center;
+        transition: all 0.4s ease;
+        transform: translate3d(-50%, 0, 0);
         image {
             width: 38rpx;
             height: 38rpx;
@@ -23,15 +26,14 @@
         &.popup-show {
             visibility: visible;
             opacity: 1;
-            left: 5rpx;
-            transform-origin: center;
-            transition: all 0.4s ease;
+            left: 145rpx;
+            top: 30rpx;
         }
     }
 </style>
 
 <template>
-    <view wx:if="{{noticeshow}}" id="notice" class="{{noticeshow?'popup-show':''}}">
+    <view id="notice" class="{{noticeshow?'popup-show':''}}">
         <image src="{{noticemess.avatarUrl ? noticemess.avatarUrl: baseHeadImg}}" mode="aspectFill" /> {{noticemess.message}}
     </view>
 </template>
@@ -58,7 +60,7 @@
             getNotice() {
                 this.messageTimer = setInterval(() => {
                     this.getNoticedata()
-                }, 10000)
+                }, 20000)
             }
         }
         // 取首页通知
