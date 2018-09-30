@@ -5,7 +5,7 @@
   @nav-top-h: 80rpx;
 
   .nav-container {
-    position: relative;
+    position: fixed;
     background: #fff;
     display: flex;
     flex-direction: row;
@@ -15,16 +15,21 @@
     padding: 0 100rpx;
     font-size: 28rpx;
     color: @default-Fcolor;
+    top:0;
+    width:100%;
+    box-sizing:border-box;
+
     .active {
       display: flex;
       flex-direction: row;
       justify-content: center;
       align-items: center;
       color: @primary-color;
-      image {
-        width: 20rpx;
-        height: 26rpx;
-        margin-right: 12rpx;
+      position: relative;
+      .public_icon2_location {
+        left:-32rpx;
+        top:2rpx;
+        position: absolute;
       }
     }
     .zhuanfa {
@@ -42,7 +47,9 @@
 <template>
   <view class="nav-container">
     <repeat for="{{tab}}" key="index" index="index" item="item">
-      <view class="{{index == activeIndex ? 'active' : ''}}"><image wx:if="{{index == activeIndex}}" src="../resource/img/nav_active.png"></image>{{item}}</view>
+      <view class="{{index == activeIndex ? 'active' : ''}}" bindtap="changeindex({{index}})">
+          <span wx:if="{{index == activeIndex}}" class="public_icon2_location" ></span>
+          {{item}}</view>
     </repeat>
     <view class="zhuanfa">
       <image src="../resource/img/zhuanfa.png"></image>
@@ -62,5 +69,10 @@
     props = {
       activeIndex: String
     };
+    methods = {
+        changeindex(index){
+            this.$emit('changeactiveIndex',index)
+        }
+    }
   }
 </script>

@@ -34,7 +34,7 @@
 
 <template>
     <view id="notice" class="{{noticeshow?'popup-show':''}}">
-        <image src="{{noticemess.avatarUrl ? noticemess.avatarUrl: baseHeadImg}}" mode="aspectFill" /> {{noticemess.message}}
+        <image src="{{noticemess.avatarUrl ? noticemess.avatarUrl: baseHeadImg}}" mode="aspectFill" />{{noticemess.nickName}} {{noticemess.message}}
     </view>
 </template>
 
@@ -60,7 +60,7 @@
             getNotice() {
                 this.messageTimer = setInterval(() => {
                     this.getNoticedata()
-                }, 20000)
+                }, 60000)
             }
         }
         // 取首页通知
@@ -87,6 +87,8 @@
                 this.$apply()
             }, 3000);
         }
-        onLoad() {}
+        onLoad() {
+            this.messageTimer = null
+        }
     }
 </script>

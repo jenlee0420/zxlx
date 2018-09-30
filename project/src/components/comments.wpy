@@ -145,7 +145,7 @@
     </view>
     <!-- 总评分 E -->
     <!-- 评价块 S -->
-    <view class="ping-card" wx:for="{{comment_list.data}}" index="index">
+    <view class="ping-card" wx:for="{{comment_list.data}}" wx:key="{{index}}" index="index">
       <view class="head">
         <view class="avatar"><image src="{{item.avatarUrl}}"></image></view>
         <view class="info">
