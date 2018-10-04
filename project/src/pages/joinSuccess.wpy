@@ -118,18 +118,12 @@
 </style>
 <template>
     <view>
-        <!--  加入拼团页面（好友见） -->
-        <!-- 花边抢购 S -->
-        <view class="flexRow flex-astart huabian">
-            <view class="shop-photo">
-                <image src="{{baseServerImg}}"  mode="aspectFill"/>
+        <!--  加入拼团成功页面（好友见） -->
+        <view class="">
+            <view>
+                <span class=""></span><text>拼单成功</text>
             </view>
-            <view class="flex-column flex-jbetween shop-info">
-                <text class="t1">20天军事特训营打算方法嘎达范德大股东【北京】</text>
-                <text class="t2">八一军营期第一期发嘎嘎是</text>
-                <text class="t2">3人拼单 · 已拼300个</text>
-                <view class=""><text class="t3 mr10">￥2988</text><text class="t2">拼单省55元</text></view>
-            </view>
+            <text> 供应商已准备就绪，请您届时参与。</text>
         </view>
         <view class="flexCol shop-gou">
             <view class="flexRow flex-jcenter pin-avatar">
@@ -140,16 +134,20 @@
           
                 <span class="public_icon1_wait_pin"></span>
             </view>
-            <button class="btn">加入拼单优惠</button>
+            <navigator url="/pages/mycenter/orderdetail?order_id={{order_id}}" hover-class="none">查看订单详情></navigator>
         </view>
-        <!-- 花边抢购 E -->
-        
+        <view class="flexRow flex-jbetween item2">
+                <view class="title">游学组合</view>
+                <view class="flexCol reverse flex-1 des">
+                    <view class="flexRow">20天军事特训营打算方法嘎达范德大股东【北京】</view>
+                    <view class="flexRow">八一军营期第一期发嘎嘎是</view>
+                </view>
+            </view>
             <view class="flexRow flex-jbetween item2">
-                <view class="title">拼单须知</view>
+                <view class="title">订单信息</view>
                 <view class="flexRow reverse flex-1 des">
-                    <view class="flexRow"><text>·</text>人满不退款</view>
-                    <view class="flexRow"><text>·</text>人满拼成</view>
-                    <view class="flexRow"><text>·</text>好友拼单</view>
+                    <view class="flexRow"><text>·</text>联系信息</view>
+                    <view class="flexRow"><text>·</text>拼成时间</view>
                 </view>
             </view>
         <!-- 相似的列表 E -->
@@ -162,7 +160,7 @@
     import wepy from 'wepy'
     import Mixin from '@/mixins/global'
     import recommend from '@/components/recommend'
-    export default class join extends wepy.page {
+    export default class joinSuccess extends wepy.page {
         config = {}
         components = {recommend}
         mixins = [Mixin]

@@ -12,7 +12,9 @@
 <template>
     <view class="container" id="recommend">
         <view class="sutitle">{{title}}</view>
-        <gooditem></gooditem>
+        <repeat for="{{list}}" index="index" item="item" key="key">
+        <gooditem :goodsitem.sync="item"></gooditem>
+        </repeat>
     </view>
 </template>
 
@@ -29,11 +31,35 @@
             title: {
                 type: String,
                 default: '精品推荐'
+            },
+            type: {
+                type:String,
+                default: '3'
             }
         }
         mixins = [Mixin]
-        data = {}
+        data = {
+            current:1,
+            list:[]
+        }
         methods = {}
-        onLoad() {}
+        getlist(){
+            wepy.request({
+                url: 'api/index/recommend',
+                method: 'POST',
+                data: {
+                    type: this.type,
+                    per_page: 10,
+                    page: this.current
+                }
+            }).then(res => {
+                if (res.code == 1) {
+                    this.list = res.data.list
+                }
+            })
+        }
+        onLoad() {
+            this.getlist()
+        }
     }
 </script>

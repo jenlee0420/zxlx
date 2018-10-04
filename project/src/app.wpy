@@ -22,6 +22,7 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
+        'pages/joinSuccess',
         'pages/search_page',
         'pages/friendpay',
         'pages/index',
