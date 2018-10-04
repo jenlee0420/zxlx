@@ -14,7 +14,8 @@
        .toptext{
          color:#fff;
          font-size: 22rpx;
-         left:10rpx;
+         left:12rpx;
+         top:3rpx;
        }
        .public_icon1_hot_sale{
          left:10rpx;
@@ -56,7 +57,7 @@
           <!-- </view> -->
     </view>
     <view class="itemcontent">
-        <text class="itemtitle fs26 c333">{{goodsitem.source_name}}</text>
+        <text class="itemtitle fs26 c333">{{goodsitem.goods_name}}</text>
         <view class="itemprice"><span class="fs30 cf71414 mr20">￥{{goodsitem.goods_min_price}}起</span><span class="fs22 cb4b4b4">已拼{{goodsitem.meed_num}}人次</span></view>
         <text class="itemdesc fs22 cb4b4b4">{{goodsitem.describe}}</text>
         <text class="itemdesc fs22 cb4b4b4">供应商：{{goodsitem.source_name}}</text>

@@ -22,10 +22,10 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
-
         'pages/search_page',
         'pages/friendpay',
         'pages/index',
+        'pages/join',
 
         'pages/mycenter/dianpin',
         'pages/search',

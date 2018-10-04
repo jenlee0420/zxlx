@@ -14,6 +14,7 @@
   page {
     background: #f4f4f4;
     padding-bottom: @nav-bottom-h;
+    height:100%
   }
   .des {
     font-size: 22rpx;
@@ -33,7 +34,6 @@
     background: @primary-color;
     color: #fff;
     text-align: center;
-    line-height: 572rpx;
   }
   .des-container {
     display: flex;
@@ -456,6 +456,10 @@
       }
     }
   }
+  .scrollView{
+        position: fixed;
+        top:80rpx;
+    }
   /* 防止page滚动 */
   .modalShow {
     top: 0px;
@@ -475,17 +479,17 @@
 </style>
 <template>
   <view class="{{modalIsShow ? 'modalShow' : ''}}">
-    <TopNav activeIndex="0"></TopNav>
-    <scroll-view scroll-y style="height: calc(100% - 108rpx);">
+    <TopNav :activeIndex.sync="activeIndex"></TopNav>
+    <scroll-view scroll-y style="height: calc(100% - 188rpx);" class="scrollView" scroll-into-view="{{toView}}" >
       <!-- 介绍卡部分 S -->
-      <view class="content">
+      <view class="content" id="scroll0">
         <view class="video-container">
             <swiper style="height:572rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
-              <block wx:for="{{good_detail.image}}" wx:key="{{index}}">
-                <swiper-item>
+              <!-- <block > -->
+                <swiper-item wx:for="{{good_detail.image}}" wx:key="{{index}}">
                   <image src="{{item.file_path}}" class="slide-image" />
                 </swiper-item>
-              </block>
+              <!-- </block> -->
           </swiper>
         </view>
         <view class="des-container">
@@ -555,12 +559,14 @@
       </view>
       <!-- 去拼单部分 E -->
       <!-- 详情部分 -->
-      <view class="rich_text"><rich-text  nodes="{{good_detail.content}}">
+      <view id="scroll1" class="rich_text"><rich-text  nodes="{{good_detail.content}}">
       </rich-text></view>
       <!-- 须知 -->
-      <view class="rich_text"><rich-text nodes="{{good_detail.notice}}" >
+      <view id="scroll2" class="rich_text"><rich-text nodes="{{good_detail.notice}}" >
       </rich-text></view>
+      <view id="scroll3">
       <comments :comment_list.sync="comment_list"></comments>
+      </view>
     </scroll-view>
     <!-- 底部导航 S -->
     <view class="nav-bottom">
@@ -609,7 +615,7 @@
             <view class="pick-block">
               <text>{{item.name}}</text>
               <view class="btn-box">
-                <block wx:for="{{item.data}}"  wx:key="index2" wx:for-index="index2">
+                <block wx:for="{{item.data}}" wx:key="{{index2}}" wx:for-index="index2">
                   <view class="btn {{item.pick ? 'picked' : ''}}" @tap="goods_detal_tip({{index1}},{{index2}})">{{item.name}}</view>
                 </block>
                 <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
@@ -692,11 +698,20 @@
       buy_type:1,
 
       class_group:"",
+      toView:'scroll0',
+      activeIndex:'0'
     }
     components = {
       TopNav,
       comments,
       notice
+    }
+
+    events = {
+        changeactiveIndex(index){
+            this.activeIndex = index;
+            this.toView = 'scroll' + index;
+        }
     }
     methods = {
       goods_detal_tip(index1,index2) {

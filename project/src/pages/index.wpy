@@ -61,9 +61,9 @@
             <swiper style="height:306rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
                 <block wx:for="{{imgUrls}}" wx:key="{{index}}">
                     <swiper-item wx:if="{{item.status == 1}}">
-                        <navigator url="{{item.target_url}}" hover-class="none">
-                            <image src="{{item.url}}" class="slide-image" />
-                        </navigator>
+                        <!-- <navigator url="{{item.target_url}}" hover-class="none"> -->
+                            <image src="{{item.url}}" class="slide-image" bindtap="navAD({{item.target_url}})"/>
+                        <!-- </navigator> -->
                     </swiper-item>
                 </block>
             </swiper>
@@ -103,6 +103,12 @@
                 <recommend :goodsitem.sync="item"></recommend>
             </repeat>
         </view>
+        <text class="sutitle">全球优质路线</text>
+        <view class="p-0-32">
+            <repeat for="{{recommend2}}" index="index" item="item" key="key">
+                <recommend :goodsitem.sync="item"></recommend>
+            </repeat>
+        </view>
         <notice></notice>
     </view>
 </template>
@@ -127,9 +133,15 @@
             cateShow: false,
             recommend: [],
             recommendpage: 1,
+            recommend2page:1,
             noticemess:''
         }
         methods = {
+            navAD(url){
+                if(url){
+                    wepy.navigateTo({url:url})
+                }
+            },
             changenav(index) {
                 // console.log(index)
                 this.navIndex = index.detail.current
@@ -169,6 +181,22 @@
                 }
             })
         }
+        /* 全球优质路线 */
+        getremmend2() {
+            wepy.request({
+                url: 'api/index/recommend',
+                method: 'POST',
+                data: {
+                    type: 4,
+                    per_page: this.page_size,
+                    page: this.recommend2page
+                }
+            }).then(res => {
+                if (res.code == 1) {
+                    this.recommend = res.data.list.data
+                }
+            })
+        }
         getCate() {
             wepy.request({
                 url: 'api/label/getlist',
@@ -196,6 +224,7 @@
             this.getCate()
             this.getAD()
             this.getremmend()
+            this.getremmend2()
         }
     }
 </script>
