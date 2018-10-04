@@ -26,10 +26,8 @@
         'pages/search_page',
         'pages/index',
         'pages/join',
-
         'pages/mycenter/dianpin',
         'pages/search',
-
         'pages/mycenter/collection',
         'pages/mycenter/orderlist',
         'pages/paypage',

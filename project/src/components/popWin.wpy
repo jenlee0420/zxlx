@@ -13,6 +13,14 @@
         .Topcorner {
             top: -18rpx;
             right: -10rpx;
+            border-radius:50%;
+background-color:#fff;
+width:54rpx;
+height:54rpx;
+
+            span{
+                margin-left:10rpx;
+            }
         }
     }
     .title{

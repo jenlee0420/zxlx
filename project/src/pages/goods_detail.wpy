@@ -1,982 +1,1022 @@
 <style lang="less">
-  @primary-color: #d74a45;
-  @primary-mcolor: #dd3412;
-  @primary-lightColor: #f71414;
-  @btn-primary: #e02e24;
-  @default-Fcolor: #2d2d2d;
-  @des-color: #adaaaa;
-  @bg-orange: #ee8151;
-  @bg-green: #91c46c;
-  @nav-bottom-h: 108rpx;
-  @nav-top-h: 80rpx;
-  @price-color: #ba0000;
-  @border-color: #e3e3e3;
-  page {
-    background: #f4f4f4;
-    padding-bottom: @nav-bottom-h;
-    height:100%
-  }
-  .des {
-    font-size: 22rpx;
-    color: @des-color;
-  }
-  .v-space {
-    margin-bottom: 12rpx;
-  }
-  .bg-primary {}
-  .content {
-    background-color: #fff;
-    margin-bottom: 20rpx;
-  }
-  .video-container {
-    width: 100%;
-    height: 572rpx;
-    background: @primary-color;
-    color: #fff;
-    text-align: center;
-  }
-  .des-container {
-    display: flex;
-    flex-direction: column;
-    padding: 28rpx;
-    .price-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 18rpx;
-      .price {
-        font-size: 30rpx;
-        color: @primary-lightColor;
-      }
-      .des {
-        .des;
-      }
+    @primary-color: #d74a45;
+    @primary-mcolor: #dd3412;
+    @primary-lightColor: #f71414;
+    @btn-primary: #e02e24;
+    @default-Fcolor: #2d2d2d;
+    @des-color: #adaaaa;
+    @bg-orange: #ee8151;
+    @bg-green: #91c46c;
+    @nav-bottom-h: 108rpx;
+    @nav-top-h: 80rpx;
+    @price-color: #ba0000;
+    @border-color: #e3e3e3;
+    page {
+        background: #f4f4f4;
+        padding-bottom: @nav-bottom-h;
+        height: 100%
     }
-    .shop-name {
-      font-size: 26rpx;
-      letter-spacing: 2rpx;
-      .v-space;
+    .des {
+        font-size: 22rpx;
+        color: @des-color;
     }
-    .content-des {
-      -webkit-box-orient: vertical;
-      display: -webkit-box;
-      word-break: break-all;
-      -webkit-line-clamp: 2;
-      overflow: hidden;
-      text-overflow: ellipsis;
-      width: 100%;
-      height: 72rpx;
-      overflow: hidden;
-      line-height: 36rpx;
-      text-overflow: ellipsis;
-      .des;
-      .v-space;
+    .v-space {
+        margin-bottom: 12rpx;
     }
-    .tag-container {
-      display: flex;
-      flex-direction: row;
-      align-items: center;
-      .tag {
-        font-size: 20rpx;
-        border-radius: 5rpx;
+    .bg-primary {
+        height: 58rpx;
+        line-height: 56rpx;
+        border-radius: 10rpx;
+    }
+    .content {
+        background-color: #fff;
+        margin-bottom: 20rpx;
+    }
+    .video-container {
+        width: 100%;
+        height: 572rpx;
+        background: @primary-color;
         color: #fff;
-        padding: 5rpx 10rpx;
-        height: 32rpx;
-        margin-right: 10rpx;
-        &.bg-orange {
-          background: @bg-orange;
-        }
-        &.bg-green {
-          background: @bg-green;
-        }
-      }
+        text-align: center;
     }
-  }
-  .pin-card {
-    padding: 0 20rpx;
-    .header {
-      width: 100%;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      height: 80rpx;
-      border-bottom: 1rpx solid #f6f6f6;
-      text {
-        font-size: 25rpx;
-      }
-      view {
+    .des-container {
+        display: flex;
+        flex-direction: column;
+        padding: 28rpx;
+        .price-row {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18rpx;
+            .price {
+                font-size: 30rpx;
+                color: @primary-lightColor;
+            }
+            .des {
+                .des;
+            }
+        }
+        .shop-name {
+            font-size: 26rpx;
+            letter-spacing: 2rpx;
+            .v-space;
+        }
+        .content-des {
+            -webkit-box-orient: vertical;
+            display: -webkit-box;
+            word-break: break-all;
+            -webkit-line-clamp: 2;
+            overflow: hidden;
+            text-overflow: ellipsis;
+            width: 100%;
+            height: 72rpx;
+            overflow: hidden;
+            line-height: 36rpx;
+            text-overflow: ellipsis;
+            .des;
+            .v-space;
+        }
+        .tag-container {
+            display: flex;
+            flex-direction: row;
+            align-items: center;
+            .tag {
+                font-size: 20rpx;
+                border-radius: 5rpx;
+                color: #fff;
+                padding: 5rpx 10rpx;
+                height: 32rpx;
+                margin-right: 10rpx;
+                &.bg-orange {
+                    background: @bg-orange;
+                }
+                &.bg-green {
+                    background: @bg-green;
+                }
+            }
+        }
+    }
+    .pin-card {
+        padding: 0 20rpx;
+        .header {
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            height: 80rpx;
+            border-bottom: 1rpx solid #f6f6f6;
+            text {
+                font-size: 25rpx;
+            }
+            view {
+                display: flex;
+                flex-direction: row;
+                align-items: center;
+                font-size: 25rpx;
+                color: @des-color;
+                image {
+                    width: 18rpx;
+                    height: 26rpx;
+                    margin-left: 12rpx;
+                }
+            }
+        }
+        .pin-row {
+            padding: 17rpx 0;
+            border-bottom: 1rpx solid #f6f6f6;
+            display: flex;
+            flex-direction: row;
+            justify-content: space-between;
+            align-items: stretch;
+            .left {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                .avator {
+                    border-radius: 50%;
+                    height: 88rpx;
+                    width: 88rpx;
+                    background: #49afc6;
+                }
+                .name {
+                    margin-left: 20rpx;
+                    font-size: 30rpx;
+                }
+            }
+            .right {
+                display: flex;
+                justify-content: flex-start;
+                align-items: center;
+                .status {
+                    margin-right: 20rpx;
+                    display: flex;
+                    flex-direction: column;
+                    align-items: flex-end;
+                    .t-nums {
+                        font-size: 26rpx;
+                    }
+                    .m-nums {
+                        .t-nums;
+                        margin-bottom: 14rpx;
+                        text {
+                            color: @primary-mcolor;
+                        }
+                    }
+                }
+                .btn {
+                    line-height: 56rpx;
+                    font-size: 26rpx;
+                    height: 58rpx;
+                    border-radius: 8rpx;
+                    color: #fff;
+                    padding: 0 25rpx;
+                    &.bg-primary {
+                        background: @btn-primary;
+                    }
+                }
+            }
+        }
+    }
+    .nav-bottom {
+        position: fixed;
+        bottom: 0;
+        left: 0;
+        right: 0;
         display: flex;
         flex-direction: row;
-        align-items: center;
-        font-size: 25rpx;
-        color: @des-color;
-        image {
-          width: 18rpx;
-          height: 26rpx;
-          margin-left: 12rpx;
-        }
-      }
-    }
-    .pin-row {
-      padding: 17rpx 0;
-      border-bottom: 1rpx solid #f6f6f6;
-      display: flex;
-      flex-direction: row;
-      justify-content: space-between;
-      align-items: stretch;
-      .left {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        .avator {
-          border-radius: 50%;
-          height: 88rpx;
-          width: 88rpx;
-          background: #49afc6;
-        }
-        .name {
-          margin-left: 20rpx;
-          font-size: 30rpx;
-        }
-      }
-      .right {
-        display: flex;
-        justify-content: flex-start;
-        align-items: center;
-        .status {
-          margin-right: 20rpx;
-          display: flex;
-          flex-direction: column;
-          align-items: flex-end;
-          .t-nums {
-            font-size: 26rpx;
-          }
-          .m-nums {
-            .t-nums;
-            margin-bottom: 14rpx;
-            text {
-              color: @primary-mcolor;
+        align-items: stretch;
+        height: @nav-bottom-h;
+        border-top: 1rpx solid @border-color;
+        >view {
+            &:first-child,
+            &:nth-child(2) {
+                border-right: 1rpx solid @border-color;
             }
-          }
+        }
+        .layout() {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+        }
+        .flex1 {
+            .layout;
+            flex: 1;
+            background: #fff;
+            .icon {
+                width: 40rpx;
+                height: 40rpx;
+            }
+            text {
+                font-size: 18rpx;
+                margin-top: 8rpx;
+            }
+        }
+        .flex2 {
+            .layout;
+            flex: 2;
+            background: #f4aba7;
+            text {
+                font-size: 26rpx;
+                color: #fff;
+            }
+        }
+        .flex3 {
+            .layout;
+            flex: 3.5;
+            background: @btn-primary;
+            text {
+                font-size: 26rpx;
+                color: #fff;
+            }
+        }
+        .flex5 {
+            .layout;
+            flex: 5.5;
+            background: #adadad;
+            text {
+                font-size: 30rpx;
+                color: #fff;
+            }
+        }
+    }
+    .backTop {
+        position: fixed;
+        width: 82rpx;
+        height: 82rpx;
+        bottom: 26rpx + @nav-bottom-h;
+        right: 27rpx;
+        image {
+            width: 100%;
+            height: 100%;
+        }
+    }
+    .share-box {
+        position: fixed;
+        z-index: 99;
+        height: 328rpx;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: #e9e8fb;
+        display: flex;
+        justify-content: flex-start;
+        flex-direction: column;
+        align-items: center;
+        .close {
+            align-self: flex-end;
+            width: 45rpx;
+            height: 45rpx;
+            margin-top: 10rpx;
+            margin-right: 18rpx;
+            margin-bottom: 10rpx;
+            image {
+                width: 100%;
+                height: 100%;
+            }
+        }
+        .qipao {
+            width: 652rpx;
+            height: 132rpx;
+            margin-bottom: 16rpx;
+            image {
+                width: 100%;
+                height: 100%;
+            }
         }
         .btn {
-          line-height: 56rpx;
-          font-size: 26rpx;
-          height: 58rpx;
-          border-radius: 8rpx;
-          color: #fff;
-          padding: 0 25rpx;
-          &.bg-primary {
-            background: @btn-primary;
-          }
-        }
-      }
-    }
-  }
-  .nav-bottom {
-    position: fixed;
-    bottom: 0;
-    left: 0;
-    right: 0;
-    display: flex;
-    flex-direction: row;
-    align-items: stretch;
-    height: @nav-bottom-h;
-    border-top: 1rpx solid @border-color;
-    >view {
-      &:first-child,
-      &:nth-child(2) {
-        border-right: 1rpx solid @border-color;
-      }
-    }
-    .layout() {
-      display: flex;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-    }
-    .flex1 {
-      .layout;
-      flex: 1;
-      background: #fff;
-      .icon {
-        width: 40rpx;
-        height: 40rpx;
-      }
-      text {
-        font-size: 18rpx;
-        margin-top: 8rpx;
-      }
-    }
-    .flex2 {
-      .layout;
-      flex: 2;
-      background: #f4aba7;
-      text {
-        font-size: 26rpx;
-        color: #fff;
-      }
-    }
-    .flex3 {
-      .layout;
-      flex: 3.5;
-      background: @btn-primary;
-      text {
-        font-size: 26rpx;
-        color: #fff;
-      }
-    }
-    .flex5 {
-      .layout;
-      flex: 5.5;
-      background: #adadad;
-      text {
-        font-size: 30rpx;
-        color: #fff;
-      }
-    }
-  }
-  .backTop {
-    position: fixed;
-    width: 82rpx;
-    height: 82rpx;
-    bottom: 26rpx + @nav-bottom-h;
-    right: 27rpx;
-    image {
-      width: 100%;
-      height: 100%;
-    }
-  }
-  .share-box {
-    position: fixed;
-    z-index: 99;
-    height: 328rpx;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    background: #e9e8fb;
-    display: flex;
-    justify-content: flex-start;
-    flex-direction: column;
-    align-items: center;
-    .close {
-      align-self: flex-end;
-      width: 45rpx;
-      height: 45rpx;
-      margin-top: 10rpx;
-      margin-right: 18rpx;
-      margin-bottom: 10rpx;
-      image {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .qipao {
-      width: 652rpx;
-      height: 132rpx;
-      margin-bottom: 16rpx;
-      image {
-        width: 100%;
-        height: 100%;
-      }
-    }
-    .btn {
-      width: 626rpx;
-      height: 90rpx;
-      border-radius: 45rpx;
-      font-size: 26rpx;
-      color: #fff;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-      background: @btn-primary;
-      image {
-        width: 45rpx;
-        height: 35rpx;
-        margin-right: 18rpx;
-      }
-    }
-  }
-  .modal {
-    z-index: 999;
-    position: fixed;
-    top: 0;
-    left: 0;
-    right: 0;
-    bottom: 0;
-    display: flex;
-    flex-direction: column;
-    justify-content: flex-end;
-    background: rgba(0, 0, 0, 0.7);
-    @body-h: 875rpx;
-    @intro-h: 166rpx;
-    @btn-ok-h: 95rpx;
-    @scroll-h: @body-h - @intro-h - @btn-ok-h +2rpx;
-    .scroll-h {
-      height: @scroll-h;
-    }
-    .m-body {
-      position: relative;
-      width: 100%;
-      height: @body-h;
-      background: #fff;
-      .close-btn {
-        width: 35rpx;
-        height: 35rpx;
-        position: absolute;
-        right: 25rpx;
-        top: 25rpx;
-        image {
-          width: 100%;
-          height: 100%;
-        }
-      }
-      .intro {
-        height: @intro-h;
-        border-bottom: 1rpx solid #ededed;
-        display: flex;
-        flex-direction: row;
-        .goods-img {
-          width: 198rpx;
-          height: 198rpx;
-          border: 1rpx solid #c2c2c2;
-          border-radius: 10rpx;
-          margin: 0 20rpx;
-          display: flex;
-          justify-content: center;
-          align-items: center;
-          position: relative;
-          bottom: 80rpx;
-          background: #fff;
-          image {
-            width: 190rpx;
-            height: 190rpx;
-          }
-        }
-        .goods-picked {
-          align-self: center;
-          display: flex;
-          flex-direction: column;
-          height: 75rpx;
-          .price {
-            font-size: 32rpx;
-            letter-spacing: 2rpx;
-            color: @price-color;
-          }
-          .picked-text {
-            font-size: 22rpx;
-            letter-spacing: 1rpx;
-          }
-        }
-      }
-      .Bpadding() {
-        padding: 25rpx 30rpx;
-      }
-      .Bline() {
-        border-bottom: 1rpx solid #ededed;
-      }
-      .pick-block {
-        .Bline;
-        .Bpadding;
-        text {
-          font-size: 25rpx;
-        }
-        .btn-box {
-          margin-top: 30rpx;
-          display: flex;
-          flex-direction: column;
-          justify-content: flex-start;
-          align-items: flex-start;
-          .btn {
-            flex-grow: 0;
-            padding: 0 18rpx;
-            margin-bottom: 30rpx;
-            font-size: 22rpx;
-            line-height: 56rpx;
-            height: 58rpx;
-            border-radius: 8rpx;
-            background: #efefef;
-            min-width: 200rpx;
-            &.picked {
-              background: @btn-primary;
-            }
-          }
-        }
-      }
-      .count-block {
-        .Bline;
-        padding: 0 30rpx;
-        height: 110rpx;
-        display: flex;
-        justify-content: space-between;
-        align-items: center;
-        .title {
-          font-size: 26rpx;
-        }
-        .counter {
-          height: 54rpx;
-          display: flex;
-          .plus {
-            height: 100%;
-            width: 75rpx;
-            text-align: center;
-            line-height: 50rpx;
-            font-size: 36rpx;
-            font-weight: bold;
-            color: #8e8d8d;
-            background: #ddd;
-            &.disable {
-              background: #eff0f0;
-            }
-          }
-          .sub {
-            .plus;
-          }
-          .num {
-            width: 102rpx;
-            height: 100%;
+            width: 626rpx;
+            height: 90rpx;
+            border-radius: 45rpx;
+            font-size: 26rpx;
+            color: #fff;
             display: flex;
             justify-content: center;
             align-items: center;
-            font-size: 30rpx;
-            color: #8e8d8d;
-            background: #eff0f0;
-            margin: 0 24rpx;
-            text-align: center;
-          }
+            background: @btn-primary;
+            image {
+                width: 45rpx;
+                height: 35rpx;
+                margin-right: 18rpx;
+            }
         }
-      }
-      .btn-ok {
-        height: 95rpx;
-        background: @btn-primary;
-        color: #fff;
-        font-size: 32rpx;
-        text-align: center;
-        line-height: @btn-ok-h;
-      }
     }
-  }
-  .scrollView{
+    .modal {
+        z-index: 999;
         position: fixed;
-        top:80rpx;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        display: flex;
+        flex-direction: column;
+        justify-content: flex-end;
+        background: rgba(0, 0, 0, 0.7);
+        @body-h: 875rpx;
+        @intro-h: 166rpx;
+        @btn-ok-h: 95rpx;
+        @scroll-h: @body-h - @intro-h - @btn-ok-h +2rpx;
+        .scroll-h {
+            height: @scroll-h;
+        }
+        .m-body {
+            position: relative;
+            width: 100%;
+            height: @body-h;
+            background: #fff;
+            .close-btn {
+                width: 35rpx;
+                height: 35rpx;
+                position: absolute;
+                right: 25rpx;
+                top: 25rpx;
+                image {
+                    width: 100%;
+                    height: 100%;
+                }
+            }
+            .intro {
+                height: @intro-h;
+                border-bottom: 1rpx solid #ededed;
+                display: flex;
+                flex-direction: row;
+                .goods-img {
+                    width: 198rpx;
+                    height: 198rpx;
+                    border: 1rpx solid #c2c2c2;
+                    border-radius: 10rpx;
+                    margin: 0 20rpx;
+                    display: flex;
+                    justify-content: center;
+                    align-items: center;
+                    position: relative;
+                    bottom: 80rpx;
+                    background: #fff;
+                    image {
+                        width: 190rpx;
+                        height: 190rpx;
+                    }
+                }
+                .goods-picked {
+                    align-self: center;
+                    display: flex;
+                    flex-direction: column;
+                    height: 75rpx;
+                    .price {
+                        font-size: 32rpx;
+                        letter-spacing: 2rpx;
+                        color: @price-color;
+                    }
+                    .picked-text {
+                        font-size: 22rpx;
+                        letter-spacing: 1rpx;
+                    }
+                }
+            }
+            .Bpadding() {
+                padding: 25rpx 30rpx;
+            }
+            .Bline() {
+                border-bottom: 1rpx solid #ededed;
+            }
+            .pick-block {
+                .Bline;
+                .Bpadding;
+                text {
+                    font-size: 25rpx;
+                }
+                .btn-box {
+                    margin-top: 30rpx;
+                    display: flex;
+                    flex-direction: column;
+                    justify-content: flex-start;
+                    align-items: flex-start;
+                    .btn {
+                        flex-grow: 0;
+                        padding: 0 18rpx;
+                        margin-bottom: 30rpx;
+                        font-size: 22rpx;
+                        line-height: 56rpx;
+                        height: 58rpx;
+                        border-radius: 8rpx;
+                        background: #efefef;
+                        min-width: 200rpx;
+                        &.picked {
+                            background: @btn-primary;
+                        }
+                    }
+                }
+            }
+            .count-block {
+                .Bline;
+                padding: 0 30rpx;
+                height: 110rpx;
+                display: flex;
+                justify-content: space-between;
+                align-items: center;
+                .title {
+                    font-size: 26rpx;
+                }
+                .counter {
+                    height: 54rpx;
+                    display: flex;
+                    .plus {
+                        height: 100%;
+                        width: 75rpx;
+                        text-align: center;
+                        line-height: 50rpx;
+                        font-size: 36rpx;
+                        font-weight: bold;
+                        color: #8e8d8d;
+                        background: #ddd;
+                        &.disable {
+                            background: #eff0f0;
+                        }
+                    }
+                    .sub {
+                        .plus;
+                    }
+                    .num {
+                        width: 102rpx;
+                        height: 100%;
+                        display: flex;
+                        justify-content: center;
+                        align-items: center;
+                        font-size: 30rpx;
+                        color: #8e8d8d;
+                        background: #eff0f0;
+                        margin: 0 24rpx;
+                        text-align: center;
+                    }
+                }
+            }
+            .btn-ok {
+                height: 95rpx;
+                background: @btn-primary;
+                color: #fff;
+                font-size: 32rpx;
+                text-align: center;
+                line-height: @btn-ok-h;
+            }
+        }
     }
-  /* 防止page滚动 */
-  .modalShow {
-    top: 0px;
-    left: 0px;
-    width: 100%;
-    height: 100%;
-    overflow: hidden;
-    position: fixed;
-    z-index: 0;
-  }
-
-  .rich_text{
-    background-color: #fff;
-    padding: 30rpx;
-    margin-bottom: 30rpx;
-  }
+    .scrollView {
+        position: fixed;
+        top: 80rpx;
+    }
+    /* 防止page滚动 */
+    .modalShow {
+        top: 0px;
+        left: 0px;
+        width: 100%;
+        height: 100%;
+        overflow: hidden;
+        position: fixed;
+        z-index: 0;
+    }
+    .rich_text {
+        background-color: #fff;
+        padding: 30rpx;
+        margin-bottom: 30rpx;
+    }
+    // 正在拼单列表
+    .pining{
+        font-size: 24rpx;
+        line-height: 30rpx;
+        display: flex;
+        letter-spacing: 3rpx;
+        image{
+            height: 85rpx;
+            width:85rpx;
+            border-radius: 50%;
+            margin-right: 20rpx;
+        }
+    }
 </style>
 <template>
-  <view class="{{modalIsShow ? 'modalShow' : ''}}">
-    <TopNav :activeIndex.sync="activeIndex"></TopNav>
-    <scroll-view scroll-y style="height: calc(100% - 188rpx);" class="scrollView" scroll-into-view="{{toView}}" >
-      <!-- 介绍卡部分 S -->
-      <view class="content" id="scroll0">
-        <view class="video-container">
-            <swiper style="height:572rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
-              <!-- <block > -->
-                <swiper-item wx:for="{{good_detail.image}}" wx:key="{{index}}">
-                  <image src="{{item.file_path}}" class="slide-image" />
-                </swiper-item>
-              <!-- </block> -->
-          </swiper>
-        </view>
-        <view class="des-container">
-          <view class="price-row">
-            <text class="price">￥{{good_detail.goods_min_price}}起</text>
-            <text class="des">已拼{{good_detail.meed_num}}人次 · {{good_detail.now_collage_num}}人拼单</text>
-          </view>
-          <text class="shop-name">{{good_detail.goods_name}}</text>
-          <text class="content-des">{{good_detail.describe}}</text>
-          <view class="tag-container">
-            <text class="tag bg-orange" wx:if="{{good_detail.is_own_business == 1}}">知兮乐兮自营</text>
-            <text class="tag bg-orange">{{good_detail.category.name}}</text>
-            <repeat for="{{good_detail.label_name}}" index="index" item="item" key="key">
-              <text class="tag bg-green">{{item.name}}</text>
-            </repeat>
-          </view>
-          <!--<view class="tag-container">-->
-            <!--<view class="tag bg-orange">知兮乐兮自营</view>-->
-            <!--<view class="tag bg-orange">红色经典</view>-->
-            <!--<view class="tag bg-green">武术</view>-->
-            <!--<view class="tag bg-green">军事迷</view>-->
-            <!--<view class="tag bg-green">不限年龄</view>-->
-          <!--</view>-->
-        </view>
-      </view>
-      <!-- 介绍卡部分 E -->
-      <!-- 去拼单部分 S -->
-      <view class="content">
-        <view class="pin-card">
-          <view class="header">
-            <text>10人在拼单，直接参与</text>
-            <view>更多
-              <image src="../resource/img/right_arrow.png"></image>
+    <view class="{{modalIsShow ? 'modalShow' : ''}}">
+        <TopNav :activeIndex.sync="activeIndex"></TopNav>
+        <scroll-view scroll-y style="height: calc(100% - 188rpx);" class="scrollView" scroll-into-view="{{toView}}">
+            <!-- 介绍卡部分 S -->
+            <view class="content" id="scroll0">
+                <view class="video-container">
+                    <swiper style="height:572rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
+                        <!-- <block > -->
+                        <swiper-item wx:for="{{good_detail.image}}" wx:key="{{index}}">
+                            <image src="{{item.file_path}}" class="slide-image" />
+                        </swiper-item>
+                        <!-- </block> -->
+                    </swiper>
+                </view>
+                <view class="des-container">
+                    <view class="price-row">
+                        <text class="price">￥{{good_detail.goods_min_price}}起</text>
+                        <text class="des">已拼{{good_detail.meed_num}}人次 · {{good_detail.now_collage_num}}人拼单</text>
+                    </view>
+                    <text class="shop-name">{{good_detail.goods_name}}</text>
+                    <text class="content-des">{{good_detail.describe}}</text>
+                    <view class="tag-container">
+                        <text class="tag bg-orange" wx:if="{{good_detail.is_own_business == 1}}">知兮乐兮自营</text>
+                        <text class="tag bg-orange">{{good_detail.category.name}}</text>
+                        <repeat for="{{good_detail.label_name}}" index="index" item="item" key="key">
+                            <text class="tag bg-green">{{item.name}}</text>
+                        </repeat>
+                    </view>
+                    <!--<view class="tag-container">-->
+                    <!--<view class="tag bg-orange">知兮乐兮自营</view>-->
+                    <!--<view class="tag bg-orange">红色经典</view>-->
+                    <!--<view class="tag bg-green">武术</view>-->
+                    <!--<view class="tag bg-green">军事迷</view>-->
+                    <!--<view class="tag bg-green">不限年龄</view>-->
+                    <!--</view>-->
+                </view>
             </view>
-          </view>
-          <view class="pin-row">
-            <view class="left">
-              <image src="../resource/img/avatar.png" class="avator"></image>
-              <text class="name">张杨文</text>
+            <!-- 介绍卡部分 E -->
+            <!-- 去拼单部分 S -->
+            <view class="content">
+                <view class="pin-card">
+                    <view class="header">
+                        <text>10人在拼单，直接参与</text>
+                        <view>更多
+                            <image src="../resource/img/right_arrow.png"></image>
+                        </view>
+                    </view>
+                    <view class="pin-row">
+                        <view class="left">
+                            <image src="../resource/img/avatar.png" class="avator"></image>
+                            <text class="name">张杨文</text>
+                        </view>
+                        <view class="right">
+                            <view class="status">
+                                <view class="m-nums">还差<text>1人</text>拼成</view>
+                                <text class="t-nums">剩余5天23:53:18.1</text>
+                            </view>
+                            <view class="btn bg-primary">
+                                去拼单
+                            </view>
+                        </view>
+                    </view>
+                    <view class="pin-row">
+                        <view class="left">
+                            <image src="../resource/img/avatar.png" class="avator"></image>
+                            <text class="name">张杨文</text>
+                        </view>
+                        <view class="right">
+                            <view class="status">
+                                <view class="m-nums">还差<text>1人</text>拼成</view>
+                                <text class="t-nums">剩余5天23:53:18.1</text>
+                            </view>
+                            <view class="btn bg-primary">
+                                去拼单
+                            </view>
+                        </view>
+                    </view>
+                </view>
             </view>
-            <view class="right">
-              <view class="status">
-                <view class="m-nums">还差<text>1人</text>拼成</view>
-                <text class="t-nums">剩余5天23:53:18.1</text>
-              </view>
-              <view class="btn bg-primary">
-                去拼单
-              </view>
+            <!-- 去拼单部分 E -->
+            <!-- 详情部分 -->
+            <view id="scroll1" class="rich_text">
+                <rich-text nodes="{{good_detail.content}}">
+                </rich-text>
             </view>
-          </view>
-          <view class="pin-row">
-            <view class="left">
-              <image src="../resource/img/avatar.png" class="avator"></image>
-              <text class="name">张杨文</text>
+            <!-- 须知 -->
+            <view id="scroll2" class="rich_text">
+                <rich-text nodes="{{good_detail.notice}}">
+                </rich-text>
             </view>
-            <view class="right">
-              <view class="status">
-                <view class="m-nums">还差<text>1人</text>拼成</view>
-                <text class="t-nums">剩余5天23:53:18.1</text>
-              </view>
-              <view class="btn bg-primary">
-                去拼单
-              </view>
+            <view id="scroll3">
+                <comments :comment_list.sync="comment_list"></comments>
             </view>
-          </view>
-        </view>
-      </view>
-      <!-- 去拼单部分 E -->
-      <!-- 详情部分 -->
-      <view id="scroll1" class="rich_text"><rich-text  nodes="{{good_detail.content}}">
-      </rich-text></view>
-      <!-- 须知 -->
-      <view id="scroll2" class="rich_text"><rich-text nodes="{{good_detail.notice}}" >
-      </rich-text></view>
-      <view id="scroll3">
-      <comments :comment_list.sync="comment_list"></comments>
-      </view>
-    </scroll-view>
-    <!-- 底部导航 S -->
-    <view class="nav-bottom">
-      <view class="flex1" @tap="to_home">
-        <span class="public_icon1_to_home2"></span><text>首页</text></view>
-      <view class="flex1" @tap="do_collection">
-        <span wx:if="{{collection!=1}}" class="public_icon1_collection"></span><text wx:if="{{collection!=1}}">收藏</text>
-        <span wx:if="{{collection==1}}" class="public_icon_already_collection"></span><text wx:if="{{collection==1}}">取消收藏</text>
-      </view>
-      <view class="flex1">
-        <span class="public_icon1_custom"></span><text>客服</text></view>
-      <view class="flex2" @tap="open_good_class(2)"><text>￥{{total_price}}</text><text>单独购买</text></view>
-      <view class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起拼单</text></view>
-      <!-- <view class="flex5"><text>报名已满</text></view> -->
-    </view>
-    <!-- 底部导航 E -->
-    <!-- 返回顶部 S -->
-    <!-- <view class="backTop">
-        <image src="../resource/img/backTop.png"></image>
-      </view> -->
-    <!-- 返回顶部 E -->
-    <!-- 邀请分享 S -->
-    <!-- <view class="share-box">
-        <view class="close"><image src="../resource/img/close.png"></image></view>
-        <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
-        <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
-      </view> -->
-    <!-- 邀请分享 E -->
-    <!-- 购买选择 S -->
-    <view class="modal" wx:if="{{open_class}}"  @tap="close_good_class">
-      <view class="m-body" @tap.stop="tmp">
-        <view class="close-btn">
-          <image src="../resource/img/close2.png"></image>
-        </view>
-        <view class="intro">
-          <view class="goods-img">
-            <image src="{{good_detail.image[0].file_path}}"></image>
-          </view>
-          <view class="goods-picked">
-            <text class="price">￥{{total_price}}</text>
-            <text class="picked-text">请选择 {{class_group}}</text>
-          </view>
-        </view>
-        <scroll-view scroll-y="{{true}}" class="scroll-h">
-          <block  wx:for="{{goods_detal}}" wx:key="index1" wx:for-index="index1">
-            <view class="pick-block">
-              <text>{{item.name}}</text>
-              <view class="btn-box">
-                <block wx:for="{{item.data}}" wx:key="{{index2}}" wx:for-index="index2">
-                  <view class="btn {{item.pick ? 'picked' : ''}}" @tap="goods_detal_tip({{index1}},{{index2}})">{{item.name}}</view>
-                </block>
-                <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
-                <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
-                <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
-              </view>
-            </view>
-          </block>
-
-          <view class="count-block">
-            <view class="title">数量</view>
-            <view class="counter">
-              <view class="sub {{sub_min? 'disable' : ''}}" @tap="good_sub">-</view>
-              <input class="num" value="{{good_number}}" type="number" @input="good_num"></input>
-              <view class="plus {{plus_max? 'disable' : ''}}" @tap="good_plus">+</view>
-            </view>
-          </view>
         </scroll-view>
-        <view class="btn-ok" @tap="buynow">确定</view>
-      </view>
+        <!-- 底部导航 S -->
+        <view class="nav-bottom">
+            <view class="flex1" @tap="to_home">
+                <span class="public_icon1_to_home2"></span><text>首页</text></view>
+            <view class="flex1" @tap="do_collection">
+                <span wx:if="{{collection!=1}}" class="public_icon1_collection"></span><text wx:if="{{collection!=1}}">收藏</text>
+                <span wx:if="{{collection==1}}" class="public_icon_already_collection"></span><text wx:if="{{collection==1}}">取消收藏</text>
+            </view>
+            <view class="flex1">
+                <span class="public_icon1_custom"></span><text>客服</text></view>
+            <view class="flex2" @tap="open_good_class(2)"><text>￥{{total_price}}</text><text>单独购买</text></view>
+            <view class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起拼单</text></view>
+            <!-- <view class="flex5"><text>报名已满</text></view> -->
+        </view>
+        <!-- 底部导航 E -->
+        <!-- 返回顶部 S -->
+        <!-- <view class="backTop">
+                <image src="../resource/img/backTop.png"></image>
+              </view> -->
+        <!-- 返回顶部 E -->
+        <!-- 邀请分享 S -->
+        <!-- <view class="share-box">
+                <view class="close"><image src="../resource/img/close.png"></image></view>
+                <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
+                <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
+              </view> -->
+        <!-- 邀请分享 E -->
+        <!-- 购买选择 S -->
+        <view class="modal" wx:if="{{open_class}}" @tap="close_good_class">
+            <view class="m-body" @tap.stop="tmp">
+                <view class="close-btn">
+                    <image src="../resource/img/close2.png"></image>
+                </view>
+                <view class="intro">
+                    <view class="goods-img">
+                        <image src="{{good_detail.image[0].file_path}}"></image>
+                    </view>
+                    <view class="goods-picked">
+                        <text class="price">￥{{total_price}}</text>
+                        <text class="picked-text">请选择 {{class_group}}</text>
+                    </view>
+                </view>
+                <scroll-view scroll-y="{{true}}" class="scroll-h">
+                    <block wx:for="{{goods_detal}}" wx:key="index1" wx:for-index="index1">
+                        <view class="pick-block">
+                            <text>{{item.name}}</text>
+                            <view class="btn-box">
+                                <block wx:for="{{item.data}}" wx:key="{{index2}}" wx:for-index="index2">
+                                    <view class="btn {{item.pick ? 'picked' : ''}}" @tap="goods_detal_tip({{index1}},{{index2}})">{{item.name}}</view>
+                                </block>
+                                <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+                                <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+                                <!--<view class="btn">八一军营期第一期发嘎嘎是</view>-->
+                            </view>
+                        </view>
+                    </block>
+                    <view class="count-block">
+                        <view class="title">数量</view>
+                        <view class="counter">
+                            <view class="sub {{sub_min? 'disable' : ''}}" @tap="good_sub">-</view>
+                            <input class="num" value="{{good_number}}" type="number" @input="good_num"></input>
+                            <view class="plus {{plus_max? 'disable' : ''}}" @tap="good_plus">+</view>
+                        </view>
+                    </view>
+                </scroll-view>
+                <view class="btn-ok" @tap="buynow">确定</view>
+            </view>
+        </view>
+        <!-- 购买选择 E -->
+        <!-- 查看更多拼单 s-->
+        <popWin title="正在拼单">
+            <view slot="content" class="pining">
+                <scroll-view  scroll-y="{{true}}" style="height:570rpx">
+                <view>
+                    <image src="../resource/img/avatar.png" class="avator" />
+                </view>
+                <view class="flex-1 flex-column">
+                    <view>张扬文 还差<text class="mainColor">1人</text>拼成</view>
+                    <text>剩余5天23:53:18.1</text>
+                </view>
+                <view>
+                    <view class="btn bg-primary">
+                        去拼单
+                    </view>
+                </view>
+                </scroll-view>
+                <view class="fs24 cb4b4b4">仅显示10个正在拼单的人</view>
+            </view>
+        </popWin>
+        <!-- 查看更多拼单 e-->
+        <notice />
     </view>
-    <!-- 购买选择 E -->
-    <notice />
-  </view>
 </template>
 <script>
-  import wepy from 'wepy'
-  import TopNav from '@/components/TopNav'
-  import comments from '@/components/comments'
-  import Mixin from '@/mixins/global'
-  import notice from '@/components/notice'
-  export default class goodsdetail extends wepy.page {
-    mixins = [Mixin]
-    data = {
-      loading:true,
-      modalIsShow: false,
-      goods_detal: [
-        {
-          "name": "分类1",
-          "data":[{
-            "name": "商品1",
-            "pick": true,
-          },
-          {
-            "name": "商品2",
-            "pick": false,
-          },
-          {
-            "name": "商品3",
-            "pick": false,
-          },
-          {
-            "name": "商品4",
-            "pick": false,
-          }]
-        },
-      ],
-      spec:[],
-      good_number: 1,
-      max_good_number: 9,
-      min_good_number: 1,
-      plus_max: false,
-      sub_min: true,
-
-      good_id:0,
-      good_detail:{},
-
-      current_page:1,
-      per_page:3,
-
-      collection:1,
-
-      comment_list:{},
-
-      open_class:false,
-
-      total_price:0,
-      pin_price:0,
-      goods_sku_id:"",
-      buy_type:1,
-
-      class_group:"",
-      toView:'scroll0',
-      activeIndex:'0'
-    }
-    components = {
-      TopNav,
-      comments,
-      notice
-    }
-
-    events = {
-        changeactiveIndex(index){
-            this.activeIndex = index;
-            this.toView = 'scroll' + index;
+    import wepy from 'wepy'
+    import TopNav from '@/components/TopNav'
+    import comments from '@/components/comments'
+    import Mixin from '@/mixins/global'
+    import notice from '@/components/notice'
+    import popWin from '@/components/popWin'
+    export default class goodsdetail extends wepy.page {
+        mixins = [Mixin]
+        data = {
+            loading: true,
+            modalIsShow: false,
+            goods_detal: [{
+                "name": "分类1",
+                "data": [{
+                        "name": "商品1",
+                        "pick": true,
+                    },
+                    {
+                        "name": "商品2",
+                        "pick": false,
+                    },
+                    {
+                        "name": "商品3",
+                        "pick": false,
+                    },
+                    {
+                        "name": "商品4",
+                        "pick": false,
+                    }
+                ]
+            }, ],
+            spec: [],
+            good_number: 1,
+            max_good_number: 9,
+            min_good_number: 1,
+            plus_max: false,
+            sub_min: true,
+            good_id: 0,
+            good_detail: {},
+            current_page: 1,
+            per_page: 3,
+            collection: 1,
+            comment_list: {},
+            open_class: false,
+            total_price: 0,
+            pin_price: 0,
+            goods_sku_id: "",
+            buy_type: 1,
+            class_group: "",
+            toView: 'scroll0',
+            activeIndex: '0'
         }
-    }
-    methods = {
-      goods_detal_tip(index1,index2) {
-        for (var i = 0; i < this.goods_detal.length; i++) {
-          if (i==index1){
-            for (var n=0;n<this.goods_detal[i].data.length;n++){
-              if (n == index2) {
-                this.goods_detal[i].data[n].pick = true;
-              } else {
-                this.goods_detal[i].data[n].pick = false;
-              };
-            }
-          }
+        components = {
+            TopNav,
+            comments,
+            notice,
+            popWin
         }
-        this.$apply();
-        this.price_count();
-      },
-      good_plus() {
-        if (this.good_number + 1 > this.max_good_number) {
-          this.plus_max = true;
-          this.$apply();
-          return;
-        };
-        if (this.good_number + 1 == this.max_good_number) {
-          this.plus_max = true;
-        } else {
-          this.plus_max = false;
-        };
-        this.sub_min = false;
-        this.good_number = this.good_number + 1;
-
-        this.$apply();
-        this.price_count();
-      },
-      good_sub() {
-        if (this.good_number - 1 < this.min_good_number) {
-          this.sub_min = true;
-          this.$apply();
-          return;
-        };
-        if (this.good_number - 1 == this.min_good_number) {
-          this.sub_min = true;
-        } else {
-          this.sub_min = false;
-        };
-        this.plus_max = false;
-        this.good_number = this.good_number - 1;
-
-        this.$apply();
-        this.price_count();
-      },
-
-      to_home(){
-        wx.navigateTo({
-          url:"/pages/index"
-        })
-      },
-
-      do_collection(){
-        if(this.collection==1){
-          wepy.request({
-            url: "api/user_favorites/delete",
-            method: 'POST',
-            data: {goods_id:this.good_id},
-          }).then(res => {
-            if(res.code != "1"){
-              this.showAlert({title: "警告", content: res.msg});
-              return
+        events = {
+            changeactiveIndex(index) {
+                this.activeIndex = index;
+                this.toView = 'scroll' + index;
             }
-            this.collection=-1;
+        }
+        methods = {
+            goods_detal_tip(index1, index2) {
+                for (var i = 0; i < this.goods_detal.length; i++) {
+                    if (i == index1) {
+                        for (var n = 0; n < this.goods_detal[i].data.length; n++) {
+                            if (n == index2) {
+                                this.goods_detal[i].data[n].pick = true;
+                            } else {
+                                this.goods_detal[i].data[n].pick = false;
+                            };
+                        }
+                    }
+                }
+                this.$apply();
+                this.price_count();
+            },
+            good_plus() {
+                if (this.good_number + 1 > this.max_good_number) {
+                    this.plus_max = true;
+                    this.$apply();
+                    return;
+                };
+                if (this.good_number + 1 == this.max_good_number) {
+                    this.plus_max = true;
+                } else {
+                    this.plus_max = false;
+                };
+                this.sub_min = false;
+                this.good_number = this.good_number + 1;
+                this.$apply();
+                this.price_count();
+            },
+            good_sub() {
+                if (this.good_number - 1 < this.min_good_number) {
+                    this.sub_min = true;
+                    this.$apply();
+                    return;
+                };
+                if (this.good_number - 1 == this.min_good_number) {
+                    this.sub_min = true;
+                } else {
+                    this.sub_min = false;
+                };
+                this.plus_max = false;
+                this.good_number = this.good_number - 1;
+                this.$apply();
+                this.price_count();
+            },
+            to_home() {
+                wx.navigateTo({
+                    url: "/pages/index"
+                })
+            },
+            do_collection() {
+                if (this.collection == 1) {
+                    wepy.request({
+                        url: "api/user_favorites/delete",
+                        method: 'POST',
+                        data: {
+                            goods_id: this.good_id
+                        },
+                    }).then(res => {
+                        if (res.code != "1") {
+                            this.showAlert({
+                                title: "警告",
+                                content: res.msg
+                            });
+                            return
+                        }
+                        this.collection = -1;
+                        this.$apply();
+                    })
+                } else {
+                    wepy.request({
+                        url: "api/user_favorites/add",
+                        method: 'POST',
+                        data: {
+                            goods_id: this.good_id
+                        },
+                    }).then(res => {
+                        if (res.code != "1") {
+                            this.showAlert({
+                                title: "警告",
+                                content: res.msg
+                            });
+                            return
+                        }
+                        this.collection = 1;
+                        this.$apply();
+                    })
+                }
+                this.$apply()
+            },
+            open_good_class(bType) {
+                this.buy_type = bType;
+                this.open_class = true;
+                this.$apply();
+            },
+            close_good_class() {
+                this.open_class = false;
+                this.$apply();
+            },
+            tmp() {},
+            buynow() {
+                wepy.navigateTo({
+                    url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
+                        '&good_number=' + this.good_number +
+                        '&goods_sku_id=' + this.goods_sku_id +
+                        '&buy_type=' + this.buy_type +
+                        '&order_collage_id=0'
+                })
+            }
+        }
+        good_num(e) {
+            this.good_number = e.detail.value;
+            if (this.good_number >= this.max_good_number) {
+                //   setTimeout(() => {
+                //     this.good_number=this.max_good_number;
+                //   this.$apply();
+                // }, 200);
+                wx.nextTick(() => {
+                    this.good_number = this.max_good_number;
+                    this.$apply();
+                })
+                this.plus_max = true;
+                this.sub_min = false;
+            } else if (this.good_number <= this.min_good_number) {
+                this.good_number = this.min_good_number;
+                this.sub_min = true;
+                this.plus_max = false;
+            } else {
+                this.plus_max = false;
+                this.sub_min = false;
+            };
             this.$apply();
-          })
-        }else{
-          wepy.request({
-            url: "api/user_favorites/add",
-            method: 'POST',
-            data: {goods_id:this.good_id},
-          }).then(res => {
-            if(res.code != "1"){
-                this.showAlert({title: "警告", content: res.msg});
+        }
+        price_count() {
+            var id = "";
+            for (var i = 0; i < this.goods_detal.length; i++) {
+                for (var n = 0; n < this.goods_detal[i].data.length; n++) {
+                    if (this.goods_detal[i].data[n].pick) {
+                        console.log(this.goods_detal[i].data[n])
+                        if (i == 0) {
+                            id = this.goods_detal[i].data[n].item_id;
+                        } else {
+                            id = id + "_" + this.goods_detal[i].data[n].item_id;
+                        }
+                    }
+                }
+            }
+            for (var i = 0; i < this.spec.length; i++) {
+                if (this.spec[i].spec_sku_id == id) {
+                    this.total_price = this.spec[i].line_price * this.good_number;
+                    this.pin_price = this.spec[i].goods_price * this.good_number;
+                }
+            }
+            this.goods_sku_id = id;
+            this.$apply();
+        }
+        onLoad(options) {
+            // 显示正在拼单列表
+            // this.$invoke('popWin','togglePopup')
+
+            if (!options.id) {
                 return
             }
-            this.collection=1;
-            this.$apply();
-          })
-        }
-
-        this.$apply()
-      },
-
-      open_good_class(bType){
-          this.buy_type=bType;
-          this.open_class=true;
-          this.$apply();
-      },
-
-      close_good_class(){
-          this.open_class=false;
-          this.$apply();
-      },
-
-      tmp(){
-
-      },
-
-      buynow(){
-          wepy.navigateTo({
-            url: '/pages/paypage?goods_id=' + this.good_detail.goods_id+
-            '&good_number='+this.good_number+
-            '&goods_sku_id='+this.goods_sku_id+
-            '&buy_type='+this.buy_type+
-            '&order_collage_id=0'
-          })
-
-      }
-
-    }
-    good_num(e) {
-      this.good_number = e.detail.value;
-      if (this.good_number >= this.max_good_number) {
-        //   setTimeout(() => {
-        //     this.good_number=this.max_good_number;
-        //   this.$apply();
-        // }, 200);
-        wx.nextTick(() => {
-          this.good_number = this.max_good_number;
-          this.$apply();
-        })
-        this.plus_max = true;
-        this.sub_min = false;
-      } else if (this.good_number <= this.min_good_number) {
-        this.good_number = this.min_good_number;
-        this.sub_min = true;
-        this.plus_max = false;
-      } else {
-        this.plus_max = false;
-        this.sub_min = false;
-      };
-      this.$apply();
-    }
-
-    price_count(){
-      var id = "";
-      for (var i=0;i<this.goods_detal.length;i++){
-        for(var n=0;n<this.goods_detal[i].data.length;n++){
-          if(this.goods_detal[i].data[n].pick){
-            console.log(this.goods_detal[i].data[n])
-            if(i==0){
-              id=this.goods_detal[i].data[n].item_id;
-            }else{
-              id=id+"_"+this.goods_detal[i].data[n].item_id;
-            }
-          }
-
-        }
-      }
-
-      for(var i=0;i<this.spec.length;i++){
-        if(this.spec[i].spec_sku_id==id){
-            this.total_price=this.spec[i].line_price*this.good_number;
-            this.pin_price=this.spec[i].goods_price*this.good_number;
-        }
-      }
-
-      this.goods_sku_id=id;
-
-      this.$apply();
-    }
-
-    onLoad(options){
-      if(!options.id){
-        return
-      }
-
-      this.good_id=options.id;
-      wepy.request({
-        url: "api/goods/detail",
-        method: 'POST',
-        data: {goods_id:this.good_id},
-      }).then(res => {
-        if(res.code != "1"){
-          this.showAlert({title: "警告", content: res.msg});
-          return
-        }
-        this.good_detail=res.data.detail;
-        this.collection=res.data.detail.is_favorites;
-
-        this.goods_detal=[];
-        this.spec=[];
-        if(res.data.detail.spec_type==10){
-          this.goods_detal.push({
-            "name": res.data.detail.goods_name,
-            "data":[
-              {
-                "name": res.data.detail.goods_name,
-                "pick": true,
-                "goods_id": res.data.detail.goods_id,
-                "item_id":res.data.detail.goods_id,
-              }
-            ],
-          });
-
-          this.spec.push({
-            "spec_sku_id":res.data.detail.goods_id,
-            "goods_price":res.data.detail.spec[0].goods_price,
-            "line_price":res.data.detail.spec[0].line_price,
-          })
-        }else{
-          for(var i=0;i<res.data.specData.spec_attr.length;i++){
-            var tmp = {
-              "name": res.data.specData.spec_attr[i].group_name,
-              "data":[],
-            }
-            var p=false;
-            for(var n=0;n<res.data.specData.spec_attr[i].spec_items.length;n++){
-                if(n==0){
-                  p=true;
-                }else{
-                  p=false;
-                };
-                tmp.data.push(
-                  {
-                    "name": res.data.specData.spec_attr[i].spec_items[n].spec_value,
-                    "pick": p,
-                    "item_id":res.data.specData.spec_attr[i].spec_items[n].item_id,
-                  }
-                )
-            }
-            this.goods_detal.push(tmp);
-          }
-
-          for(var i=0;i<res.data.specData.spec_list.length;i++){
-            this.spec.push({
-              "spec_sku_id":res.data.specData.spec_list[i].spec_sku_id,
-              "goods_price":res.data.specData.spec_list[i].form.goods_price,
-              "line_price":res.data.specData.spec_list[i].form.line_price,
+            this.good_id = options.id;
+            wepy.request({
+                url: "api/goods/detail",
+                method: 'POST',
+                data: {
+                    goods_id: this.good_id
+                },
+            }).then(res => {
+                if (res.code != "1") { 
+                    this.showAlert({
+                        title: "警告",
+                        content: res.msg
+                    });
+                    return
+                }
+                this.good_detail = res.data.detail;
+                this.collection = res.data.detail.is_favorites;
+                this.goods_detal = [];
+                this.spec = [];
+                if (res.data.detail.spec_type == 10) {
+                    this.goods_detal.push({
+                        "name": res.data.detail.goods_name,
+                        "data": [{
+                            "name": res.data.detail.goods_name,
+                            "pick": true,
+                            "goods_id": res.data.detail.goods_id,
+                            "item_id": res.data.detail.goods_id,
+                        }],
+                    });
+                    this.spec.push({
+                        "spec_sku_id": res.data.detail.goods_id,
+                        "goods_price": res.data.detail.spec[0].goods_price,
+                        "line_price": res.data.detail.spec[0].line_price,
+                    })
+                } else {
+                    for (var i = 0; i < res.data.specData.spec_attr.length; i++) {
+                        var tmp = {
+                            "name": res.data.specData.spec_attr[i].group_name,
+                            "data": [],
+                        }
+                        var p = false;
+                        for (var n = 0; n < res.data.specData.spec_attr[i].spec_items.length; n++) {
+                            if (n == 0) {
+                                p = true;
+                            } else {
+                                p = false;
+                            };
+                            tmp.data.push({
+                                "name": res.data.specData.spec_attr[i].spec_items[n].spec_value,
+                                "pick": p,
+                                "item_id": res.data.specData.spec_attr[i].spec_items[n].item_id,
+                            })
+                        }
+                        this.goods_detal.push(tmp);
+                    }
+                    for (var i = 0; i < res.data.specData.spec_list.length; i++) {
+                        this.spec.push({
+                            "spec_sku_id": res.data.specData.spec_list[i].spec_sku_id,
+                            "goods_price": res.data.specData.spec_list[i].form.goods_price,
+                            "line_price": res.data.specData.spec_list[i].form.line_price,
+                        })
+                    }
+                }
+                this.price_count();
+                wepy.request({
+                    url: "api/goods/comment",
+                    method: 'POST',
+                    data: {
+                        goods_id: this.good_id,
+                        per_page: this.per_page,
+                        page: this.current_page
+                    },
+                }).then(res => {
+                    this.loading = false;
+                    if (res.code != "1") {
+                        this.showAlert({
+                            title: "警告",
+                            content: res.msg
+                        });
+                        return
+                    }
+                    this.comment_list = res.data.list;
+                    this.$apply();
+                })
             })
-          }
-
         }
-        this.price_count();
-
-        wepy.request({
-          url: "api/goods/comment",
-          method: 'POST',
-          data: {goods_id:this.good_id,per_page:this.per_page,page:this.current_page},
-        }).then(res => {
-          this.loading= false;
-          if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
-            return
-          }
-          this.comment_list=res.data.list;
-
-
-          this.$apply();
-        })
-      })
-  }
-
-  }
-
-
-
-//  PageInit(){
-//
-//  }
+        // 是否确定取消支付弹窗
+        showPayConfirm() {
+            this.showAlert({
+                confirmText: '继续支付',
+                confirmColor: '#e93131',
+                cancelText: '暂时放弃',
+                cancelColor: '#a09a9a',
+                content: '你尚未完成支付，你喜欢的东东可能会被抢空哦~',
+                title: '确定要放弃付款吗？',
+                confirm: function() {
+                    console.log('继续支付')
+                },
+                cancel: function() {
+                    console.log('暂时放弃')
+                },
+            })
+        }
+    }
+    //  PageInit(){
+    //
+    //  }
 </script>

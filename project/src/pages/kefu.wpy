@@ -29,10 +29,25 @@
         }
         methods = {}
         getInfo() {
-            let t = unescape(intro)
-            t = t.replace(/<img src/g, '<img style="max-width:100%" src')
-            this.intro = t
+            wepy.request({
+                url: 'api/label/getlist',
+                method: 'POST',
+            }).then(res => {
+                if (res.code == 1) {
+                    let t = unescape(intro)
+                    t = t.replace(/<img src/g, '<img style="max-width:100%" src')
+                    this.intro = t
+                } else {
+                    wepy.showModal({
+                        content: res.msg,
+                        showCancel: false
+                    })
+                }
+                this.$apply()
+            })
         }
-        onLoad() {}
+        onLoad() {
+            this.getInfo()
+        }
     }
 </script>

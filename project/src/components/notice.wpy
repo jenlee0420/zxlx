@@ -26,7 +26,7 @@
         &.popup-show {
             visibility: visible;
             opacity: 1;
-            left: 145rpx;
+            left: 175rpx;
             top: 30rpx;
         }
     }

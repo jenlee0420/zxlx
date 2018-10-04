@@ -43,10 +43,12 @@
             >span {
                 width: 120rpx;
                 white-space: nowrap;
+                margin-right: 20rpx;
             }
             >input {
                 flex: 1;
-                color: #333
+                color: #333;
+                font-size: 30rpx;
             }
             textarea {
                 width: 100%;
@@ -55,7 +57,6 @@
                 font-size: 26rpx;
                 color: #333
             }
-
         }
     }
 </style>
@@ -63,35 +64,35 @@
 <template>
     <view class="container" id="dingzhi">
         <view class="itemlable"><text>定制描述</text></view>
-        <view class="inputview m0"><textarea placeholder-style="color:#bbb" placeholder="请在此定制您想要定制的活动或行程" /></view>
+        <view class="inputview m0"><textarea placeholder-style="color:#bbb" placeholder="请在此定制您想要定制的活动或行程" @input="getVal('describe')" /></view>
         <view class="itemlable"><text>人数及往返时间</text></view>
         <view class="inputview">
-            <span>参与人数</span><input type="number" />
+            <span>参与人数</span><input type="number" @input="getVal('number')" />
         </view>
         <view class="inputview">
             <span>出发日期</span>
             <picker mode="date" start="2015-09-01" end="2022-09-01" @change="bindStartTimeChange">
                 <view class="picker">
-                  <input value="{{sdate}}" disabled/>
+                    <input value="{{sdate}}" disabled/>
                 </view>
             </picker>
         </view>
         <view class="inputview m0">
             <span>返回日期</span>
-            <picker mode="date"  start="{{sdate}}" end="2022-09-01" @change="bindEndTimeChange">
-              <view class="picker">
-                <input value="{{edate}}" disabled/>
-              </view>
+            <picker mode="date" start="{{sdate}}" end="2022-09-01" @change="bindEndTimeChange">
+                <view class="picker">
+                    <input value="{{edate}}" disabled/>
+                </view>
             </picker>
         </view>
-        <view class="itemlable"><text>人数及往返时间</text></view>
+        <view class="itemlable"><text>联系人信息</text></view>
         <view class="inputview">
-            <span>联系人姓名</span><input type="text" />
+            <span>联系人姓名</span><input type="text" @input="getVal('contacts')" />
         </view>
         <view class="inputview">
-            <span>手机号</span><input type="number" />
+            <span>手机号</span><input type="number" @input="getVal('mobile')" />
         </view>
-        <button class="fullbtn btn mb30">提交定制需求</button>
+        <button class="fullbtn btn mb30" @tap="submit">提交定制需求</button>
         <notice />
     </view>
 </template>
@@ -104,19 +105,57 @@
         config = {
             navigationBarTitleText: '定制游学',
         }
-        components = {notice}
+        components = {
+            notice
+        }
         mixins = [Mixin]
         data = {
             sdate: '',
             edate: '',
+            contacts: '',
+            mobile: '',
+            describe: '',
+            number: ''
         }
         methods = {
             bindStartTimeChange(e) {
-              this.sdate=e.detail.value;
+                this.sdate = e.detail.value;
             },
-
-            bindEndTimeChange(e){
-              this.edate=e.detail.value;
+            bindEndTimeChange(e) {
+                this.edate = e.detail.value;
+            },
+            getVal(key, e) {
+                this[key] = e.detail.value
+            },
+            submit() {
+                wepy.request({
+                    url: 'api/customized/add',
+                    method: 'POST',
+                    data:{
+                        start_time: this.sdate,
+                        return_time: this.edate,
+                        contacts:this.contacts,
+                        mobile: this.mobile,
+                        describe: this.describe,
+                        number: this.number
+                    }
+                }).then(res => {
+                    if (res.code == 1) {
+                        this.showSuccess(res.msg);
+                         this.sdate =''
+                        this.edate =''
+                        this.contacts =''
+                       this.mobile =''
+                         this.describe =''
+                        this.number =''
+                    } else {
+                        wepy.showModal({
+                            content: res.msg,
+                            showCancel: false
+                        })
+                    }
+                    this.$apply()
+                })
             }
         }
         onLoad() {}
