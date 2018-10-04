@@ -65,22 +65,22 @@
     <view class="bg_fff">
       <view class="flex-algin-center flex-column">
         <view class="myhead">
-          <image src="{{baseServerImg}}" mode="aspectFill">
+          <image src="{{avatarUrl}}" mode="aspectFill">
         </view>
         <view class="graybox">
-          <text>David Yu,我在知兮乐兮上找到了很赞的游学，快来帮我付款吧~</text>
+          <text>{{this_user_name}},我在知兮乐兮上找到了很赞的游学，快来帮我付款吧~</text>
           <view class="goodsinfo">
             <view class="imgbox">
-              <image src="{{baseServerImg}}" mode="aspectFill" />
+              <image src="{{detail.goods[0].image.file_path}}" mode="aspectFill" />
             </view>
             <view class="flex-1">
-              <text class="itemname">{{goodsitem.source_name}}</text>
-              <text class="itemdesc fs22 cb4b4b4">{{goodsitem.describe}}</text>
+              <text class="itemname">{{detail.goods[0].goods_name}}</text>
+              <text class="itemdesc fs22 cb4b4b4">{{detail.goods[0].goods_attr}}</text>
             </view>
           </view>
         </view>
       </view>
-      <view class="price">￥3000</view>
+      <view class="price">￥{{detail.total_price}}</view>
       <view class="t_c fs22">
         <text class="mr16">剩余支付时间</text>
         <text class="mr10">2天</text><text class="timebox">23</text>:<text class="timebox">23</text>:<text class="timebox">23</text>
@@ -110,8 +110,95 @@
       notice
     }
     mixins = [Mixin]
-    data = {}
-    methods = {}
-    onLoad() {}
+    data = {
+      avatarUrl:"",
+      detail:{},
+      user_id:"1",
+      order_id:"51",
+
+      this_user_name:"",
+    }
+    methods = {
+      pay(){
+        wepy.request({
+          url: "api/order/friendPay",
+          method: 'POST',
+          data: {order_id:this.order_id},
+        }).then(res => {
+          if(res.code != "1"){
+            this.showAlert({title: "警告", content: res.msg});
+            return
+          }
+
+          wx.requestPayment({
+            timeStamp:res.data.timeStamp,
+            nonceStr:res.data.nonceStr,
+            package:res.data.package,
+            signType:res.data.signType,
+            paySign:res.data.paySign,
+            success:function(e){
+              console.log("success")
+              console.log(e)
+            },
+            fail:function(e){
+              console.log("fail")
+              console.log(e)
+            }
+          })
+        })
+      }
+    }
+
+    onLoad(options){
+      console.log(options)
+      if(!options){
+        return
+      }
+
+      if(!options.user_id){
+        return
+      }
+
+      if(!options.order_id){
+        return
+      }
+
+      this.user_id=options.user_id;
+      this.order_id=options.order_id;
+    }
+    PageInit() {
+      if(!this.user_id&&!this.order_id){
+        this.showAlert({title: "警告", content: "分享错误"});
+      }
+
+      wepy.request({
+        url: "api/user/getuserdetail",
+        method: 'POST',
+        data: {user_id:this.user_id},
+      }).then(res => {
+        if(res.code != "1"){
+          this.showAlert({title: "警告", content: res.msg});
+          return
+        }
+
+        this.avatarUrl=res.data.avatarUrl;
+
+        wepy.request({
+          url: "api/order/detail",
+          method: 'POST',
+          data: {order_id:this.order_id},
+        }).then(res => {
+          if(res.code != "1"){
+            this.showAlert({title: "警告", content: res.msg});
+            return
+          }
+          this.detail=res.data;
+
+          var obj=JSON.parse(wx.getStorageSync("userData"));
+          this.this_user_name=obj.nickName
+          this.$apply();
+        })
+      })
+    }
   }
 </script>

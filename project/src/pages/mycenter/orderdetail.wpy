@@ -158,8 +158,8 @@
         <view class="address">
             <span class="public_icon2_location2"></span>
             <view class="flex-1 ml20">
-                <text>{{detail.address.name}}   {{detail.address.phone}}</text>
-                <text>{{detail.address.region.province+detail.address.region.city+detail.address.region.region+detail.address.detail}}</text>
+                <text>{{detail.address[0].name}}   {{detail.address[0].phone}}</text>
+                <text>{{detail.address[0].region.province+detail.address[0].region.city+detail.address[0].region.region+detail.address[0].detail}}</text>
             </view>
             <view wx:if="{{order_status=='10'}}">
                 <button class="btnRdline" @tap="to_address_list">修改</button>

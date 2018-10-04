@@ -136,7 +136,7 @@
             orderBtn
         }
         mixins = [Mixin]
-        data = { 
+        data = {
             loading: true,
             TypeList: [{
                 name: '全部',
@@ -260,13 +260,18 @@
                 this.currIndex = opation.type
             }
         }
-        PageInit(opation) {
-            this.loadorderlist({
-                per_page: this.page_size,
-                page: this.TypeList[this.currIndex].current_page,
-                data_type:this.TypeList[this.currIndex].key,
-            }, this.currIndex);
+//        PageInit(opation) {
+//
+//        }
+
+        onShow(){
+          this.loadorderlist({
+            per_page: this.page_size,
+            page: this.TypeList[this.currIndex].current_page,
+            data_type:this.TypeList[this.currIndex].key,
+          }, this.currIndex);
         }
+
         onPullDownRefresh(e) {
             this.loadorderlist({
                 per_page: this.page_size,
