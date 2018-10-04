@@ -293,7 +293,8 @@
       <view class="price-part flexRow flex-jend">
         实付款:<text>￥{{detail.order_total_price}}</text>
       </view>
-      <view class="pay-btn" @tap="pay_now">立即支付</view>
+      <button class="pay-btn" wx:if="{{pay_type==1}}" @tap="pay_now">立即支付</button>
+      <button class="pay-btn" open-type="share" wx:if="{{pay_type==2}}">找好友代付</button>
     </view>
     <!-- 底部按钮 E -->
     <notice />
@@ -319,6 +320,7 @@
       notice
     }
     methods = {
+
       pay_now(){
         var data={
           goods_id:this.detail.goods_list[0].goods_id,
@@ -348,7 +350,21 @@
             return
           }
 
-
+          wx.requestPayment({
+            timeStamp:res.data.timeStamp,
+            nonceStr:res.data.nonceStr,
+            package:res.data.package,
+            signType:res.data.signType,
+            paySign:res.data.paySign,
+            success:function(e){
+              console.log("success")
+              console.log(e)
+            },
+            fail:function(e){
+              console.log("fail")
+              console.log(e)
+            }
+          })
           wx.setStorageSync("address","");
         });
       },
@@ -420,6 +436,126 @@
         this.$apply();
     }
 
+    paynow_async(){
+    var data={
+      goods_id:this.detail.goods_list[0].goods_id,
+      goods_num:this.detail.goods_list[0].total_num,
+      goods_sku_id:this.goods_sku_id,
+      address_id:this.detail.address.address_id,
+      address:{
+        name:this.detail.address.name ,
+        phone :this.detail.address.phone ,
+        province_id :this.detail.address.region.province_id,
+        city_id :this.detail.address.region.city_id,
+        region_id : this.detail.address.region.region_id,
+        detail :this.detail.address.detail,
+      },
+      buy_type:this.buy_type,
+      pay_type:this.pay_type
+    };
+
+    var res={};
+    wepy.request({
+        url: "api/order/paynow",
+        method: 'POST',
+        data: data,
+      }).then(res => {return res})
+
+    var re={
+      title:this.detail.goods_list[0].goods_name,
+      path:"/pages/friendpay?user_id="+wx.getStorageSync("userid")+"&order_id="+res.data.order_id,
+      imageUrl:this.detail.goods_list[0].image[0].file_path,
+    }
+    return  re
+  }
+
+    onShareAppMessage(obj){
+      var data={
+        goods_id:this.detail.goods_list[0].goods_id,
+        goods_num:this.detail.goods_list[0].total_num,
+        goods_sku_id:this.goods_sku_id,
+        address_id:this.detail.address.address_id,
+        address:{
+          name:this.detail.address.name ,
+          phone :this.detail.address.phone ,
+          province_id :this.detail.address.region.province_id,
+          city_id :this.detail.address.region.city_id,
+          region_id : this.detail.address.region.region_id,
+          detail :this.detail.address.detail,
+        },
+        buy_type:this.buy_type,
+        pay_type:this.pay_type
+      };
+
+      var res2={};
+      wepy.request({
+        url: "api/order/paynow",
+        method: 'POST',
+        data: data,
+      }).then(res => {res2=res;})
+
+      for (i=0;i<5;i++){
+
+      }
+
+      var re={
+        title:this.detail.goods_list[0].goods_name,
+        path:"/pages/friendpay?user_id="+wx.getStorageSync("userid")+"&order_id="+res2.data.order_id,
+        imageUrl:this.detail.goods_list[0].image[0].file_path,
+      }
+//    return {
+//      title:this.detail.goods_list[0].goods_name,
+//      path:"/pages/friendpay?user_id="+wx.getStorageSync("userid")+"&order_id="+res.order_id,
+//      imageUrl:this.detail.goods_list[0].image[0].file_path,
+//    };
+
+
+//      async function paynow_request () {
+//        var res=await wepy.request({
+//          url: "api/order/paynow",
+//          method: 'POST',
+//          data: data,
+//        }).then(res => {return res})
+//      console.log("!!!!!!!!!!!22222222222222")
+//      console.log(res)
+//        return res;
+//      }
+
+
+
+//
+//        console.log(res._value);
+//        return res._value
+//          var res=
+//      wepy.request({
+//        url: "api/order/paynow",
+//          method: 'POST',
+//          data: data,
+//      }).then(res => {
+//        if(res.code != "1"){
+//          this.showAlert({title: "警告", content: res.msg});
+//          return
+//        }
+//    console.log("!!!!!!!!!!!!!!!!!!!!!!")
+//        return {
+//          title:this.detail.goods_list[0].goods_name,
+//          path:"/pages/friendpay?user_id="+wx.getStorageSync("userid")+"&order_id="+res.data.order_id,
+//          imageUrl:this.detail.goods_list[0].image[0].file_path,
+//        }
+//      })
+      //}
+
+
+    //function(data){
+
+    //}(data)
+
+
+
+
+    };
+
+
 
     onLoad(options){
       if(!options){
@@ -431,18 +567,19 @@
       if(!options.good_number){
         return;
       }
+
       if(!options.goods_sku_id){
-        this.goods_sku_id=options.goods_sku_id;
         return;
       }
       if(!options.buy_type){
-        this.buy_type=options.buy_type;
         return;
       }
       if(!options.order_collage_id){
         return;
       }
 
+      this.buy_type=options.buy_type;
+      this.goods_sku_id=options.goods_sku_id;
       var data={
         goods_id:options.goods_id,
         goods_num:options.good_number,

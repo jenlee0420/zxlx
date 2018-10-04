@@ -22,7 +22,9 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
+
         'pages/search_page',
+        'pages/friendpay',
         'pages/index',
 
         'pages/mycenter/dianpin',
@@ -31,7 +33,7 @@
         'pages/mycenter/collection',
         'pages/mycenter/orderlist',
         'pages/paypage',
-        'pages/friendpay',
+
         'pages/mycenter/orderdetail',
         'pages/mycenter/index',
         'pages/member/list_member',

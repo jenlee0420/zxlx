@@ -25,7 +25,7 @@ export default class Global extends wepy.mixin {
   methods = {
 
   }
-  
+
     // 数组显示
     arrView(val, key) {
         if (val == undefined) {
@@ -183,7 +183,7 @@ export default class Global extends wepy.mixin {
                         file: fileArr[i]
                     }
                     this.imgupfile(data).then(res =>{
-                        
+
                         if (res.statusCode === 200) {
                             let tmp = JSON.parse(res.data).data
                             resUrl.push({id:tmp.file_id, url:tmp.file_path})
@@ -427,7 +427,7 @@ export default class Global extends wepy.mixin {
     }
     onShow(opation) {
         if(this.$com.notice){
-            this.getMessage()
+            //this.getMessage()
         }
         // if(this.__route__ === 'pages/index'){
         //     return

@@ -11,7 +11,7 @@
     <button class="btn" @tap="to_member" wx:if="{{orderitem.order_status.value=='40'}}">完善出行人</button>
     <button class="btn" wx:if="{{orderitem.order_status.value=='noused'}}" disabled>已评价</button>
     <button class="btn" @tap="todianpin({{orderitem}})" wx:if="{{orderitem.order_status.value=='30'}}">我要评价</button>
-    <button class="btn" wx:if="{{orderitem.order_status.value=='10'}}">去支付</button>
+    <button class="btn" wx:if="{{orderitem.order_status.value=='10'}}" @tap="to_pay({{orderitem}})">去支付</button>
     <button class="btn" wx:if="{{orderitem.order_status.value=='all'}}">发给好友</button>
     <button class="btn" @tap="del_order({{orderitem}})" wx:if="{{orderitem.order_status.value=='20'}}">删除订单</button>
     <button class="btn" @tap="to_good_detail({{orderitem}})" wx:if="{{orderitem.order_status.value=='20'}}">再次购买</button>
@@ -37,6 +37,16 @@
     mixins = [Mixin]
     data = {}
     methods = {
+      to_pay(order){
+        wepy.navigateTo({
+          url: '/pages/paypage?goods_id=' + order.goods[0].goods_id+
+          '&good_number='+order.goods[0].total_num+
+          '&goods_sku_id='+order.goods[0].spec_sku_id+
+          '&buy_type='+order.buy_type+
+          '&order_collage_id=0'
+        })
+      },
+
       to_good_detail(order){
         wx.navigateTo({
           url:"/pages/goods_detail?id="+order.goods[0].goods_id
