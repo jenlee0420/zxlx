@@ -199,9 +199,9 @@
             },
             to_detail(order_id) {
                 console.log(order_id)
-                wx.navigateTo({
-                    url: "orderdetail?order_id=" + order_id
-                })
+//                wx.navigateTo({
+//                    url: "orderdetail?order_id=" + order_id
+//                })
             },
             nextpage(index) {
                 this.loadorderlist({

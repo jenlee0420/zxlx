@@ -38,13 +38,43 @@
     data = {}
     methods = {
       to_pay(order){
-        wepy.navigateTo({
-          url: '/pages/paypage?goods_id=' + order.goods[0].goods_id+
-          '&good_number='+order.goods[0].total_num+
-          '&goods_sku_id='+order.goods[0].spec_sku_id+
-          '&buy_type='+order.buy_type+
-          '&order_collage_id=0'
-        })
+        if(order.pay_type==1){
+          wepy.request({
+            url: "api/order/pay",
+            method: 'POST',
+            data: {order_id:order.order_id,pay_type:order.pay_type},
+          }).then(res => {
+            this.loading= false;
+            if(res.code != "1"){
+              this.showAlert({title: "警告", content: res.msg});
+            }else{
+              wx.requestPayment({
+                timeStamp:res.data.timeStamp,
+                nonceStr:res.data.nonceStr,
+                package:res.data.package,
+                signType:res.data.signType,
+                paySign:res.data.paySign,
+                success:function(e){
+                  console.log("success")
+                  console.log(e)
+                },
+                fail:function(e){
+                  console.log("fail")
+                  console.log(e)
+                }
+              })
+            }
+          })
+        }else{
+          wx.navigateTo({
+            url: '/pages/paypage?goods_id=' + order.goods[0].goods_id+
+            '&good_number='+order.goods[0].total_num+
+            '&goods_sku_id='+order.goods[0].spec_sku_id+
+            '&buy_type='+order.buy_type+
+            '&order_collage_id=0'+
+            '&order_id='+order.order_id
+          })
+        }
       },
 
       to_good_detail(order){
