@@ -209,7 +209,7 @@
           <view class="des">八一军营期第一期发嘎嘎是</view>
         </view>
         <view class="right_arrow">
-          <image src="../resource/img/right_arrow.png" />
+          <span class="c999 zan-icon zan-icon-arrow"></span>
         </view>
       </view>
       <view class="flexRow flex-jbetween item2">
