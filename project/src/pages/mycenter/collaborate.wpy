@@ -46,13 +46,13 @@
     </view>
     <view class="forminfo">
       <ul>
-        <li><text>联系人</text><input  placeholder="姓名" /></li>
-        <li><text>手机号码</text><input  placeholder="电话" /></li>
-        <li><text>所在城市</text><input  placeholder="您的业务所在城市" /></li>
-        <li><text>合作意向</text><textarea placeholder="介绍您的亲子产品以及希望的合作方式（最多500字）" ></textarea></li>
+        <li><text>联系人</text><input  placeholder="姓名"  @input="getVal('mobile')"/></li>
+        <li><text>手机号码</text><input  placeholder="电话"  @input="getVal('mobile')"/></li>
+        <li><text>所在城市</text><input  placeholder="您的业务所在城市"  @input="getVal('mobile')"/></li>
+        <li><text>合作意向</text><textarea placeholder="介绍您的亲子产品以及希望的合作方式（最多500字）"  @input="getVal('mobile')"></textarea></li>
       </ul>
     </view>
-    <view class="flex flex-jcenter"><button class="w600 btn mb190 mt30">提交</button></view>
+    <view class="flex flex-jcenter"><button class="w600 btn mb190 mt30" @tap="submit">提交</button></view>
   </view>
 </template>
 
@@ -67,7 +67,27 @@ export default class collaborate extends wepy.page {
   mixins = [Mixin]
   data = {
   }
-  methods = {}
+  methods = {
+    getVal(key, e) {
+                this[key] = e.detail.value
+            },
+            submit() {
+                wepy.request({
+                    url: "api/feedback/add",
+                    method: 'POST',
+                    data: {
+                        content: this.content
+                    },
+                }).then(res => {
+                    if (res.code == "1") {
+                        this.showSuccess(res.msg)
+                        setTimeout(() => {
+                            wepy.navigateBack()
+                        }, 500);
+                    }
+                })
+            }
+  }
   onLoad() {
   }
 }

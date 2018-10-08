@@ -268,7 +268,11 @@ export default class Global extends wepy.mixin {
             })
         })
     }
-
+    //转时间戳
+    transdate2Time(date){
+        let tmp = new Date(date)
+        return tmp.getTime()
+    }
     //	时间格式化   (YYYY-MM-DD HH:mm)
     transTime(time,opt = 'yyyy-MM-dd hh:mm'){
         if(time === '' || time === undefined){

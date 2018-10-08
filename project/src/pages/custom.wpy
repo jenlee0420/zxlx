@@ -132,8 +132,8 @@
                     url: 'api/customized/add',
                     method: 'POST',
                     data:{
-                        start_time: this.sdate,
-                        return_time: this.edate,
+                        start_time: this.transdate2Time(this.sdate),
+                        return_time: this.transdate2Time(this.edate),
                         contacts:this.contacts,
                         mobile: this.mobile,
                         describe: this.describe,
