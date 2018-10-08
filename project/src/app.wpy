@@ -22,7 +22,7 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
-        //'pages/yaoqing',
+        'pages/yaoqing',
         //'pages/joinSuccess',
         'pages/search_page',
         'pages/friendpay',
