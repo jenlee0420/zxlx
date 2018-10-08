@@ -430,8 +430,13 @@
             signType:res.data.signType,
             paySign:res.data.paySign,
             success:function(e){
-              console.log("success")
-              console.log(e)
+              if(buy_type==1){
+                wepy.navigateTo({
+                  url: '/pages/yaoqing'
+                })
+              }else{
+
+              }
             },
             fail:function(e){
               console.log("fail")
