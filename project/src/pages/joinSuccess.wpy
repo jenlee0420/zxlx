@@ -132,7 +132,7 @@
                 <view class="flexRow flex-jcenter">
                     <span class="public_icon2_pin_success mr20"></span><text class="tipsuccess">拼单成功</text>
                 </view>
-                <text class="fs24 c929292 t_c mt30"> 供应商已准备就绪，请您届时参与。</text>
+                <text class="fs24 c929292 t_c mt30 mb10"> 供应商已准备就绪，请您届时参与。</text>
             </view>
             <view class="flexCol shop-gou">
                 <view class="flexRow flex-jcenter pin-avatar mb20">

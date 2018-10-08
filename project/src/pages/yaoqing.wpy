@@ -53,36 +53,36 @@
       .shop-gou {
         .pin-avatar {
           position: relative;
-          margin-bottom: 28rpx;
           image {
-            width: 66rpx;
-            height: 66rpx;
+              width: 88rpx;
+              height: 88rpx;
+              border-radius: 50%;
+              margin-right: 20rpx;
           }
           .bubble {
-            position: absolute;
-            left:-8rpx;
-            top:-12rpx;
-            padding: 2rpx 8rpx;
-            background: #e0b213;
-            font-size: 14rpx;
-            color: #fff;
-            height: 22rpx;
-            border-radius: 11rpx;
-            line-height: 24rpx;
+              position: absolute;
+              left: -8rpx;
+              top: -12rpx;
+              padding: 2rpx 11rpx;
+              background: #e0b213;
+              font-size: 20rpx;
+              color: #fff;
+              height: 31rpx;
+              border-radius: 15rpx;
+              line-height: 31rpx;
           }
-          image + image {
-            margin-left: 2rpx;
-          }
+        
         }
         .btn {
           width: 182rpx;
           height: 62rpx;
-          color: #f32422;
+          color: #fb8785;
           border: 1rpx solid #fb8785;
           font-size: 30rpx;
           border-radius: 10rpx;
           text-align: center;
           line-height: 60rpx;
+          background-color: #fff;
         }
       }
 
@@ -98,9 +98,10 @@
       font-size: 30rpx;
       text-align: center;
       border-radius: 10rpx;
-      padding: 30rpx 0;
       letter-spacing:2rpx;
       margin-bottom: 26rpx;
+      height: 92rpx;
+      line-height: 92rpx;
     }
     .tips {
       font-size: 24rpx;
@@ -170,21 +171,21 @@
     <!-- 花边抢购 S -->
     <view class="flexRow flex-astart huabian">
       <view class="shop-photo">
-        <image src="../resource/img/big_zhi.png"></image>
+        <image src="../resource/img/big_zhi.png" />
       </view>
       <view class="flexCol flex-jbetween shop-info">
-        <view class="flex lisheng">
+        <view class="flexCol lisheng">
           <text class="t1">限时立省</text>
           <text class="t2">￥3000.3</text>
           <text class="t3">￥2988</text>
         </view>
         <view class="flexCol shop-gou">
           <view class="flexRow flex-jcenter pin-avatar">
-            <image src="../resource/img/avatar.png"></image>
-            <image src="../resource/img/avatar.png"></image>
-            <view class="bubble">拼主</view>
+            <text class="bubble">拼主</text>
+            <image src="{{baseHeadImg}}" mode="aspectFill" />
+                    <span class="public_icon1_wait_pin"></span>
           </view>
-          <view class="btn">点击抢购</view>
+          <view class="btn mt30">点击抢购</view>
         </view>
       </view>
     </view>
@@ -201,14 +202,14 @@
     <!-- 倒计时部分 E -->
     <!-- 相似的列表 S -->
     <view class="list">
-      <view class="item">
+      <view class="item flexRow">
         <view class="self-start title">游学组合</view>
         <view class="flexCol flex-1 flex-astart">
           <view class="title2">20天军事特训营打算方法嘎达范德大股东【北京】</view>
           <view class="des">八一军营期第一期发嘎嘎是</view>
         </view>
         <view class="right_arrow">
-          <image src="../resource/img/right_arrow.png"></image>
+          <image src="../resource/img/right_arrow.png" />
         </view>
       </view>
       <view class="flexRow flex-jbetween item2">
@@ -226,15 +227,24 @@
     </view>
     <!-- 相似的列表 E -->
     <view class="flexCol tuijian">
-      <text class="title">精品推荐</text>
-    </view>
+            <recommend tilte='精品推荐' :type="3"></recommend>
+        </view>
   </view>
 </template>
 <script>
   import wepy from 'wepy'
-
+  import Mixin from '@/mixins/global'
+  import recommend from '@/components/recommend'
   export default class listYaoqing extends wepy.page {
-    data = {
-    };
+   config = {}
+        components = {
+            recommend
+        }
+        mixins = [Mixin]
+        data = {}
+        methods = {}
+        onLoad() {
+            this.$invoke('recommend','getlist')
+        }
   }
 </script>

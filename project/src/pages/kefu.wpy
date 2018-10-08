@@ -2,6 +2,8 @@
 .container{
     background:#fff;
     width: 100%;
+    padding: 20rpx;
+    font-size: 25rpx;
 }
 </style>
 
@@ -30,11 +32,15 @@
         methods = {}
         getInfo() {
             wepy.request({
-                url: 'api/label/getlist',
+                url: 'api/about/index',
                 method: 'POST',
+                data:{
+                    type:3
+                }
             }).then(res => {
                 if (res.code == 1) {
-                    let t = unescape(intro)
+                    this.intro = res.data.info.content
+                    let t = unescape(this.intro)
                     t = t.replace(/<img src/g, '<img style="max-width:100%" src')
                     this.intro = t
                 } else {
