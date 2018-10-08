@@ -22,6 +22,8 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
+        'pages/yaoqing',
+        'pages/mycenter/index',
         'pages/joinSuccess',
         'pages/search_page',
         'pages/friendpay',
@@ -34,7 +36,7 @@
         'pages/paypage',
 
         'pages/mycenter/orderdetail',
-        'pages/mycenter/index',
+        
         'pages/member/list_member',
         'pages/member/add_member',
         'pages/mycenter/collaborate',
