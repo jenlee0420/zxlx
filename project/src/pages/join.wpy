@@ -94,35 +94,86 @@
             font-size: 24rpx;
         }
     }
-       
-        .item2 {
-            height: 90rpx;
-            padding: 0 30rpx;
-            border-top: 1rpx solid #e5e5e5;
+    .item2 {
+        height: 90rpx;
+        padding: 0 30rpx;
+        border-top: 1rpx solid #e5e5e5;
+        font-size: 24rpx;
+        .des {
+            color: #9c9999;
+            text {
+                margin: 0 10rpx;
+                font-size: 46rpx;
+            }
+        }
+    }
+    .tuijian {
+        .title {
+            font-size: 30rpx;
+            height: 100rpx;
+            line-height: 100rpx;
+        }
+    }
+    .pingotherlist{
+        background-color: #f7d2d3;
+        margin: 20rpx 45rpx;
+        border-radius: 10rpx;
+        padding: 10rpx;
+        .pining{
+        font-size: 24rpx;
+        line-height: 30rpx;
+        display: flex;
+        letter-spacing: 3rpx;
+        image {
+            height: 85rpx;
+            width: 85rpx;
+            border-radius: 50%;
+            margin-right: 20rpx;
+        }
+        }
+        .btn{
+                border-radius: 10rpx;
+                height: 59rpx;
+                line-height: 59rpx;
+                font-size: 24rpx;
+                border:none;
+            }
+        .itemlable {
             font-size: 24rpx;
-            .des {
-                color: #9c9999;
-                text {
-                    margin: 0 10rpx;
-                    font-size: 46rpx;
+            color: #7e7e7e;
+            text-align: center;
+            margin: 20rpx auto;
+            text-align: center;
+            display: inline-block;
+            width: 100%;
+            color:#f48d60;
+            >text {
+                position: relative;
+                &::before,
+                &::after {
+                    content: '';
+                    width: 80rpx;
+                    height: 1px;
+                    border-top: 1px solid #f48d60;
+                    position: absolute;
+                    left: -100rpx;
+                    top: 20rpx;
+                }
+                &::after {
+                    left: auto;
+                    right: -100rpx;
                 }
             }
         }
-        .tuijian {
-    .title {
-      font-size: 30rpx;
-      height: 100rpx;
-      line-height: 100rpx;
-    }
-  }
+        }
 </style>
 <template>
     <view>
         <!--  加入拼团页面（好友见） -->
         <!-- 花边抢购 S -->
-        <view class="flexRow flex-astart huabian">
+        <view class="flexRow flex-astart huabian bg_fff">
             <view class="shop-photo">
-                <image src="{{baseServerImg}}"  mode="aspectFill"/>
+                <image src="{{baseServerImg}}" mode="aspectFill" />
             </view>
             <view class="flex-column flex-jbetween shop-info">
                 <text class="t1">20天军事特训营打算方法嘎达范德大股东【北京】</text>
@@ -131,40 +182,62 @@
                 <view class=""><text class="t3 mr10">￥2988</text><text class="t2">拼单省55元</text></view>
             </view>
         </view>
-        <view class="flexCol shop-gou">
+        <view class="flexCol shop-gou bg_fff">
             <view class="flexRow flex-jcenter pin-avatar">
                 <text class="bubble">拼主</text>
-                    <image src="{{baseHeadImg}}"  mode="aspectFill"/>
-
-                    <image src="{{baseHeadImg}}"  mode="aspectFill"/>
-          
+                <image src="{{baseHeadImg}}" mode="aspectFill" />
+                <image src="{{baseHeadImg}}" mode="aspectFill" />
                 <span class="public_icon1_wait_pin"></span>
             </view>
+            <view class="fs30 mt20">
+                <span class="mr20"></span><text class="tipsuccess">拼单已满</text>
+            </view>
             <button class="btn">加入拼单优惠</button>
+            <button class="btn">我来发起拼单</button>
         </view>
-        <!-- 花边抢购 E -->
-        
-            <view class="flexRow flex-jbetween item2">
-                <view class="title">拼单须知</view>
-                <view class="flexRow reverse flex-1 des">
-                    <view class="flexRow"><text>·</text>人满不退款</view>
-                    <view class="flexRow"><text>·</text>人满拼成</view>
-                    <view class="flexRow"><text>·</text>好友拼单</view>
+        <view class="pingotherlist bg_fff">
+                <view class="itemlable"><text>或参加别的拼单</text></view>
+                <view class="pining">
+                    <view>
+                        <image src="{{item.avatarUrl}}" class="avator" />
+                    </view>
+                    <view class="flex-1 flex-column">
+                        <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
+                        <text>剩余{{item.remaining_time}}</text>
+                    </view>
+                    <view>
+                        <view class="btn bg-primary">
+                            去拼单
+                        </view>
+                    </view>
                 </view>
             </view>
+        <!-- 花边抢购 E -->
+        <view class="flexRow flex-jbetween item2 bg_fff">
+            <view class="title">拼单须知</view>
+            <view class="flexRow reverse flex-1 des">
+                <view class="flexRow"><text>·</text>人满不退款</view>
+                <view class="flexRow"><text>·</text>人满拼成</view>
+                <view class="flexRow"><text>·</text>好友拼单</view>
+            </view>
+        </view>
         <!-- 相似的列表 E -->
         <view class="flexCol tuijian">
             <recommend tilte='精品推荐' type="3"></recommend>
         </view>
+        <backtoHome />
     </view>
 </template>
 <script>
     import wepy from 'wepy'
     import Mixin from '@/mixins/global'
     import recommend from '@/components/recommend'
+    import backtoHome from '@@/backtoHome'
     export default class join extends wepy.page {
         config = {}
-        components = {recommend}
+        components = {
+            recommend,backtoHome
+        }
         mixins = [Mixin]
         data = {}
         methods = {}

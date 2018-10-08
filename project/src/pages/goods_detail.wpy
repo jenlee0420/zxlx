@@ -478,16 +478,15 @@
         background-color: #fff;
         padding: 30rpx;
         margin-bottom: 30rpx;
-    }
-    // 正在拼单列表
-    .pining{
+    } // 正在拼单列表
+    .pining {
         font-size: 24rpx;
         line-height: 30rpx;
         display: flex;
         letter-spacing: 3rpx;
-        image{
+        image {
             height: 85rpx;
-            width:85rpx;
+            width: 85rpx;
             border-radius: 50%;
             margin-right: 20rpx;
         }
@@ -541,25 +540,23 @@
                             <image src="../resource/img/right_arrow.png"></image>
                         </view>
                     </view>
-
                     <block wx:for="{{pin_list}}" wx:key="index" wx:for-index="index">
-                      <view class="pin-row" wx:if="{{index<2}}">
-                        <view class="left">
-                          <image src="{{item.avatarUrl}}" class="avator"></image>
-                          <text class="name">{{item.nickName}}</text>
+                        <view class="pin-row" wx:if="{{index<2}}">
+                            <view class="left">
+                                <image src="{{item.avatarUrl}}" class="avator"></image>
+                                <text class="name">{{item.nickName}}</text>
+                            </view>
+                            <view class="right">
+                                <view class="status">
+                                    <view class="m-nums">还差<text>{{item.lack_num}}人</text>拼成</view>
+                                    <text class="t-nums">剩余{{item.remaining_time}}</text>
+                                </view>
+                                <view class="btn bg-primary">
+                                    去拼单
+                                </view>
+                            </view>
                         </view>
-                        <view class="right">
-                          <view class="status">
-                            <view class="m-nums">还差<text>{{item.lack_num}}人</text>拼成</view>
-                            <text class="t-nums">剩余{{item.remaining_time}}</text>
-                          </view>
-                          <view class="btn bg-primary">
-                            去拼单
-                          </view>
-                        </view>
-                      </view>
                     </block>
-
                 </view>
             </view>
             <!-- 去拼单部分 E -->
@@ -594,15 +591,15 @@
         <!-- 底部导航 E -->
         <!-- 返回顶部 S -->
         <!-- <view class="backTop">
-                <image src="../resource/img/backTop.png"></image>
-              </view> -->
+                    <image src="../resource/img/backTop.png"></image>
+                  </view> -->
         <!-- 返回顶部 E -->
         <!-- 邀请分享 S -->
         <!-- <view class="share-box">
-                <view class="close"><image src="../resource/img/close.png"></image></view>
-                <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
-                <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
-              </view> -->
+                    <view class="close"><image src="../resource/img/close.png"></image></view>
+                    <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
+                    <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
+                  </view> -->
         <!-- 邀请分享 E -->
         <!-- 购买选择 S -->
         <view class="modal" wx:if="{{open_class}}" @tap="close_good_class">
@@ -648,32 +645,31 @@
         <!-- 购买选择 E -->
         <!-- 查看更多拼单 s-->
         <popWin title="正在拼单">
-            <view  slot="content">
-            <block  wx:for="{{pin_list}}" wx:key="index" wx:for-index="index">
-              
-                <scroll-view  scroll-y="{{true}}" style="height:570rpx">
-                    <view class="pining">
-                  <view>
-                    <image src="{{item.avatarUrl}}" class="avator" />
-                  </view>
-                  <view class="flex-1 flex-column">
-                    <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
-                    <text>剩余{{item.remaining_time}}</text>
-                  </view>
-                  <view>
-                    <view class="btn bg-primary">
-                      去拼单
-                    </view>
-                  </view>
-                  </view>
+            <view slot="content">
+                <scroll-view scroll-y="{{true}}" style="height:570rpx">
+                    <block wx:for="{{pin_list}}" wx:key="index" wx:for-index="index">
+                        <view class="pining">
+                            <view>
+                                <image src="{{item.avatarUrl}}" class="avator" />
+                            </view>
+                            <view class="flex-1 flex-column">
+                                <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
+                                <text>剩余{{item.remaining_time}}</text>
+                            </view>
+                            <view>
+                                <view class="btn bg-primary">
+                                    去拼单
+                                </view>
+                            </view>
+                        </view>
+                    </block>
                 </scroll-view>
                 <view class="fs24 cb4b4b4 t_c ">仅显示10个正在拼单的人</view>
-              
-            </block>
             </view>
         </popWin>
         <!-- 查看更多拼单 e-->
         <notice />
+        <backtoHome />
     </view>
 </template>
 <script>
@@ -683,6 +679,7 @@
     import Mixin from '@/mixins/global'
     import notice from '@/components/notice'
     import popWin from '@/components/popWin'
+    import backtoHome from '@@/backtoHome'
     export default class goodsdetail extends wepy.page {
         mixins = [Mixin]
         data = {
@@ -728,14 +725,15 @@
             class_group: "",
             toView: 'scroll0',
             activeIndex: '0',
-            pin_num:10,
-            pin_list:[],
+            pin_num: 10,
+            pin_list: [],
         }
         components = {
             TopNav,
             comments,
             notice,
-            popWin
+            popWin,
+            backtoHome
         }
         events = {
             changeactiveIndex(index) {
@@ -855,9 +853,9 @@
                         '&order_collage_id=0'
                 })
             },
-            pin_more(){
-              // 显示正在拼单列表
-              this.$invoke('popWin','togglePopup');
+            pin_more() {
+                // 显示正在拼单列表
+                this.$invoke('popWin', 'togglePopup');
             }
         }
         good_num(e) {
@@ -907,8 +905,6 @@
             this.$apply();
         }
         onLoad(options) {
-
-
             if (!options.id) {
                 return
             }
@@ -998,36 +994,31 @@
                 })
             })
         }
-
-        onShow(){
-
-          wepy.request({
-            url: "api/goods/collage",
-            method: 'POST',
-            data: {
-              goods_id: this.good_id,
-              per_page: 10,
-              page: 0,
-              collage_filled:10,
-            },
-          }).then(res => {
-            if (res.code != "1") {
-              this.showAlert({
-                title: "警告",
-                content: res.msg
-              });
-              return
-            }
-
-            if(res.data.list.total<10){
-              this.pin_num=res.data.list.total;
-            }
-
-            this.pin_list=res.data.list.data;
-            this.$apply();
-          })
+        onShow() {
+            wepy.request({
+                url: "api/goods/collage",
+                method: 'POST',
+                data: {
+                    goods_id: this.good_id,
+                    per_page: 10,
+                    page: 0,
+                    collage_filled: 10,
+                },
+            }).then(res => {
+                if (res.code != "1") {
+                    this.showAlert({
+                        title: "警告",
+                        content: res.msg
+                    });
+                    return
+                }
+                if (res.data.list.total < 10) {
+                    this.pin_num = res.data.list.total;
+                }
+                this.pin_list = res.data.list.data;
+                this.$apply();
+            })
         }
-
         // 是否确定取消支付弹窗
         showPayConfirm() {
             this.showAlert({
