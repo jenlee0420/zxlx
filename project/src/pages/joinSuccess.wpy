@@ -4,6 +4,10 @@
         width: 44rpx;
         height: 44rpx;
     }
+    .tipsuccess {
+        color: #009131;
+        font-size: 30rpx;
+    }
     .huabian {
         // .huabian-bg;
         background-size: contain;
@@ -44,7 +48,7 @@
         }
     }
     .shop-gou {
-        margin: 30rpx 20rpx;
+        margin:20rpx;
         .pin-avatar {
             position: relative;
             image {
@@ -94,65 +98,69 @@
             font-size: 24rpx;
         }
     }
-       
-        .item2 {
-            height: 90rpx;
-            padding: 0 30rpx;
-            border-top: 1rpx solid #e5e5e5;
-            font-size: 24rpx;
-            .des {
-                color: #9c9999;
-                text {
-                    margin: 0 10rpx;
-                    font-size: 46rpx;
-                }
+    .item2 {
+        min-height: 90rpx;
+        padding: 20rpx 30rpx; // margin: 0 20rpx;
+        border-top: 1rpx solid #e5e5e5;
+        font-size: 24rpx;
+        box-sizing:border-box;
+
+        &:first-child {
+            border-top: 0rpx solid #e5e5e5;
+        }
+        .des {
+            color: #9c9999;
+            text {
+                margin: 0 10rpx;
+                font-size: 46rpx;
             }
         }
-        .tuijian {
-    .title {
-      font-size: 30rpx;
-      height: 100rpx;
-      line-height: 100rpx;
     }
-  }
+    .tuijian {
+        .title {
+            font-size: 30rpx;
+            height: 100rpx;
+            line-height: 100rpx;
+        }
+    }
 </style>
 <template>
     <view>
-        <!--  加入拼团成功页面（好友见） -->
-        <view class="">
-            <view>
-                <span class=""></span><text>拼单成功</text>
-            </view>
-            <text> 供应商已准备就绪，请您届时参与。</text>
-        </view>
-        <view class="flexCol shop-gou">
-            <view class="flexRow flex-jcenter pin-avatar">
-                <text class="bubble">拼主</text>
-                    <image src="{{baseHeadImg}}"  mode="aspectFill"/>
-
-                    <image src="{{baseHeadImg}}"  mode="aspectFill"/>
-          
-                <span class="public_icon1_wait_pin"></span>
-            </view>
-            <navigator url="/pages/mycenter/orderdetail?order_id={{order_id}}" hover-class="none">查看订单详情></navigator>
-        </view>
-        <view class="flexRow flex-jbetween item2">
-                <view class="title">游学组合</view>
-                <view class="flexCol reverse flex-1 des">
-                    <view class="flexRow">20天军事特训营打算方法嘎达范德大股东【北京】</view>
-                    <view class="flexRow">八一军营期第一期发嘎嘎是</view>
+        <view class="bg_fff">
+            <!--  加入拼团成功页面（好友见） -->
+            <view class="flex-column">
+                <view class="flexRow flex-jcenter">
+                    <span class="public_icon2_pin_success mr20"></span><text class="tipsuccess">拼单成功</text>
                 </view>
+                <text class="fs24 c929292 t_c mt30"> 供应商已准备就绪，请您届时参与。</text>
             </view>
-            <view class="flexRow flex-jbetween item2">
-                <view class="title">订单信息</view>
-                <view class="flexRow reverse flex-1 des">
-                    <view class="flexRow"><text>·</text>联系信息</view>
-                    <view class="flexRow"><text>·</text>拼成时间</view>
+            <view class="flexCol shop-gou">
+                <view class="flexRow flex-jcenter pin-avatar mb20">
+                    <text class="bubble">拼主</text>
+                    <image src="{{baseHeadImg}}" mode="aspectFill" />
+                    <image src="{{baseHeadImg}}" mode="aspectFill" />
+                    <span class="public_icon1_wait_pin"></span>
                 </view>
+                <navigator class="fs24 mb20" url="/pages/mycenter/orderdetail?order_id={{order_id}}" hover-class="none">查看订单详情></navigator>
             </view>
+        </view>
+        <view class="flexRow flex-astart item2 bg_fff">
+            <view class="title mr40 ">游学组合</view>
+            <view class="flexCol flex-astart reverse flex-1 des">
+                <view class="fs25 c333 mb10">20天军事特训营打算方法嘎达范德大股东【北京】</view>
+                <view class="fs24 c929292">八一军营期第一期发嘎嘎是</view>
+            </view>
+        </view>
+        <view class="flexRow flex-jbetween item2 bg_fff">
+            <view class="title">订单信息</view>
+            <view class="flexRow reverse flex-1 des">
+                <view class="flexRow"><text>·</text>联系信息</view>
+                <view class="flexRow"><text>·</text>拼成时间</view>
+            </view>
+        </view>
         <!-- 相似的列表 E -->
         <view class="flexCol tuijian">
-            <recommend tilte='精品推荐' type="3"></recommend>
+            <recommend tilte='精品推荐' :type="3"></recommend>
         </view>
     </view>
 </template>
@@ -162,10 +170,14 @@
     import recommend from '@/components/recommend'
     export default class joinSuccess extends wepy.page {
         config = {}
-        components = {recommend}
+        components = {
+            recommend
+        }
         mixins = [Mixin]
         data = {}
         methods = {}
-        onLoad() {}
+        onLoad() {
+            this.$invoke('recommend','getlist')
+        }
     }
 </script>
