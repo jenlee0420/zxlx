@@ -46,7 +46,7 @@ height:54rpx;
     <view wx:if="{{showPopup}}">
         <view class="winpop" style="{{'height:' + popObj.winh}}">
             <view class="Topcorner" @tap="togglePopup"><span class="zan-icon zan-icon-close"></span></view>
-            <text class="title">{{popObj.title}}</text>
+            <text class="title">{{title}}</text>
             <slot name="content"></slot>
         </view>
         <div class="mask"></div>
@@ -67,6 +67,9 @@ height:54rpx;
                     winh: '60%',
                     show: true
                 }
+            },
+            title:{
+                type:String,
             }
         }
         mixins = [Mixin]

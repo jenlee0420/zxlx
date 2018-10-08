@@ -648,9 +648,11 @@
         <!-- 购买选择 E -->
         <!-- 查看更多拼单 s-->
         <popWin title="正在拼单">
+            <view  slot="content">
             <block  wx:for="{{pin_list}}" wx:key="index" wx:for-index="index">
-              <view slot="content" class="pining">
+              
                 <scroll-view  scroll-y="{{true}}" style="height:570rpx">
+                    <view class="pining">
                   <view>
                     <image src="{{item.avatarUrl}}" class="avator" />
                   </view>
@@ -663,10 +665,12 @@
                       去拼单
                     </view>
                   </view>
+                  </view>
                 </scroll-view>
-                <view class="fs24 cb4b4b4">仅显示10个正在拼单的人</view>
-              </view>
+                <view class="fs24 cb4b4b4 t_c ">仅显示10个正在拼单的人</view>
+              
             </block>
+            </view>
         </popWin>
         <!-- 查看更多拼单 e-->
         <notice />
