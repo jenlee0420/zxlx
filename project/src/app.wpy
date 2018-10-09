@@ -24,10 +24,13 @@
         //'pages/test',
         'pages/join',
         'pages/yaoqing',
-        'pages/joinSuccess',
         'pages/search_page',
         'pages/friendpay',
         'pages/index',
+
+
+
+        'pages/joinSuccess',
 
         'pages/mycenter/dianpin',
         'pages/search',
