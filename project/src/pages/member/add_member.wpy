@@ -85,7 +85,7 @@
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">身份证号:</text>
-                <input class="my_input" id_card="{{id_card}}" @input="input_idcard" placeholder="18位身份证号码" />
+                <input class="my_input" value="{{id_card}}" @input="input_idcard" placeholder="18位身份证号码" />
             </view>
         </view>
         <view class="my_view">
@@ -107,12 +107,13 @@
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">性别:</text>
-                <radio-group class="my_picker">
+                <myradio1 :syncList.sync="my_sex" vbind="getradiodata1"></myradio1>
+                <!-- <radio-group class="my_picker">
                     <label wx:for="{{my_sex}}" wx:key="{{index}}">
                         <radio value="{{item.name}}" checked="{{item.checked}}"/>
                         <label class="public_icon3_not_choise"></label>{{item.value}}
                     </label>
-                </radio-group>
+                </radio-group> -->
             </view>
         </view>
         <view class="my_view">
@@ -163,23 +164,23 @@
         data = {
             edit:false,
             my_type: [{
-                    name: 'kid',
+                    name: '2',
                     value: '儿童'
                 },
                 {
-                    name: 'adult',
+                    name: '1',
                     value: '成人',
                     checked: 'true'
                 },
             ],
             contacttype:{},
             my_sex: [{
-                    name: 'man',
+                    name: '2',
                     value: '男',
                     checked: 'true'
                 },
                 {
-                    name: 'women',
+                    name: '1',
                     value: '女'
                 },
             ],
@@ -188,7 +189,8 @@
             id_card:"",
             bir_date:"",
             phone:"",
-
+            type:'',
+            sex:'',
             address:"",
             address_id:"",
             postcode:"",
@@ -211,6 +213,24 @@
               [],[],[]
             ],
         }
+        events = {
+          getradiodata(e){
+            // console.log(e)
+            this.type = e
+          },
+          getradiodata1(e){
+            this.sex = e
+          }
+        }
+        setRadio(arr,val){
+          arr.forEach(e => {
+            e.checked = false
+            console.log(e)
+            if(e.name == val){
+              e.checked = true
+            }
+          });
+        }
         methods = {
             toMap() {
                 var that=this;
@@ -226,7 +246,8 @@
                         longitude: longitude,
                         scale: 28,
                         success:function (res) {
-                          that2.address=res.address;
+                          console.log('address',res)
+                          that2.address=res.name;
                           that2.$apply();
                         },
                       })
@@ -261,6 +282,10 @@
                   region_id:this.place.region_id,
                   detail:this.address,
                   postcode:this.postcode,
+                  card:this.id_card,
+                  birthday: this.transdate2Time(this.bir_date),
+                  type:this.type,
+                  sex: this.sex,
                 };
 
                 wepy.request({
@@ -387,6 +412,12 @@
                 this.address=res.detail;
                 this.address_id=options.address_id;
                 this.postcode=res.postcode;
+                this.bir_date	= this.transTime(res.birthday,'yyyy-MM-dd')
+                this.id_card = res.card
+                this.type = res.type
+                this.sex = res.sex
+                this.setRadio(this.my_type,res.type)
+                this.setRadio(this.my_sex,res.sex)
 
                 this.place.province_id=res.province_id;
                 this.place.city_id=res.city_id;
