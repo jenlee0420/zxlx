@@ -25,11 +25,12 @@
         
         'pages/yaoqing',
         'pages/join',
-        'pages/joinSuccess',
         'pages/search_page',
         'pages/friendpay',
         'pages/index',
-        
+
+        'pages/joinSuccess',
+
         'pages/mycenter/dianpin',
         'pages/search',
         'pages/mycenter/collection',

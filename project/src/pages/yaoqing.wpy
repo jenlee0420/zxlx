@@ -12,10 +12,12 @@
 
   .huabian {
     // .huabian-bg;
+    background: url('@{imgbaseUrl}/sharebg.png') no-repeat;
     background-size: contain;
+    background-color: #fff6f5;
     padding-top: 44rpx;
     width: 100%;
-    height: 570rpx;
+    height: 520rpx;
     .shop-photo {
       margin-left: 40rpx;
       width: 430rpx;
@@ -71,7 +73,7 @@
               border-radius: 15rpx;
               line-height: 31rpx;
           }
-        
+
         }
         .btn {
           width: 182rpx;
@@ -102,6 +104,9 @@
       margin-bottom: 26rpx;
       height: 92rpx;
       line-height: 92rpx;
+      display: flex !important;
+      justify-content: center;
+      align-items: center;
     }
     .tips {
       font-size: 24rpx;
@@ -130,7 +135,6 @@
       .right_arrow {
         margin-left: 44rpx;
         width: 23rpx;
-        height: 31rpx;
         image {
           width:100%;
           height:100%;
@@ -171,18 +175,18 @@
     <!-- 花边抢购 S -->
     <view class="flexRow flex-astart huabian">
       <view class="shop-photo">
-        <image src="../resource/img/big_zhi.png" />
+        <image src="{{collage_detail.image}}" />
       </view>
       <view class="flexCol flex-jbetween shop-info">
         <view class="flexCol lisheng">
           <text class="t1">限时立省</text>
-          <text class="t2">￥3000.3</text>
-          <text class="t3">￥2988</text>
+          <text class="t2">￥{{collage_detail.line_price}}</text>
+          <text class="t3">￥{{collage_detail.goods_price}}</text>
         </view>
         <view class="flexCol shop-gou">
           <view class="flexRow flex-jcenter pin-avatar">
-            <text class="bubble">拼主</text>
-            <image src="{{baseHeadImg}}" mode="aspectFill" />
+            <text class="bubble">{{collage_detail.nickName}}</text>
+            <image src="{{collage_detail.avatarUrl}}" mode="aspectFill" />
                     <span class="public_icon1_wait_pin"></span>
           </view>
           <view class="btn mt30">点击抢购</view>
@@ -191,22 +195,22 @@
     </view>
     <!-- 花边抢购 E -->
     <!-- 倒计时部分 S -->
-    <view class="flexCol time-part">
-      <view class="btn">
-        邀请好友拼单 2天 23:59:35.7 后结束
-      </view>
+    <view class="flexCol time-part bg_fff">
+      <button class="btn" open-type="share">
+        <span class="public_icon1_white_weixin mr20"></span> 分享给您的好友
+      </button>
       <view class="tips">
         分享到3个群后，拼成率高达98%
       </view>
     </view>
     <!-- 倒计时部分 E -->
     <!-- 相似的列表 S -->
-    <view class="list">
+    <view class="list bg_fff">
       <view class="item flexRow">
         <view class="self-start title">游学组合</view>
         <view class="flexCol flex-1 flex-astart">
-          <view class="title2">20天军事特训营打算方法嘎达范德大股东【北京】</view>
-          <view class="des">八一军营期第一期发嘎嘎是</view>
+          <view class="title2">{{detail.goods[0].goods_name}}</view>
+          <view class="des">{{detail.goods[0].goods_attr}}</view>
         </view>
         <view class="right_arrow">
           <span class="c999 zan-icon zan-icon-arrow"></span>
@@ -241,10 +245,76 @@
             recommend
         }
         mixins = [Mixin]
-        data = {}
+        data = {
+          order_id:0,
+          order_collage_id:0,
+          collage_detail:{},
+          detail:{},
+        }
         methods = {}
-        onLoad() {
-            this.$invoke('recommend','getlist')
+        onLoad(options) {
+          // if (!options){
+          //   return
+          // }
+          // if (!options.order_id){
+          //   return
+          // }
+          // this.order_id=
+          this.order_id=95//options.order_id
+
+          wepy.request({
+            url: "api/order/detail",
+            method: 'POST',
+            data: {
+              order_id: this.order_id
+            },
+          }).then(res => {
+            if (res.code != "1") {
+              this.showAlert({
+                title: "警告",
+                content: res.msg
+              });
+              return
+            }
+            this.order_collage_id=res.data.order_collage_id;
+            this.detail=res.data;
+            this.$apply();
+
+            wepy.request({
+              url: "api/order/collagedetail",
+              method: 'POST',
+              data: {
+                order_collage_id: this.order_collage_id
+              },
+            }).then(res => {
+              if (res.code != "1") {
+                this.showAlert({
+                  title: "警告",
+                  content: res.msg
+                });
+                return
+              }
+
+              this.collage_detail=res.data.collage_detail;
+              this.$apply();
+
+            })
+          })
+
+          this.$invoke('recommend','getlist')
+        }
+
+        pageInit(){
+
+        }
+
+        onShareAppMessage(obj){
+          var re={
+            title:this.detail.goods[0].goods_name,
+            path:"/pages/join?order_id="+this.order_id,
+            imageUrl:this.collage_detail.image,
+          }
+          return re
         }
   }
 </script>

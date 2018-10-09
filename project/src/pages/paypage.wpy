@@ -430,9 +430,9 @@
             signType:res.data.signType,
             paySign:res.data.paySign,
             success:function(e){
-              if(buy_type==1){
+              if(this.buy_type==1){
                 wepy.navigateTo({
-                  url: '/pages/yaoqing'
+                  url: '/pages/yaoqing?order_id'+e.order_id,
                 })
               }else{
 
