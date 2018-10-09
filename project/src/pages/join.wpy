@@ -190,7 +190,7 @@
                 <span class="public_icon1_wait_pin"></span>
             </view>
             <view class="fs30 mt20">
-                <span class="mr20"></span><text class="tipsuccess">拼单已满</text>
+                <span class="mr20 pin_yiman"></span><text class="tipsuccess">拼单已满</text>
             </view>
             <button class="btn">加入拼单优惠</button>
             <button class="btn">我来发起拼单</button>
