@@ -209,8 +209,8 @@
       <view class="item flexRow">
         <view class="self-start title">游学组合</view>
         <view class="flexCol flex-1 flex-astart">
-          <view class="title2">{{detail.goods[0].goods_name}}</view>
-          <view class="des">{{detail.goods[0].goods_attr}}</view>
+          <view class="title2">{{collage_detail.goods_name}}</view>
+          <view class="des">{{collage_detail.goods_attr}}</view>
         </view>
         <view class="right_arrow">
           <span class="c999 zan-icon zan-icon-arrow"></span>
@@ -246,39 +246,19 @@
         }
         mixins = [Mixin]
         data = {
-          order_id:0,
           order_collage_id:0,
           collage_detail:{},
-          detail:{},
         }
         methods = {}
         onLoad(options) {
-          // if (!options){
-          //   return
-          // }
-          // if (!options.order_id){
-          //   return
-          // }
-          // this.order_id=
-          this.order_id=95//options.order_id
+           if (!options){
+             return
+           }
+           if (!options.order_collage_id){
+             return
+           }
+           this.order_collage_id=options.order_collage_id
 
-          wepy.request({
-            url: "api/order/detail",
-            method: 'POST',
-            data: {
-              order_id: this.order_id
-            },
-          }).then(res => {
-            if (res.code != "1") {
-              this.showAlert({
-                title: "警告",
-                content: res.msg
-              });
-              return
-            }
-            this.order_collage_id=res.data.order_collage_id;
-            this.detail=res.data;
-            this.$apply();
 
             wepy.request({
               url: "api/order/collagedetail",
@@ -311,7 +291,7 @@
         onShareAppMessage(obj){
           var re={
             title:this.detail.goods[0].goods_name,
-            path:"/pages/join?order_id="+this.order_id,
+            path:"/pages/join?order_collage_id="+this.order_collage_id,
             imageUrl:this.collage_detail.image,
           }
           return re

@@ -360,6 +360,7 @@
       buy_type:2,
       showPopup:false,
       order_id:"",
+      order_collage_id:0,
     };
     components = {
       notice
@@ -380,7 +381,8 @@
             detail :this.detail.address.detail,
           },
           buy_type:this.buy_type,
-          pay_type:this.pay_type
+          pay_type:this.pay_type,
+          order_collage_id:this.order_collage_id,
         };
 
         wepy.request({
@@ -410,7 +412,8 @@
             detail :this.detail.address.detail,
           },
           buy_type:this.buy_type,
-          pay_type:this.pay_type
+          pay_type:this.pay_type,
+          order_collage_id:this.order_collage_id,
         };
 
         wepy.request({
@@ -549,6 +552,7 @@
 
       this.buy_type=options.buy_type;
       this.goods_sku_id=options.goods_sku_id;
+      this.order_collage_id=options.order_collage_id;
       var data={
         goods_id:options.goods_id,
         goods_num:options.good_number,

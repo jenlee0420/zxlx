@@ -22,9 +22,9 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
-        
-        'pages/yaoqing',
         'pages/join',
+        'pages/yaoqing',
+
         'pages/search_page',
         'pages/friendpay',
         'pages/index',

@@ -176,8 +176,8 @@
                 <image src="{{collage_detail.image}}" mode="aspectFill" />
             </view>
             <view class="flex-column flex-jbetween shop-info">
-                <text class="t1">{{detail.goods[0].goods_name}}</text>
-                <text class="t2">{{detail.goods[0].goods_attr}}</text>
+                <text class="t1">{{collage_detail.goods_name}}</text>
+                <text class="t2">{{collage_detail.goods_attr}}</text>
                 <text class="t2">{{collage_detail.join_num}}人拼单 · 已拼300个</text>
                 <view class=""><text class="t3 mr10">￥{{collage_detail.goods_price}}</text><text class="t2">拼单省{{collage_detail.line_price-collage_detail.goods_price}}元</text></view>
             </view>
@@ -185,8 +185,9 @@
         <view class="flexCol shop-gou bg_fff">
             <view class="flexRow flex-jcenter pin-avatar">
                 <text class="bubble">{{collage_detail.nickName}}</text>
-                <image src="{{collage_detail.avatarUrl}}" mode="aspectFill" />
-                <image src="{{baseHeadImg}}" mode="aspectFill" />
+                <block wx:for="{{collage_detail.collage_list}}">
+                  <image src="{{item.avatarUrl}}" mode="aspectFill" />
+                </block>
                 <span class="public_icon1_wait_pin"></span>
             </view>
             <view  wx:if="{{collage_detail.meed_num-collage_detail.join_num==0}}"  class="fs30 mt20">
@@ -242,52 +243,36 @@
         }
         mixins = [Mixin]
         data = {
-          order_id:0,
           order_collage_id:0,
           collage_detail:{},
-          detail:{},
           pin_list:[],
         }
         methods = {
           join_pin(){
-            var data={
-              goods_id:this.detail.goods[0].goods_id,
-              goods_num:1,
-              goods_sku_id:this.detail.goods[0].goods_spec_id,
-              buy_type:1,
-              order_collage_id:this.order_collage_id,
-            };
-
-            wepy.request({
-              url: "api/order/buynow",
-              method: 'POST',
-              data: data,
-            }).then(res => {
-              if(res.code != "1"){
-                this.showAlert({title: "警告", content: res.msg});
-                return
-              }
-              //this.detail=res.data;
-              this.$apply();
+            wepy.navigateTo({
+              url: '/pages/goods_detail?order_collage_id='+this.order_collage_id+'&id='+this.collage_detail.goods_id,
             })
           }
         }
         onLoad(options) {
-          // if (!options){
-          //   return
-          // }
-          // if (!options.order_id){
-          //   return
-          // }
-          // this.order_id=options.order_id;
+           if (!options){
+             return
+           }
+           if (!options.order_collage_id){
+             return
+           }
 
-          this.order_id=95
 
+          this.order_collage_id=options.order_collage_id;
+          this.$invoke('recommend','getlist')
+        }
+
+        PageInit(){
           wepy.request({
-            url: "api/order/detail",
+            url: "api/order/collagedetail",
             method: 'POST',
             data: {
-              order_id: this.order_id
+              order_collage_id: this.order_collage_id
             },
           }).then(res => {
             if (res.code != "1") {
@@ -297,59 +282,36 @@
               });
               return
             }
-            this.order_collage_id=res.data.order_collage_id;
-            this.detail=res.data;
+
+            this.collage_detail=res.data.collage_detail;
             this.$apply();
 
             wepy.request({
-              url: "api/order/collagedetail",
+              url: "api/goods/collage",
               method: 'POST',
               data: {
-                order_collage_id: this.order_collage_id
+                goods_id: this.collage_detail.goods_id,
+                per_page: 2,
+                page: 0,
+                collage_filled: 10,
               },
             }).then(res => {
               if (res.code != "1") {
-                this.showAlert({
-                  title: "警告",
-                  content: res.msg
-                });
-                return
-              }
+              this.showAlert({
+                title: "警告",
+                content: res.msg
+              });
+              return
+            }
 
-              this.collage_detail=res.data.collage_detail;
-              this.$apply();
-
-              wepy.request({
-                url: "api/goods/collage",
-                method: 'POST',
-                data: {
-                  goods_id: this.detail.goods[0].goods_id,
-                  per_page: 2,
-                  page: 0,
-                  collage_filled: 10,
-                },
-              }).then(res => {
-                if (res.code != "1") {
-                  this.showAlert({
-                    title: "警告",
-                    content: res.msg
-                  });
-                  return
-                }
-
-                this.pin_list = res.data.list.data;
-                this.$apply();
-              })
-
-            })
+            this.pin_list = res.data.list.data;
+            this.$apply();
           })
 
-          this.$invoke('recommend','getlist')
+
+        })
         }
 
-        pageInit(){
-
-        }
 
 
 
