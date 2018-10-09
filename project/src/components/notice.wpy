@@ -60,8 +60,9 @@
             getNotice() {
                 this.messageTimer = setInterval(() => {
                     this.getNoticedata()
-                }, 60000)
+                }, 30000)
             }
+            //30秒
         }
         // 取首页通知
         getNoticedata() {

@@ -271,7 +271,7 @@ export default class Global extends wepy.mixin {
     //转时间戳
     transdate2Time(date){
         let tmp = new Date(date)
-        return tmp.getTime()
+        return tmp.getTime() / 1000
     }
     //	时间格式化   (YYYY-MM-DD HH:mm)
     transTime(time,opt = 'yyyy-MM-dd hh:mm'){
@@ -415,7 +415,7 @@ export default class Global extends wepy.mixin {
         var pages = getCurrentPages()
         var bool = false
         Object.keys(pages).forEach((v) => {
-            if ((pages[v].route).indexOf('pages/index') > -1) {
+            if ((pages[v].route).indexOf('pages/index') > -1 || (pages[v].route).indexOf('pages/search_page') > -1) {
                 console.log('erewrew')
                 bool = true
             }

@@ -31,7 +31,10 @@
     padding-left: 40rpx;
     padding-right: 18rpx;
     border-top: 1rpx solid #e3e3e3;
-    height: 186rpx;
+    // height: 111rpx;
+    padding-top:20rpx;
+    padding-bottom:20rpx;
+
     .icon-loc {
       width: 28rpx;
       height: 35rpx;
@@ -249,15 +252,15 @@
 
     <!-- 地址信息 S -->
     <view class="flexRow locWrap" wx:if="{{detail.address}}" @tap="to_addresslist({{detail.address.address_id}})">
-      <icon class="public_icon2_location2 list_mg_35"></icon>
-      <view class="flex flex-astretch info-wrap">
+      <icon class="public_icon2_location2 list_mg_35 mr20"></icon>
+      <view class="flexCol flex-astretch info-wrap">
         <view class="flexRow nandt">
           <text class="name">{{detail.address.name}}</text>
           <text class="tel">{{detail.address.phone}}</text>
         </view>
         <text class="flexRow flex-acenter address">{{detail.address.region.province+detail.address.region.city+detail.address.region.region+detail.address.detail}}</text>
       </view>
-      <image class="right_arrow" src="../resource/img/right_arrow.png"></image>
+      <span class="c999 zan-icon zan-icon-arrow"></span>
     </view>
     <!-- 地址信息 E -->
     <!-- 按钮列表 S -->
