@@ -167,7 +167,7 @@
         <view class="address" wx:if="{{order_status=='10'||order_status=='20'}}">
             <span class="public_icon2_location2"></span>
             <view class="flexCol flex-astart flex-1 ml20">
-                <text>{{detail.address[0].name}}   {{detail.address[0].phone}}</text>
+                <text class="mb10">{{detail.address[0].name}}   {{detail.address[0].phone}}</text>
                 <text>{{detail.address[0].region.province+detail.address[0].region.city+detail.address[0].region.region+detail.address[0].detail}}</text>
             </view>
             <view wx:if="{{order_status=='10'}}">

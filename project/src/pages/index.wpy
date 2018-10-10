@@ -134,7 +134,8 @@
             recommend: [],
             recommendpage: 1,
             recommend2page:1,
-            noticemess:''
+            noticemess:'',
+            test:{}
         }
         methods = {
             navAD(url){

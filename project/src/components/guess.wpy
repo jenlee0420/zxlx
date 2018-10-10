@@ -1,34 +1,56 @@
 <style lang="less">
-    #guess{
-        .sutitle{
-            display:flex;
-            justify-content: center;
-            align-items: center;
-            background-color: #fff;
-        }
+  #guess {
+    .sutitle {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      background-color: #fff;
     }
+  }
 </style>
 
 <template>
   <view class="container" id="guess">
     <view class="sutitle"><span class="public_icon2_doyoulike mr10"></span>猜你喜欢</view>
-    <gooditem></gooditem>
+    <repeat for="{{list}}" index="index" item="item" key="key">
+      <gooditem :goodsitem.sync="item"></gooditem>
+    </repeat>
   </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-import gooditem from '@/components/collectionItem'
-export default class Guess extends wepy.page {
-  config = {
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  import gooditem from '@/components/collectionItem'
+  export default class Guess extends wepy.page {
+    config = {}
+    components = {
+      gooditem
+    }
+    mixins = [Mixin]
+    data = {
+      current: 1,
+      list: []
+    }
+    methods = {}
+    getlist() {
+      wepy.request({
+        url: 'api/index/recommend',
+        method: 'POST',
+        data: {
+          type: 2,
+          per_page: 10,
+          page: this.current
+        }
+      }).then(res => {
+        if (res.code == 1) {
+          this.list = res.data.list.data
+        }
+        this.$apply()
+      })
+    }
+    onLoad() {
+      this.getlist()
+    }
   }
-  components = {gooditem}
-  mixins = [Mixin]
-  data = {
-  }
-  methods = {}
-  onLoad() {
-  }
-}
 </script>

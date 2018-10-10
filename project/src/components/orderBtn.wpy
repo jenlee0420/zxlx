@@ -11,8 +11,8 @@
     <button class="btn" @tap="to_member" wx:if="{{orderitem.order_status.value=='40'}}">完善出行人</button>
     <button class="btn" wx:if="{{orderitem.order_status.value=='30'&&this.detail.is_comment==1}}" disabled>已评价</button>
     <button class="btn" @tap="todianpin({{orderitem}})" wx:if="{{orderitem.order_status.value=='30'&&this.detail.is_comment!=1}}">我要评价</button>
-    <button class="btn"  @tap="to_pay({{orderitem}})" wx:if="{{orderitem.order_status.value=='10'&&orderitem.pay_type==1}}">去支付</button>
-    <button class="btn"  @tap="to_friend_pay({orderitem})" wx:if="{{orderitem.order_status.value=='10'&&orderitem.pay_type==2}}">发给好友</button>
+    <button class="btn" @tap="to_pay({{orderitem}})" wx:if="{{orderitem.order_status.value=='10'&&orderitem.pay_type==1}}">去支付</button>
+    <button class="btn" @tap="to_friend_pay({orderitem})" wx:if="{{orderitem.order_status.value=='10'&&orderitem.pay_type==2}}">发给好友</button>
     <button class="btn" @tap="del_order({{orderitem}})" wx:if="{{orderitem.order_status.value=='20'}}">删除订单</button>
     <button class="btn" @tap="to_good_detail({{orderitem}})" wx:if="{{orderitem.order_status.value=='20'}}">再次购买</button>
   </view>
@@ -32,99 +32,119 @@
         }
       }
     }
-    watch={
-    }
+    watch = {}
     mixins = [Mixin]
     data = {}
     methods = {
-      to_friend_pay(order){
+      to_friend_pay(order) {
         wx.navigateTo({
-          url:"/pages/sharefriend?order_id="+order.order_id,
+          url: "/pages/sharefriend?order_id=" + order.order_id,
         })
       },
-
-      to_pay(order){
+      to_pay(order) {
         wepy.request({
           url: "api/order/pay",
           method: 'POST',
-          data: {order_id:order.order_id,pay_type:order.pay_type},
+          data: {
+            order_id: order.order_id,
+            pay_type: order.pay_type
+          },
         }).then(res => {
-          this.loading= false;
-          if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
-          }else{
+          this.loading = false;
+          if (res.code != "1") {
+            this.showAlert({
+              title: "警告",
+              content: res.msg
+            });
+          } else {
             wx.requestPayment({
-              timeStamp:res.data.timeStamp,
-              nonceStr:res.data.nonceStr,
-              package:res.data.package,
-              signType:res.data.signType,
-              paySign:res.data.paySign,
-              success:function(e){
+              timeStamp: res.data.timeStamp,
+              nonceStr: res.data.nonceStr,
+              package: res.data.package,
+              signType: res.data.signType,
+              paySign: res.data.paySign,
+              success: function(e) {
                 wepy.navigateTo({
                   url: '/pages/mycenter/orderlist?type=1',
                 })
               },
-              fail:function(e){
+              fail: function(e) {
                 console.log(e)
               }
             })
           }
         })
       },
-
-      to_good_detail(order){
+      to_good_detail(order) {
         wx.navigateTo({
-          url:"/pages/goods_detail?id="+order.goods[0].goods_id
+          url: "/pages/goods_detail?id=" + order.goods[0].goods_id
         })
       },
-
-      to_refund(order){
+      to_refund(order) {
         wx.navigateTo({
-          url:"/pages/refund?order_id="+order.order_id
+          url: "/pages/refund?order_id=" + order.order_id
         })
       },
-
-      to_member(){
+      to_member() {
         wx.navigateTo({
-          url:"/pages/member/list_member?order_id="+order.order_id
+          url: "/pages/member/list_member?order_id=" + order.order_id
         })
       },
-      todianpin(item){
+      todianpin(item) {
         wx.navigateTo({
-          url:"/pages/mycenter/dianpin?orderid=" + item.order_id + "&goodsid="+item.goods[0].order_goods_id
+          url: "/pages/mycenter/dianpin?orderid=" + item.order_id + "&goodsid=" + item.goods[0].order_goods_id
         })
       },
-      cancle_order(order){
-          wepy.request({
-            url: "api/order/cancel",
-            method: 'POST',
-            data: {order_id:order.order_id},
-          }).then(res => {
-            this.loading= false;
-          if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
-          }else{
-            //this.$emit('flush')
-            wepy.navigateTo({
-              url: '/pages/mycenter/orderlist?type=1',
+      cancle_order(order) {
+        this.showAlert({
+          content: '确定取消订单',
+          confirm: function() {
+            wepy.request({
+              url: "api/order/cancel",
+              method: 'POST',
+              data: {
+                order_id: order.order_id
+              },
+            }).then(res => {
+              this.loading = false;
+              if (res.code != "1") {
+                this.showAlert({
+                  title: "警告",
+                  content: res.msg
+                });
+              } else {
+                //this.$emit('flush')
+                wepy.navigateTo({
+                  url: '/pages/mycenter/orderlist?type=1',
+                })
+              }
             })
           }
         })
       },
-
-      del_order(order){
-        wepy.request({
-          url: "api/order/delete",
-          method: 'POST',
-          data: {order_id:order.order_id},
-        }).then(res => {
-          this.loading= false;
-          if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
-          }else{
-            //this.$emit('flush');
-            wepy.navigateTo({
-              url: '/pages/mycenter/orderlist?type=1',
+      del_order(order) {
+        this.showAlert({
+          content: '确定删除订单',
+          confirm: function() {
+            wepy.request({
+              url: "api/order/delete",
+              method: 'POST',
+              data: {
+                order_id: order.order_id
+              },
+            }).then(res => {
+              this.loading = false;
+              if (res.code != "1") {
+                this.showAlert({
+                  title: "警告",
+                  content: res.msg
+                });
+              } else {
+                //this.$emit('flush');
+                wepy.navigateTo({
+                  url: '/pages/mycenter/orderlist?type=1',
+                })
+              }
             })
           }
         })

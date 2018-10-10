@@ -38,7 +38,6 @@
       width: 100%;
       text-align: center;
       font-size: 60rpx;
-      color: #333;
       margin-bottom: 46rpx;
     }
     .timebox {
@@ -56,6 +55,16 @@
       font-size: 30rpx;
       color: #9b9c9a;
       line-height: 38rpx;
+    }
+    .paycancel{
+      color: #b7b9b5;
+      font-size: 22rpx;
+      border-radius: 10rpx;
+      padding: 6px;
+      background-color:#ebeaea;
+      width: 368rpx;
+      margin-left:auto;
+      margin-right:auto;
     }
   }
 </style>
@@ -80,15 +89,18 @@
           </view>
         </view>
       </view>
-      <view class="price">￥{{detail.total_price}}</view>
-      <view class="t_c fs22">
+      {{limitTime.date}}天{{limitTime.hour}}:{{limitTime.min}}:{{limitTime.sec}}
+      <view class="price {{detail.order_status != '10'?'cb4b4b4':''}}">￥{{detail.total_price}}</view>
+      <view class="t_c fs22" wx:if="{{detail.order_status == '10'}}">
         <text class="mr16">剩余支付时间</text>
         <text class="mr10">2天</text><text class="timebox">23</text>:<text class="timebox">23</text>:<text class="timebox">23</text>
       </view>
-      <view class="t_c mt40">
+      <view class="t_c mt40 mb40" wx:if="{{detail.order_status == '10'}}">
         <button class="btn w600">立即支付</button>
       </view>
-      <view class="waring">
+      <text class="paycancel flexCol mb40" wx:else>好友已取消订单，或者超时未支付
+      </text>
+      <view class="waring" wx:if="{{detail.order_status == '10'}}">
         <view>· 付款前请务必与好友确认无误，避免受骗哦</view>
         <view>· 如果发起退款，钱将原路退还您</view>
       </view>
@@ -117,6 +129,8 @@
       order_id:"51",
 
       this_user_name:"",
+      payloop:null,
+      limitTime:{}
     }
     methods = {
       pay(){
@@ -148,7 +162,17 @@
         })
       }
     }
-
+    //倒计时
+    countdown(time){
+      this.payloop = setInterval(() => {
+        time = time - 1
+        this.limitTime = this.countdownDateTime(time)
+        if(time <=0){
+          console.log('time out')
+        }
+        this.$apply()
+      },'1000')
+    }
     onLoad(options){
       console.log(options)
       if(!options){
@@ -165,6 +189,9 @@
 
       this.user_id=options.user_id;
       this.order_id=options.order_id;
+    }
+    onUnload() {
+      clearInterval(this.payloop)
     }
     PageInit() {
       if(!this.user_id&&!this.order_id){
@@ -193,7 +220,10 @@
             return
           }
           this.detail=res.data;
-
+          //倒计时
+          if (!this.payloop) {
+            this.countdown(this.detail.surplus_pay_time)
+          }
           var obj=JSON.parse(wx.getStorageSync("userData"));
           this.this_user_name=obj.nickName
           this.$apply();

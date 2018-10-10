@@ -83,8 +83,8 @@ export default class Global extends wepy.mixin {
         title: data.title?data.title:'',
         content: data.content?data.content:'',
         showCancel: data.showCancel==undefined?true:data.showCancel,
-        confirmColor: data.confirmColor?data.confirmColor:'#4287ff',
-        cancelColor: data.cancelColor?data.cancelColor:'#4287ff',
+        confirmColor: data.confirmColor?data.confirmColor:'#d90000',
+        cancelColor: data.cancelColor?data.cancelColor:'#a3a3a3',
         confirmText: data.confirmText ? data.confirmText : '确定',
         cancelText: data.cancelText ? data.cancelText : '取消',
         }).then(res => {
@@ -302,6 +302,23 @@ export default class Global extends wepy.mixin {
 		}
 		return fmt;
     }
+    //转换t剩余时间
+    countdownDateTime(time){
+        let datetime = {}
+        let thisTime = {
+            date: parseInt(time / 60 / 60 / 24),
+            hour: parseInt(time / 60 / 60 % 24),
+            min: parseInt(time / 60 % 60),
+            sec: parseInt(time % 60),
+        }
+        datetime = thisTime
+        datetime.date = thisTime.date 
+        datetime.hour = thisTime.hour < 10 ? '0' + String(thisTime.hour) : thisTime.hour
+        datetime.min = thisTime.min < 10 ? '0' + String(thisTime.min) : thisTime.min
+        datetime.sec = thisTime.sec < 10 ? '0' + String(thisTime.sec) : thisTime.sec
+        return datetime
+    }
+
     // 百度地图返回城市code
     getCity(lat, lng) {
         return new Promise((resolve, reject) => {
