@@ -393,8 +393,12 @@
           method: 'POST',
           data: data,
         }).then(res => {
-          this.showPopup=true;
-          this.order_id=res.data.order_id
+          //this.showPopup=true;
+          this.order_id=res.data.order_id;
+
+          wx.navigateTo({
+            url:"/pages/sharefriend?order_id="+this.order_id,
+          })
           this.$apply();
         })
 
