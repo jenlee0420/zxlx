@@ -158,11 +158,13 @@
             <text wx:if="{{order_status=='10'}}">等待买家付款</text>
             <text wx:if="{{order_status=='20'}}">订单已取消</text>
             <text wx:if="{{order_status=='30'}}">买家已完成</text>
+            <text wx:if="{{order_status=='40'}}">等待买家使用</text>
             <span class="public_icon_order_wait_pay" wx:if="{{order_status=='10'}}"></span>
             <span class="public_icon_order_cancel" wx:if="{{order_status=='20'}}"></span>
             <span class="public_icon4_complete_buy" wx:if="{{order_status=='30'}}"></span>
+            <span class="public_icon_order_nouse" wx:if="{{order_status=='40'}}"></span>
         </view>
-        <view class="address">
+        <view class="address" wx:if="{{order_status=='10'||order_status=='20'}}">
             <span class="public_icon2_location2"></span>
             <view class="flexCol flex-astart flex-1 ml20">
                 <text>{{detail.address[0].name}}   {{detail.address[0].phone}}</text>
@@ -209,26 +211,33 @@
                 实付：￥{{detail.total_price}}
             </view>
             <!-- 出行人信息 -->
-            <view class="members" wx:if="{{order_status=='30'}}">
-                <view class="c555545"><text>出行人信息（2人）</text></view>
-                <view class="memberinfo">
-                    <text class="c333">李佳</text>
-                    <text class="cb4b4b4">手机号码   177*********3</text>
-                    <text class="cb4b4b4">身份证     330824*************3</text>
-                </view>
+            <view class="members" wx:if="{{order_status=='40'}}">
+                <view class="c555545"><text>出行人信息（{{detail.address.length}}人）</text></view>
+                <block wx:for="{{detail.address}}">
+                  <view class="memberinfo">
+                    <text class="c333">{{item.name}}</text>
+                    <text class="cb4b4b4">手机号码   {{item.phone}}</text>
+                    <text class="cb4b4b4">身份证     {{item.card}}</text>
+                  </view>
+                </block>
+
             </view>
             <!-- 出行人信息 end-->
             <!-- 评价信息 -->
             <view class="comments" wx:if="{{order_status=='30'}}">
-                <view class="commlabel"><text>评价信息</text>
-                    <Star total="5" num="3">
-                </view>
-                <!-- <view class="commContent">评价内容</view>
+                <block wx:for="{{comment_list}}">
+                  <view class="commlabel"><text>评价信息</text>
+                    <Star total="5" num="{{item.score}}">
+                  </view>
+                  <view class="commContent">{{item.comment}}</view>
+                  <block wx:for="item.pic">
                     <view class="commentimgs">
-                        <image src="{{baseServerImg}}" mode="aspectFill" />
-                        <image src="{{baseServerImg}}" mode="aspectFill" />
-                    </view> -->
-                <view class="noComments">
+                        <image src="{{item}}" mode="aspectFill" />
+                    </view>
+                  </block>
+                </block>
+
+                <view class="noComments" wx:if="{{detail.is_comment!=1}}">
                     <span class="public_icon4_not_assess"></span>
                     <text>暂无评价信息，请参与评价，谢谢哦！</text>
                 </view>
@@ -236,12 +245,13 @@
             <!-- 评价信息 end -->
             <button class="contact"><span class="public_icon4_contact mr10" open-type="contact" ></span>联系客服</button>
         </view>
-        <view class="orderinfo" wx:if="{{order_status=='10'||order_status=='20'}}">
+        {{this.detail.pay_type}}
+        <view class="orderinfo" wx:if="{{order_status=='10'||order_status=='20'||order_status=='40'}}">
             <text>订单编号：{{detail.order_no}}</text>
-            <text wx:if="{{pay_type==1}}">支付方式：微信</text>
-            <text wx:if="{{pay_type==2}}">支付方式：好友代付</text>
+            <text wx:if="{{detail.pay_type==1}}">支付方式：微信</text>
+            <text wx:if="{{detail.pay_type==2}}">支付方式：好友代付</text>
             <text>下单时间：{{detail.create_time}}</text>
-            <text wx:if="{{order_status=='30'}}">完成时间：2018-12-19  </text>
+            <text wx:if="{{order_status=='30'}}">完成时间：{{detail.receipt_time}}  </text>
         </view>
         <orderbtn :orderitem.sync="detail"></orderbtn>
         <view style="margin-top: 20rpx">
@@ -271,6 +281,7 @@
             detail: {},
             loading: true,
             order_id: 0,
+            comment_list:[],
         }
         events = {
             flush() {
@@ -332,6 +343,27 @@
                     this.detail = res.data
                 }
                 this.$apply();
+
+                if(this.order_status=='30'){
+
+                  wepy.request({
+                    url: "api/order/getcomment",
+                    method: 'POST',
+                    data: {
+                      order_id: options.order_id
+                    },
+                  }).then(res => {
+                    if (res.code != "1") {
+                      this.showAlert({
+                        title: "警告",
+                        content: res.msg
+                      });
+                      return
+                    }
+                    this.comment_list=res.data.list;
+                    this.$apply();
+                })
+                }
             })
         }
         PageInit() {
