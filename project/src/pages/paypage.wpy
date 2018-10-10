@@ -207,6 +207,9 @@
       font-size: 33rpx;
       color: #fff;
       line-height: @footer-h;
+      &.disable {
+        background: #eff0f0;
+      }
     }
   }
 #shareBox {
@@ -332,8 +335,8 @@
       <view class="price-part flexRow flex-jend">
         实付款:<text>￥{{detail.order_total_price}}</text>
       </view>
-      <view class="pay-btn" wx:if="{{pay_type==1}}" @tap="pay_now">立即支付</view>
-      <view class="pay-btn" wx:if="{{pay_type==2}}" @tap="pay_friend">找好友代付</view>
+      <view class="pay-btn {{user_term? '' : 'disable'}}" wx:if="{{pay_type==1}}" @tap="pay_now">立即支付</view>
+      <view class="pay-btn {{user_term? '' : 'disable'}}" wx:if="{{pay_type==2}}" @tap="pay_friend">找好友代付</view>
     </view>
     <!-- 底部按钮 E -->
     <notice />
@@ -370,6 +373,10 @@
     }
     methods = {
       pay_friend(){
+        if (!this.user_term){
+          return
+        }
+
         var data={
           goods_id:this.detail.goods_list[0].goods_id,
           goods_num:this.detail.goods_list[0].total_num,
@@ -405,6 +412,10 @@
       },
 
       pay_now(){
+        if (!this.user_term){
+          return
+        }
+
         var data={
           goods_id:this.detail.goods_list[0].goods_id,
           goods_num:this.detail.goods_list[0].total_num,
@@ -445,15 +456,17 @@
                   url: '/pages/yaoqing?order_id'+e.order_id,
                 })
               }else{
-
+                wepy.navigateTo({
+                  url: '/pages/mycenter/orderlist?type=1',
+                })
               }
+              wx.setStorageSync("address","");
             },
             fail:function(e){
-              console.log("fail")
               console.log(e)
             }
           })
-          wx.setStorageSync("address","");
+
         });
       },
 

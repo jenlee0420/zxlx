@@ -60,11 +60,11 @@
               signType:res.data.signType,
               paySign:res.data.paySign,
               success:function(e){
-                console.log("success")
-                console.log(e)
+                wepy.navigateTo({
+                  url: '/pages/mycenter/orderlist?type=1',
+                })
               },
               fail:function(e){
-                console.log("fail")
                 console.log(e)
               }
             })
@@ -104,7 +104,10 @@
           if(res.code != "1"){
             this.showAlert({title: "警告", content: res.msg});
           }else{
-            this.$emit('flush')
+            //this.$emit('flush')
+            wepy.navigateTo({
+              url: '/pages/mycenter/orderlist?type=1',
+            })
           }
         })
       },
@@ -119,7 +122,10 @@
           if(res.code != "1"){
             this.showAlert({title: "警告", content: res.msg});
           }else{
-            this.$emit('flush');
+            //this.$emit('flush');
+            wepy.navigateTo({
+              url: '/pages/mycenter/orderlist?type=1',
+            })
           }
         })
       },

@@ -170,8 +170,8 @@
             <text class="fs24">请选择支付方式</text>
             <view class="paylist">
                 <ul>
-                    <li @tap="choice_pay(1)"><span class="public_icon2_weixin_pay mr20"></span><text>微信支付</text><span class="zan-icon-success zan-icon" wx:if="{{pay_type==1}}" ></span></li>
-                    <li @tap="choice_pay(2)"><span class="public_icon2_other_pay mr20"></span><text>找微信朋友代付</text><span class="zan-icon-success zan-icon"  wx:if="{{pay_type==2}}"></span></li>
+                    <li @tap="choice_pay(1)"><span class="public_icon2_weixin_pay mr20"></span><text>微信支付</text><span class="zan-icon-success zan-icon" wx:if="{{detail.pay_type==1}}" ></span></li>
+                    <li @tap="choice_pay(2)"><span class="public_icon2_other_pay mr20"></span><text>找微信朋友代付</text><span class="zan-icon-success zan-icon"  wx:if="{{detail.pay_type==2}}"></span></li>
                 </ul>
             </view>
         </view>
@@ -258,7 +258,6 @@
         data = {
           order_status:"",
           detail:{},
-          pay_type:1,
           loading:true,
           order_id:0,
         }
@@ -290,7 +289,7 @@
           },
 
           choice_pay(pay_type){
-            this.pay_type=pay_type;
+            this.detail.pay_type=pay_type;
             this.$apply();
           }
         }
