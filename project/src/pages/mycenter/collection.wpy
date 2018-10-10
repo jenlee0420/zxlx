@@ -28,7 +28,7 @@ export default class collection extends wepy.page {
   data = {
     currentpage:1,
     favlist:{
-      list:0,
+      list:[],
       total_count:0,
       total_page:0,
     },
@@ -47,6 +47,9 @@ export default class collection extends wepy.page {
         this.loading = false
         if(res.code == 1){
           // this.favlist.list = res.data.list.data
+          if(!res.data.list){
+            return;
+          }
           if(this.currentpage == 1){
             this.favlist.list = res.data.list.data
           }else{

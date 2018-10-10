@@ -33,7 +33,7 @@
         }
         .inputview {
             background-color: #fff;
-            border-radius: 20rpx; // min-height: 30rpx;
+            border-radius: 10rpx; // min-height: 30rpx;
             padding: 20rpx;
             font-size: 26rpx;
             display: flex;

@@ -1,69 +1,76 @@
 <style lang="less">
     #orderdetail {
-        >view{
+        >view {
             background-color: #fff;
         }
-        .orderstatus{
+        .orderstatus {
             height: 177rpx;
             background-color: #ce4031;
-            color:#fff;
+            color: #fff;
             font-size: 33rpx;
             padding: 0 70rpx;
             display: flex;
             justify-content: space-between;
             align-items: center;
         }
-        .address{
+        .address {
             display: flex;
             align-items: center;
             padding: 20rpx;
-            text{
+            text {
                 line-height: 35rpx;
                 font-size: 26rpx;
                 color: #333;
                 display: inline;
             }
         }
-        .payment{
+        .payment {
             background-color: transparent;
             line-height: 85rpx;
             margin-bottom: 20rpx;
-            >text{
+            >text {
                 padding-left: 44rpx;
                 display: inline-block;
                 height: 65rpx;
             }
-            .paylist{
+            .paylist {
                 background-color: #fff;
                 padding-left: 44rpx;
                 width: 100%;
                 box-sizing: border-box;
-                ul{
-                    li{
+                ul {
+                    li {
                         border-bottom: 1rpx solid @bColor;
                         display: flex;
                         font-size: 26rpx;
                         height: 85rpx;
                         align-items: center;
-                        >text{flex:1}
+                        >text {
+                            flex: 1
+                        }
                         padding-right: 20rpx;
-                        &:last-child{
+                        &:last-child {
                             border-bottom: none;
                         }
                     }
                 }
             }
         }
-        .contact{
+        .contact {
             font-size: 28rpx;
-            color:#666;
+            color: #666;
             display: flex;
             justify-content: center;
             align-items: center;
             padding: 10rpx 0;
-            border-top: 1rpx solid @bColor;
+            background-color: transparent;
+            outline: none;
+            border-radius: 0px;
         }
-        .orderinfo{
+        button.contact::after {
+            border: none;
+        }
+        .orderinfo {
             padding: 30rpx;
             font-size: 24rpx;
             color: #888;
@@ -72,29 +79,29 @@
             line-height: 45rpx;
             margin-bottom: 20rpx;
         }
-        .comments{
-            .commlabel{
+        .comments {
+            .commlabel {
                 background-color: #eee;
-                display:flex;
-                >text{
+                display: flex;
+                >text {
                     font-size: 24rpx;
-                    color:#555545;
+                    color: #555545;
                     margin-right: 180rpx;
                 }
                 height: 67rpx;
                 line-height: 67rpx;
                 padding-left: 30rpx;
             }
-            .commContent{
+            .commContent {
                 line-height: 40rpx;
                 color: #333;
                 word-break: break-all;
                 font-size: 24rpx;
                 padding: 30rpx;
             }
-            .commentimgs{
+            .commentimgs {
                 padding: 30rpx;
-                image{
+                image {
                     width: 106rpx;
                     height: 106rpx;
                     margin-right: 10rpx;
@@ -103,7 +110,7 @@
                 display: flex;
                 flex-flow: wrap;
             }
-            .noComments{
+            .noComments {
                 height: 273rpx;
                 display: flex;
                 flex-direction: column;
@@ -111,21 +118,21 @@
                 align-items: center;
                 font-size: 24rpx;
                 color: #bebcbc;
-                span{
+                span {
                     margin-bottom: 37rpx;
                 }
             }
         }
-        .members{
-            >view:first-child{
+        .members {
+            >view:first-child {
                 background-color: #eee;
                 padding-left: 30rpx;
                 font-size: 24rpx;
                 height: 67rpx;
                 line-height: 67rpx;
             }
-            .memberinfo{
-                padding:30rpx;
+            .memberinfo {
+                padding: 30rpx;
                 padding-left: 0;
                 margin-left: 30rpx;
                 font-size: 26rpx;
@@ -133,14 +140,14 @@
                 display: flex;
                 flex-direction: column;
                 border-bottom: 1rpx solid @bColor;
-                &:last-child{
-                    border-bottom:none;
+                &:last-child {
+                    border-bottom: none;
                 }
             }
         }
-        .btns{
-             padding: 20rpx;
-                text-align: right;
+        .btns {
+            padding: 20rpx;
+            text-align: right;
         }
     }
 </style>
@@ -157,7 +164,7 @@
         </view>
         <view class="address">
             <span class="public_icon2_location2"></span>
-            <view class="flex-1 ml20">
+            <view class="flexCol flex-astart flex-1 ml20">
                 <text>{{detail.address[0].name}}   {{detail.address[0].phone}}</text>
                 <text>{{detail.address[0].region.province+detail.address[0].region.city+detail.address[0].region.region+detail.address[0].detail}}</text>
             </view>
@@ -170,8 +177,8 @@
             <text class="fs24">请选择支付方式</text>
             <view class="paylist">
                 <ul>
-                    <li @tap="choice_pay(1)"><span class="public_icon2_weixin_pay mr20"></span><text>微信支付</text><span class="zan-icon-success zan-icon" wx:if="{{detail.pay_type==1}}" ></span></li>
-                    <li @tap="choice_pay(2)"><span class="public_icon2_other_pay mr20"></span><text>找微信朋友代付</text><span class="zan-icon-success zan-icon"  wx:if="{{detail.pay_type==2}}"></span></li>
+                    <li @tap="choice_pay(1)"><span class="public_icon2_weixin_pay mr20"></span><text>微信支付</text><span class="zan-icon-success zan-icon" wx:if="{{detail.pay_type==1}}"></span></li>
+                    <li @tap="choice_pay(2)"><span class="public_icon2_other_pay mr20"></span><text>找微信朋友代付</text><span class="zan-icon-success zan-icon" wx:if="{{detail.pay_type==2}}"></span></li>
                 </ul>
             </view>
         </view>
@@ -181,30 +188,29 @@
                 <image src="{{detail.source_image}}" mode="aspectFill" /><span class="fs25 c333 flex-1 ml20">{{detail.source_name}}</span>
             </view>
             <block wx:for="{{detail.goods}}" wx:key="{{index}}">
-              <view class="itemdetail">
-                <view class="mr20">
-                  <image src="{{item.image.file_path}}" mode="aspectFill" />
+                <view class="itemdetail">
+                    <view class="mr20">
+                        <image src="{{item.image.file_path}}" mode="aspectFill" />
+                    </view>
+                    <view class="flex-1">
+                        <text class="itemname">{{item.goods_name}}</text>
+                        <text class="fs22 c929292">{{item.goods_attr}}</text>
+                    </view>
+                    <view class="itemprice ml20">
+                        <text class="fs28 c333">￥{{item.goods_price}}</text>
+                        <view class="c888">
+                            <font class="fs28">x</font>
+                            <font class="fs24">{{item.total_num}}</font>
+                        </view>
+                    </view>
                 </view>
-                <view class="flex-1">
-                  <text class="itemname">{{item.goods_name}}</text>
-                  <text class="fs22 c929292">{{item.goods_attr}}</text>
-                </view>
-                <view class="itemprice ml20">
-                  <text class="fs28 c333">￥{{item.goods_price}}</text>
-                  <view class="c888">
-                    <font class="fs28">x</font>
-                    <font class="fs24">{{item.total_num}}</font>
-                  </view>
-                </view>
-              </view>
             </block>
-
             <view class="itempay">
                 实付：￥{{detail.total_price}}
             </view>
             <!-- 出行人信息 -->
             <view class="members" wx:if="{{order_status=='30'}}">
-                <view class="c555545"><text >出行人信息（2人）</text></view>
+                <view class="c555545"><text>出行人信息（2人）</text></view>
                 <view class="memberinfo">
                     <text class="c333">李佳</text>
                     <text class="cb4b4b4">手机号码   177*********3</text>
@@ -214,19 +220,21 @@
             <!-- 出行人信息 end-->
             <!-- 评价信息 -->
             <view class="comments" wx:if="{{order_status=='30'}}">
-                <view class="commlabel"><text >评价信息</text><Star  total="5" num="3"></view>
+                <view class="commlabel"><text>评价信息</text>
+                    <Star total="5" num="3">
+                </view>
                 <!-- <view class="commContent">评价内容</view>
-                <view class="commentimgs">
-                    <image src="{{baseServerImg}}" mode="aspectFill" />
-                    <image src="{{baseServerImg}}" mode="aspectFill" />
-                </view> -->
+                    <view class="commentimgs">
+                        <image src="{{baseServerImg}}" mode="aspectFill" />
+                        <image src="{{baseServerImg}}" mode="aspectFill" />
+                    </view> -->
                 <view class="noComments">
                     <span class="public_icon4_not_assess"></span>
                     <text>暂无评价信息，请参与评价，谢谢哦！</text>
                 </view>
             </view>
             <!-- 评价信息 end -->
-            <view class="contact"><button class="public_icon4_contact mr10" open-type="contact" />联系客服</view>
+            <button class="contact"><span class="public_icon4_contact mr10" open-type="contact" ></span>联系客服</button>
         </view>
         <view class="orderinfo" wx:if="{{order_status=='10'||order_status=='20'}}">
             <text>订单编号：{{detail.order_no}}</text>
@@ -236,10 +244,9 @@
             <text wx:if="{{order_status=='30'}}">完成时间：2018-12-19  </text>
         </view>
         <orderbtn :orderitem.sync="detail"></orderbtn>
-        <view  style="margin-top: 20rpx">
-          <guess></guess>
+        <view style="margin-top: 20rpx">
+            <guess></guess>
         </view>
-
     </view>
 </template>
 
@@ -253,70 +260,81 @@
         config = {
             navigationBarTitleText: '订单详情',
         }
-        components = {orderbtn,Star,guess}
+        components = {
+            orderbtn,
+            Star,
+            guess
+        }
         mixins = [Mixin]
         data = {
-          order_status:"",
-          detail:{},
-          loading:true,
-          order_id:0,
+            order_status: "",
+            detail: {},
+            loading: true,
+            order_id: 0,
         }
-
-        events={
-          flush(){
-            wepy.request({
-              url: "api/order/detail",
-              method: 'POST',
-              data: {order_id:this.order_id},
-            }).then(res => {
-              this.loading= false;
-              if(res.code != "1"){
-                this.showAlert({title: "警告", content: res.msg});
-              }else{
-                this.order_status=res.data.order_status.value;
-                this.detail=res.data
-              }
-              this.$apply();
-            })
-          },
+        events = {
+            flush() {
+                wepy.request({
+                    url: "api/order/detail",
+                    method: 'POST',
+                    data: {
+                        order_id: this.order_id
+                    },
+                }).then(res => {
+                    this.loading = false;
+                    if (res.code != "1") {
+                        this.showAlert({
+                            title: "警告",
+                            content: res.msg
+                        });
+                    } else {
+                        this.order_status = res.data.order_status.value;
+                        this.detail = res.data
+                    }
+                    this.$apply();
+                })
+            },
         }
-
         methods = {
-          to_address_list(){
-            wx.navigateTo({
-              url:"/pages/member/list_member",
-            })
-          },
-
-          choice_pay(pay_type){
-            this.detail.pay_type=pay_type;
-            this.$apply();
-          }
+            to_address_list() {
+                wx.navigateTo({
+                    url: "/pages/member/list_member",
+                })
+            },
+            choice_pay(pay_type) {
+                this.detail.pay_type = pay_type;
+                this.$apply();
+            }
         }
         onLoad(options) {
-          if(options.order_id==undefined){
-            this.showAlert({title:"错误"});
-            return
-          }
-          this.order_id=options.order_id;
-          wepy.request({
-            url: "api/order/detail",
-            method: 'POST',
-            data: {order_id:options.order_id},
-          }).then(res => {
-            this.loading= false;
-            if(res.code != "1"){
-              this.showAlert({title: "警告", content: res.msg});
-            }else{
-              this.order_status=res.data.order_status.value;
-              this.detail=res.data
+            if (options.order_id == undefined) {
+                this.showAlert({
+                    title: "错误"
+                });
+                return
             }
-            this.$apply();
-          })
+            this.order_id = options.order_id;
+            wepy.request({
+                url: "api/order/detail",
+                method: 'POST',
+                data: {
+                    order_id: options.order_id
+                },
+            }).then(res => {
+                this.loading = false;
+                if (res.code != "1") {
+                    this.showAlert({
+                        title: "警告",
+                        content: res.msg
+                    });
+                } else {
+                    this.order_status = res.data.order_status.value;
+                    this.detail = res.data
+                }
+                this.$apply();
+            })
         }
-
-        PageInit(){
-
+        PageInit() {
         }
     }
 </script>

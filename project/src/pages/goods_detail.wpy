@@ -312,7 +312,7 @@
         flex-direction: column;
         justify-content: flex-end;
         background: rgba(0, 0, 0, 0.7);
-        @body-h: 875rpx;
+        @body-h: 850rpx;
         @intro-h: 166rpx;
         @btn-ok-h: 95rpx;
         @scroll-h: @body-h - @intro-h - @btn-ok-h + 2rpx;

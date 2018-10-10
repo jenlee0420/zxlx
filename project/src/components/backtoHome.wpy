@@ -1,6 +1,6 @@
 <style lang="less">
   #homebtn{
-    position: absolute;
+    position: fixed;
     top:30rpx;
     left:-59rpx;
     span{

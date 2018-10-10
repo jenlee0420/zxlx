@@ -416,7 +416,6 @@ export default class Global extends wepy.mixin {
         var bool = false
         Object.keys(pages).forEach((v) => {
             if ((pages[v].route).indexOf('pages/index') > -1 || (pages[v].route).indexOf('pages/search_page') > -1) {
-                console.log('erewrew')
                 bool = true
             }
         })
