@@ -365,7 +365,7 @@
       sub_min: true,
       buy_type:2,
       showPopup:false,
-      order_id:"",
+      order_id:0,
       order_collage_id:0,
     };
     components = {
@@ -400,6 +400,10 @@
           method: 'POST',
           data: data,
         }).then(res => {
+          if(res.code != "1"){
+            this.showAlert({title: "警告", content: res.msg});
+            return
+          }
           //this.showPopup=true;
           this.order_id=res.data.order_id;
 
@@ -443,7 +447,9 @@
             this.showAlert({title: "警告", content: res.msg});
             return
           }
+          this.order_id=res.data.order_id;
 
+          var that = this ;
           wx.requestPayment({
             timeStamp:res.data.timeStamp,
             nonceStr:res.data.nonceStr,
@@ -451,10 +457,17 @@
             signType:res.data.signType,
             paySign:res.data.paySign,
             success:function(e){
-              if(this.buy_type==1){
-                wepy.navigateTo({
-                  url: '/pages/yaoqing?order_id'+e.order_id,
-                })
+              if(that.buy_type==1){
+                if(that.order_collage_id==0){
+                  wepy.navigateTo({
+                    url: '/pages/yaoqing?order_id='+that.order_id,
+                  })
+                }else {
+                  wepy.navigateTo({
+                    url: '/pages/joinSuccess?order_id='+that.order_id+"&order_collage_id="+that.order_collage_id,
+                  })
+                }
+
               }else{
                 wepy.navigateTo({
                   url: '/pages/mycenter/orderlist?type=1',
@@ -464,6 +477,9 @@
             },
             fail:function(e){
               console.log(e)
+              wepy.navigateTo({
+                url: '/pages/mycenter/orderdetail?order_id='+that.order_id,
+              })
             }
           })
 

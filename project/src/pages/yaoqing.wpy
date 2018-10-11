@@ -248,18 +248,35 @@
         data = {
           order_collage_id:0,
           collage_detail:{},
+          order_id:0,
+          detail:0,
         }
         methods = {}
         onLoad(options) {
            if (!options){
              return
            }
-           if (!options.order_collage_id){
+           if (!options.order_id){
              return
            }
-           this.order_collage_id=options.order_collage_id
-
-
+           this.order_id=options.order_id
+          wepy.request({
+            url: "api/order/detail",
+            method: 'POST',
+            data: {
+              order_id: this.order_id
+            },
+          }).then(res => {
+            if (res.code != "1") {
+              this.showAlert({
+                title: "警告",
+                content: res.msg
+              });
+              return
+            }
+            this.order_collage_id=res.data.order_collage_id;
+            this.detail=res.data;
+            this.$apply();
             wepy.request({
               url: "api/order/collagedetail",
               method: 'POST',
@@ -274,11 +291,10 @@
                 });
                 return
               }
-
               this.collage_detail=res.data.collage_detail;
               this.$apply();
-
             })
+
           })
 
           this.$invoke('recommend','getlist')

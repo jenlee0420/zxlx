@@ -188,7 +188,7 @@
                 <block wx:for="{{collage_detail.collage_list}}">
                   <image src="{{item.avatarUrl}}" mode="aspectFill" />
                 </block>
-                <span class="public_icon1_wait_pin"></span>
+                <span wx:if="{{collage_detail.meed_num-collage_detail.join_num==0}}" class="public_icon1_wait_pin"></span>
             </view>
             <view  wx:if="{{collage_detail.meed_num-collage_detail.join_num==0}}"  class="fs30 mt20">
                 <span class="mr20 pin_yiman"></span><text class="tipsuccess">拼单已满</text>
@@ -256,12 +256,21 @@
         }
         onLoad(options) {
            if (!options){
+             this.showAlert({
+               title: "错误",
+               content: "options 为空"
+             });
              return
            }
            if (!options.order_collage_id){
+             this.showAlert({
+               title: "错误",
+               content: "order_collage_id 为空"
+             });
              return
            }
 
+           console.log(options)
 
           this.order_collage_id=options.order_collage_id;
           this.$invoke('recommend','getlist')

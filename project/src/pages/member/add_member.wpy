@@ -362,6 +362,7 @@
             }).then(res => {
               if (res.code != "1") {
                 this.showAlert({title: "警告", content: res.msg});
+                return
               } else {
                 this.place_display_array[1]=[];
                 this.place_array[1]=[];
@@ -377,6 +378,7 @@
                 }).then(res => {
                   if (res.code != "1") {
                     this.showAlert({title: "警告", content: res.msg});
+                    return
                   } else {
                     this.place_display_array[2]=[];
                     this.place_array[2]=[];
@@ -396,7 +398,6 @@
 
         }
         onLoad(options) {
-          console.log(options)
           if(options.user_id){
             this.user_id=options.user_id
           }
@@ -421,7 +422,9 @@
                 this.address=res.detail;
                 this.address_id=options.address_id;
                 this.postcode=res.postcode;
-                this.bir_date	= this.transTime(res.birthday,'yyyy-MM-dd')
+                if(res.birthday!=0){
+                  this.bir_date	= this.transTime(res.birthday,'yyyy-MM-dd')
+                }
                 this.id_card = res.card
                 this.type = res.type
                 this.sex = res.sex

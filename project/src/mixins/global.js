@@ -276,7 +276,7 @@ export default class Global extends wepy.mixin {
     //	时间格式化   (YYYY-MM-DD HH:mm)
     transTime(time,opt = 'yyyy-MM-dd hh:mm'){
         if(time === '' || time === undefined){
-            return
+            return 0;
         }else{
             var time1 = new Date(time * 1000)
             var time2 = this.dateFormat(time1, opt);
@@ -312,7 +312,7 @@ export default class Global extends wepy.mixin {
             sec: parseInt(time % 60),
         }
         datetime = thisTime
-        datetime.date = thisTime.date 
+        datetime.date = thisTime.date
         datetime.hour = thisTime.hour < 10 ? '0' + String(thisTime.hour) : thisTime.hour
         datetime.min = thisTime.min < 10 ? '0' + String(thisTime.min) : thisTime.min
         datetime.sec = thisTime.sec < 10 ? '0' + String(thisTime.sec) : thisTime.sec
