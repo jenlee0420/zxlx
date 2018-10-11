@@ -67,6 +67,7 @@
                 wepy.navigateTo({
                   url: '/pages/mycenter/orderlist?type=1',
                 })
+                wx.setStorageSync("address"+order.order_id,"");
               },
               fail: function(e) {
                 console.log(e)

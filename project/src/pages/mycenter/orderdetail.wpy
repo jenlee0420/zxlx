@@ -309,7 +309,7 @@
         methods = {
             to_address_list() {
                 wx.navigateTo({
-                    url: "/pages/member/list_member",
+                    url: "/pages/member/list_member?address_id="+this.detail.address[0].address_id+"&order_id="+this.order_id,
                 })
             },
             choice_pay(pay_type) {
@@ -367,6 +367,18 @@
             })
         }
         PageInit() {
+        }
+
+        onShow(){
+          if(wx.getStorageSync("address")!=""){
+            var obj=JSON.parse(wx.getStorageSync("address"));
+            this.detail.address[0].address_id=obj.address_id;
+            this.detail.address[0].name=obj.name;
+            this.detail.address[0].phone=obj.phone;
+            this.detail.address[0].region=obj.region;
+            this.detail.address[0].detail=obj.detail;
+          }
+          this.$apply();
         }
     }
 </script>

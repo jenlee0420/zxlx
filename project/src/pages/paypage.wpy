@@ -495,7 +495,7 @@
           })
         }else{
           wx.navigateTo({
-            url:"/pages/member/list_member?address_id="+address_id
+            url:"/pages/member/list_member?address_id="+address_id,
           })
         }
 
@@ -609,17 +609,6 @@
           return
         }
         this.detail=res.data;
-        if(wx.getStorageSync("address")!=""){
-          var obj=JSON.parse(wx.getStorageSync("address"));
-          this.detail.address.address_id=obj.address_id;
-          this.detail.address.name=obj.name;
-          this.detail.address.phone=obj.phone;
-          this.detail.address.region=obj.region;
-          this.detail.address.detail=obj.detail;
-        }
-
-
-
         this.$apply();
       })
     };

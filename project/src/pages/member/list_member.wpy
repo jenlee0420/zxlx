@@ -162,6 +162,7 @@
       default_addree:0,
 
       choice_address:"",
+      order_id:"",
     }
     methods = {
       choice_address(index){
@@ -169,7 +170,7 @@
           return;
         }
 
-        wx.setStorageSync("address",JSON.stringify({
+        wx.setStorageSync("address"+order_id,JSON.stringify({
           address_id:this.data.list[index].address_id,
           name:this.data.list[index].name,
           user_id:this.data.list[index].user_id,
@@ -252,7 +253,12 @@
 
     onLoad(options) {
         if(options){
-          this.choice_address=options.address_id;
+          if(options.choice_address){
+            this.choice_address=options.address_id;
+          }
+          if(options.order_id){
+            this.order_id=options.order_id;
+          }
         }
 
         wepy.request({
