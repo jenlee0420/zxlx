@@ -1,0 +1,77 @@
+<style lang="less">
+  #wxlogin {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    .sharebtn {
+      width: 626rpx;
+      background-color: @theme;
+      border-radius: 50rpx;
+      color: #fff;
+      height: 90rpx;
+      line-height: 90rpx;
+      font-size: 26rpx;
+      margin: 0 auto;
+    }
+    text {
+      margin: 20rpx 0;
+    }
+    .logo {
+      height: 60vh;
+    }
+  }
+</style>
+
+<template>
+  <view class="container" id="wxlogin">
+    <view class="logo"></view>
+    <text class="c999 fs25"> 登录后即可继续当前操作</text>
+    <button open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo" class="sharebtn flexRow flex-jcenter">
+              <span class="public_icon1_white_weixin mr20"></span> 微信快捷登录
+            </button>
+    <text class="c666 fs25">登录后可购物，参加活动还可领优惠券</text>
+  </view>
+</template>
+
+<script>
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  export default class wxlogin extends wepy.page {
+    config = {}
+    components = {}
+    mixins = [Mixin]
+    data = {}
+    methods = {
+      bindgetuserinfo(e) {
+        if (!e.detail.signature) {
+          return
+        }
+        let detail = e.detail.userInfo
+        console.log(e.detail)
+        wepy.request({
+          url: "api/user/edit",
+          method: 'POST',
+          data: {
+            nick_name: detail.nickName,
+            avatar_url: detail.avatarUrl,
+            gender: detail.gender,
+            iv: e.detail.iv,
+            encryptedData: e.detail.encryptedData,
+            rawData: e.detail.rawData,
+            signature: e.detail.signature
+          },
+        }).then(res => {
+          if (res.code == 1) {
+            this.showSuccess('登录成功')
+            setTimeout(() => {
+              wepy.navigateBack()
+            }, 500);
+          }
+          this.$apply()
+        })
+      }
+    }
+    onLoad() {}
+  }
+</script>

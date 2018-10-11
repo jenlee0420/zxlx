@@ -136,21 +136,21 @@
         }
         methods = {
             editinfo(e) {
-                let detail = e.detail
+                let detail = e.detail.userInfo
                 console.log(e.detail)
                 wepy.request({
                     url: "api/user/edit",
                     method: 'POST',
-                    data: detail,
-                    // {
-                    //     // nick_name: detail.nickName,
-                    //     // avatar_url: detail.avatarUrl,
-                    //     // gender: detail.gender,
-                    //     // iv:e.detail.iv,
-                    //     // encryptedData:e.detail.encryptedData,
-                    //     // rawData:e.detail.rawData,
-                    //     // signature:e.detail.signature
-                    // },
+                    data: 
+                    {
+                        nick_name: detail.nickName,
+                        avatar_url: detail.avatarUrl,
+                        gender: detail.gender,
+                        iv:e.detail.iv,
+                        encryptedData:e.detail.encryptedData,
+                        rawData:e.detail.rawData,
+                        signature:e.detail.signature
+                    },
                 }).then(res => {
                     if (res.code == 1) {
                         this.userinfo.nickName = detail.nickName

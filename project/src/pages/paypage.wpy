@@ -281,7 +281,7 @@
     </view>
     <!-- 按钮列表 E -->
     <!-- 数量选择 S -->
-    <block wx:for="{{detail.goods_list}}">
+    <block wx:for="{{detail.goods_list}}" wx:key="{{index}}">
       <view class="flexCol flex-astretch numWrap">
         <view class="flexRow man-info">
           <img class="flex flex-jcenter avatar" src="{{item.source_image}}"/>

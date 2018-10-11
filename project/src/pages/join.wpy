@@ -11,7 +11,7 @@
         width: 100%;
         .shop-photo {
             padding-left: 36rpx;
-            padding-right: 17rpx;
+            padding-right: 20rpx;
             width: 230rpx;
             height: 230rpx; // box-sizing: border-box;
             image {
@@ -44,7 +44,7 @@
         }
     }
     .shop-gou {
-        margin: 30rpx 20rpx;
+        padding: 60rpx 20rpx 30rpx 20rpx;
         .pin-avatar {
             position: relative;
             image {
@@ -114,30 +114,30 @@
             line-height: 100rpx;
         }
     }
-    .pingotherlist{
+    .pingotherlist {
         background-color: #f7d2d3;
         margin: 20rpx 45rpx;
         border-radius: 10rpx;
         padding: 10rpx;
-        .pining{
-        font-size: 24rpx;
-        line-height: 30rpx;
-        display: flex;
-        letter-spacing: 3rpx;
-        image {
-            height: 85rpx;
-            width: 85rpx;
-            border-radius: 50%;
-            margin-right: 20rpx;
-        }
-        }
-        .btn{
-                border-radius: 10rpx;
-                height: 59rpx;
-                line-height: 59rpx;
-                font-size: 24rpx;
-                border:none;
+        .pining {
+            font-size: 24rpx;
+            line-height: 30rpx;
+            display: flex;
+            letter-spacing: 3rpx;
+            image {
+                height: 85rpx;
+                width: 85rpx;
+                border-radius: 50%;
+                margin-right: 20rpx;
             }
+        }
+        .btn {
+            border-radius: 10rpx;
+            height: 59rpx;
+            line-height: 59rpx;
+            font-size: 24rpx;
+            border: none;
+        }
         .itemlable {
             font-size: 24rpx;
             color: #7e7e7e;
@@ -146,7 +146,7 @@
             text-align: center;
             display: inline-block;
             width: 100%;
-            color:#f48d60;
+            color: #f48d60;
             >text {
                 position: relative;
                 &::before,
@@ -165,7 +165,7 @@
                 }
             }
         }
-        }
+    }
 </style>
 <template>
     <view>
@@ -184,37 +184,37 @@
         </view>
         <view class="flexCol shop-gou bg_fff">
             <view class="flexRow flex-jcenter pin-avatar">
-                <text class="bubble">{{collage_detail.nickName}}</text>
-                <block wx:for="{{collage_detail.collage_list}}">
-                  <image src="{{item.avatarUrl}}" mode="aspectFill" />
+                <text class="bubble">拼主</text>
+                <block wx:for="{{collage_detail.collage_list}}" wx:key="{{index}}">
+                    <image src="{{item.avatarUrl}}" mode="aspectFill" />
                 </block>
                 <span wx:if="{{collage_detail.meed_num-collage_detail.join_num!=0}}" class="public_icon1_wait_pin"></span>
             </view>
-            <view  wx:if="{{collage_detail.meed_num-collage_detail.join_num==0}}"  class="fs30 mt20">
+            <view wx:if="{{collage_detail.meed_num-collage_detail.join_num==0}}" class="fs30 mt20">
                 <span class="mr20 pin_yiman"></span><text class="tipsuccess">拼单已满</text>
             </view>
             <button @tap="join_pin" class="btn">加入拼单优惠</button>
             <button wx:if="{{collage_detail.meed_num-collage_detail.join_num==0}}" class="btn">我来发起拼单</button>
         </view>
-        <view class="pingotherlist bg_fff">
-                <view class="itemlable"><text>或参加别的拼单</text></view>
-                <block wx:for="{{pin_list}}" wx:key="index" wx:for-index="index">
-                  <view class="pining">
+        <view class="pingotherlist bg_fff" wx:if="{{collage_detail.meed_num-collage_detail.join_num==0}}">
+            <view class="itemlable"><text>或参加别的拼单</text></view>
+            <block wx:for="{{pin_list}}" wx:key="index" wx:for-index="index">
+                <view class="pining">
                     <view>
-                      <image src="{{item.avatarUrl}}" class="avator" />
+                        <image src="{{item.avatarUrl}}" class="avator" />
                     </view>
                     <view class="flex-1 flex-column">
-                      <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
-                      <text>剩余{{item.remaining_time}}</text>
+                        <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
+                        <text>剩余{{item.remaining_time}}</text>
                     </view>
                     <view>
-                      <view class="btn bg-primary">
-                        去拼单
-                      </view>
+                        <view class="btn bg-primary">
+                            去拼单
+                        </view>
                     </view>
-                  </view>
-                </block>
-            </view>
+                </view>
+            </block>
+        </view>
         <!-- 花边抢购 E -->
         <view class="flexRow flex-jbetween item2 bg_fff">
             <view class="title">拼单须知</view>
@@ -239,91 +239,80 @@
     export default class join extends wepy.page {
         config = {}
         components = {
-            recommend,backtoHome
+            recommend,
+            backtoHome
         }
         mixins = [Mixin]
         data = {
-          order_collage_id:0,
-          collage_detail:{},
-          pin_list:[],
+            order_collage_id: 0,
+            collage_detail: {},
+            pin_list: [],
         }
         methods = {
-          join_pin(){
-            wepy.navigateTo({
-              url: '/pages/goods_detail?order_collage_id='+this.order_collage_id+'&id='+this.collage_detail.goods_id,
-            })
-          }
+            join_pin() {
+                wepy.navigateTo({
+                    url: '/pages/goods_detail?order_collage_id=' + this.order_collage_id + '&id=' + this.collage_detail.goods_id,
+                })
+            }
         }
         onLoad(options) {
-           // if (!options){
-           //   this.showAlert({
-           //     title: "错误",
-           //     content: "options 为空"
-           //   });
-           //   return
-           // }
-           // if (!options.order_collage_id){
-           //   this.showAlert({
-           //     title: "错误",
-           //     content: "order_collage_id 为空"
-           //   });
-           //   return
-           // }
-           //
-           // console.log(options)
-
-          this.order_collage_id=43//options.order_collage_id;
-          this.$invoke('recommend','getlist')
+            // if (!options){
+            //   this.showAlert({
+            //     title: "错误",
+            //     content: "options 为空"
+            //   });
+            //   return
+            // }
+            // if (!options.order_collage_id){
+            //   this.showAlert({
+            //     title: "错误",
+            //     content: "order_collage_id 为空"
+            //   });
+            //   return
+            // }
+            //
+            // console.log(options)
+            this.order_collage_id = 43 //options.order_collage_id;
+            this.$invoke('recommend', 'getlist')
         }
-
-        PageInit(){
-          wepy.request({
-            url: "api/order/collagedetail",
-            method: 'POST',
-            data: {
-              order_collage_id: this.order_collage_id
-            },
-          }).then(res => {
-            if (res.code != "1") {
-              this.showAlert({
-                title: "警告",
-                content: res.msg
-              });
-              return
-            }
-
-            this.collage_detail=res.data.collage_detail;
-            this.$apply();
-
+        PageInit() {
             wepy.request({
-              url: "api/goods/collage",
-              method: 'POST',
-              data: {
-                goods_id: this.collage_detail.goods_id,
-                per_page: 2,
-                page: 0,
-                collage_filled: 10,
-              },
+                url: "api/order/collagedetail",
+                method: 'POST',
+                data: {
+                    order_collage_id: this.order_collage_id
+                },
             }).then(res => {
-              if (res.code != "1") {
-              this.showAlert({
-                title: "警告",
-                content: res.msg
-              });
-              return
-            }
-
-            this.pin_list = res.data.list.data;
-            this.$apply();
-          })
-
-
-        })
+                if (res.code != "1") {
+                    this.showAlert({
+                        title: "警告",
+                        content: res.msg
+                    });
+                    return
+                }
+                this.collage_detail = res.data.collage_detail;
+                this.$apply();
+                wepy.request({
+                    url: "api/goods/collage",
+                    method: 'POST',
+                    data: {
+                        goods_id: this.collage_detail.goods_id,
+                        per_page: 2,
+                        page: 0,
+                        collage_filled: 10,
+                    },
+                }).then(res => {
+                    if (res.code != "1") {
+                        this.showAlert({
+                            title: "警告",
+                            content: res.msg
+                        });
+                        return
+                    }
+                    this.pin_list = res.data.list.data;
+                    this.$apply();
+                })
+            })
         }
-
-
-
-
-
     }
 </script>
