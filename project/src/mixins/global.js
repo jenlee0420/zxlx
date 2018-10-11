@@ -336,23 +336,26 @@ export default class Global extends wepy.mixin {
     }
     // 若用户未授权地理位置，则弹出设置页面
     getLocalSetting() {
-        wepy.getSetting().then(res => {
-            if (res.authSetting["scope.userLocation"] === true) {
-                // this.getLocalinfo()
-            } else {
-                wepy.openSetting().then(res =>{
-                    if (res.authSetting["scope.userLocation"] === true) {
-                        console.log(res)
-                        // 用户设置成功后，再次写入缓存信息中
-                        wepy.getLocation().then(res => {
-                            let currentCity = {}
-                            currentCity.lng = res.longitude
-                            currentCity.lat = res.latitude
-                            wepy.setStorageSync('localinfo', JSON.stringify(this.currentCity))
-                        })
-                    }
-                })
-            }
+        return new Promise((resolve, reject) => {
+            wepy.getSetting().then(res => {
+                if (res.authSetting["scope.userInfo"] === true) {
+                    resolve(true)
+                } else {
+                    resolve(false)
+                    // wepy.openSetting().then(res =>{
+                    //     if (res.authSetting["scope.userLocation"] === true) {
+                    //         console.log(res)
+                    //         // 用户设置成功后，再次写入缓存信息中
+                    //         wepy.getLocation().then(res => {
+                    //             let currentCity = {}
+                    //             currentCity.lng = res.longitude
+                    //             currentCity.lat = res.latitude
+                    //             wepy.setStorageSync('localinfo', JSON.stringify(this.currentCity))
+                    //         })
+                    //     }
+                    // })
+                }
+            })
         })
     }
     // 取经纬度信息

@@ -848,6 +848,12 @@
             },
             tmp() {},
             buynow() {
+                //判断是否有授权
+                console.log(this.getLocalSetting(),'ererrr')
+                if(!this.getLocalSetting()){
+                    wepy.navigateTo({url:'/pages/wxlogin'})
+                    return
+                }
                 wepy.navigateTo({
                     url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
                         '&good_number=' + this.good_number +
