@@ -10,9 +10,6 @@
     justify-content: center;
     align-items: center;
     margin-left: 30rpx;
-    font-size: 30rpx;
-    font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
-    color: #FFFFFF;
   }
 
   .list_menber_view_view_btn_self{
@@ -31,18 +28,17 @@
     display: flex;
     font-size: 30rpx;
     font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
-    color: #FFFFFF;
     justify-content: space-between;
     position: fixed;
-
+    color: #FFFFFF;
   }
 
   .list_menber_view_list{
+    font-size: 26rpx;
+    color: #282727;
     display: flex;
     height: 128rpx;
     align-items: center;
-    font-size: 26rpx;
-    color: #282727;
     font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
     padding: 20rpx 0;
   }
@@ -97,15 +93,14 @@
   <view class="container" id="memberlist">
     <view class="list_menber_view_view">
 
-      <button class="list_menber_view_view_btn_self" @tap="go_to_add">
+      <view class="list_menber_view_view_btn_self" @tap="go_to_add">
         <icon class="public_icon_add_traveller"></icon>
-        <text>手动添加</text>
-      </button>
+        <text>添加</text>
+      </view>
 
-      <button class="list_menber_view_view_btn_weixin" open-type="share">
-        <icon class="public_icon1_white_weixin"></icon>
-        <text>微信好友添加</text>
-      </button>
+      <view class="list_menber_view_view_btn_weixin" @tap="save">
+        <text>保存</text>
+      </view>
     </view>
 
     <block wx:for="{{list}}" wx:key="{{index}}">
@@ -122,14 +117,12 @@
               <text class=" ">{{item.adress}}</text>
             </view>
           </view>
-          <span wx:if="{{choice_address==item.address_id}}" class="zan-icon-success zan-icon list_choice"></span>
+          <span wx:if="{{item.choice}}" class="zan-icon-success zan-icon list_choice"></span>
         </view>
 
         <view class="list_do">
           <view class="list_do_1 flex-1">
             <icon class="public_icon4_defalt"  hidden="{{default_addree!=index}}"></icon>
-            <text  hidden="{{default_addree!=index}}">已设为默认</text>
-            <text  hidden="{{default_addree==index}}" @tap="set_default({{index}})">设为默认</text>
           </view>
           <view class="list_do_2" @tap="go_to_edit({{index}})">
             <icon class="public_icon4_edit_addrss"></icon>
@@ -158,31 +151,43 @@
     data = {
       list:[
       ],
-
-      default_addree:0,
-
-      choice_address:"",
+      order_id:0,
+      detail:{},
     }
     methods = {
-      choice_address(index){
-        if(!this.choice_address){
-          return;
+      save(){
+        var address_id_list='';
+        for(var i=0;i<this.list.length-1;i++){
+          if(this.list[i].choice){
+            address_id_list=address_id_list+this.list[i].address_id+','
+          }
         }
 
-        wx.setStorageSync("address",JSON.stringify({
-          address_id:this.data.list[index].address_id,
-          name:this.data.list[index].name,
-          user_id:this.data.list[index].user_id,
-          detail:this.data.list[index].detail,
-          phone:this.data.list[index].phone,
-          region:{
-            province:this.data.list[index].region.province,
-            city:this.data.list[index].region.city,
-            region:this.data.list[index].region.region,
-          },
-        }))
+        if(this.list[this.list.length-1].choice){
+            address_id_list=address_id_list+this.list[i].address_id
+        }
 
-        wx.navigateBack();
+        var data={
+          order_id:this.order_id,
+          address_id:address_id_list
+        }
+        wepy.request({
+          url: "api/order/addorderaddress",
+          method: 'POST',
+          data: data,
+        }).then(res => {
+          if(res.code!="1"){
+            that.showAlert({title:"警告",content:res.msg});
+          }else {
+            wx.navigateBack();
+          }
+        })
+
+      },
+
+      choice_address(index){
+        this.list[index].choice=!this.list[index].choice;
+        this.$apply();
       },
 
       go_to_add(){
@@ -216,44 +221,32 @@
                 that.$apply();
               }
             })
-        }});
+          }});
 
 
       },
 
-      set_default(index){
-        var data={
-          address_id:this.list[index].address_id,
-        };
-
-        wepy.request({
-          url: "api/address/setdefault",
-          method: 'POST',
-          data: data,
-        }).then(res => {
-          if(res.code!="1"){
-            this.showAlert({title:"警告",content:res.msg});
-          }else {
-            this.default_addree=index;
-            this.$apply();
-          }
-        })
-      }
     }
-
-    onShareAppMessage(obj){
-      var re={
-        title:"填写地址",
-        path:"/pages/member/add_member?user_id="+wx.getStorageSync("userid"),
-        imageUrl:"",
-      }
-      return re
-    };
-
     onLoad(options) {
-        if(options){
-          this.choice_address=options.address_id;
+      if(!options){
+        return;
+      }
+
+      if(options){
+        this.order_id=options.order_id;
+      }
+
+      wepy.request({
+        url: "api/order/detail",
+        method: 'POST',
+        data: {order_id: options.order_id},
+      }).then(res => {
+        if(res.code!="1"){
+          this.showAlert({title:"警告",content:res.msg});
+          return
         }
+
+        this.detail = res.data;
 
         wepy.request({
           url: "api/address/lists",
@@ -261,35 +254,42 @@
           data: {},
         }).then(res => {
           if(res.code!="1"){
-          this.showAlert({title:"警告",content:res.msg});
-        }else {
-          var index=0;
-          this.list=[];
-          for(var i=0;i<res.data.list.length;i++){
-            var thisdata=res.data.list[i];
-            this.list.push({
-              address_id:thisdata.address_id,
-              name:thisdata.name,
-              user_id:thisdata.user_id,
-              adress:thisdata.region.province+thisdata.region.city+thisdata.region.region+thisdata.detail,
-              phone:thisdata.phone,
-              region:{
-                province:thisdata.region.province,
-                city:thisdata.region.city,
-                region:thisdata.region.region,
-              },
-              detail:thisdata.detail,
-            })
+            this.showAlert({title:"警告",content:res.msg});
+          }else {
+            var index=0;
+            this.list=[];
+            for(var i=0;i<res.data.list.length;i++){
+              var thisdata=res.data.list[i];
+              var choice=false;
 
-            if(res.data.default_id==thisdata.address_id){
-              index=i;
+              for(var n=0;n<this.detail.address.length;n++) {
+                if (this.detail.address[n].address_id==thisdata.address_id){
+                  choice=true;
+                }
+              }
+
+              this.list.push({
+                address_id:thisdata.address_id,
+                name:thisdata.name,
+                user_id:thisdata.user_id,
+                adress:thisdata.region.province+thisdata.region.city+thisdata.region.region+thisdata.detail,
+                phone:thisdata.phone,
+                region:{
+                  province:thisdata.region.province,
+                  city:thisdata.region.city,
+                  region:thisdata.region.region,
+                },
+                detail:thisdata.detail,
+                choice:choice,
+              })
+
             }
+            this.$apply();
           }
-
-          this.default_addree=index;
-          this.$apply();
-        }
+        })
       })
+
+
 
     }
 

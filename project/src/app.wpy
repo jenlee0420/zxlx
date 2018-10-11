@@ -30,6 +30,7 @@
         'pages/sharefriend',
         'pages/joinSuccess',
         'pages/mycenter/dianpin',
+        'pages/mycenter/list_member',
         'pages/search',
         'pages/mycenter/collection',
         'pages/mycenter/orderlist',

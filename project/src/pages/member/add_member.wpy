@@ -162,7 +162,7 @@
         }
         mixins = [Mixin]
         data = {
-            edit:false,
+            edit:true,
             my_type: [{
                     name: '2',
                     value: '儿童'
@@ -194,6 +194,7 @@
             address:"",
             address_id:"",
             postcode:"",
+            user_id:0,
 
             place:{
               province_id:"",
@@ -286,7 +287,10 @@
                   birthday: this.transdate2Time(this.bir_date),
                   type:this.type,
                   sex: this.sex,
+                  friend_user_id:this.user_id,
                 };
+
+                console.log(data)
 
                 wepy.request({
                   url: url,
@@ -392,12 +396,17 @@
 
         }
         onLoad(options) {
-            if(options.address_id==undefined){
+          console.log(options)
+          if(options.user_id){
+            this.user_id=options.user_id
+          }
+
+          if(options.address_id==undefined){
               this.edit=false;
               return
             }
 
-            this.edit=true;
+
             wepy.request({
               url: "api/address/detail",
               method: 'POST',
