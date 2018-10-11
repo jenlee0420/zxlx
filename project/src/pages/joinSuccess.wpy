@@ -140,7 +140,7 @@
                     <block wx:for="{{collage_detail.collage_list}}">
                       <image src="{{item.avatarUrl}}" mode="aspectFill" />
                     </block>
-                    <span wx:if="{{collage_detail.meed_num-collage_detail.join_num==0}}" class="public_icon1_wait_pin"></span>
+                    <span wx:if="{{collage_detail.meed_num-collage_detail.join_num!=0}}" class="public_icon1_wait_pin"></span>
                 </view>
                 <navigator class="fs24 mb20" url="/pages/mycenter/orderdetail?order_id={{order_id}}" hover-class="none">查看订单详情></navigator>
             </view>

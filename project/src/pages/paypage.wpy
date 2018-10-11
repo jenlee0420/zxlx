@@ -616,11 +616,7 @@
           this.detail.address.detail=obj.detail;
         }
 
-        if(options.order_id){
-          this.order_id=options.order_id;
-          this.showPopup=true;
-          this.pay_tpye=2;
-        }
+
 
         this.$apply();
       })
