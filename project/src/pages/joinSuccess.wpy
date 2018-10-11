@@ -146,7 +146,7 @@
             </view>
         </view>
         <view class="flexRow flex-astart item2 bg_fff">
-            <view class="title mr40 ">游学组合</view>
+            <view class="title mr40 ">{{collage_detail.combination_third}}</view>
             <view class="flexCol flex-astart reverse flex-1 des">
                 <view class="fs25 c333 mb10">{{collage_detail.goods_name}}</view>
                 <view class="fs24 c929292">{{collage_detail.goods_attr}}</view>
@@ -205,6 +205,9 @@
             });
             return;
           }
+
+          this.order_collage_id=options.order_collage_id;
+          this.order_id=options.order_id;
 
           this.$invoke('recommend','getlist')
 

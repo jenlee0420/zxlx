@@ -22,14 +22,14 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
-        'pages/join',
         'pages/index',
 
+        'pages/joinSuccess',
         'pages/yaoqing',
         'pages/search_page',
         'pages/friendpay',
         'pages/sharefriend',
-        'pages/joinSuccess',
+        'pages/join',
         'pages/mycenter/dianpin',
         'pages/mycenter/list_member',
         'pages/search',

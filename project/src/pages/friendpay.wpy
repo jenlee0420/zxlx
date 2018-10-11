@@ -125,8 +125,8 @@
     data = {
       avatarUrl:"",
       detail:{},
-      user_id:"1",
-      order_id:"51",
+      user_id:"",
+      order_id:"",
 
       this_user_name:"",
       payloop:null,
@@ -174,12 +174,11 @@
       },'1000')
     }
     onLoad(options){
-      console.log(options)
       if(!options){
         return
       }
 
-      if(!options.user_id){
+      if(!options.user_id) {
         return
       }
 
@@ -190,11 +189,13 @@
       this.user_id=options.user_id;
       this.order_id=options.order_id;
     }
-    onUnload() {
+
+    onUnload(){
       clearInterval(this.payloop)
     }
+
     PageInit() {
-      if(!this.user_id&&!this.order_id){
+      if(!this.user_id||!this.order_id){
         this.showAlert({title: "警告", content: "分享错误"});
       }
 

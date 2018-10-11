@@ -79,25 +79,25 @@
         <view class="my_view">
           <view class="my_view_view">
             <text class="my_view_text">手机号:</text>
-            <input class="my_input" value="{{phone}}" @input="input_phone"/>
+            <input class="my_input" type="number" value="{{phone}}" @input="input_phone"/>
           </view>
         </view>
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">身份证号:</text>
-                <input class="my_input" value="{{id_card}}" @input="input_idcard" placeholder="18位身份证号码" />
+                <input class="my_input"  type="idcard" value="{{id_card}}" @input="input_idcard" placeholder="18位身份证号码" />
             </view>
         </view>
         <view class="my_view">
           <view class="my_view_view">
             <text class="my_view_text">邮政编码:</text>
-            <input class="my_input" value="{{postcode}}" @input="input_postcode"/>
+            <input class="my_input" type="number" value="{{postcode}}" @input="input_postcode"/>
           </view>
         </view>
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">出生年月:</text>
-                <picker class="my_picker" mode="date" start="2015-09-01" end="2017-09-01" @change="pick_date">
+                <picker class="my_picker" mode="date" @change="pick_date">
                     <view class="picker">
                         <input class="my_input" placeholder="如：2008-09-10" value="{{bir_date}}" disabled/>
                     </view>

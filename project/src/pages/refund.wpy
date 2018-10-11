@@ -90,7 +90,7 @@
 
       <view class="refund_view_view flex flex-between mr30">
         <text class="refund_view_text">申请金额</text>
-        <input class="refund_input" placeholder="按照须知需求处理" type="number" value="{{money}}" @input="input_money"/>
+        <input class="refund_input" placeholder="按照须知需求处理" type="digit" value="{{money}}" @input="input_money"/>
         <text class="c929292">最高￥300</text>
       </view>
 

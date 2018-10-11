@@ -111,7 +111,7 @@
     mixins = [Mixin]
     data = {
       detail:{},
-      order_id:"51",
+      order_id:"",
       avatarUrl:"",
     }
     methods = {
@@ -119,6 +119,7 @@
     }
 
     onLoad(options){
+      console.log(options)
       if(!options){
         return
       }
@@ -126,6 +127,8 @@
       if(!options.order_id){
         return
       }
+
+      this.order_id=options.order_id;
 
       wepy.request({
         url: "api/order/detail",

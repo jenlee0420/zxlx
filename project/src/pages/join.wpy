@@ -255,24 +255,24 @@
           }
         }
         onLoad(options) {
-           // if (!options){
-           //   this.showAlert({
-           //     title: "错误",
-           //     content: "options 为空"
-           //   });
-           //   return
-           // }
-           // if (!options.order_collage_id){
-           //   this.showAlert({
-           //     title: "错误",
-           //     content: "order_collage_id 为空"
-           //   });
-           //   return
-           // }
+            if (!options){
+              this.showAlert({
+                title: "错误",
+                content: "options 为空"
+              });
+              return
+            }
+            if (!options.order_collage_id){
+              this.showAlert({
+                title: "错误",
+                content: "order_collage_id 为空"
+              });
+              return
+            }
            //
            // console.log(options)
 
-          this.order_collage_id=43//options.order_collage_id;
+          this.order_collage_id=options.order_collage_id;//50//
           this.$invoke('recommend','getlist')
         }
 

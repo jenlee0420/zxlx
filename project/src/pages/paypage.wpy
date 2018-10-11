@@ -352,7 +352,9 @@
 <script>
   import wepy from 'wepy'
   import notice from '@/components/notice'
+  import Mixin from '@/mixins/global'
   export default class paypage extends wepy.page {
+    mixins = [Mixin]
     data = {
       user_term:false,
       detail:{},
