@@ -83,7 +83,7 @@
       <view class="price">￥{{detail.total_price}}</view>
       <view class="t_c fs22">
         <text class="mr16">剩余支付时间</text>
-        <text class="mr10">2天</text><text class="timebox">23</text>:<text class="timebox">23</text>:<text class="timebox">23</text>
+        <text class="mr10">{{limitTime.date}}天</text><text class="timebox">{{limitTime.hour}}</text>:<text class="timebox">{{limitTime.min}}</text>:<text class="timebox">{{limitTime.sec}}</text>
       </view>
       <view class="t_c mt40">
         <button class="btn w600" open-type="share">发送给微信好友</button>
@@ -113,9 +113,27 @@
       detail:{},
       order_id:"",
       avatarUrl:"",
+      payloop:null,
+      limitTime:{},
     }
     methods = {
 
+    }
+
+    //倒计时
+    countdown(time){
+      this.payloop = setInterval(() => {
+        time = time - 1
+        this.limitTime = this.countdownDateTime(time)
+        if(time <=0){
+          console.log('time out')
+        }
+        this.$apply()
+      },'1000')
+    }
+
+    onUnload(){
+      clearInterval(this.payloop)
     }
 
     onLoad(options){
@@ -126,6 +144,14 @@
 
       if(!options.order_id){
         return
+      }
+
+      //倒计时
+      if (!this.payloop) {
+        if(this.detail.surplus_pay_time>0){
+          this.countdown(this.detail.surplus_pay_time)
+        }
+
       }
 
       this.order_id=options.order_id;
