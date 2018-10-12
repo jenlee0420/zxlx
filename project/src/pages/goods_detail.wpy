@@ -80,6 +80,7 @@
             display: flex;
             flex-direction: row;
             align-items: center;
+            flex-flow: wrap;
             .tag {
                 font-size: 20rpx;
                 border-radius: 5rpx;
@@ -87,6 +88,8 @@
                 padding: 5rpx 10rpx;
                 height: 32rpx;
                 margin-right: 10rpx;
+                white-space: nowrap;
+                margin-bottom: 10rpx;
                 &.bg-orange {
                     background: @bg-orange;
                 }
@@ -587,20 +590,20 @@
             <view wx:if="{{order_collage_id==0}}" class="flex2" @tap="open_good_class(2)"><text>￥{{total_price}}</text><text>单独购买</text></view>
             <view wx:if="{{order_collage_id==0}}" class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起拼单</text></view>
             <view wx:if="{{order_collage_id!=0}}" class="flex3" @tap="open_good_class(1)"><text>加入拼单</text></view>
-          <!-- <view class="flex5"><text>报名已满</text></view> -->
+            <!-- <view class="flex5"><text>报名已满</text></view> -->
         </view>
         <!-- 底部导航 E -->
         <!-- 返回顶部 S -->
         <!-- <view class="backTop">
-                    <image src="../resource/img/backTop.png"></image>
-                  </view> -->
+                            <image src="../resource/img/backTop.png"></image>
+                          </view> -->
         <!-- 返回顶部 E -->
         <!-- 邀请分享 S -->
         <!-- <view class="share-box">
-                    <view class="close"><image src="../resource/img/close.png"></image></view>
-                    <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
-                    <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
-                  </view> -->
+                            <view class="close"><image src="../resource/img/close.png"></image></view>
+                            <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
+                            <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
+                          </view> -->
         <!-- 邀请分享 E -->
         <!-- 购买选择 S -->
         <view class="modal" wx:if="{{open_class}}" @tap="close_good_class">
@@ -728,8 +731,8 @@
             activeIndex: '0',
             pin_num: 10,
             pin_list: [],
-            order_collage_id:0,
-            collage_detail:{},
+            order_collage_id: 0,
+            collage_detail: {},
         }
         components = {
             TopNav,
@@ -745,12 +748,11 @@
             }
         }
         methods = {
-            join_pin(index){
-              wepy.navigateTo({
-                url: '/pages/join?order_collage_id='+this.pin_list[index].id,
-              })
+            join_pin(index) {
+                wepy.navigateTo({
+                    url: '/pages/join?order_collage_id=' + this.pin_list[index].id,
+                })
             },
-
             goods_detal_tip(index1, index2) {
                 for (var i = 0; i < this.goods_detal.length; i++) {
                     if (i == index1) {
@@ -854,24 +856,29 @@
             },
             tmp() {},
             buynow() {
-                //判断是否有授权
-                console.log(this.getLocalSetting(),'ererrr')
-                if(!this.getLocalSetting()){
-                    wepy.navigateTo({url:'/pages/wxlogin'})
-                    return
-                }
-                wepy.navigateTo({
-                    url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
-                        '&good_number=' + this.good_number +
-                        '&goods_sku_id=' + this.goods_sku_id +
-                        '&buy_type=' + this.buy_type +
-                        '&order_collage_id='+this.order_collage_id
-                })
+                this.buynowFun()
+                this.open_class = false
             },
             pin_more() {
                 // 显示正在拼单列表
                 this.$invoke('popWin', 'togglePopup');
             }
+        }
+        buynowFun() {
+            //判断是否有授权
+            if (!this.getLocalSetting()) {
+                wepy.navigateTo({
+                    url: '/pages/wxlogin'
+                })
+                return
+            }
+            wepy.navigateTo({
+                url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
+                    '&good_number=' + this.good_number +
+                    '&goods_sku_id=' + this.goods_sku_id +
+                    '&buy_type=' + this.buy_type +
+                    '&order_collage_id=' + this.order_collage_id
+            })
         }
         good_num(e) {
             this.good_number = e.detail.value;
@@ -923,15 +930,12 @@
             if (!options) {
                 return
             }
-
             if (options.id) {
-              this.good_id = options.id;
+                this.good_id = options.id;
             }
-
-            if (options.order_collage_id){
-              this.order_collage_id=options.order_collage_id;
+            if (options.order_collage_id) {
+                this.order_collage_id = options.order_collage_id;
             }
-
             wepy.request({
                 url: "api/goods/detail",
                 method: 'POST',
@@ -1041,9 +1045,24 @@
                 this.pin_list = res.data.list.data;
                 this.$apply();
             })
+            if (wx.getStorageSync("payflag") == 'true') {
+                this.showPayConfirm()
+            }
+            wepy.removeStorage({
+                key: 'payflag'
+            })
         }
+        onShareAppMessage() {
+            var re = {
+                title: this.good_detail.goods_name,
+                path: "/pages/goods_detail?id=" + this.good_id,
+                imageUrl: this.good_detail.image.length > 0 ? this.good_detail.image[0].file_path : '',
+            }
+            return re
+        };
         // 是否确定取消支付弹窗
         showPayConfirm() {
+            var that = this
             this.showAlert({
                 confirmText: '继续支付',
                 confirmColor: '#e93131',
@@ -1052,7 +1071,13 @@
                 content: '你尚未完成支付，你喜欢的东东可能会被抢空哦~',
                 title: '确定要放弃付款吗？',
                 confirm: function() {
-                    console.log('继续支付')
+                    wepy.navigateTo({
+                        url: '/pages/paypage?goods_id=' + that.good_detail.goods_id +
+                            '&good_number=' + that.good_number +
+                            '&goods_sku_id=' + that.goods_sku_id +
+                            '&buy_type=' + that.buy_type +
+                            '&order_collage_id=' + that.order_collage_id
+                    })
                 },
                 cancel: function() {
                     console.log('暂时放弃')

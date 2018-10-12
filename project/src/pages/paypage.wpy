@@ -273,11 +273,11 @@
         <text>手动添加联系信息</text>
         <image class="right_arrow" src="../resource/img/right_arrow.png"></image>
       </view>
-      <view class="flexRow">
+      <!-- <view class="flexRow">
         <span class="public_icon2_weixin"></span>
         <text>一键获取微信联系信息</text>
         <image class="right_arrow" src="../resource/img/right_arrow.png"></image>
-      </view>
+      </view> -->
     </view>
     <!-- 按钮列表 E -->
     <!-- 数量选择 S -->
@@ -289,7 +289,7 @@
         </view>
         <view class="shop-info">
           <view class="flexRow flex-astretch">
-            <image class="self-start" src="{{item.image[0].file_path}}"></image>
+            <image class="self-start" src="{{item.image[0].file_path}}" />
             <view class="flexCol flex-astretch flex-jbetween">
               <text class="title">{{item.goods_name}}</text>
               <text class="des">{{item.describe}}</text>
@@ -610,6 +610,8 @@
         this.detail=res.data;
         this.$apply();
       })
+
+      wx.setStorageSync("payflag",'true');
     };
 
     onShow(){

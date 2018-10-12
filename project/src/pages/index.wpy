@@ -2,8 +2,8 @@
     #homepage {
         // display: flex;
         // flex-direction: column;
-          overflow-x:hidden;
-    width:100%;
+        overflow-x: hidden;
+        width: 100%;
         .topSwiper {
             height: 306rpx;
         }
@@ -60,11 +60,11 @@
     <view class="container" id="homepage">
         <!-- 头部轮播图片 -->
         <div class="topSwiper">
-            <swiper style="height:306rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
+            <swiper wx:if="{{!adload}}" style="height:306rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
                 <block wx:for="{{imgUrls}}" wx:key="{{index}}">
                     <swiper-item wx:if="{{item.status == 1}}">
                         <!-- <navigator url="{{item.target_url}}" hover-class="none"> -->
-                            <image src="{{item.url}}" class="slide-image" bindtap="navAD({{item.target_url}})"/>
+                        <image src="{{item.url}}" class="slide-image" bindtap="navAD({{item.target_url}})" />
                         <!-- </navigator> -->
                     </swiper-item>
                 </block>
@@ -76,20 +76,20 @@
                 <swiper-item>
                     <div class="navTablist">
                         <span wx:for="{{catelist1}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
-                                    <view class="icon">
-                                        <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
-                                    </view>
-                                    {{item.name}}
-                                </span>
+                                            <view class="icon">
+                                                <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
+                                            </view>
+                                            {{item.name}}
+                                        </span>
                     </div>
                 </swiper-item>
                 <swiper-item wx:if="{{cateShow}}">
                     <div class="navTablist">
                         <span wx:for="{{catelist2}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
-                                    <view class="icon">
-                                        <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
-                                    </view>
-                                    {{item.name}}</span>
+                                            <view class="icon">
+                                                <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
+                                            </view>
+                                            {{item.name}}</span>
                     </div>
                 </swiper-item>
             </swiper>
@@ -134,15 +134,21 @@
             navIndex: 0,
             cateShow: false,
             recommend: [],
+            recommend2: [],
             recommendpage: 1,
-            recommend2page:1,
-            noticemess:'',
-            test:{}
+            recommend2page: 1,
+            noticemess: '',
+            test: {},
+            adload: true,
+            recommendShow:false,
+            last_page2: 1
         }
         methods = {
-            navAD(url){
-                if(url){
-                    wepy.navigateTo({url:url})
+            navAD(url) {
+                if (url) {
+                    wepy.navigateTo({
+                        url: url
+                    })
                 }
             },
             changenav(index) {
@@ -164,9 +170,11 @@
                     sign: 'home_ad',
                 }
             }).then(res => {
+                this.adload = false
                 if (res.code == 1) {
                     this.imgUrls = res.data.list
                 }
+                this.$apply()
             })
         }
         getremmend() {
@@ -179,13 +187,19 @@
                     page: this.recommendpage
                 }
             }).then(res => {
+                this.recommendShow = true
                 if (res.code == 1) {
                     this.recommend = res.data.list.data
                 }
+                this.$apply()
             })
         }
         /* 全球优质路线 */
         getremmend2() {
+            if (this.recommend2page > this.last_page2) {
+                this.recommend2page = this.last_page2 == 0 ? 1 :this.last_page2
+                return
+            }
             wepy.request({
                 url: 'api/index/recommend',
                 method: 'POST',
@@ -196,8 +210,14 @@
                 }
             }).then(res => {
                 if (res.code == 1) {
-                    this.recommend = res.data.list.data
+                    if (this.recommend2page == 1) {
+                        this.recommend2 = res.data.list.data
+                    } else {
+                        this.recommend2 = this.recommend2.concat(res.data.list.data)
+                    }
+                    this.last_page2 = res.data.list.last_page
                 }
+                this.$apply()
             })
         }
         getCate() {
@@ -221,7 +241,12 @@
             })
         }
         onLoad() {
-            this.PageInit()
+            // this.PageInit()
+        }
+        onReachBottom() {
+            console.log('eff')
+            this.recommend2page += 1
+            this.getremmend2()
         }
         PageInit() {
             this.getCate()

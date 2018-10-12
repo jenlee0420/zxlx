@@ -5,7 +5,6 @@ export default class Global extends wepy.mixin {
     imgBaseUrl: 'https://zxlx-web.oss-cn-beijing.aliyuncs.com/',
     baseHeadImg: 'http://zxlx-web.oss-cn-beijing.aliyuncs.com/head.png',
     baseServerImg: 'https://zxlx-web.oss-cn-beijing.aliyuncs.com/tmpimg.png',
-    hasHomepage:false,
     reg: {
         empty:/^\s*$/,
         phone:/^1[34578]\d{1}[\d\*]{4}\d{4}$/,
@@ -492,6 +491,9 @@ export default class Global extends wepy.mixin {
     }
 
     onLoad() {
-        this.hasHomepage = this.checkHomePage()
+        if(this.$com.backtoHome){
+            this.$invoke('backtoHome','showHome',this.checkHomePage())
+        }
+        
     }
 }

@@ -10,7 +10,7 @@
 </style>
 
 <template>
-  <view id="homebtn" wx:if="{{!hasHomepage}}">
+  <view id="homebtn" wx:if="{{!showBtn}}">
     <span class="public_icon1_to_home" @tap="backHome"></span>
   </view>
 </template>
@@ -29,6 +29,10 @@ export default class backtoHome extends wepy.component {
   methods = {
     backHome(){
       wepy.reLaunch({url:'/pages/index'})
+    },
+    showHome(bool){
+      this.showBtn = bool
+      console.log(bool,'/dfdfdf')
     }
   }
   onLoad() {
