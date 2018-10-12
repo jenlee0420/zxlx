@@ -89,11 +89,11 @@
           </view>
         </view>
       </view>
-      {{limitTime.date}}天{{limitTime.hour}}:{{limitTime.min}}:{{limitTime.sec}}
+      <!--{{limitTime.date}}天{{limitTime.hour}}:{{limitTime.min}}:{{limitTime.sec}}-->
       <view class="price {{detail.order_status != '10'?'cb4b4b4':''}}">￥{{detail.total_price}}</view>
       <view class="t_c fs22" wx:if="{{detail.order_status == '10'}}">
         <text class="mr16">剩余支付时间</text>
-        <text class="mr10">2天</text><text class="timebox">23</text>:<text class="timebox">23</text>:<text class="timebox">23</text>
+        <text class="mr10">{{limitTime.date}}天</text><text class="timebox">{{limitTime.hour}}</text>:<text class="timebox">{{limitTime.min}}</text>:<text class="timebox">{{limitTime.sec}}</text>
       </view>
       <view class="t_c mt40 mb40" wx:if="{{detail.order_status == '10'}}">
         <button class="btn w600">立即支付</button>
@@ -223,7 +223,9 @@
           this.detail=res.data;
           //倒计时
           if (!this.payloop) {
-            this.countdown(this.detail.surplus_pay_time)
+            if(this.detail.surplus_pay_time>0){
+              this.countdown(this.detail.surplus_pay_time);
+            }
           }
           var obj=JSON.parse(wx.getStorageSync("userData"));
           this.this_user_name=obj.nickName
