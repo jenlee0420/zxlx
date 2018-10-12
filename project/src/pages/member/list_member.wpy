@@ -162,28 +162,46 @@
       default_addree:0,
 
       choice_address:"",
-      order_id:"",
+
+      order_id:0,
     }
     methods = {
       choice_address(index){
-        if(!this.choice_address){
-          return;
+        if(this.choice_address){
+          if(this.order_id){
+            wepy.request({
+              url: "api/order/editorderaddress",
+              method: 'POST',
+              data: {
+                order_id:this.order_id,
+                address_id:this.data.list[index].address_id,
+              },
+            }).then(res => {
+              if(res.code!="1"){
+                this.showAlert({title:"警告",content:res.msg});
+              }
+
+              wx.navigateBack();
+            })
+          }else {
+            wx.setStorageSync("address",JSON.stringify({
+              address_id:this.data.list[index].address_id,
+              name:this.data.list[index].name,
+              user_id:this.data.list[index].user_id,
+              detail:this.data.list[index].detail,
+              phone:this.data.list[index].phone,
+              region:{
+                province:this.data.list[index].region.province,
+                city:this.data.list[index].region.city,
+                region:this.data.list[index].region.region,
+              },
+            }))
+            wx.navigateBack();
+          }
         }
 
-        wx.setStorageSync("address"+order_id,JSON.stringify({
-          address_id:this.data.list[index].address_id,
-          name:this.data.list[index].name,
-          user_id:this.data.list[index].user_id,
-          detail:this.data.list[index].detail,
-          phone:this.data.list[index].phone,
-          region:{
-            province:this.data.list[index].region.province,
-            city:this.data.list[index].region.city,
-            region:this.data.list[index].region.region,
-          },
-        }))
 
-        wx.navigateBack();
+
       },
 
       go_to_add(){
@@ -252,10 +270,12 @@
     };
 
     onLoad(options) {
+      console.log(options)
         if(options){
-          if(options.choice_address){
+          if(options.address_id){
             this.choice_address=options.address_id;
           }
+
           if(options.order_id){
             this.order_id=options.order_id;
           }

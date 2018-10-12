@@ -551,7 +551,7 @@
                                     <view class="m-nums">还差<text>{{item.lack_num}}人</text>拼成</view>
                                     <text class="t-nums">剩余{{item.remaining_time}}</text>
                                 </view>
-                                <view class="btn bg-primary">
+                                <view @tap="join_pin({{index}})" class="btn bg-primary">
                                     去拼单
                                 </view>
                             </view>
@@ -658,7 +658,7 @@
                                 <text>剩余{{item.remaining_time}}</text>
                             </view>
                             <view>
-                                <view class="btn bg-primary">
+                                <view @tap="join_pin({{index}})" class="btn bg-primary">
                                     去拼单
                                 </view>
                             </view>
@@ -745,6 +745,12 @@
             }
         }
         methods = {
+            join_pin(index){
+              wepy.navigateTo({
+                url: '/pages/join?order_collage_id='+this.pin_list[index].id,
+              })
+            },
+
             goods_detal_tip(index1, index2) {
                 for (var i = 0; i < this.goods_detal.length; i++) {
                     if (i == index1) {

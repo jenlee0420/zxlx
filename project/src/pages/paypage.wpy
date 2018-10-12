@@ -475,7 +475,6 @@
                   url: '/pages/mycenter/orderlist?type=1',
                 })
               }
-              wx.setStorageSync("address","");
             },
             fail:function(e){
               console.log(e)
@@ -623,6 +622,10 @@
         this.detail.address.detail=obj.detail;
       }
       this.$apply();
+    }
+
+    onUnload(){
+      wx.setStorageSync("address","");
     }
   }
 </script>

@@ -208,7 +208,7 @@
                         <text>剩余{{item.remaining_time}}</text>
                     </view>
                     <view>
-                        <view class="btn bg-primary">
+                        <view @tap="join_other_pin" class="btn bg-primary">
                             去拼单
                         </view>
                     </view>
@@ -249,6 +249,12 @@
             pin_list: [],
         }
         methods = {
+            join_other_pin(index){
+              wepy.navigateTo({
+                url: '/pages/join?order_collage_id='+this.pin_list[index].id,
+              })
+            },
+
             join_pin() {
                 wepy.navigateTo({
                     url: '/pages/goods_detail?order_collage_id=' + this.order_collage_id + '&id=' + this.collage_detail.goods_id,

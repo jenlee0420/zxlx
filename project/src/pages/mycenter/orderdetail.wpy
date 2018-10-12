@@ -325,60 +325,58 @@
                 return
             }
             this.order_id = options.order_id;
-            wepy.request({
-                url: "api/order/detail",
-                method: 'POST',
-                data: {
-                    order_id: options.order_id
-                },
-            }).then(res => {
-                this.loading = false;
-                if (res.code != "1") {
-                    this.showAlert({
-                        title: "警告",
-                        content: res.msg
-                    });
-                } else {
-                    this.order_status = res.data.order_status.value;
-                    this.detail = res.data
-                }
-                this.$apply();
 
-                if(this.order_status=='30'){
-
-                  wepy.request({
-                    url: "api/order/getcomment",
-                    method: 'POST',
-                    data: {
-                      order_id: options.order_id
-                    },
-                  }).then(res => {
-                    if (res.code != "1") {
-                      this.showAlert({
-                        title: "警告",
-                        content: res.msg
-                      });
-                      return
-                    }
-                    this.comment_list=res.data.list;
-                    this.$apply();
-                })
-                }
-            })
         }
         PageInit() {
         }
 
         onShow(){
-          if(wx.getStorageSync("address")!=""){
-            var obj=JSON.parse(wx.getStorageSync("address"));
-            this.detail.address[0].address_id=obj.address_id;
-            this.detail.address[0].name=obj.name;
-            this.detail.address[0].phone=obj.phone;
-            this.detail.address[0].region=obj.region;
-            this.detail.address[0].detail=obj.detail;
+          if (!this.order_id) {
+            this.showAlert({
+              title: "错误 order_id"
+            });
+            return
           }
-          this.$apply();
+          wepy.request({
+            url: "api/order/detail",
+            method: 'POST',
+            data: {
+              order_id: this.order_id
+            },
+          }).then(res => {
+            this.loading = false;
+            if (res.code != "1") {
+              this.showAlert({
+                title: "警告",
+                content: res.msg
+              });
+            } else {
+              this.order_status = res.data.order_status.value;
+              this.detail = res.data
+            }
+            this.$apply();
+
+            if(this.order_status=='30'){
+
+              wepy.request({
+                url: "api/order/getcomment",
+                method: 'POST',
+                data: {
+                  order_id: options.order_id
+                },
+              }).then(res => {
+                if (res.code != "1") {
+                  this.showAlert({
+                    title: "警告",
+                    content: res.msg
+                  });
+                  return
+                }
+                this.comment_list=res.data.list;
+                this.$apply();
+              })
+            }
+          })
         }
     }
 </script>
