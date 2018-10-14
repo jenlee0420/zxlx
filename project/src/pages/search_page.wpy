@@ -115,17 +115,21 @@
     mixins = [Mixin]
     data = {
       catelist: [],
-      goodslist: {list:[],total_count:0},
+      goodslist: {
+        list: [],
+        total_count: 0,
+        last_page: 1
+      },
       page: 1,
       category: {
         id: 0,
         val: '全部'
       },
-      pagesize:10,
+      pagesize: 10,
       loading: true,
       searchview: false,
-      scrollleft:0,
-      search:''
+      scrollleft: 0,
+      search: ''
     }
     methods = {
       changeCate(obj) {
@@ -145,8 +149,8 @@
           url: '/pages/search?val=' + this.category.val
         })
       },
-      clearsearch(){
-        this.search='';
+      clearsearch() {
+        this.search = '';
         this.page = 1
         this.getlist()
       }
@@ -168,6 +172,10 @@
       })
     }
     getlist() {
+      if (this.page > this.last_page) {
+        this.page = this.last_page == 0 ? 1 : this.last_page
+        return
+      }
       wepy.request({
         url: 'api/goods/lists',
         method: 'POST',
@@ -180,8 +188,13 @@
       }).then(res => {
         this.loading = false
         if (res.code == 1) {
-          this.goodslist.list = res.data.list.data
+          if (this.page == 1) {
+            this.goodslist.list = res.data.list.data
+          } else {
+            this.goodslist.list = this.goodslist.list.concat(res.data.list.data)
+          }
           this.goodslist.total_count = res.data.list.total
+          this.last_page = res.data.list.last_page
         } else {
           wepy.showModal({
             content: res.msg,
@@ -191,11 +204,13 @@
         this.$apply()
       })
     }
-    getValbyId(){
+    getValbyId() {
       this.catelist.forEach(e => {
-        if(e.id == this.category.id){
+        if (e.id == this.category.id) {
           this.category.val = e.name
-          wepy.setNavigationBarTitle({title: e.name})
+          wepy.setNavigationBarTitle({
+            title: e.name
+          })
         }
       });
     }
@@ -211,13 +226,16 @@
         })
         this.getValbyId()
       }
-      
       if (wepy.getStorageSync('keyword')) {
         this.search = wepy.getStorageSync('keyword')
         wepy.removeStorage({
           key: 'keyword'
         })
       }
+      this.getlist()
+    }
+    onReachBottom() {
+      this.page += 1
       this.getlist()
     }
   }

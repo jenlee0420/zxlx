@@ -54,16 +54,28 @@
 }
 
 .public_icon1_play_day1{
-  &:extend(.public_icon1);
-  background-position: 0rpx -437rpx ;
-  width: 20rpx;
-  height: 57rpx;
+  background-image: url('@{imgbaseUrl}/bg-1.png');
+  background-repeat: no-repeat;
+  background-size: 100%;
+  display: inline-block;
+  width: 22rpx;
+  height: 43rpx;
 }
 .public_icon1_play_day2{
-  &:extend(.public_icon1);
-  background-position: -157rpx  -437rpx ;
-  width: 20rpx;
-  height: 57rpx;
+  background-image: url('@{imgbaseUrl}/bg-2.png');
+  background-repeat: repeat-x;
+  display: inline-block;
+  height: 43rpx;
+  height:32rpx;
+  padding-right:10rpx;
+}
+.public_icon1_play_day3{
+  background-image: url('@{imgbaseUrl}/bg-3.png');
+  background-repeat: no-repeat;
+  display: inline-block;
+  background-size: 100%;
+  width: 23rpx;
+  height: 43rpx;
 }
 
 .public_icon1_pin_full{
@@ -335,7 +347,7 @@
 
 .public_icon3_collection{
   &:extend(.public_icon3);
-  background-position: 0rpx -520rpx ;
+  background-position: 4rpx -520rpx ;
   width: 101rpx;
   height: 69rpx;
 }

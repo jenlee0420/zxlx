@@ -35,8 +35,8 @@
     .zhuanfa {
       position: absolute;
       right: 48rpx;
-      width: 30rpx;
-      height: 30rpx;
+      width: 42rpx;
+      height: 42rpx;
       button{
         background-color: transparent;
             outline: none;

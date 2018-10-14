@@ -659,7 +659,7 @@
                             </view>
                             <view class="flex-1 flex-column">
                                 <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
-                                <text>剩余{{item.remaining_time}}</text>
+                                <text>剩余{{item.over_time}}</text>
                             </view>
                             <view>
                                 <view @tap="join_pin({{index}})" class="btn bg-primary">
@@ -748,6 +748,14 @@
                 this.activeIndex = index;
                 this.toView = 'scroll' + index;
             }
+        }
+        computed ={
+            // overtime(time){
+            //     console.log(time,'////')
+            //     if(!time) {return}
+            //     console.log(time,'////')
+            //     return this.countdownDateTime(time)
+            // }
         }
         methods = {
             join_pin(index) {
@@ -1064,6 +1072,12 @@
                     this.pin_num = res.data.list.total;
                 }
                 this.pin_list = res.data.list.data;
+                this.pin_list.forEach(e => {
+                    // console.log(e)
+                    let t =this.countdownDateTime(e.over_time)
+                    e.over_time = t.date ? t.date+'天' :''
+                    e.over_time += t.hour+":"+t.min+":"+t.sec
+                });
                 this.$apply();
             })
             if (wx.getStorageSync("payflag") == 'true') {

@@ -190,7 +190,7 @@
                 </block>
                 <span wx:if="{{collage_detail.meed_num-collage_detail.join_num!=0}}" class="public_icon1_wait_pin"></span>
             </view>
-            <text>还差{{collage_detail.meed_num-collage_detail.join_num}}人拼成</text>
+            <text class="fs28 c333 mt10">还差{{collage_detail.meed_num-collage_detail.join_num}}人拼成</text>
             <view wx:if="{{collage_detail.meed_num-collage_detail.join_num==0}}" class="fs30 mt20">
                 <span class="mr20 pin_yiman"></span><text class="tipsuccess">拼单已满</text>
             </view>

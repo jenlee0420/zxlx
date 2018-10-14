@@ -1,5 +1,9 @@
 <style lang="less">
-
+.btns .btn,.btns .btnline{
+  height: 60rpx;
+  line-height: 58rpx;
+  font-size: 24rpx;
+}
 </style>
 
 <template>

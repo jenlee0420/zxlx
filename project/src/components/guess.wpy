@@ -22,7 +22,7 @@
   import wepy from 'wepy'
   import Mixin from '@/mixins/global'
   import gooditem from '@/components/collectionItem'
-  export default class Guess extends wepy.page {
+  export default class Guess extends wepy.component {
     config = {}
     components = {
       gooditem

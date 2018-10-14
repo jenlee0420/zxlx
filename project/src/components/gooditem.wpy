@@ -23,10 +23,10 @@
          bottom:55rpx
        }
        .bottomtext{
-         left:0;bottom:0;
-         font-size: 24rpx;
+         left:-7rpx;bottom:0;
+         font-size: 22rpx;
          color: #fff;
-         line-height: 57rpx;
+         display: flex;
          >span{display: inline-block;}
         }
     }
@@ -49,9 +49,9 @@
         <text class="toptext abs">{{goodsitem.subtitle_goods_name}}</text>
         <span class="public_icon1_hot_sale abs" wx:if="{{goodsitem.propaganda == 1}}"></span>
         <view class="bottomtext abs">
-          <!-- <span class="public_icon1_play_day1"></span> -->
-          <span class="public_icon1_play_day3">纯玩11天</span>
-          <!-- <span class="public_icon1_play_day2"></span> -->
+          <span class="public_icon1_play_day1"></span>
+          <span class="public_icon1_play_day2">纯玩11天</span>
+          <span class="public_icon1_play_day3"></span>
           </view>
         <!-- <view class="photo"> -->
           <image src="{{goodsitem.image.length>0?goodsitem.image[0].file_path:baseServerImg}}" mode="aspectFill"/>

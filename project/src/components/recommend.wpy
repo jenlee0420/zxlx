@@ -24,7 +24,7 @@
     import wepy from 'wepy'
     import Mixin from '@/mixins/global'
     import gooditem from '@/components/gooditem'
-    export default class recommend extends wepy.page {
+    export default class recommend extends wepy.component {
         config = {}
         components = {
             gooditem
@@ -62,7 +62,7 @@
             })
         }
         onLoad() {
-            // this.getlist()
+            this.getlist()
         }
     }
 </script>

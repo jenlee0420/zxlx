@@ -209,7 +209,7 @@
           this.order_collage_id=options.order_collage_id;
           this.order_id=options.order_id;
 
-          this.$invoke('recommend','getlist')
+        //   this.$invoke('recommend','getlist')
 
           wepy.request({
             url: "api/order/collagedetail",

@@ -19,13 +19,12 @@
     mode
   } from './untils'
   export default class extends wepy.app {
-    config = {
+    config = { 
       pages: [
         // 'pages/icon',
         //'pages/test',
-
         'pages/index',
-        'pages/yaoqing',
+        'pages/yaoqing', 
         'pages/search_page',
         'pages/friendpay',
         'pages/sharefriend',
