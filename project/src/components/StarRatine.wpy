@@ -24,7 +24,7 @@
 <script>
   import wepy from 'wepy'
 
-  export default class StarRating extends wepy.component {
+  export default class StarRatine extends wepy.component {
     components = {};
 
     data = {
@@ -34,7 +34,7 @@
     props = {
       total: String,
       num: {
-        type: Number,
+        type: String,
         default: () => {
         return 0
       }

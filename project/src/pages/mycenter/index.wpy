@@ -1,6 +1,8 @@
 <style lang="less">
     #mycenter {
         background-color: #f4f4f4;
+        overflow-x: hidden;
+        width: 100%;
         .tophead {
             width: 100%;
             background-color: #f9fbfc;

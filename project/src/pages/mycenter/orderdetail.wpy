@@ -1,5 +1,7 @@
 <style lang="less">
     #orderdetail {
+        overflow-x: hidden;
+        width: 100%;
         >view {
             background-color: #fff;
         }

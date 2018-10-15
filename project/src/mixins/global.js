@@ -449,7 +449,7 @@ export default class Global extends wepy.mixin {
     }
     onShow(opation) {
         if(this.$com.notice){
-            //this.getMessage()
+            this.getMessage()
         }
         // if(this.__route__ === 'pages/index'){
         //     return
