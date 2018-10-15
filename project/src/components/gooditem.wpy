@@ -50,7 +50,7 @@
         <span class="public_icon1_hot_sale abs" wx:if="{{goodsitem.propaganda == 1}}"></span>
         <view class="bottomtext abs">
           <span class="public_icon1_play_day1"></span>
-          <span class="public_icon1_play_day2">纯玩11天</span>
+          <span class="public_icon1_play_day2">{{goodsitem.play_day}}</span>
           <span class="public_icon1_play_day3"></span>
           </view>
         <!-- <view class="photo"> -->
