@@ -58,8 +58,8 @@
                 </repeat>
             </view>
             <view class="flex flex-between flex-algin-center">
-                <text class="maincolor fs30">￥{{goodsitem.goods_price}}起</text>
-                <button class="btn h60" bindtap="join_pin({{index}})">发起拼单</button>
+                <text class="maincolor fs30">￥{{goodsitem.goods_min_price}}起</text>
+                <button class="btn h60" bindtap="navDetail({{goodsitem.goods_id}}})">发起拼单</button>
             </view>
         </view>
     </view>
@@ -82,11 +82,11 @@
         }
         data = {}
         methods = {
-            join_pin(index) {
+            navDetail(id) {
                 wepy.navigateTo({
-                    url: '/pages/join?order_collage_id=' + this.pin_list[index].id,
+                    url: '/pages/goods_detail?id=' + id
                 })
-            },
+            }
         }
         onLoad() {}
     }

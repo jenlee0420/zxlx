@@ -68,6 +68,7 @@
             background-color: transparent;
             outline: none;
             border-radius: 0px;
+            border-top:1rpx solid @bColor;
         }
         button.contact::after {
             border: none;
@@ -192,7 +193,7 @@
                 <image src="{{detail.source_image}}" mode="aspectFill" /><span class="fs25 c333 flex-1 ml20">{{detail.source_name}}</span>
             </view>
             <block wx:for="{{detail.goods}}" wx:key="{{index}}">
-                <view class="itemdetail">
+                <view class="itemdetail"  bindtap="navDetail({{item.goods_id}})">
                     <view class="mr20">
                         <image src="{{item.image.file_path}}" mode="aspectFill" />
                     </view>
@@ -245,7 +246,7 @@
                 </view>
             </view>
             <!-- 评价信息 end -->
-            <button class="contact"><span class="public_icon4_contact mr10" open-type="contact" ></span>联系客服</button>
+            <button class="contact" hover-class="none"><span class="public_icon4_contact mr10" open-type="contact" ></span>联系客服</button>
         </view>
         {{this.detail.pay_type}}
         <view class="orderinfo" wx:if="{{order_status=='10'||order_status=='20'||order_status=='40'}}">
@@ -309,6 +310,12 @@
             },
         }
         methods = {
+            navDetail(id) {
+                console.log(id)
+                wepy.navigateTo({
+                    url: '/pages/goods_detail?id=' + id
+                })
+            },
             to_address_list() {
                 wx.navigateTo({
                     url: "/pages/member/list_member?address_id="+this.detail.address[0].address_id+"&order_id="+this.order_id,

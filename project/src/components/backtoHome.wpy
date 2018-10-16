@@ -32,7 +32,6 @@ export default class backtoHome extends wepy.component {
     },
     showHome(bool){
       this.showBtn = bool
-      console.log(bool,'/dfdfdf')
     }
   }
   onLoad() {
