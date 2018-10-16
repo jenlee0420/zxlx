@@ -172,10 +172,7 @@
       })
     }
     getlist() {
-      if (this.page > this.last_page) {
-        this.page = this.last_page == 0 ? 1 : this.last_page
-        return
-      }
+      
       wepy.request({
         url: 'api/goods/lists',
         method: 'POST',
@@ -235,6 +232,10 @@
       this.getlist()
     }
     onReachBottom() {
+      if (this.page > this.last_page) {
+        this.page = this.last_page == 0 ? 1 : this.last_page
+        return
+      }
       this.page += 1
       this.getlist()
     }

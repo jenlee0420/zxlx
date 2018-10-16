@@ -175,12 +175,12 @@
         }
         events = {
             flush() {
-//                console.log(this.TypeList[this.currentIndex].key),
-//                    this.loadorderlist({
-//                        per_page: this.page_size,
-//                        page: 1,
-//                        data_type: this.TypeList[this.currentIndex].key,
-//                    }, this.currentIndex);
+                console.log(this.TypeList[this.currentIndex].key),
+                    this.loadorderlist({
+                        per_page: this.page_size,
+                        page: 1,
+                        data_type: this.TypeList[this.currentIndex].key,
+                    }, this.currentIndex);
             },
         }
         methods = {
@@ -192,7 +192,7 @@
             changeType_swiper(e) {
                 this.loadorderlist({
                     per_page: this.page_size,
-                    page: 1,
+                    page: this.TypeList[e.detail.current].current_page,
                     data_type: this.TypeList[e.detail.current].key,
                 }, e.detail.current)
             },
@@ -259,11 +259,14 @@
                 this.currentIndex = opation.type
             }
         }
+//        PageInit(opation) {
+//
+//        }
 
         onShow(){
           this.loadorderlist({
             per_page: this.page_size,
-            page: 1,
+            page: this.TypeList[this.currentIndex].current_page,
             data_type:this.TypeList[this.currentIndex].key,
           }, this.currentIndex);
         }

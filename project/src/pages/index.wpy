@@ -64,7 +64,7 @@
                 <block wx:for="{{imgUrls}}" wx:key="{{index}}">
                     <swiper-item wx:if="{{item.status == 1}}">
                         <!-- <navigator url="{{item.target_url}}" hover-class="none"> -->
-                        <image src="{{item.url}}" class="slide-image" bindtap="navAD({{item.target_url}})" />
+                        <image src="{{item.image_url}}" class="slide-image" bindtap="navAD({{item.target_url}})" />
                         <!-- </navigator> -->
                     </swiper-item>
                 </block>
