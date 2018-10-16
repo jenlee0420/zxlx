@@ -130,7 +130,8 @@
     import orderBtn from '@/components/orderBtn'
     export default class Index extends wepy.page {
         config = {
-            enablePullDownRefresh: true
+            enablePullDownRefresh: true,
+            navigationBarTitleText: '订单列表',
         }
         components = {
             orderBtn

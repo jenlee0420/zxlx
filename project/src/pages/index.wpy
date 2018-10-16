@@ -121,7 +121,10 @@
     import recommend from '@/components/gooditem'
     import notice from '@/components/notice'
     export default class Index extends wepy.page {
-        config = {}
+        config = {
+            enablePullDownRefresh: true,
+            navigationBarTitleText: '知兮乐兮',
+        }
         components = {
             recommend,
             notice
@@ -252,6 +255,10 @@
             this.getAD()
             this.getremmend()
             this.getremmend2()
+        }
+        onPullDownRefresh(e) {
+            this.recommend2page = 1
+            this.PageInit()
         }
     }
 </script>
