@@ -54,17 +54,20 @@
         data = {
             noticeshow: false,
             noticemess: '',
+            messageTimer:null
         }
         methods = {
             getNotice() {
-                let pages = getCurrentPages()
-                console.log('dd',pages[0])
-                console.log(this)
                 this.messageTimer = setInterval(() => {
+                    console.log('2')
                     this.getNoticedata()
                 }, 30000)
-            }
+            },
             //30秒
+            clearTimerMeth(){
+                clearInterval(this.messageTimer)
+                console.log('ee',this.messageTimer)
+            }
         }
         // 取首页通知
         getNoticedata() {
@@ -89,7 +92,13 @@
                 this.$apply()
             }, 3000);
         }
+        clearTime(){
+            // this.messageTimer = null
+            clearInterval(this.messageTimer)
+        }
         onLoad() {
+            // this.clearTime()
+            
         }
     }
 </script>

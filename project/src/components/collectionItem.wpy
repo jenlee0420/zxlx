@@ -50,7 +50,7 @@
         </view>
         <view class="flex-1">
             <text class="itemname">{{goodsitem.source_name}}</text>
-            <text class="fs22 c929292">已拼{{goodsitem.already_collage_user_num}}人次 · {{goodsitem.now_collage_num}}人拼单</text>
+            <text class="fs22 c929292">已拼{{goodsitem.already_collage_user_num}}人次 · {{goodsitem.now_collage_num}}人组团</text>
             <view class="itemlabel">
                 <text class="redlabel" wx:if="{{goodsitem.is_own_business == 1}}">知兮乐兮自营</text>
                 <repeat for="{{goodsitem.label_name}}" index="index" item="item" key="key">
@@ -59,7 +59,7 @@
             </view>
             <view class="flex flex-between flex-algin-center">
                 <text class="maincolor fs30">￥{{goodsitem.goods_min_price}}起</text>
-                <button class="btn h60" bindtap="navDetail({{goodsitem.goods_id}}})">发起拼单</button>
+                <button class="btn h60" bindtap="navDetail({{goodsitem.goods_id}}})">发起组团</button>
             </view>
         </view>
     </view>

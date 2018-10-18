@@ -18,8 +18,7 @@ export default class Global extends wepy.mixin {
         price:/^\d+(\.{0,1}\d+){0,1}$/ // 只能是正数
     },
     loadloop:true,
-    page_size:10,
-    messageTimer:null
+    page_size:10
   }
   methods = {
 
@@ -454,8 +453,8 @@ export default class Global extends wepy.mixin {
 
     }
     onShow(opation) {
-        this.messageTimer = null
         if(this.$com.notice){
+            this.$invoke('notice','clearTimerMeth')
             this.getMessage()
         }
         // if(this.__route__ === 'pages/index'){

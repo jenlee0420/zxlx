@@ -513,7 +513,7 @@
                 <view class="des-container">
                     <view class="price-row">
                         <text class="price">￥{{good_detail.goods_min_price}}起</text>
-                        <text class="des">已拼{{good_detail.meed_num}}人次 · {{good_detail.now_collage_num}}人拼单</text>
+                        <text class="des">已拼{{good_detail.meed_num}}人次 · {{good_detail.now_collage_num}}人组团</text>
                     </view>
                     <text class="shop-name">{{good_detail.goods_name}}</text>
                     <text class="content-des">{{good_detail.describe}}</text>
@@ -534,11 +534,11 @@
                 </view>
             </view>
             <!-- 介绍卡部分 E -->
-            <!-- 去拼单部分 S -->
+            <!-- 去组团部分 S -->
             <view class="content">
                 <view class="pin-card">
                     <view class="header">
-                        <text>{{pin_num}}人在拼单，直接参与</text>
+                        <text>{{pin_num}}人在组团，直接参与</text>
                         <view @tap="pin_more">更多
                             <image src="../resource/img/right_arrow.png"></image>
                         </view>
@@ -555,14 +555,14 @@
                                     <text class="t-nums">剩余{{item.remaining_time}}</text>
                                 </view>
                                 <view @tap="join_pin({{index}})" class="btn bg-primary">
-                                    去拼单
+                                    去组团
                                 </view>
                             </view>
                         </view>
                     </block>
                 </view>
             </view>
-            <!-- 去拼单部分 E -->
+            <!-- 去组团部分 E -->
             <!-- 详情部分 -->
             <view id="scroll1" class="rich_text">
                 <rich-text nodes="{{good_detail.content}}">
@@ -589,8 +589,8 @@
                 <button class="public_icon1_custom" open-type="contact" hover-class="none"></button><text>客服</text></view>
                 
             <view wx:if="{{order_collage_id==0}}" class="flex2" @tap="open_good_class(2)"><text>￥{{total_price}}</text><text>单独购买</text></view>
-            <view wx:if="{{order_collage_id==0}}" class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起拼单</text></view>
-            <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime>0}}" class="flex3" @tap="open_good_class(1)"><text>加入拼单</text></view>
+            <view wx:if="{{order_collage_id==0}}" class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起组团</text></view>
+            <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime>0}}" class="flex3" @tap="open_good_class(1)"><text>加入组团</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num==0}}" class="flex5"><text>报名已满</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime<=0}}"  class="flex5"><text>活动已结束</text></view>
         </view>
@@ -649,8 +649,8 @@
             </view>
         </view>
         <!-- 购买选择 E -->
-        <!-- 查看更多拼单 s-->
-        <popWin title="正在拼单">
+        <!-- 查看更多组团 s-->
+        <popWin title="正在组团">
             <view slot="content">
                 <scroll-view scroll-y="{{true}}" style="height:570rpx">
                     <block wx:for="{{pin_list}}" wx:key="index" wx:for-index="index">
@@ -664,16 +664,16 @@
                             </view>
                             <view>
                                 <view @tap="join_pin({{index}})" class="btn bg-primary">
-                                    去拼单
+                                    去组团
                                 </view>
                             </view>
                         </view>
                     </block>
                 </scroll-view>
-                <view class="fs24 cb4b4b4 t_c ">仅显示10个正在拼单的人</view>
+                <view class="fs24 cb4b4b4 t_c ">仅显示10个正在组团的人</view>
             </view>
         </popWin>
-        <!-- 查看更多拼单 e-->
+        <!-- 查看更多组团 e-->
         <notice />
         <backtoHome />
     </view>
