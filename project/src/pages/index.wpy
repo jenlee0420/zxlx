@@ -256,6 +256,9 @@
             this.getAD()
             this.getremmend()
             this.getremmend2()
+            wepy.removeStorage({
+                key: 'payflag'
+            })
         }
         onPullDownRefresh(e) {
             this.recommend2page = 1

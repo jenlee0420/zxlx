@@ -269,6 +269,7 @@ export default class Global extends wepy.mixin {
     }
     //转时间戳
     transdate2Time(date){
+        if(!date){return 0}
         let tmp = new Date(date)
         return tmp.getTime() / 1000
     }
@@ -333,14 +334,18 @@ export default class Global extends wepy.mixin {
             })
         })
     }
-    // 若用户未授权地理位置，则弹出设置页面
+    // 若用户未授权
     getLocalSetting() {
-        return new Promise((resolve, reject) => {
+        // return new Promise((resolve, reject) => {
             wepy.getSetting().then(res => {
+                
                 if (res.authSetting["scope.userInfo"] === true) {
-                    resolve(true)
+                    return true
+                    // resolve(true)
                 } else {
-                    resolve(false)
+                    return false
+                    // resolve(false)
+                    console.log(res,'authSetting')
                     // wepy.openSetting().then(res =>{
                     //     if (res.authSetting["scope.userLocation"] === true) {
                     //         console.log(res)
@@ -355,7 +360,7 @@ export default class Global extends wepy.mixin {
                     // })
                 }
             })
-        })
+        // })
     }
     // 取经纬度信息
     localinfobyStorage() {
@@ -441,7 +446,7 @@ export default class Global extends wepy.mixin {
         })
         return bool
     }
-    // 定时取拼团或评论成功消息
+    // 定时取组团或评论成功消息
     getMessage(){
         this.$invoke('notice','getNotice')
     }

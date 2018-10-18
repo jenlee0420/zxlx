@@ -273,7 +273,10 @@
                     this.showAlert({title:"警告",content:"请输入手机号"});
                     return
                 }
-
+                if (this.place.province_id == "" || this.place.city_id == ''  || this.place.region_id == '' || this.address == ''){
+                  this.showAlert({title:"警告",content:"请选择地址"});
+                  return
+                }
                 var data={
                   address_id:this.address_id,
                   name:this.name,

@@ -25,6 +25,7 @@
         //'pages/test',
         'pages/index',
         'pages/yaoqing', 
+        'pages/wxlogin',
         'pages/search_page',
         'pages/friendpay',
         'pages/sharefriend',
@@ -88,6 +89,7 @@
       userInfo: null,
       mode,
       config,
+      timer:null
     }
     constructor() {
       super()
