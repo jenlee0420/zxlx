@@ -127,10 +127,10 @@
 <template>
     <view>
         <view class="bg_fff">
-            <!--  加入拼团成功页面（好友见） -->
+            <!--  加入组团成功页面（好友见） -->
             <view class="flex-column">
                 <view class="flexRow flex-jcenter">
-                    <span class="public_icon2_pin_success mr20"></span><text class="tipsuccess">拼单成功</text>
+                    <span class="public_icon2_pin_success mr20"></span><text class="tipsuccess">组团成功</text>
                 </view>
                 <text class="fs24 c929292 t_c mt30 mb10"> 供应商已准备就绪，请您届时参与。</text>
             </view>

@@ -440,7 +440,7 @@ export default class Global extends wepy.mixin {
         })
         return bool
     }
-    // 定时取拼团或评论成功消息
+    // 定时取组团或评论成功消息
     getMessage(){
         this.$invoke('notice','getNotice')
     }

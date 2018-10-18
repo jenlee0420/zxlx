@@ -217,15 +217,15 @@
         </view>
       </view>
       <view class="flexRow flex-jbetween item2">
-        <view class="title">拼单时间</view>
+        <view class="title">组团时间</view>
         <view class="time">2018/08/24 14:49:24</view>
       </view>
       <view class="flexRow flex-jbetween item2">
-        <view class="title">拼单须知</view>
+        <view class="title">组团须知</view>
         <view class="flexRow reverse flex-1 des">
           <view class="flexRow"><text>·</text>人满不退款</view>
           <view class="flexRow"><text>·</text>人满拼成</view>
-          <view class="flexRow"><text>·</text>好友拼单</view>
+          <view class="flexRow"><text>·</text>好友组团</view>
         </view>
       </view>
     </view>
