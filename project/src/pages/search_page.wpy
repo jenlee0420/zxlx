@@ -184,6 +184,7 @@
         }
       }).then(res => {
         this.loading = false
+        wx.stopPullDownRefresh();
         if (res.code == 1) {
           if (this.page == 1) {
             this.goodslist.list = res.data.list.data
@@ -241,7 +242,7 @@
     }
     onPullDownRefresh(e) {
       this.page = 1
-      this.PageInit()
+      this.getlist()
     }
   }
 </script>

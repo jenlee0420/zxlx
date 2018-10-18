@@ -208,7 +208,7 @@
       color: #fff;
       line-height: @footer-h;
       &.disable {
-        background: #eff0f0;
+        background: #adadad;
       }
     }
   }
@@ -421,7 +421,10 @@
         if (!this.user_term){
           return
         }
-
+        if(!this.detail.address){
+          this.showToast('请先添加联系信息')
+          return
+        }
         var data={
           goods_id:this.detail.goods_list[0].goods_id,
           goods_num:this.detail.goods_list[0].total_num,

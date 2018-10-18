@@ -19,13 +19,23 @@
     }
     .logo {
       height: 60vh;
+      width: 70%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      image{
+        width: 100rpx;
+        height: 100rpx;
+      }
     }
   }
 </style>
 
 <template>
   <view class="container" id="wxlogin">
-    <view class="logo"></view>
+    <view class="logo">
+      <image src="{{imgBaseUrl}}logo.png" mode="aspectFit"/>
+    </view>
     <text class="c999 fs25"> 登录后即可继续当前操作</text>
     <button open-type="getUserInfo" bindgetuserinfo="bindgetuserinfo" class="sharebtn flexRow flex-jcenter">
               <span class="public_icon1_white_weixin mr20"></span> 微信快捷登录

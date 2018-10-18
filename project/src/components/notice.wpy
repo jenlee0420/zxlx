@@ -54,7 +54,6 @@
         data = {
             noticeshow: false,
             noticemess: '',
-            messageTimer: null
         }
         methods = {
             getNotice() {
@@ -84,12 +83,10 @@
         closemessage() {
             setTimeout(() => {
                 this.noticeshow = false
-                this.messageTimer = null
                 this.$apply()
             }, 3000);
         }
         onLoad() {
-            this.messageTimer = null
         }
     }
 </script>

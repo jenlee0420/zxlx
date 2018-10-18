@@ -269,6 +269,7 @@ export default class Global extends wepy.mixin {
     }
     //转时间戳
     transdate2Time(date){
+        if(!date){return 0}
         let tmp = new Date(date)
         return tmp.getTime() / 1000
     }
@@ -333,14 +334,18 @@ export default class Global extends wepy.mixin {
             })
         })
     }
-    // 若用户未授权地理位置，则弹出设置页面
+    // 若用户未授权
     getLocalSetting() {
-        return new Promise((resolve, reject) => {
+        // return new Promise((resolve, reject) => {
             wepy.getSetting().then(res => {
+                
                 if (res.authSetting["scope.userInfo"] === true) {
-                    resolve(true)
+                    return true
+                    // resolve(true)
                 } else {
-                    resolve(false)
+                    return false
+                    // resolve(false)
+                    console.log(res,'authSetting')
                     // wepy.openSetting().then(res =>{
                     //     if (res.authSetting["scope.userLocation"] === true) {
                     //         console.log(res)
@@ -355,7 +360,7 @@ export default class Global extends wepy.mixin {
                     // })
                 }
             })
-        })
+        // })
     }
     // 取经纬度信息
     localinfobyStorage() {
@@ -433,8 +438,9 @@ export default class Global extends wepy.mixin {
     checkHomePage() {
         var pages = getCurrentPages()
         var bool = false
+        console.log(pages,'/')
         Object.keys(pages).forEach((v) => {
-            if ((pages[v].route).indexOf('pages/index') > -1 || (pages[v].route).indexOf('pages/search_page') > -1) {
+            if ((pages[v].route).indexOf('pages/index') > -1 || (pages[v].route).indexOf('pages/search_page') > -1 || (pages[v].route).indexOf('pages/mycenter/index') > -1) {
                 bool = true
             }
         })
@@ -448,6 +454,7 @@ export default class Global extends wepy.mixin {
 
     }
     onShow(opation) {
+        this.messageTimer = null
         if(this.$com.notice){
             this.getMessage()
         }

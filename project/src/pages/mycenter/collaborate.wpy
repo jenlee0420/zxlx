@@ -44,7 +44,7 @@
     <view class="container" id="collaborate">
         <view class="words">
             <text>想和知兮乐兮进行合作吗？</text>
-            <text>现在提交您的联系方式和合作意向，我们会1-2内联系您:）</text>
+            <text>现在提交您的联系方式和合作意向，我们会在1-2个工作日内联系您:）</text>
         </view>
         <view class="forminfo">
             <ul>

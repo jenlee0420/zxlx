@@ -199,10 +199,6 @@
         }
         /* 全球优质路线 */
         getremmend2() {
-            if (this.recommend2page > this.last_page2) {
-                this.recommend2page = this.last_page2 == 0 ? 1 :this.last_page2
-                return
-            }
             wepy.request({
                 url: 'api/index/recommend',
                 method: 'POST',
@@ -212,6 +208,7 @@
                     page: this.recommend2page
                 }
             }).then(res => {
+                wx.stopPullDownRefresh();
                 if (res.code == 1) {
                     if (this.recommend2page == 1) {
                         this.recommend2 = res.data.list.data
@@ -247,6 +244,10 @@
             // this.PageInit()
         }
         onReachBottom() {
+            if (this.recommend2page > this.last_page2) {
+                this.recommend2page = this.last_page2 == 0 ? 1 :this.last_page2
+                return
+            }
             this.recommend2page += 1
             this.getremmend2()
         }
@@ -255,6 +256,9 @@
             this.getAD()
             this.getremmend()
             this.getremmend2()
+            wepy.removeStorage({
+                key: 'payflag'
+            })
         }
         onPullDownRefresh(e) {
             this.recommend2page = 1

@@ -586,7 +586,8 @@
                 <span wx:if="{{collection==1}}" class="public_icon_already_collection"></span><text wx:if="{{collection==1}}">取消收藏</text>
             </view>
             <view class="flex1">
-                <span class="public_icon1_custom"></span><text>客服</text></view>
+                <button class="public_icon1_custom" open-type="contact" hover-class="none"></button><text>客服</text></view>
+                
             <view wx:if="{{order_collage_id==0}}" class="flex2" @tap="open_good_class(2)"><text>￥{{total_price}}</text><text>单独购买</text></view>
             <view wx:if="{{order_collage_id==0}}" class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起拼单</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime>0}}" class="flex3" @tap="open_good_class(1)"><text>加入拼单</text></view>
@@ -811,7 +812,7 @@
                 this.price_count();
             },
             to_home() {
-                wx.navigateTo({
+                wx.switchTab({
                     url: "/pages/index"
                 })
             },
