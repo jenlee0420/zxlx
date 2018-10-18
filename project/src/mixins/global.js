@@ -433,8 +433,9 @@ export default class Global extends wepy.mixin {
     checkHomePage() {
         var pages = getCurrentPages()
         var bool = false
+        console.log(pages,'/')
         Object.keys(pages).forEach((v) => {
-            if ((pages[v].route).indexOf('pages/index') > -1 || (pages[v].route).indexOf('pages/search_page') > -1) {
+            if ((pages[v].route).indexOf('pages/index') > -1 || (pages[v].route).indexOf('pages/search_page') > -1 || (pages[v].route).indexOf('pages/mycenter/index') > -1) {
                 bool = true
             }
         })
@@ -448,6 +449,7 @@ export default class Global extends wepy.mixin {
 
     }
     onShow(opation) {
+        this.messageTimer = null
         if(this.$com.notice){
             this.getMessage()
         }
