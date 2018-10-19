@@ -1,4 +1,7 @@
 <style lang="less">
+#addmember{
+  width: 100%;
+}
     .my_view {
         height: 95rpx;
         border-top: 1rpx solid #d8d6d6;
@@ -9,16 +12,21 @@
     .my_view_view {
         display: flex;
         align-items: center;
+        >text{
+          white-space: nowrap;
+        }
     }
     /*.my_name_text{*/
     /*width: 110rpx;*/
     /*}*/
     .my_input {
         height: 95rpx;
+        width: 440rpx;
     }
     .my_view_text {
         width: 165rpx;
-        margin-left: 80rpx;
+        margin-left: 60rpx;
+        font-size:28rpx;
     }
     .my_name_view {
         &:extend(.my_view);
@@ -61,9 +69,14 @@
         font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
         font-size: 30rpx;
     }
+    .my_picker{
+      .my_input{
+        width: 500rpx;
+      }
+    }
 </style>
 <template>
-    <view class="container">
+    <view class="container" id="addmember">
         <view class="my_view">
             <view class="my_view_view">
                 <text class="my_view_text">类别:</text>
@@ -98,9 +111,9 @@
             <view class="my_view_view">
                 <text class="my_view_text">出生年月:</text>
                 <picker class="my_picker" mode="date" @change="pick_date">
-                    <view class="picker">
+ <!-- <view class="picker"> -->
                         <input class="my_input" placeholder="如：2008-09-10" value="{{bir_date}}" disabled/>
-                    </view>
+         <!-- </view> -->
                 </picker>
             </view>
         </view>
@@ -137,7 +150,7 @@
             <button class="btn my_btn" @tap="saveContact">保存</button>
             <!-- 分享后微信好友看到的按钮 -->
             <!--<button class="btn my_btn">提交给朋友</button>-->
-            <text class="fs18 cb4b4b4 mt30">提交后，您的信息将出现在您朋友的知兮乐兮账号中</text>
+            <text class="fs18 cb4b4b4 mt30" wx:if="{{user_id!=''}}">提交后，您的信息将出现在您朋友的知兮乐兮账号中</text>
             <!--  -->
         </view>
 

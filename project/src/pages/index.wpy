@@ -77,7 +77,7 @@
                     <div class="navTablist">
                         <span wx:for="{{catelist1}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
                                             <view class="icon">
-                                                <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
+                                                <image src="{{item.image_url?image_url.image:baseServerImg}}" mode="aspectFill"/>
                                             </view>
                                             {{item.name}}
                                         </span>
@@ -87,7 +87,7 @@
                     <div class="navTablist">
                         <span wx:for="{{catelist2}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
                                             <view class="icon">
-                                                <image src="{{item.image?item.image:baseServerImg}}" mode="aspectFill"/>
+                                                <image src="{{item.image_url?item.image_url:baseServerImg}}" mode="aspectFill"/>
                                             </view>
                                             {{item.name}}</span>
                     </div>
@@ -228,7 +228,7 @@
                 if (res.code == 1) {
                     this.catelist1 = res.data.list.slice(0, 10)
                     if (res.data.list.length > 10) {
-                        this.catelist2 = res.data.list.slice(10)
+                        this.catelist2 = res.data.list.slice(10,20)
                         this.cateShow = true
                     }
                 } else {
@@ -242,6 +242,9 @@
         }
         onLoad() {
             // this.PageInit()
+            // this.messageTimer = setInterval(() => {
+            //     this.$invoke('notice','getNotice')
+            // },10000)
         }
         onReachBottom() {
             if (this.recommend2page > this.last_page2) {
@@ -250,6 +253,7 @@
             }
             this.recommend2page += 1
             this.getremmend2()
+            
         }
         PageInit() {
             this.getCate()

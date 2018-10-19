@@ -13,6 +13,9 @@
     border-top:1rpx solid #d8d6d6;
     height: 95rpx;
     line-height:95rpx;
+    >text{
+      white-space: nowrap;
+    }
   }
 
   .refund_view_border{
@@ -216,11 +219,13 @@
 
       save(e){
         var pic="";
-
+        var t = []
         for(var i=0;i<this.image_data.length-1;i++){
-            pic=pic+this.image_data[i].id+",";
+            // pic=pic+this.image_data[i].id+",";
+            t.push(this.image_data[i].id)
         }
-        pic=pic+this.image_data[this.image_data.length-1].id
+        // pic=pic+this.image_data[this.image_data.length-1].id
+        pic = t.join(',')
 
         var req={
           order_id:this.order_id,

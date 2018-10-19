@@ -149,7 +149,7 @@
       <view class="head">
         <view class="avatar"><image src="{{item.avatarUrl}}"></image></view>
         <view class="info">
-          <view class="name">{{item.nickName}}<text class="bg-orange">{{item.gender}}</text></view>
+          <view class="name">{{item.nickName}}<text class="bg-orange" wx:if="{{item.gender !='未知' && item.gender !=''}}">{{item.gender}}</text></view>
           <text>{{item.create_time}}</text>
         </view>
         <view class="star">

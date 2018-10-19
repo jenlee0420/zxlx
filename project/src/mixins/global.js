@@ -458,9 +458,18 @@ export default class Global extends wepy.mixin {
     event() {
 
     }
-    onShow(opation) {
+    onHide(){
         if(this.$com.notice){
             this.$invoke('notice','clearTimerMeth')
+        }
+    }
+    onUnLoad(){
+        if(this.$com.notice){
+            this.$invoke('notice','clearTimerMeth')
+        }
+    }
+    onShow(opation) {
+        if(this.$com.notice){
             this.getMessage()
         }
         // if(this.__route__ === 'pages/index'){
