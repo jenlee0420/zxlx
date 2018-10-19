@@ -318,7 +318,7 @@
         @body-h: 850rpx;
         @intro-h: 166rpx;
         @btn-ok-h: 95rpx;
-        @scroll-h: @body-h - @intro-h - @btn-ok-h + 2rpx;
+        @scroll-h: @body-h - @intro-h - @btn-ok-h +2rpx;
         .scroll-h {
             height: @scroll-h;
         }
@@ -587,25 +587,24 @@
             </view>
             <view class="flex1">
                 <button class="public_icon1_custom" open-type="contact" hover-class="none"></button><text>客服</text></view>
-                
             <view wx:if="{{order_collage_id==0}}" class="flex2" @tap="open_good_class(2)"><text>￥{{total_price}}</text><text>单独购买</text></view>
             <view wx:if="{{order_collage_id==0}}" class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起组团</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime>0}}" class="flex3" @tap="open_good_class(1)"><text>加入组团</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num==0}}" class="flex5"><text>报名已满</text></view>
-            <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime<=0}}"  class="flex5"><text>活动已结束</text></view>
+            <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime<=0}}" class="flex5"><text>活动已结束</text></view>
         </view>
         <!-- 底部导航 E -->
         <!-- 返回顶部 S -->
         <!-- <view class="backTop">
-                            <image src="../resource/img/backTop.png"></image>
-                          </view> -->
+                                <image src="../resource/img/backTop.png"></image>
+                              </view> -->
         <!-- 返回顶部 E -->
         <!-- 邀请分享 S -->
         <!-- <view class="share-box">
-                            <view class="close"><image src="../resource/img/close.png"></image></view>
-                            <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
-                            <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
-                          </view> -->
+                                <view class="close"><image src="../resource/img/close.png"></image></view>
+                                <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
+                                <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
+                              </view> -->
         <!-- 邀请分享 E -->
         <!-- 购买选择 S -->
         <view class="modal" wx:if="{{open_class}}" @tap="close_good_class">
@@ -735,7 +734,7 @@
             pin_list: [],
             order_collage_id: 0,
             collage_detail: {},
-            nowTime:0,
+            nowTime: 0,
         }
         components = {
             TopNav,
@@ -750,7 +749,7 @@
                 this.toView = 'scroll' + index;
             }
         }
-        computed ={
+        computed = {
             // overtime(time){
             //     console.log(time,'////')
             //     if(!time) {return}
@@ -877,19 +876,27 @@
         }
         buynowFun() {
             //判断是否有授权
-            if (!this.getLocalSetting()) {
-                wepy.navigateTo({
-                    url: '/pages/wxlogin'
-                })
-                return
-            }
-            wepy.navigateTo({
-                url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
-                    '&good_number=' + this.good_number +
-                    '&goods_sku_id=' + this.goods_sku_id +
-                    '&buy_type=' + this.buy_type +
-                    '&order_collage_id=' + this.order_collage_id
+            this.getLocalSetting().then(res => {
+                if (res) {
+                    wepy.navigateTo({
+                        url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
+                            '&good_number=' + this.good_number +
+                            '&goods_sku_id=' + this.goods_sku_id +
+                            '&buy_type=' + this.buy_type +
+                            '&order_collage_id=' + this.order_collage_id
+                    })
+                } else {
+                    wepy.navigateTo({
+                        url: '/pages/wxlogin'
+                    })
+                }
             })
+            // if (!this.getLocalSetting()) {
+            //     wepy.navigateTo({
+            //         url: '/pages/wxlogin'
+            //     })
+            //     return
+            // }
         }
         good_num(e) {
             this.good_number = e.detail.value;
@@ -944,25 +951,24 @@
             if (options.id) {
                 this.good_id = options.id;
             }
-
             if (options.order_collage_id) {
                 this.order_collage_id = options.order_collage_id;
-              wepy.request({
-                url: "api/order/collagedetail",
-                method: 'POST',
-                data: {
-                  order_collage_id: this.order_collage_id
-                },
-              }).then(res => {
-                if (res.code != "1"){
-                  this.showAlert({
-                    title: "警告",
-                    content: res.msg
-                  });
-                  return
-                }
-                this.collage_detail=res.data.collage_detail;
-              })
+                wepy.request({
+                    url: "api/order/collagedetail",
+                    method: 'POST',
+                    data: {
+                        order_collage_id: this.order_collage_id
+                    },
+                }).then(res => {
+                    if (res.code != "1") {
+                        this.showAlert({
+                            title: "警告",
+                            content: res.msg
+                        });
+                        return
+                    }
+                    this.collage_detail = res.data.collage_detail;
+                })
             }
             wepy.request({
                 url: "api/goods/detail",
@@ -979,6 +985,8 @@
                     return
                 }
                 this.good_detail = res.data.detail;
+                this.good_detail.content = this.transContent(this.good_detail.content)
+                this.good_detail.notice = this.transContent(this.good_detail.notice)
                 this.collection = res.data.detail.is_favorites;
                 this.goods_detal = [];
                 this.spec = [];
@@ -1050,8 +1058,7 @@
             })
         }
         onShow() {
-            this.nowTime=Date.parse(new Date())/1000;
-
+            this.nowTime = Date.parse(new Date()) / 1000;
             wepy.request({
                 url: "api/goods/collage",
                 method: 'POST',
@@ -1075,9 +1082,9 @@
                 this.pin_list = res.data.list.data;
                 this.pin_list.forEach(e => {
                     // console.log(e)
-                    let t =this.countdownDateTime(e.surplus_time)
-                    e.surplus_time = t.date ? t.date+'天' :''
-                    e.surplus_time += t.hour+":"+t.min+":"+t.sec
+                    let t = this.countdownDateTime(e.surplus_time)
+                    e.surplus_time = t.date ? t.date + '天' : ''
+                    e.surplus_time += t.hour + ":" + t.min + ":" + t.sec
                 });
                 this.$apply();
             })

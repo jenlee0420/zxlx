@@ -335,16 +335,16 @@ export default class Global extends wepy.mixin {
     }
     // 若用户未授权
     getLocalSetting() {
-        // return new Promise((resolve, reject) => {
+        return new Promise((resolve, reject) => {
             wepy.getSetting().then(res => {
-                
+                console.log(res.authSetting["scope.userInfo"] === true,'authSetting')
                 if (res.authSetting["scope.userInfo"] === true) {
-                    return true
-                    // resolve(true)
+                    // return true
+                    resolve(true)
                 } else {
-                    return false
-                    // resolve(false)
-                    console.log(res,'authSetting')
+                    // return false
+                    resolve(false)
+                    
                     // wepy.openSetting().then(res =>{
                     //     if (res.authSetting["scope.userLocation"] === true) {
                     //         console.log(res)
@@ -359,7 +359,7 @@ export default class Global extends wepy.mixin {
                     // })
                 }
             })
-        // })
+        })
     }
     // 取经纬度信息
     localinfobyStorage() {
@@ -448,6 +448,12 @@ export default class Global extends wepy.mixin {
     // 定时取组团或评论成功消息
     getMessage(){
         this.$invoke('notice','getNotice')
+    }
+    //格式化内容中的图片/richtext适用
+    transContent(content){
+        let t = unescape(content)
+        t = t.replace(/<img src/g, '<img style="max-width:100%" src')
+        return t
     }
     event() {
 
