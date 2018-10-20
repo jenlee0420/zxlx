@@ -188,6 +188,7 @@
         path:"/pages/friendpay?user_id="+wx.getStorageSync("userid")+"&order_id="+this.order_id,
         imageUrl:this.detail.goods[0].image.file_path,
       }
+      console.log(re)
       return re
     };
   }
