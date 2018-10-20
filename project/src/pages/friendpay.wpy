@@ -146,7 +146,7 @@
             this.showAlert({title: "警告", content: res.msg});
             return
           }
-          console.log(res.data)
+          var that=this;
 
           wx.requestPayment({
             timeStamp:res.data.timeStamp,
@@ -155,7 +155,7 @@
             signType:res.data.signType,
             paySign:res.data.paySign,
             success:function(e){
-              this.showSuccess("支付成功")
+              that.showSuccess("支付成功")
               setTimeout(() => {
                 wx.switchTab({
                   url: "/pages/index"
@@ -163,7 +163,7 @@
               }, 100);
             },
             fail:function(e){
-              this.showToast("支付失败")
+              that.showToast("支付失败")
             }
           })
         })
