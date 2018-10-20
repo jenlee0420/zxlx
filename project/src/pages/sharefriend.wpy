@@ -146,13 +146,9 @@
         return
       }
 
-      //倒计时
-      if (!this.payloop) {
-        if(this.detail.surplus_pay_time>0){
-          this.countdown(this.detail.surplus_pay_time)
-        }
 
-      }
+
+
 
       this.order_id=options.order_id;
 
@@ -169,6 +165,13 @@
 
         var obj=JSON.parse(wx.getStorageSync("userData"));
         this.avatarUrl=obj.avatarUrl;
+
+      //倒计时
+        if (!this.payloop) {
+          if(this.detail.surplus_pay_time>0){
+            this.countdown(this.detail.surplus_pay_time)
+          }
+        }
         this.$apply();
       })
     }
