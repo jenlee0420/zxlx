@@ -136,6 +136,7 @@
       limitTime:{}
     }
     methods = {
+      console.log(this.order_id)
       pay(){
         wepy.request({
           url: "api/order/friendPay",
