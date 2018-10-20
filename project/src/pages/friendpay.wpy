@@ -147,6 +147,7 @@
             this.showAlert({title: "警告", content: res.msg});
             return
           }
+          console.log(data)
 
           wx.requestPayment({
             timeStamp:res.data.timeStamp,
