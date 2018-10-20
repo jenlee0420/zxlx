@@ -99,7 +99,7 @@
         <text class="mr10">{{limitTime.date}}天</text><text class="timebox">{{limitTime.hour}}</text>:<text class="timebox">{{limitTime.min}}</text>:<text class="timebox">{{limitTime.sec}}</text>
       </view>
       <view class="t_c mt40 mb40" wx:if="{{detail.order_status.value == '10'}}">
-        <button class="btn w600">立即支付</button>
+        <button class="btn w600" @tap="pay">立即支付</button>
       </view>
       <text class="paycancel flexCol mb40" wx:if="{{detail.order_status.value == '20'}}">好友已取消订单，或者超时未支付
       </text>
@@ -136,8 +136,8 @@
       limitTime:{}
     }
     methods = {
-      console.log(this.order_id)
       pay(){
+        console.log(this.order_id)
         wepy.request({
           url: "api/order/friendPay",
           method: 'POST',
