@@ -6,6 +6,9 @@
       border-radius: 50%;
       overflow: hidden;
     }
+    >.bg_fff{
+        padding-bottom: 20rpx;
+      }
     .graybox {
       margin: 32rpx;
       border-radius: 10rpx;
@@ -90,17 +93,17 @@
         </view>
       </view>
       <!--{{limitTime.date}}天{{limitTime.hour}}:{{limitTime.min}}:{{limitTime.sec}}-->
-      <view class="price {{detail.order_status != '10'?'cb4b4b4':''}}">￥{{detail.total_price}}</view>
-      <view class="t_c fs22" wx:if="{{detail.order_status == '10'}}">
+      <view class="price {{detail.order_status.value != '10'?'cb4b4b4':''}}">￥{{detail.total_price}}</view>
+      <view class="t_c fs22" wx:if="{{detail.order_status.value == '10'}}">
         <text class="mr16">剩余支付时间</text>
         <text class="mr10">{{limitTime.date}}天</text><text class="timebox">{{limitTime.hour}}</text>:<text class="timebox">{{limitTime.min}}</text>:<text class="timebox">{{limitTime.sec}}</text>
       </view>
-      <view class="t_c mt40 mb40" wx:if="{{detail.order_status == '10'}}">
+      <view class="t_c mt40 mb40" wx:if="{{detail.order_status.value == '10'}}">
         <button class="btn w600">立即支付</button>
       </view>
       <text class="paycancel flexCol mb40" wx:else>好友已取消订单，或者超时未支付
       </text>
-      <view class="waring" wx:if="{{detail.order_status == '10'}}">
+      <view class="waring" wx:if="{{detail.order_status.value == '10'}}">
         <view>· 付款前请务必与好友确认无误，避免受骗哦</view>
         <view>· 如果发起退款，钱将原路退还您</view>
       </view>
@@ -125,8 +128,8 @@
     data = {
       avatarUrl:"",
       detail:{},
-      user_id:"",
-      order_id:"",
+      user_id:"1",
+      order_id:"152",
 
       this_user_name:"",
       payloop:null,

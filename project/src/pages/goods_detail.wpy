@@ -505,7 +505,7 @@
                     <swiper style="height:572rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
                         <!-- <block > -->
                         <swiper-item wx:for="{{good_detail.image}}" wx:key="{{index}}">
-                            <image src="{{item.file_path}}" class="slide-image" />
+                            <image src="{{item.file_path}}" class="slide-image"  mode="aspectFill" />
                         </swiper-item>
                         <!-- </block> -->
                     </swiper>

@@ -6,6 +6,9 @@
       border-radius: 50%;
       overflow: hidden;
     }
+    >.bg_fff{
+        padding-bottom: 20rpx;
+      }
     .graybox {
       margin: 32rpx;
       border-radius: 10rpx;
@@ -88,7 +91,7 @@
       <view class="t_c mt40">
         <button class="btn w600" open-type="share">发送给微信好友</button>
       </view>
-      <view class="waring mb20">
+      <view class="waring">
         <view>· 如果发起退款，钱将原路退还您</view>
       </view>
     </view>
