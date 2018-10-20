@@ -88,7 +88,7 @@
       <view class="t_c mt40">
         <button class="btn w600" open-type="share">发送给微信好友</button>
       </view>
-      <view class="waring">
+      <view class="waring mb20">
         <view>· 如果发起退款，钱将原路退还您</view>
       </view>
     </view>
