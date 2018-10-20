@@ -185,10 +185,12 @@
       }
 
       if(!options.user_id) {
+        this.showAlert({title: "警告", content: "user_id为空"});
         return
       }
 
       if(!options.order_id){
+        this.showAlert({title: "警告", content: "order_id为空"});
         return
       }
 
