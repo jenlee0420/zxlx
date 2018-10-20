@@ -101,7 +101,7 @@
       <view class="t_c mt40 mb40" wx:if="{{detail.order_status.value == '10'}}">
         <button class="btn w600">立即支付</button>
       </view>
-      <text class="paycancel flexCol mb40" wx:else>好友已取消订单，或者超时未支付
+      <text class="paycancel flexCol mb40" wx:if="{{detail.order_status.value == '20'}}">好友已取消订单，或者超时未支付
       </text>
       <view class="waring" wx:if="{{detail.order_status.value == '10'}}">
         <view>· 付款前请务必与好友确认无误，避免受骗哦</view>
