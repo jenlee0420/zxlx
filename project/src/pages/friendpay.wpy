@@ -154,12 +154,15 @@
             signType:res.data.signType,
             paySign:res.data.paySign,
             success:function(e){
-              console.log("success")
-              console.log(e)
+              this.showSuccess("支付成功")
+              setTimeout(() => {
+                wx.switchTab({
+                  url: "/pages/index"
+                })
+              }, 100);
             },
             fail:function(e){
-              console.log("fail")
-              console.log(e)
+              this.showToast("支付失败")
             }
           })
         })
