@@ -144,7 +144,8 @@
             test: {},
             adload: true,
             recommendShow:false,
-            last_page2: 1
+            last_page2: 1,
+            messageTimer:''
         }
         methods = {
             navAD(url) {
@@ -243,8 +244,14 @@
         onLoad() {
             // this.PageInit()
             // this.messageTimer = setInterval(() => {
-            //     this.$invoke('notice','getNotice')
+            //     console.log('eeee')
+            //     // this.$invoke('notice','getNotice')
             // },10000)
+        }
+        onHide(){
+            // this.messageTimer = null
+            // clearInterval(this.messageTimer)
+            // console.log('ee',this.messageTimer)
         }
         onReachBottom() {
             if (this.recommend2page > this.last_page2) {

@@ -318,7 +318,7 @@
         @body-h: 850rpx;
         @intro-h: 166rpx;
         @btn-ok-h: 95rpx;
-        @scroll-h: @body-h - @intro-h - @btn-ok-h +2rpx;
+        @scroll-h: @body-h - @intro-h - @btn-ok-h;
         .scroll-h {
             height: @scroll-h;
         }
@@ -516,7 +516,7 @@
                         <text class="des">已拼{{good_detail.meed_num}}人次 · {{good_detail.now_collage_num}}人组团</text>
                     </view>
                     <text class="shop-name">{{good_detail.goods_name}}</text>
-                    <text class="content-des">{{good_detail.describe}}</text>
+                    <text class="content-des" wx:if="{{good_detail.describe}}">{{good_detail.describe}}</text>
                     <view class="tag-container">
                         <text class="tag bg-orange" wx:if="{{good_detail.is_own_business == 1}}">知兮乐兮自营</text>
                         <text class="tag bg-orange">{{good_detail.category.name}}</text>

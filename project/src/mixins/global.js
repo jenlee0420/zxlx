@@ -451,8 +451,9 @@ export default class Global extends wepy.mixin {
     }
     //格式化内容中的图片/richtext适用
     transContent(content){
+        if(!content) return
         let t = unescape(content)
-        t = t.replace(/<img src/g, '<img style="max-width:100%" src')
+        t = t.replace(/<img src/g, '<img style="max-width:100%;height:auto" src')
         return t
     }
     event() {

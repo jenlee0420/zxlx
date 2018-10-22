@@ -48,7 +48,7 @@
     <view class="photoview defaultImg">
         <text class="toptext abs">{{goodsitem.subtitle_goods_name}}</text>
         <span class="public_icon1_hot_sale abs" wx:if="{{goodsitem.propaganda == 1}}"></span>
-        <view class="bottomtext abs">
+        <view class="bottomtext abs" wx:if="{{goodsitem.play_day}}">
           <span class="public_icon1_play_day1"></span>
           <span class="public_icon1_play_day2">{{goodsitem.play_day}}</span>
           <span class="public_icon1_play_day3"></span>
@@ -63,6 +63,7 @@
         <text class="itemdesc fs22 cb4b4b4">{{goodsitem.describe}}</text>
         <text class="itemdesc fs22 cb4b4b4">供应商：{{goodsitem.source_name}}</text>
         <view class="itemlabel">
+            <text class="redlabel" wx:if="{{goodsitem.introduction}}">{{goodsitem.introduction}}</text>
             <text class="redlabel" wx:if="{{goodsitem.is_own_business == 1}}">知兮乐兮自营</text>
             <text class="redlabel">{{goodsitem.category.name}}</text>
             <repeat for="{{goodsitem.label_name}}" index="index" item="item" key="key">

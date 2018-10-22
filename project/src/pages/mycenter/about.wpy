@@ -40,10 +40,7 @@
                 }
             }).then(res => {
                 if (res.code == 1) {
-                    this.intro = res.data.info.content
-                    let t = unescape(this.intro)
-                    t = t.replace(/<img src/g, '<img style="max-width:100%" src')
-                    this.intro = t
+                    this.intro = this.transContent(res.data.info.content)
                 } else {
                     wepy.showModal({
                         content: res.msg,

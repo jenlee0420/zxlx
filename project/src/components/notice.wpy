@@ -65,7 +65,7 @@
             },
             //30秒
             clearTimerMeth(){
-                this.messageTimer = null
+                // this.messageTimer = null
                 clearInterval(this.messageTimer)
                 console.log('ee',this.messageTimer)
             }
