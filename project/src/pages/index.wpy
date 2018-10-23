@@ -77,7 +77,7 @@
                     <div class="navTablist">
                         <span wx:for="{{catelist1}}" wx:key="{{index}}" @tap="gotolist({{item.id}})">
                                             <view class="icon">
-                                                <image src="{{item.image_url?image_url.image:baseServerImg}}" mode="aspectFill"/>
+                                                <image src="{{item.image_url?item.image_url:baseServerImg}}" mode="aspectFill"/>
                                             </view>
                                             {{item.name}}
                                         </span>
@@ -242,6 +242,19 @@
             })
         }
         onLoad() {
+            var t = '43454333<img style="max-width:100% !important; height:auto !important;" src="http://wxapi.zxlx123.com/uploads/ueditor/image/20181023/1540274146axVKJd.jpg" title="1540274146axVKJd.jpg" alt="1540274146axVKJd.jpg" width="500" height="400" border="0" vspace="0" style="width: 500px; height: 400px;"/>34534535<img style="" width="200" height="300" />'
+            var arr = new RegExp(/.*?img.*?(width=.*?)\s(height=.*?)\s.*/g)
+            // console.log(arr.Match(t))
+            var str12="<a href=\"标注1\" target=_blank>标注2</a>";
+ 
+            var pattern12 = "<img.*?\\s(width=\"[^\"]*\").*?\\sheight=\"([^\"]*)\"";
+            // var pattern14 = "<a\\shref=\"([^\"]*)\"\\starget=_blank>(.*?)</a>";
+            
+            console.log(t.match(pattern12))
+            console.log(arr.exec(t))
+            t = t.replace(/^img.*?(width=.*?)\s.*$/g,"$1")
+            // console.log()
+            console.log(t.replace(/^.*?img.*?(width=.*?)\s(height=.*?)\s.*$/g,"$1 $2"),'000')
             // this.PageInit()
             // this.messageTimer = setInterval(() => {
             //     console.log('eeee')

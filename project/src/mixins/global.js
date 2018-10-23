@@ -437,7 +437,6 @@ export default class Global extends wepy.mixin {
     checkHomePage() {
         var pages = getCurrentPages()
         var bool = false
-        console.log(pages,'/')
         Object.keys(pages).forEach((v) => {
             if ((pages[v].route).indexOf('pages/index') > -1 || (pages[v].route).indexOf('pages/search_page') > -1 || (pages[v].route).indexOf('pages/mycenter/index') > -1) {
                 bool = true
@@ -452,8 +451,11 @@ export default class Global extends wepy.mixin {
     //格式化内容中的图片/richtext适用
     transContent(content){
         if(!content) return
+        let temp = ""
         let t = unescape(content)
-        t = t.replace(/<img src/g, '<img style="max-width:100%;height:auto" src')
+        t = t.replace(/\<img/gi, '<img style=\"max-width:100% !important; height:auto !important;\"')
+        temp = t.replace(/^.*?<img.*?(width=.*?)\s(height=.*?)\s.*$/g,"$1 $2")
+        t = t.replace(temp,'')
         return t
     }
     event() {
