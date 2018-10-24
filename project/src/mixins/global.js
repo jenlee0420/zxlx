@@ -453,9 +453,16 @@ export default class Global extends wepy.mixin {
         if(!content) return
         let temp = ""
         let t = unescape(content)
-        t = t.replace(/\<img/gi, '<img style=\"max-width:100% !important; height:auto !important;\"')
+        var Reg = new RegExp(/.*?img.*?(width=.*?)\s(height=.*?)\s.*/g)
+
         temp = t.replace(/^.*?<img.*?(width=.*?)\s(height=.*?)\s.*$/g,"$1 $2")
-        t = t.replace(temp,'')
+        // if(temp!='') {t = t.replace(temp,'')}
+        // temp = t.replace(/^.*?<img.*?(width:\s.*?;)\s(height:\s.*?;).*$/g,"$1 $2")
+        // t = t.replace(temp,'')
+        t = t.replace(/\<img/gi, '<img style=\"max-width:100% !important; height:auto !important;\"')
+        t = t.replace(/section/g,'div')
+        // console.log(temp)
+        // console.log(t)
         return t
     }
     event() {

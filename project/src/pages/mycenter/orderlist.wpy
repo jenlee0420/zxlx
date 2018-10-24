@@ -4,7 +4,7 @@
         flex-direction: column;
         height: 100%;
         swiper {
-            height: 100%;
+            height: 100vh;
         }
         .order_nav {
             // position: fixed;
@@ -69,7 +69,7 @@
         <!-- 广告部分 -->
         <view wx:if="{{false}}"></view>
         <view class="flex-1">
-            <swiper indicator-dots="{{false}}" autoplay="{{false}}" class="swiper" bindchange="changeType_swiper" current="{{currentIndex}}">
+            <swiper indicator-dots="{{false}}" autoplay="{{false}}" class="swiper" style="height:calc(100vh - 80rpx)" bindchange="changeType_swiper" current="{{currentIndex}}">
                 <block wx:for="{{TypeList}}" wx:for-item="itemb" wx:key="indexa" wx:for-index="indexa">
                     <!-- <repeat for="{{TypeList}}" index="indexa" item="itemb" key="indexa"> -->
                     <swiper-item>
@@ -245,10 +245,12 @@
                 //last page
                 if (this.TypeList[index].current_page == res.data.list.last_page) {
                 }
-                res = res.data.list;
-                for (var i = 0; i < res.data.length; i++) {
-                    this.TypeList[index].list.push(res.data[i])
-                }
+                // res = res.data.list;
+                this.TypeList[index].list = this.TypeList[index].list.concat(res.data.list.data)
+                // for (var i = 0; i < res.data.length; i++) {
+                //     this.TypeList[index].list.push(res.data[i])
+                // }
+                console.log(this.TypeList[index].list)
                 if (feedback) {
                     feedback();
                 }
