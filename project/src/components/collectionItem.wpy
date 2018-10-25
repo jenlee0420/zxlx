@@ -50,7 +50,7 @@
         </view>
         <view class="flex-1">
             <text class="itemname">{{goodsitem.source_name}}</text>
-            <text class="fs22 c929292">已拼{{goodsitem.already_collage_user_num}}人次 · {{goodsitem.now_collage_num}}人组团</text>
+            <text class="fs22 c929292">已售{{goodsitem.goods_sales}}人次 · {{goodsitem.goods_collage_num}}人组团</text>
             <view class="itemlabel">
                 <text class="redlabel" wx:if="{{goodsitem.introduction}}">{{goodsitem.introduction}}</text>
                 <text class="redlabel" wx:if="{{goodsitem.is_own_business == 1}}">知兮乐兮自营</text>

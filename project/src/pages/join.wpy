@@ -178,7 +178,7 @@
             <view class="flex-column flex-jbetween shop-info">
                 <text class="t1">{{collage_detail.goods_name}}</text>
                 <text class="t2">{{collage_detail.goods_attr}}</text>
-                <text class="t2">{{collage_detail.join_num}}人组团 · 已拼300个</text>
+                <text class="t2">{{collage_detail.join_num}}人组团 · 已售{{collage_detail.goods_sales}}人次</text>
                 <view class=""><text class="t3 mr10">￥{{collage_detail.goods_price}}</text><text class="t2">组团省{{collage_detail.line_price-collage_detail.goods_price}}元</text></view>
             </view>
         </view>

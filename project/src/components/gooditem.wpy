@@ -59,7 +59,7 @@
     </view>
     <view class="itemcontent">
         <text class="itemtitle fs26 c333">{{goodsitem.goods_name}}</text>
-        <view class="itemprice"><span class="fs30 cf71414 mr20">￥{{goodsitem.goods_min_price}}起</span><span class="fs22 cb4b4b4">已拼{{goodsitem.meed_num}}人次</span></view>
+        <view class="itemprice"><span class="fs30 cf71414 mr20">￥{{goodsitem.goods_min_price}}起</span><span class="fs22 cb4b4b4">已售{{goodsitem.goods_sales}}人次</span></view>
         <text class="itemdesc fs22 cb4b4b4">{{goodsitem.describe}}</text>
         <text class="itemdesc fs22 cb4b4b4">供应商：{{goodsitem.source_name}}</text>
         <view class="itemlabel">

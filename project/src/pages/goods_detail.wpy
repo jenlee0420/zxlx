@@ -497,6 +497,9 @@
             margin-right: 20rpx;
         }
     }
+    .public_icon1_to_top{
+        bottom:115rpx;
+    }
 </style>
 <template>
     <view class="{{modalIsShow ? 'modalShow' : ''}}">
@@ -516,7 +519,7 @@
                 <view class="des-container">
                     <view class="price-row">
                         <text class="price">￥{{good_detail.goods_min_price}}起</text>
-                        <text class="des">已拼{{good_detail.meed_num}}人次 · {{good_detail.now_collage_num}}人组团</text>
+                        <text class="des">已售{{good_detail.goods_sales}}人次 · {{good_detail.goods_collage_num}}人组团</text>
                     </view>
                     <text class="shop-name">{{good_detail.goods_name}}</text>
                     <text class="content-des" wx:if="{{good_detail.describe}}">{{good_detail.describe}}</text>
@@ -1087,7 +1090,7 @@
                 }
                 this.pin_list = res.data.list.data;
                 this.pin_list.forEach(e => {
-                    // console.log(e)
+                    console.log(e)
                     let t = this.countdownDateTime(e.surplus_time)
                     e.surplus_time = t.date ? t.date + '天' : ''
                     e.surplus_time += t.hour + ":" + t.min + ":" + t.sec
