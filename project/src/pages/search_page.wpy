@@ -94,6 +94,7 @@
       </scroll-view>
     </block>
     <notice />
+    <span class="public_icon1_to_top" @tap="scrollTop" wx:if="{{showtopBtn}}"></span>
   </view>
 </template>
 
@@ -130,7 +131,8 @@
       loading: true,
       searchview: false,
       scrollleft: 0,
-      search: ''
+      search: '',
+      showtopBtn:false
     }
     methods = {
       changeCate(obj) {
@@ -173,6 +175,7 @@
       })
     }
     getlist() {
+      this.showtopBtn = false
       wepy.request({
         url: 'api/goods/lists',
         method: 'POST',
@@ -193,6 +196,8 @@
           }
           this.goodslist.total_count = res.data.list.total
           this.last_page = res.data.list.last_page
+
+          if(this.goodslist.list.length>5){this.showtopBtn = true}
         } else {
           wepy.showModal({
             content: res.msg,

@@ -1,5 +1,7 @@
 <style lang="less">
   #friendpay {
+    overflow-x: hidden;
+      width: 100%;
     .myhead {
       width: 102rpx;
       height: 102rpx;

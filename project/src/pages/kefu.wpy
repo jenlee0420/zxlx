@@ -11,6 +11,7 @@
 <template>
     <view class="container">
         <rich-text type='text' nodes="{{intro}}" attrs="{{style}}" bindtap="tap"></rich-text>
+        <span class="public_icon1_to_top" @tap="scrollTop"></span>
     </view>
 </template>
 

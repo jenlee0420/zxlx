@@ -678,6 +678,7 @@
         <!-- 查看更多组团 e-->
         <notice />
         <backtoHome />
+        <span class="public_icon1_to_top" @tap="scrollTop"></span>
     </view>
 </template>
 <script>

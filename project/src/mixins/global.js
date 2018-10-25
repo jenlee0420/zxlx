@@ -21,7 +21,12 @@ export default class Global extends wepy.mixin {
     page_size:10
   }
   methods = {
-
+    scrollTop(){
+        wepy.pageScrollTo({ 
+            scrollTop: 0,
+            duration: 300
+          })
+    }
   }
 
     // 数组显示

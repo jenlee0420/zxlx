@@ -112,6 +112,7 @@
             </repeat>
         </view>
         <notice></notice>
+        <span class="public_icon1_to_top" @tap="scrollTop"></span>
     </view>
 </template>
 

@@ -6,9 +6,9 @@
       border-radius: 50%;
       overflow: hidden;
     }
-    >.bg_fff{
-        padding-bottom: 20rpx;
-      }
+    >.bg_fff {
+      padding-bottom: 20rpx;
+    }
     .graybox {
       margin: 32rpx;
       border-radius: 10rpx;
@@ -113,80 +113,111 @@
     }
     mixins = [Mixin]
     data = {
-      detail:{},
-      order_id:"",
-      avatarUrl:"",
-      payloop:null,
-      limitTime:{},
+      detail: {},
+      order_id: "",
+      avatarUrl: "",
+      payloop: null,
+      limitTime: {},
+      pay_status: '',
+      infoTimer: null
     }
-    methods = {
-
-    }
-
+    methods = {}
     //倒计时
-    countdown(time){
+    countdown(time) {
       this.payloop = setInterval(() => {
         time = time - 1
         this.limitTime = this.countdownDateTime(time)
-        if(time <=0){
+        if (time <= 0) {
           console.log('time out')
         }
         this.$apply()
-      },'1000')
+      }, '1000')
     }
-
-    onUnload(){
-      clearInterval(this.payloop)
+    getorderinfo() {
+      this.infoTimer = setInterval(() => {
+        this.getinfo()
+      }, '5000')
     }
-
-    onLoad(options){
-      console.log(options)
-      if(!options){
-        return
-      }
-
-      if(!options.order_id){
-        return
-      }
-
-
-
-
-
-      this.order_id=options.order_id;
-
+    getinfo() {
       wepy.request({
         url: "api/order/detail",
         method: 'POST',
-        data: {order_id:this.order_id},
+        data: {
+          order_id: this.order_id
+        },
       }).then(res => {
-        if(res.code != "1"){
-          this.showAlert({title: "警告", content: res.msg});
+        this.loading = false;
+        if (res.code != "1") {
+          this.showAlert({
+            title: "警告",
+            content: res.msg
+          });
+        } else {
+          this.pay_status = res.data.pay_status.value;
+          console.log(this.pay_status, 'status')
+          if (this.pay_status == '20') {
+            clearInterval(this.infoTimer)
+            wepy.navigateTo({
+              url: '/pages/mycenter/orderlist?type=2&isshow=show',
+            })
+          }
+        }
+        this.$apply();
+      })
+    }
+    onUnload() {
+      clearInterval(this.payloop)
+      clearInterval(this.infoTimer)
+    }
+    onLoad(options) {
+      console.log(options)
+      wepy.removeStorage({
+        key: 'payflag'
+      })
+      if (!options) {
+        return
+      }
+      if (!options.order_id) {
+        return
+      }
+      this.order_id = options.order_id;
+      wepy.request({
+        url: "api/order/detail",
+        method: 'POST',
+        data: {
+          order_id: this.order_id
+        },
+      }).then(res => {
+        if (res.code != "1") {
+          this.showAlert({
+            title: "警告",
+            content: res.msg
+          });
           return
         }
-        this.detail=res.data;
-
-        var obj=JSON.parse(wx.getStorageSync("userData"));
-        this.avatarUrl=obj.avatarUrl;
-
-      //倒计时
+        this.detail = res.data;
+        var obj = JSON.parse(wx.getStorageSync("userData"));
+        this.avatarUrl = obj.avatarUrl;
+        //倒计时
         if (!this.payloop) {
-          if(this.detail.surplus_pay_time>0){
+          if (this.detail.surplus_pay_time > 0) {
             this.countdown(this.detail.surplus_pay_time)
           }
         }
         this.$apply();
       })
     }
-    PageInit() {
-
-    }
-
-    onShareAppMessage(obj){
-      var re={
-        title:this.detail.goods[0].goods_name,
-        path:"/pages/friendpay?user_id="+wx.getStorageSync("userid")+"&order_id="+this.order_id,
-        imageUrl:this.detail.goods[0].image.file_path,
+    PageInit() {}
+    onShareAppMessage(obj) {
+      var that = this
+      var re = {
+        title: this.detail.goods[0].goods_name,
+        path: "/pages/friendpay?user_id=" + wx.getStorageSync("userid") + "&order_id=" + this.order_id,
+        imageUrl: this.detail.goods[0].image.file_path,
+        success:function(){
+          console.log('转发成功')
+          that.getorderinfo()
+        }
       }
       console.log(re)
       return re

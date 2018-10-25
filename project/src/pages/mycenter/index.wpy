@@ -82,17 +82,17 @@
                 <navigator class="fs24 c888" url="/pages/mycenter/orderlist?type=0" hover-class="none">查看全部 <span class="c999 zan-icon zan-icon-arrow"></span></navigator>
             </view>
             <view class="ordertype">
-                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=1&&isshow=show" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=1&isshow=show" hover-class="none">
                     <span class="public_icon3_waite_pay"><span class="zan-badge__count" wx:if="{{orderCount.payment}}">{{orderCount.payment}}</span></span>
                     待付款
                 </navigator>
-                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=2&&isshow=show" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=2&isshow=show" hover-class="none">
                     <span class="public_icon3_not_use"><span class="zan-badge__count" wx:if="{{orderCount.noused}}">{{orderCount.noused}}</span></span> 未使用
                 </navigator>
-                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=3&&isshow=show" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=3&isshow=show" hover-class="none">
                     <span class="public_icon3_complete"><span class="zan-badge__count" wx:if="{{orderCount.finish}}">{{orderCount.finish}}</span></span> 已完成
                 </navigator>
-                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=4&&isshow=show" hover-class="none">
+                <navigator class="flex-column" url="/pages/mycenter/orderlist?type=4&isshow=show" hover-class="none">
                     <span class="public_icon3_not_complete"><span class="zan-badge__count" wx:if="{{orderCount.cancel}}">{{orderCount.cancel}}</span></span> 已取消
                 </navigator>
             </view>
@@ -127,7 +127,9 @@
     import cellbox from '@@/cellbox'
     import recommend from '@/components/recommend'
     export default class Index extends wepy.page {
-        config = {}
+        config = {
+            enablePullDownRefresh: true,
+        }
         components = {
             cellbox,
             recommend
@@ -189,6 +191,7 @@
                     content: this.content
                 },
             }).then(res => {
+                wx.stopPullDownRefresh();
                 if (res.code == 1) {
                     this.userinfo = res.data.userInfo
                     this.orderCount = res.data.orderCount
@@ -200,6 +203,10 @@
             console.log(this.baseHeadImg)
             this.getuserinfo()
             // this.showSuccess('需求已成功提交')
+        }
+        //下拉刷新 
+        onPullDownRefresh(e) {
+            this.getuserinfo()
         }
         onShareAppMessage() {
             var re = {

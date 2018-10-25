@@ -8,6 +8,7 @@
       <collectionitem :goodsitem.sync="item"></collectionitem>
     </repeat>
     <listfooter :loading.sync="loading" :item.sync="favlist" :pagesize="page_size"></listfooter>
+    <span class="public_icon1_to_top" @tap="scrollTop" wx:if="{{showtopBtn}}"></span>
   </view>
 </template>
 
@@ -32,6 +33,7 @@ export default class collection extends wepy.page {
       total_count:0,
       total_page:0,
     },
+    showtopBtn:false,
     loading:true
   }
   methods = {}
@@ -58,6 +60,7 @@ export default class collection extends wepy.page {
 
           this.favlist.total_count = res.data.list.total
           this.favlist.total_page = res.data.list.last_page
+          if(this.favlist.list.length>5){this.showtopBtn=true}
         }
         this.$apply()
       })
