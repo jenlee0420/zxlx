@@ -504,7 +504,7 @@
 <template>
     <view class="{{modalIsShow ? 'modalShow' : ''}}">
         <TopNav :activeIndex.sync="activeIndex"></TopNav>
-        <scroll-view scroll-y style="height: calc(100% - 188rpx);" class="scrollView" scroll-into-view="{{toView}}">
+        <scroll-view scroll-y style="height: calc(100% - 188rpx);" class="scrollView" @scroll="thisScroll" scroll-into-view="{{toView}}" scroll-top="{{thisTop}}">
             <!-- 介绍卡部分 S -->
             <view class="content" id="scroll0">
                 <view class="video-container">
@@ -665,7 +665,7 @@
                             </view>
                             <view class="flex-1 flex-column">
                                 <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
-                                <text>剩余{{item.surplus_time}}</text>
+                                <text>剩余{{item.surplus_time1}}</text>
                             </view>
                             <view>
                                 <view @tap="join_pin({{index}})" class="btn bg-primary">
@@ -681,7 +681,7 @@
         <!-- 查看更多组团 e-->
         <notice />
         <backtoHome />
-        <span class="public_icon1_to_top" @tap="scrollTop"></span>
+        <span class="public_icon1_to_top" @tap="scrollTo(0)"></span>
     </view>
 </template>
 <script>
@@ -692,7 +692,8 @@
     import notice from '@/components/notice'
     import popWin from '@/components/popWin'
     import backtoHome from '@@/backtoHome'
-    export default class goodsdetail extends wepy.page {
+    export default class goods_detail extends wepy.page {
+        config = {}
         mixins = [Mixin]
         data = {
             loading: true,
@@ -742,6 +743,7 @@
             order_collage_id: 0,
             collage_detail: {},
             nowTime: 0,
+            thisTop:0
         }
         components = {
             TopNav,
@@ -765,6 +767,14 @@
             // }
         }
         methods = {
+            thisScroll(e){
+                this.thisTop = e.detail.scrollTop
+            },
+            scrollTo(index){
+                this.activeIndex = index;
+                this.toView = 'scroll' + index;
+                this.thisTop = 0
+            },
             join_pin(index) {
                 wepy.navigateTo({
                     url: '/pages/join?order_collage_id=' + this.pin_list[index].id,
@@ -1092,8 +1102,8 @@
                 this.pin_list.forEach(e => {
                     console.log(e)
                     let t = this.countdownDateTime(e.surplus_time)
-                    e.surplus_time = t.date ? t.date + '天' : ''
-                    e.surplus_time += t.hour + ":" + t.min + ":" + t.sec
+                    e.surplus_time1 = t.date ? t.date + '天' : ''
+                    e.surplus_time1 += t.hour + ":" + t.min + ":" + t.sec
                 });
                 this.$apply();
             })
