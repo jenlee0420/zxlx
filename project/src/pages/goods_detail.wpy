@@ -558,7 +558,7 @@
                             <view class="right">
                                 <view class="status">
                                     <view class="m-nums">还差<text>{{item.lack_num}}人</text>拼成</view>
-                                    <text class="t-nums">剩余{{item.remaining_time}}</text>
+                                    <text class="t-nums">剩余{{item.surplus_time1}}</text>
                                 </view>
                                 <view @tap="join_pin({{index}})" class="btn bg-primary">
                                     去参团
@@ -665,7 +665,7 @@
                             </view>
                             <view class="flex-1 flex-column">
                                 <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
-                                <text>剩余{{item.surplus_time1}}</text>
+                                <view>剩余{{item.surplus_time1}}</view>
                             </view>
                             <view>
                                 <view @tap="join_pin({{index}})" class="btn bg-primary">
@@ -743,7 +743,8 @@
             order_collage_id: 0,
             collage_detail: {},
             nowTime: 0,
-            thisTop:0
+            thisTop:0,
+            scrollflag:false
         }
         components = {
             TopNav,
@@ -768,12 +769,16 @@
         }
         methods = {
             thisScroll(e){
-                this.thisTop = e.detail.scrollTop
+                if(!this.scrollflag){
+                    this.thisTop = e.detail.scrollTop
+                    this.scrollflag = true
+                }
             },
             scrollTo(index){
                 this.activeIndex = index;
                 this.toView = 'scroll' + index;
                 this.thisTop = 0
+                this.scrollflag = false
             },
             join_pin(index) {
                 wepy.navigateTo({
@@ -1100,7 +1105,6 @@
                 }
                 this.pin_list = res.data.list.data;
                 this.pin_list.forEach(e => {
-                    console.log(e)
                     let t = this.countdownDateTime(e.surplus_time)
                     e.surplus_time1 = t.date ? t.date + '天' : ''
                     e.surplus_time1 += t.hour + ":" + t.min + ":" + t.sec
