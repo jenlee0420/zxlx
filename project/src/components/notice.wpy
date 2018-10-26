@@ -59,15 +59,14 @@
         methods = {
             getNotice() {
                 this.messageTimer = setInterval(() => {
-                    console.log('2')
                     this.getNoticedata()
                 }, 30000)
             },
             //30秒
             clearTimerMeth(){
-                // this.messageTimer = null
                 clearInterval(this.messageTimer)
                 console.log('ee',this.messageTimer)
+                this.messageTimer = null
             }
         }
         // 取首页通知

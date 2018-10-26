@@ -32,7 +32,7 @@
     }
     .itemcontent{
       padding:20rpx;
-      .itemdesc{display: flex;line-height: 28rpx;}
+      .itemdesc{display: flex;line-height: 28rpx;word-break: break-all}
       .itemprice{letter-spacing: 2rpx;}
     }
     .itemlabel{

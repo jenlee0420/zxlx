@@ -243,7 +243,7 @@
           data: req,
         }).then(res => {
           if (res.code != "1") {
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({ content: res.msg});
           } else {
              wx.navigateBack();
           }

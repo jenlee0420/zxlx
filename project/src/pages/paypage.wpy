@@ -403,7 +403,7 @@
           data: data,
         }).then(res => {
           if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({ content: res.msg});
             return
           }
           //this.showPopup=true;
@@ -449,7 +449,7 @@
           data: data,
         }).then(res => {
           if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({content: res.msg});
             return
           }
           this.order_id=res.data.order_id;
@@ -566,8 +566,6 @@
       return re
     };
 
-
-
     onLoad(options){
       if(!options){
         return;
@@ -607,13 +605,12 @@
         data: data,
       }).then(res => {
         if(res.code != "1"){
-          this.showAlert({title: "警告", content: res.msg});
+          this.showAlert({ content: res.msg});
           return
         }
         this.detail=res.data;
         this.$apply();
       })
-
       wx.setStorageSync("payflag",'true');
     };
 

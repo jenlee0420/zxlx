@@ -112,6 +112,7 @@
     </view>
     <guess class="mt20"></guess>
     <notice />
+    <backtoHome />
   </view>
 </template>
 
@@ -120,11 +121,13 @@
   import Mixin from '@/mixins/global'
   import guess from '@/components/guess'
   import notice from '@/components/notice'
+  import backtoHome from '@@/backtoHome'
   export default class friendpay extends wepy.page {
     config = {}
     components = {
       guess,
-      notice
+      notice,
+      backtoHome
     }
     mixins = [Mixin]
     data = {
@@ -145,7 +148,7 @@
           data: {order_id:this.order_id},
         }).then(res => {
           if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({ content: res.msg});
             return
           }
           var that=this;
@@ -188,12 +191,12 @@
       }
 
       if(!options.user_id) {
-        this.showAlert({title: "警告", content: "user_id为空"});
+        this.showAlert({content: "user_id为空"});
         return
       }
 
       if(!options.order_id){
-        this.showAlert({title: "警告", content: "order_id为空"});
+        this.showAlert({ content: "order_id为空"});
         return
       }
 
@@ -207,7 +210,7 @@
 
     PageInit() {
       if(!this.user_id||!this.order_id){
-        this.showAlert({title: "警告", content: "分享错误"});
+        this.showAlert({ content: "分享错误"});
       }
 
       wepy.request({
@@ -216,7 +219,7 @@
         data: {user_id:this.user_id},
       }).then(res => {
         if(res.code != "1"){
-          this.showAlert({title: "警告", content: res.msg});
+          this.showAlert({ content: res.msg});
           return
         }
 
@@ -228,7 +231,7 @@
           data: {order_id:this.order_id},
         }).then(res => {
           if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({ content: res.msg});
             return
           }
           this.detail=res.data;

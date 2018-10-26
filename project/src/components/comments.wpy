@@ -182,7 +182,6 @@
   computed={
     starnum(){
     if(this.comment_list.data){
-      console.log('dfff',this.comment_list.data.avg_score)
       return this.comment_list.data.avg_score
     }
   }

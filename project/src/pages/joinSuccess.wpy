@@ -156,7 +156,7 @@
             <view class="title">订单信息</view>
             <view class="flexRow reverse flex-1 des">
                 <view class="flexRow"><text>·</text>联系信息</view>
-                <view class="flexRow"><text>·</text>拼成时间</view>
+                <view class="flexRow"><text>·</text>组成时间</view>
             </view>
         </view>
         <!-- 相似的列表 E -->
@@ -220,7 +220,6 @@
           }).then(res => {
             if (res.code != "1") {
               this.showAlert({
-                title: "警告",
                 content: res.msg
               });
               return

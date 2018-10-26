@@ -200,7 +200,7 @@
         <span class="public_icon1_white_weixin mr20"></span> 分享给您的好友
       </button>
       <view class="tips">
-        分享到3个群后，拼成率高达98%
+        分享到3个群后，组成率高达98%
       </view>
     </view>
     <!-- 倒计时部分 E -->
@@ -224,7 +224,7 @@
         <view class="title">组团须知</view>
         <view class="flexRow reverse flex-1 des">
           <view class="flexRow"><text>·</text>人满不退款</view>
-          <view class="flexRow"><text>·</text>人满拼成</view>
+          <view class="flexRow"><text>·</text>人满组成</view>
           <view class="flexRow"><text>·</text>好友组团</view>
         </view>
       </view>
@@ -269,7 +269,6 @@
           }).then(res => {
             if (res.code != "1") {
               this.showAlert({
-                title: "警告",
                 content: res.msg
               });
               return
@@ -286,7 +285,6 @@
             }).then(res => {
               if (res.code != "1") {
                 this.showAlert({
-                  title: "警告",
                   content: res.msg
                 });
                 return

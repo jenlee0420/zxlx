@@ -557,7 +557,7 @@
                             </view>
                             <view class="right">
                                 <view class="status">
-                                    <view class="m-nums">还差<text>{{item.lack_num}}人</text>拼成</view>
+                                    <view class="m-nums">还差<text>{{item.lack_num}}人</text>组成</view>
                                     <text class="t-nums">剩余{{item.surplus_time1}}</text>
                                 </view>
                                 <view @tap="join_pin({{index}})" class="btn bg-primary">
@@ -593,8 +593,8 @@
             </view>
             <view class="flex1">
                 <button class="public_icon1_custom" open-type="contact" hover-class="none"></button><text>客服</text></view>
-            <view wx:if="{{order_collage_id==0}}" class="flex2" @tap="open_good_class(2)"><text>￥{{total_price}}</text><text>单独购买</text></view>
-            <view wx:if="{{order_collage_id==0}}" class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起组团</text></view>
+            <view wx:if="{{order_collage_id==0}}" class="flex2" @tap="open_good_class(2)"><text>￥{{total_price?total_price:good_detail.goods_max_line_price}}</text><text>单独购买</text></view>
+            <view wx:if="{{order_collage_id==0}}" class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price?pin_price:good_detail.goods_min_price}}</text><text>发起组团</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime>0}}" class="flex3" @tap="open_good_class(1)"><text>加入组团</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num==0}}" class="flex5"><text>报名已满</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime<=0}}" class="flex5"><text>活动已结束</text></view>
@@ -623,8 +623,10 @@
                         <image src="{{good_detail.image[0].file_path}}"></image>
                     </view>
                     <view class="goods-picked">
-                        <text class="price">￥{{buy_type == 1 ? pin_price : total_price}}</text>
-                        <text class="picked-text">已选择：{{class_group ? class_group : goods_detal[0].data[0].name}}</text>
+                        <text class="price" wx:if="{{buy_type == 1}}">￥{{pin_price ? pin_price : good_detail.goods_min_price}}</text>
+                        <text class="price" wx:else>￥{{total_price ? total_price : good_detail.goods_max_line_price}}</text>
+                        
+                        <text class="picked-text">已选择：{{class_group}}</text>
                     </view>
                 </view>
                 <scroll-view scroll-y="{{true}}" class="scroll-h flex-1">
@@ -664,7 +666,7 @@
                                 <image src="{{item.avatarUrl}}" class="avator" />
                             </view>
                             <view class="flex-1 flex-column">
-                                <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
+                                <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>组成</view>
                                 <view>剩余{{item.surplus_time1}}</view>
                             </view>
                             <view>
@@ -849,7 +851,6 @@
                     }).then(res => {
                         if (res.code != "1") {
                             this.showAlert({
-                                title: "警告",
                                 content: res.msg
                             });
                             return
@@ -868,7 +869,6 @@
                     }).then(res => {
                         if (res.code != "1") {
                             this.showAlert({
-                                title: "警告",
                                 content: res.msg
                             });
                             return
@@ -891,7 +891,6 @@
             tmp() {},
             buynow() {
                 this.buynowFun()
-                this.open_class = false
             },
             pin_more() {
                 // 显示正在拼单列表
@@ -902,13 +901,20 @@
             //判断是否有授权
             this.getLocalSetting().then(res => {
                 if (res) {
-                    wepy.navigateTo({
-                        url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
-                            '&good_number=' + this.good_number +
-                            '&goods_sku_id=' + this.goods_sku_id +
-                            '&buy_type=' + this.buy_type +
-                            '&order_collage_id=' + this.order_collage_id
-                    })
+                    if(!this.goods_sku_id){
+                        this.showAlert({
+                            content: '请选择商品规格'
+                        });
+                    }else{
+                        this.open_class = false
+                        wepy.navigateTo({
+                            url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
+                                '&good_number=' + this.good_number +
+                                '&goods_sku_id=' + this.goods_sku_id +
+                                '&buy_type=' + this.buy_type +
+                                '&order_collage_id=' + this.order_collage_id
+                        })
+                    }
                 } else {
                     wepy.navigateTo({
                         url: '/pages/wxlogin'
@@ -986,7 +992,6 @@
                 }).then(res => {
                     if (res.code != "1") {
                         this.showAlert({
-                            title: "警告",
                             content: res.msg
                         });
                         return
@@ -1003,7 +1008,6 @@
             }).then(res => {
                 if (res.code != "1") {
                     this.showAlert({
-                        title: "警告",
                         content: res.msg
                     });
                     return
@@ -1019,7 +1023,7 @@
                         "name": res.data.detail.goods_name,
                         "data": [{
                             "name": res.data.detail.goods_name,
-                            "pick": true,
+                            "pick": false,
                             "goods_id": res.data.detail.goods_id,
                             "item_id": res.data.detail.goods_id,
                         }],
@@ -1037,14 +1041,10 @@
                         }
                         var p = false;
                         for (var n = 0; n < res.data.specData.spec_attr[i].spec_items.length; n++) {
-                            if (n == 0) {
-                                p = true;
-                            } else {
-                                p = false;
-                            };
+                            
                             tmp.data.push({
                                 "name": res.data.specData.spec_attr[i].spec_items[n].spec_value,
-                                "pick": p,
+                                "pick": false,
                                 "item_id": res.data.specData.spec_attr[i].spec_items[n].item_id,
                             })
                         }
@@ -1071,7 +1071,6 @@
                     this.loading = false;
                     if (res.code != "1") {
                         this.showAlert({
-                            title: "警告",
                             content: res.msg
                         });
                         return
@@ -1095,7 +1094,6 @@
             }).then(res => {
                 if (res.code != "1") {
                     this.showAlert({
-                        title: "警告",
                         content: res.msg
                     });
                     return

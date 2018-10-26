@@ -178,7 +178,7 @@
               },
             }).then(res => {
               if(res.code!="1"){
-                this.showAlert({title:"警告",content:res.msg});
+                this.showAlert({content:res.msg});
               }
 
               wx.navigateBack();
@@ -222,14 +222,14 @@
           address_id:this.list[index].address_id,
         };
         var that=this;
-        this.showAlert({title:"警告",content:"确认要删除吗？",confirm:function(){
+        this.showAlert({title:"提示",content:"确认要删除吗？",confirm:function(){
             wepy.request({
               url: "api/address/delete",
               method: 'POST',
               data: data,
             }).then(res => {
               if(res.code!="1"){
-                that.showAlert({title:"警告",content:res.msg});
+                that.showAlert({content:res.msg});
               }else {
                 that.list.splice(index,1);
                 that.$apply();
@@ -251,7 +251,7 @@
           data: data,
         }).then(res => {
           if(res.code!="1"){
-            this.showAlert({title:"警告",content:res.msg});
+            this.showAlert({content:res.msg});
           }else {
             this.default_addree=index;
             this.$apply();
@@ -287,7 +287,7 @@
           data: {},
         }).then(res => {
           if(res.code!="1"){
-          this.showAlert({title:"警告",content:res.msg});
+          this.showAlert({content:res.msg});
         }else {
           var index=0;
           this.list=[];

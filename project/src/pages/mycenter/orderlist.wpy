@@ -231,7 +231,6 @@
                 this.loading = false
                 if (res.code != "1") {
                     this.showAlert({
-                        title: "警告",
                         content: res.msg
                     });
                     return
