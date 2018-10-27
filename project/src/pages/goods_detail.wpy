@@ -16,6 +16,10 @@
         padding-bottom: @nav-bottom-h;
         height: 100%
     }
+    .zan-icon-arrow{
+        margin-top:-2rpx;
+        color: #adaaaa;
+    }
     .des {
         font-size: 22rpx;
         color: @des-color;
@@ -546,7 +550,7 @@
                     <view class="header">
                         <text>{{pin_num}}人在组团，直接参与</text>
                         <view @tap="pin_more">更多
-                            <image src="../resource/img/right_arrow.png"></image>
+                            <text class="zan-icon zan-icon-arrow"></text>
                         </view>
                     </view>
                     <block wx:for="{{pin_list}}" wx:key="index" wx:for-index="index">

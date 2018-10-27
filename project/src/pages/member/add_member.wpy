@@ -317,9 +317,10 @@
                     this.showAlert({content:res.msg});
                     return
                   }else {
-                    wx.navigateTo({
-                      url:"list_member"
-                    })
+                    wx.navigateBack();
+                    // wx.navigateTo({
+                    //   url:"list_member"
+                    // })
                   }
                 })
             },

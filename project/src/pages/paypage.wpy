@@ -271,7 +271,7 @@
       <view class="flexRow" @tap="to_addresslist('')">
         <span class="public_icon_manual_add_address"></span>
         <text>手动添加联系信息</text>
-        <image class="right_arrow" src="../resource/img/right_arrow.png"></image>
+        <span class="cb4b4b4 zan-icon zan-icon-arrow"></span>
       </view>
       <!-- <view class="flexRow">
         <span class="public_icon2_weixin"></span>
@@ -493,7 +493,7 @@
       to_addresslist(address_id){
         if(address_id==""){
           wx.navigateTo({
-            url:"/pages/member/list_member"
+            url:"/pages/member/list_member?from=pay"
           })
         }else{
           wx.navigateTo({
@@ -617,11 +617,13 @@
     onShow(){
       if(wx.getStorageSync("address")!=""){
         var obj=JSON.parse(wx.getStorageSync("address"));
-        this.detail.address.address_id=obj.address_id;
-        this.detail.address.name=obj.name;
-        this.detail.address.phone=obj.phone;
-        this.detail.address.region=obj.region;
-        this.detail.address.detail=obj.detail;
+        // console.log(obj,this.detail.address.address_id)
+        this.detail.address=obj;
+        // this.detail.address.address_id=obj.address_id;
+        // this.detail.address.name=obj.name;
+        // this.detail.address.phone=obj.phone;
+        // this.detail.address.region=obj.region;
+        // this.detail.address.detail=obj.detail;
       }
       this.$apply();
     }
