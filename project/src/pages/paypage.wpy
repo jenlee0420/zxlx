@@ -462,6 +462,7 @@
             signType:res.data.signType,
             paySign:res.data.paySign,
             success:function(e){
+              console.log('buy_type:',that.buy_type,that.order_collage_id)
               if(that.buy_type==1){
                 if(that.order_collage_id==0){
                   wepy.navigateTo({

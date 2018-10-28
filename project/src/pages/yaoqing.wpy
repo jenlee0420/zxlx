@@ -3,7 +3,10 @@
 //   @import '../resource/less/photo.less';
 
   @footer-h: 106rpx;
-
+  #yaoqing{
+    width: 100%;
+    overflow-x: hidden;
+  }
 
   .icon-44 {
     width: 44rpx;
@@ -171,7 +174,7 @@
 
 </style>
 <template>
-  <view>
+  <view id="yaoqing">
     <!-- 花边抢购 S -->
     <view class="flexRow flex-astart huabian">
       <view class="shop-photo">
