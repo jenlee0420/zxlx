@@ -61,7 +61,7 @@
 <template>
     <view class="container" id="dianpin">
         <view>
-            <text>游学名称</text><text>{{detail.source_name}}</text>
+            <text>{{detail.combination_one}}名称</text><text>{{detail.goods[0].goods_name}}</text>
         </view>
         <view class="flex">
             <text class="mr75">评分</text>

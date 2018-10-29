@@ -179,6 +179,7 @@
         events = {
             flush() {
                 console.log(this.TypeList[this.currentIndex].key),
+                this.TypeList[this.currentIndex].current_page = 1
                     this.loadorderlist({
                         per_page: this.page_size,
                         page: 1,
@@ -267,6 +268,9 @@
             if(option&&option.isshow){
               this.isshow=option.isshow;
             }
+            wepy.removeStorage({
+                key: 'payflag'
+            })
         }
 //        PageInit(opation) {
 //

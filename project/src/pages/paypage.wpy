@@ -442,7 +442,7 @@
           pay_type:this.pay_type,
           order_collage_id:this.order_collage_id,
         };
-
+        console.log('buy_type:',this.buy_type,this.order_collage_id)
         wepy.request({
           url: "api/order/paynow",
           method: 'POST',
@@ -453,7 +453,7 @@
             return
           }
           this.order_id=res.data.order_id;
-
+          
           var that = this ;
           wx.requestPayment({
             timeStamp:res.data.timeStamp,
@@ -462,8 +462,8 @@
             signType:res.data.signType,
             paySign:res.data.paySign,
             success:function(e){
-              console.log('buy_type:',that.buy_type,that.order_collage_id)
-              if(that.buy_type==1){
+              
+              if(that.buy_type == 1){
                 if(that.order_collage_id==0){
                   wepy.navigateTo({
                     url: '/pages/yaoqing?order_id='+that.order_id,

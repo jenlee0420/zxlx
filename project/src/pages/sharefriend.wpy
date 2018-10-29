@@ -71,7 +71,7 @@
           <image src="{{avatarUrl}}" mode="aspectFill">
         </view>
         <view class="graybox">
-          <text>我在知兮乐兮上找到了很赞的游学，快来帮我付款吧~</text>
+          <text>我在知兮乐兮上找到了很赞的{{detail.combination_one}}，快来帮我付款吧~</text>
           <view class="goodsinfo">
             <view class="imgbox">
               <image src="{{detail.goods[0].image.file_path}}" mode="aspectFill" />

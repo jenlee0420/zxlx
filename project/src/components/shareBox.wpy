@@ -40,7 +40,7 @@
 <template>
   <view class="container" id="shareBox" wx:if="{{showPopup}}">
     <view class="Topcorner" @tap="togglePopup"><span class="zan-icon zan-icon-close"></span></view>
-    <view class="content">邀请好友一起拼？点击
+    <view class="content">邀请好友一起组团？点击
       <font class="maincolor">按钮</font>即可分享</view>
     <view class="sharebtn flexRow flex-jcenter" @tap="sharefun">
       <span class="public_icon1_white_weixin mr20"></span> 分享给您的好友

@@ -210,7 +210,7 @@
     <!-- 相似的列表 S -->
     <view class="list bg_fff">
       <view class="item flexRow">
-        <view class="self-start title">游学组合</view>
+        <view class="self-start title">{{detail.combination_two}}</view>
         <view class="flexCol flex-1 flex-astart">
           <view class="title2">{{collage_detail.goods_name}}</view>
           <view class="des">{{collage_detail.goods_attr}}</view>

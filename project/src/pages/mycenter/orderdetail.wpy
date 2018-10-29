@@ -228,14 +228,14 @@
             <!-- 出行人信息 end-->
             <!-- 评价信息 -->
             <view class="comments" wx:if="{{order_status=='30'}}">
-                <block wx:for="{{comment_list}}">
+                <block wx:for="{{comment_list}}" wx:for-item="item" wx:key="index" >
                   <view class="commlabel"><text>评价信息</text>
                     <Star total="5" num="{{item.score}}">
                   </view>
                   <view class="commContent">{{item.comment}}</view>
-                  <block wx:for="item.pic">
+                  <block wx:for="{{item.pic}}" wx:for-item="itema" wx:key="index1">
                     <view class="commentimgs">
-                        <image src="{{item}}" mode="aspectFill" />
+                        <image src="{{itema}}" mode="aspectFill" />
                     </view>
                   </block>
                 </block>
@@ -288,23 +288,9 @@
         }
         events = {
             flush() {
-                wepy.request({
-                    url: "api/order/detail",
-                    method: 'POST',
-                    data: {
-                        order_id: this.order_id
-                    },
-                }).then(res => {
-                    this.loading = false;
-                    if (res.code != "1") {
-                        this.showAlert({
-                            content: res.msg
-                        });
-                    } else {
-                        this.order_status = res.data.order_status.value;
-                        this.detail = res.data
-                    }
-                    this.$apply();
+                //删除订单后跳转到已取消列表
+                wepy.navigateTo({
+                  url: '/pages/mycenter/orderlist?type=4&isshow=show"',
                 })
             },
         }
@@ -333,7 +319,9 @@
                 return
             }
             this.order_id = options.order_id;
-
+            wepy.removeStorage({
+                key: 'payflag'
+            })
         }
         PageInit() {
         }
@@ -363,13 +351,13 @@
             }
             this.$apply();
 
-            if(this.order_status=='30'){
+            if(this.order_status == '30'){
 
               wepy.request({
                 url: "api/order/getcomment",
                 method: 'POST',
                 data: {
-                  order_id: options.order_id
+                  order_id: this.order_id
                 },
               }).then(res => {
                 if (res.code != "1") {

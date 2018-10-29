@@ -126,6 +126,7 @@
         })
       },
       del_order(order) {
+        var that=this
         this.showAlert({
           content: '确定删除订单',
           confirm: function() {
@@ -136,16 +137,16 @@
                 order_id: order.order_id
               },
             }).then(res => {
-              this.loading = false;
+              that.loading = false;
               if (res.code != "1") {
-                this.showAlert({
+                that.showAlert({
                   content: res.msg
                 });
               } else {
-                //this.$emit('flush');
-                wepy.navigateTo({
-                  url: '/pages/mycenter/orderlist?type=1',
-                })
+                that.$emit('flush');
+                // wepy.navigateTo({
+                //   url: '/pages/mycenter/orderlist?type=1',
+                // })
               }
             })
           }

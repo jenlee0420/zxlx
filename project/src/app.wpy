@@ -23,13 +23,15 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
+        'pages/friendpay',
         'pages/index',
         'pages/yaoqing', 
         'pages/wxlogin',
         'pages/search_page',
-        'pages/friendpay',
+        
         'pages/sharefriend',
         'pages/join',
+        'pages/joinSuccess',
         'pages/mycenter/dianpin',
         'pages/mycenter/list_member',
         'pages/search',

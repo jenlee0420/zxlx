@@ -184,7 +184,7 @@
         </view>
         <view class="flexCol shop-gou bg_fff">
             <view class="flexRow flex-jcenter pin-avatar">
-                <text class="bubble">拼主</text>
+                <text class="bubble">团主</text>
                 <block wx:for="{{collage_detail.collage_list}}" wx:key="{{index}}">
                     <image src="{{item.avatarUrl}}" mode="aspectFill" />
                 </block>
