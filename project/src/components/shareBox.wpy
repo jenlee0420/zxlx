@@ -11,6 +11,7 @@
     display: flex;
     flex-direction: column;
     justify-content: center;
+    z-index: 100;
     .content {
       margin: 67rpx 51rpx 37rpx 51rpx;
       border: 1rpx dotted #ffc2b1;
@@ -41,10 +42,10 @@
   <view class="container" id="shareBox" wx:if="{{showPopup}}">
     <view class="Topcorner" @tap="togglePopup"><span class="zan-icon zan-icon-close"></span></view>
     <view class="content">邀请好友一起组团？点击
-      <font class="maincolor">按钮</font>即可分享</view>
-    <view class="sharebtn flexRow flex-jcenter" @tap="sharefun">
-      <span class="public_icon1_white_weixin mr20"></span> 分享给您的好友
-    </view>
+      <font class="maincolor">按钮</font> 即可分享</view>
+    <button open-type="share" class="sharebtn flexRow flex-jcenter" @tap="sharefun">
+          <span class="public_icon1_white_weixin mr20"></span> 分享给您的好友
+        </button>
   </view>
 </template>
 
@@ -56,17 +57,43 @@
     components = {}
     mixins = [Mixin]
     data = {
-      showPopup: true
+      showPopup: false,
+      sharetime: null
     }
     methods = {
       togglePopup() {
         this.showPopup = !this.showPopup
         this.$apply()
       },
-      sharefun(){
+      sharefun() {
         this.$emit('sharefun')
+      },
+      clearThisTimer() {
+        clearInterval(this.sharetime)
       }
     }
-    onLoad() {}
+    togglePopup() {
+      this.showPopup = !this.showPopup
+      this.$apply()
+    }
+    clearThisTimer() {
+      clearInterval(this.sharetime)
+    }
+    getTime() {
+      wepy.request({
+        url: 'api/share/setting',
+        method: 'POST'
+      }).then(res => {
+        if (res.code == 1) {
+          this.sharetime = setInterval(() => {
+            this.togglePopup()
+            this.clearThisTimer()
+          }, res.data * 1000);
+        }
+      })
+    }
+    onLoad() {
+      this.getTime()
+    }
   }
 </script>

@@ -145,6 +145,7 @@
         }
         this.page = 1
         this.getlist()
+        this.getValbyId()
       },
       changeView() {
         // this.searchview = !this.searchview

@@ -4,7 +4,6 @@
   @color-purple: #9c44ee;
   @color-line: #e6e6e6;
   @color-line2: #e9eae7;
-
   .totalPin {
     // border-top: 2rpx solid @color-line;
     height: 204rpx;
@@ -35,7 +34,6 @@
       font-size: 26rpx;
     }
   }
-
   .ping-card {
     border-top: 1rpx solid @color-line2;
     padding: 40rpx 26rpx 48rpx 135rpx;
@@ -43,7 +41,6 @@
     flex-direction: column;
     justify-content: flex-start;
     align-items: flex-start;
-
     .head {
       position: relative;
       height: 90rpx;
@@ -100,7 +97,6 @@
         align-self: flex-start;
       }
     }
-
     .content {
       display: flex;
       flex-direction: row;
@@ -126,7 +122,6 @@
         font-size: 24rpx;
       }
     }
-
   }
 </style>
 <template>
@@ -137,9 +132,8 @@
       <view class="rating">
         整体评分
         <view class="starContainer" style="{{containerStyle ? containerStyle : ''}}">
-
-            <span wx:for="{{comment_list.avg_score}}" wx:key="{{index}}" class="public_icon2_star_light"></span>
-            <span wx:for="{{5-comment_list.avg_score}}" wx:key="{{index}}" class="public_icon2_star_dark"></span>
+          <span wx:for="{{comment_list.avg_score}}" wx:key="{{index}}" class="public_icon2_star_light"></span>
+          <span wx:for="{{5-comment_list.avg_score}}" wx:key="{{index}}" class="public_icon2_star_dark"></span>
         </view>
         {{comment_list.data.avg_score}}</view>
     </view>
@@ -147,17 +141,27 @@
     <!-- 评价块 S -->
     <view class="ping-card" wx:for="{{comment_list.data}}" wx:key="{{index}}" index="index">
       <view class="head">
-        <view class="avatar"><image src="{{item.avatarUrl}}"></image></view>
+        <view class="avatar">
+          <image src="{{item.avatarUrl}}"></image>
+        </view>
         <view class="info">
           <view class="name">{{item.nickName}}<text class="bg-orange" wx:if="{{item.gender !='未知' && item.gender !=''}}">{{item.gender}}</text></view>
           <text>{{item.create_time}}</text>
         </view>
         <view class="star">
-          <Star5></Star5>
+          <view class="starContainer">
+            <span wx:for="{{item.score}}" wx:key="{{index2}}" class="public_icon2_star_light"></span>
+            <span wx:for="{{5-item.score}}" wx:key="{{index2}}" class="public_icon2_star_dark"></span>
+          </view>
         </view>
       </view>
       <view class="content">
         <text>{{item.comment}}</text>
+        <block wx:for="{{item.pic}}" wx:for-item="itema" wx:key="index1">
+          <view class="commentimgs">
+            <image src="{{itema}}" mode="aspectFill" @tap="showpic({{itema}},{{item.pic}})" />
+          </view>
+        </block>
         <view class="extra-text">{{item.goods_attr}}</view>
       </view>
     </view>
@@ -173,21 +177,27 @@
     };
     props = {
       comment_list: {
-          type: Object,
-          default: () => {
-            return {}
-          }
+        type: Object,
+        default: () => {
+          return {}
+        }
       }
     }
-  computed={
-    starnum(){
-    if(this.comment_list.data){
-      return this.comment_list.data.avg_score
+    computed = {
+      starnum() {
+        if (this.comment_list.data) {
+          return this.comment_list.data.avg_score
+        }
+      }
     }
-  }
-  }
-    data = {
-
-    };
+    data = {};
+    methods = {
+      showpic(url, urls) {
+        wx.previewImage({
+          current: url, // 当前显示图片的http链接
+          urls: urls // 需要预览的图片http链接列表
+        })
+      }
+    }
   }
 </script>

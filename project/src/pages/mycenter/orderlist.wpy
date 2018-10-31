@@ -208,6 +208,9 @@
                  })
             },
             nextpage(index) {
+                if(this.TypeList[index].list.length >= this.TypeList[index].totalCount){
+                    return
+                }
                 this.loadorderlist({
                     per_page: this.page_size,
                     page: this.TypeList[index].current_page,
@@ -243,6 +246,7 @@
                 this.currentIndex = index;
                 this.currType = this.TypeList[index].key;
                 this.TypeList[index].total_page = res.data.list.last_page;
+                this.TypeList[index].totalCount = res.data.list.total
                 //last page
                 if (this.TypeList[index].current_page == res.data.list.last_page) {
                 }
@@ -268,9 +272,6 @@
             if(option&&option.isshow){
               this.isshow=option.isshow;
             }
-            wepy.removeStorage({
-                key: 'payflag'
-            })
         }
 //        PageInit(opation) {
 //

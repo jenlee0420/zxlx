@@ -21,8 +21,8 @@
 <template>
     <view class="container" id="feedback">
         <view class="boderbottom">
-            <text>反馈意见</text>
-            <textarea placeholder-style="color:#bbb" placeholder="请将您的建议告诉我们，以便我们提供更好的产品。（最多500字）" @input="changeinput" />
+            <text class="req">反馈意见</text>
+            <textarea placeholder-style="color:#bbb" placeholder="请将您的建议告诉我们，以便我们提供更好的产品。（最多500字）" @input="changeinput" maxlength="500" />
         </view>
         <view class="flex flex-jcenter"><button class="w600 btn mb190 mt30" @tap="submit">提交</button></view>
     </view>
@@ -57,6 +57,8 @@
                         setTimeout(() => {
                             wepy.navigateBack()
                         }, 500);
+                    }else{
+                        this.showAlert({content: res.msg});
                     }
                 })
             }

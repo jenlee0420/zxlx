@@ -246,7 +246,7 @@
                 </view>
             </view>
             <!-- 评价信息 end -->
-            <button class="contact" hover-class="none"><span class="public_icon4_contact mr10" open-type="contact" ></span>联系客服</button>
+            <button class="contact" hover-class="none" open-type="contact" ><span class="public_icon4_contact mr10"></span>联系客服</button>
         </view>
         {{this.detail.pay_type}}
         <view class="orderinfo" wx:if="{{order_status=='10'||order_status=='20'||order_status=='40'}}">
@@ -319,9 +319,6 @@
                 return
             }
             this.order_id = options.order_id;
-            wepy.removeStorage({
-                key: 'payflag'
-            })
         }
         PageInit() {
         }

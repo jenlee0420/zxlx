@@ -1,8 +1,9 @@
 <style lang="less">
-  #memberlist{
+  #memberlist {
     border-top: 1rpx solid @bColor;
+    padding-bottom:100rpx;
   }
-  .list_menber_view_view_btn{
+  .list_menber_view_view_btn {
     border-radius: 10rpx;
     width: 336rpx;
     height: 90rpx;
@@ -11,20 +12,17 @@
     align-items: center;
     margin-left: 30rpx;
   }
-
-  .list_menber_view_view_btn_self{
+  .list_menber_view_view_btn_self {
     &:extend(.list_menber_view_view_btn);
     background-color: #e02e24;
   }
-
-  .list_menber_view_view_btn_weixin{
+  .list_menber_view_view_btn_weixin {
     &:extend(.list_menber_view_view_btn);
     background-color: #08c303;
     margin-left: 10rpx;
   }
-
-  .list_menber_view_view{
-    bottom: 148rpx;
+  .list_menber_view_view {
+    bottom: 20rpx;
     display: flex;
     font-size: 30rpx;
     font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
@@ -32,8 +30,7 @@
     position: fixed;
     color: #FFFFFF;
   }
-
-  .list_menber_view_list{
+  .list_menber_view_list {
     font-size: 26rpx;
     color: #282727;
     display: flex;
@@ -42,16 +39,13 @@
     font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
     padding: 20rpx 0;
   }
-
-  .list_location_icon{
+  .list_location_icon {
     margin-left: 32rpx;
   }
-
-  .list_mg_35{
+  .list_mg_35 {
     margin-left: 35rpx;
   }
-
-  .list_do{
+  .list_do {
     display: flex;
     margin-left: 35rpx;
     margin-right: 19rpx;
@@ -59,54 +53,45 @@
     margin-bottom: 30rpx;
     font-size: 24rpx;
   }
-
-  .list_do_1{
+  .list_do_1 {
     &:extend(.list_flex);
     color: #f8280d;
   }
-  .list_do_2{
+  .list_do_2 {
     &:extend(.list_flex);
     color: #cecccc;
   }
-  .list_flex{
-    display:flex;
-    align-items:center;
+  .list_flex {
+    display: flex;
+    align-items: center;
   }
-  .list_bg{
-    background-color:#fff;
+  .list_bg {
+    background-color: #fff;
   }
-
-  .list_address{
+  .list_address {
     margin-top: 20rpx;
   }
-
-  .list_choice{
+  .list_choice {
     margin-right: 35rpx;
     color: #f8280d;
   }
-
-
-
 </style>
 
 <template>
   <view class="container" id="memberlist">
     <view class="list_menber_view_view">
-
       <view class="list_menber_view_view_btn_self" @tap="go_to_add">
         <icon class="public_icon_add_traveller"></icon>
         <text>添加</text>
       </view>
-
       <view class="list_menber_view_view_btn_weixin" @tap="save">
         <text>保存</text>
       </view>
     </view>
-
     <block wx:for="{{list}}" wx:key="{{index}}">
       <!-- <view class="list_member_view_flex"> -->
       <view class="list_bg">
-        <view  class="list_menber_view_list" @tap="choice_address({{index}})">
+        <view class="list_menber_view_list" @tap="choice_address({{index}})">
           <icon class="public_icon2_location2 list_mg_35"></icon>
           <view class="flex-1 list_mg_35">
             <view>
@@ -119,10 +104,9 @@
           </view>
           <span wx:if="{{item.choice}}" class="zan-icon-success zan-icon list_choice"></span>
         </view>
-
         <view class="list_do">
           <view class="list_do_1 flex-1">
-            <icon class="public_icon4_defalt"  hidden="{{default_addree!=index}}"></icon>
+            <icon class="public_icon4_defalt" hidden="{{default_addree!=index}}"></icon>
           </view>
           <view class="list_do_2" @tap="go_to_edit({{index}})">
             <icon class="public_icon4_edit_addrss"></icon>
@@ -134,9 +118,7 @@
           </view>
         </view>
       </view>
-
     </block>
-
   </view>
 </template>
 
@@ -144,154 +126,151 @@
   import wepy from 'wepy'
   import Mixin from '@/mixins/global'
   export default class Index extends wepy.page {
-    config = {
-    }
+    config = {}
     components = {}
     mixins = [Mixin]
     data = {
-      list:[
-      ],
-      order_id:0,
-      detail:{},
+      list: [],
+      order_id: 0,
+      detail: {},
     }
     methods = {
-      save(){
-        var address_id_list='';
-        for(var i=0;i<this.list.length-1;i++){
-          if(this.list[i].choice){
-            address_id_list=address_id_list+this.list[i].address_id+','
+      save() {
+        var address_id_list = '';
+        for (var i = 0; i < this.list.length - 1; i++) {
+          if (this.list[i].choice) {
+            address_id_list = address_id_list + this.list[i].address_id + ','
           }
         }
-
-        if(this.list[this.list.length-1].choice){
-            address_id_list=address_id_list+this.list[i].address_id
+        if (this.list[this.list.length - 1].choice) {
+          address_id_list = address_id_list + this.list[i].address_id
         }
-
-        var data={
-          order_id:this.order_id,
-          address_id:address_id_list
+        var data = {
+          order_id: this.order_id,
+          address_id: address_id_list
         }
         wepy.request({
           url: "api/order/addorderaddress",
           method: 'POST',
           data: data,
         }).then(res => {
-          if(res.code!="1"){
-            that.showAlert({content:res.msg});
-          }else {
+          if (res.code != "1") {
+            that.showAlert({
+              content: res.msg
+            });
+          } else {
             wx.navigateBack();
           }
         })
-
       },
-
-      choice_address(index){
-        this.list[index].choice=!this.list[index].choice;
+      choice_address(index) {
+        this.list[index].choice = !this.list[index].choice;
         this.$apply();
       },
-
-      go_to_add(){
+      go_to_add() {
         wx.navigateTo({
-          url:"add_member"
+          url: "/pages/member/add_member"
         })
       },
-
-      go_to_edit(index){
-        var address_id=this.list[index].address_id;
+      go_to_edit(index) {
+        var address_id = this.list[index].address_id;
         wx.navigateTo({
-          url:"add_member?address_id="+address_id
+          url: "/pages/member/add_member?address_id=" + address_id
         })
       },
-
-      del(index){
-        var data={
-          address_id:this.list[index].address_id,
+      del(index) {
+        var data = {
+          address_id: this.list[index].address_id,
         };
-        var that=this;
-        this.showAlert({title:"提示",content:"确认要删除吗？",confirm:function(){
+        var that = this;
+        this.showAlert({
+          title: "提示",
+          content: "确认要删除吗？",
+          confirm: function() {
             wepy.request({
               url: "api/address/delete",
               method: 'POST',
               data: data,
             }).then(res => {
-              if(res.code!="1"){
-                that.showAlert({content:res.msg});
-              }else {
-                that.list.splice(index,1);
+              if (res.code != "1") {
+                that.showAlert({
+                  content: res.msg
+                });
+              } else {
+                that.list.splice(index, 1);
                 that.$apply();
               }
             })
-          }});
-
-
+          }
+        });
       },
-
+    }
+    getaddresslist() {
+      wepy.request({
+        url: "api/address/lists",
+        method: 'POST',
+        data: {},
+      }).then(res => {
+        if (res.code != "1") {
+          this.showAlert({
+            content: res.msg
+          });
+        } else {
+          var index = 0;
+          this.list = [];
+          for (var i = 0; i < res.data.list.length; i++) {
+            var thisdata = res.data.list[i];
+            var choice = false;
+            for (var n = 0; n < this.detail.address.length; n++) {
+              if (this.detail.address[n].address_id == thisdata.address_id) {
+                choice = true;
+              }
+            }
+            this.list.push({
+              address_id: thisdata.address_id,
+              name: thisdata.name,
+              user_id: thisdata.user_id,
+              adress: thisdata.region.province + thisdata.region.city + thisdata.region.region + thisdata.detail,
+              phone: thisdata.phone,
+              region: {
+                province: thisdata.region.province,
+                city: thisdata.region.city,
+                region: thisdata.region.region,
+              },
+              detail: thisdata.detail,
+              choice: choice,
+            })
+          }
+          this.$apply();
+        }
+      })
+    }
+    onShow() {
+      this.getaddresslist()
     }
     onLoad(options) {
       if(!options){
         return;
       }
-
       if(options){
         this.order_id=options.order_id;
       }
-
       wepy.request({
         url: "api/order/detail",
         method: 'POST',
-        data: {order_id: options.order_id},
+        data: {
+          order_id: this.order_id
+        },
       }).then(res => {
-        if(res.code!="1"){
-          this.showAlert({content:res.msg});
+        if (res.code != "1") {
+          this.showAlert({
+            content: res.msg
+          });
           return
         }
-
         this.detail = res.data;
-
-        wepy.request({
-          url: "api/address/lists",
-          method: 'POST',
-          data: {},
-        }).then(res => {
-          if(res.code!="1"){
-            this.showAlert({content:res.msg});
-          }else {
-            var index=0;
-            this.list=[];
-            for(var i=0;i<res.data.list.length;i++){
-              var thisdata=res.data.list[i];
-              var choice=false;
-
-              for(var n=0;n<this.detail.address.length;n++) {
-                if (this.detail.address[n].address_id==thisdata.address_id){
-                  choice=true;
-                }
-              }
-
-              this.list.push({
-                address_id:thisdata.address_id,
-                name:thisdata.name,
-                user_id:thisdata.user_id,
-                adress:thisdata.region.province+thisdata.region.city+thisdata.region.region+thisdata.detail,
-                phone:thisdata.phone,
-                region:{
-                  province:thisdata.region.province,
-                  city:thisdata.region.city,
-                  region:thisdata.region.region,
-                },
-                detail:thisdata.detail,
-                choice:choice,
-              })
-
-            }
-            this.$apply();
-          }
-        })
+        this.getaddresslist()
       })
-
-
-
     }
-
   }
 </script>

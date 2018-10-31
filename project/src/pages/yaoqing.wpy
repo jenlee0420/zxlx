@@ -1,18 +1,15 @@
 <style lang="less">
-//   @import '../resource/less/layout.less';
-//   @import '../resource/less/photo.less';
-
+  //   @import '../resource/less/layout.less';
+  //   @import '../resource/less/photo.less';
   @footer-h: 106rpx;
-  #yaoqing{
+  #yaoqing {
     width: 100%;
     overflow-x: hidden;
   }
-
   .icon-44 {
     width: 44rpx;
     height: 44rpx;
   }
-
   .huabian {
     // .huabian-bg;
     background: url('@{imgbaseUrl}/sharebg.png') no-repeat;
@@ -44,7 +41,7 @@
           font-size: 30rpx;
           color: #595959;
           text-decoration: line-through;
-          letter-spacing:2rpx;
+          letter-spacing: 2rpx;
           height: 50rpx;
           line-height: 50rpx;
         }
@@ -59,24 +56,23 @@
         .pin-avatar {
           position: relative;
           image {
-              width: 88rpx;
-              height: 88rpx;
-              border-radius: 50%;
-              margin-right: 20rpx;
+            width: 88rpx;
+            height: 88rpx;
+            border-radius: 50%;
+            margin-right: 20rpx;
           }
           .bubble {
-              position: absolute;
-              left: -8rpx;
-              top: -12rpx;
-              padding: 2rpx 11rpx;
-              background: #e0b213;
-              font-size: 20rpx;
-              color: #fff;
-              height: 31rpx;
-              border-radius: 15rpx;
-              line-height: 31rpx;
+            position: absolute;
+            left: -8rpx;
+            top: -12rpx;
+            padding: 2rpx 11rpx;
+            background: #e0b213;
+            font-size: 20rpx;
+            color: #fff;
+            height: 31rpx;
+            border-radius: 15rpx;
+            line-height: 31rpx;
           }
-
         }
         .btn {
           width: 182rpx;
@@ -90,10 +86,8 @@
           background-color: #fff;
         }
       }
-
     }
   }
-
   .time-part {
     padding: 70rpx 48rpx 20rpx 48rpx;
     .btn {
@@ -103,7 +97,7 @@
       font-size: 30rpx;
       text-align: center;
       border-radius: 10rpx;
-      letter-spacing:2rpx;
+      letter-spacing: 2rpx;
       margin-bottom: 26rpx;
       height: 92rpx;
       line-height: 92rpx;
@@ -116,12 +110,10 @@
     }
   }
   .list {
-    padding: 0 20rpx;
-    // 游学组合
+    padding: 0 20rpx; // 游学组合
     .item {
       padding: 26rpx 6rpx 23rpx 6rpx;
-      border-top: 1rpx solid #e5e5e5;
-    //   .flexRow;
+      border-top: 1rpx solid #e5e5e5; //   .flexRow;
       .title {
         font-size: 24rpx;
         margin-right: 96rpx;
@@ -129,7 +121,7 @@
       .title2 {
         font-size: 26rpx;
         margin-bottom: 22rpx;
-        letter-spacing:2rpx
+        letter-spacing: 2rpx
       }
       .des {
         font-size: 22rpx;
@@ -139,13 +131,12 @@
         margin-left: 44rpx;
         width: 23rpx;
         image {
-          width:100%;
-          height:100%;
-          display:block;
+          width: 100%;
+          height: 100%;
+          display: block;
         }
       }
     }
-
     .item2 {
       height: 90rpx;
       padding: 0 6rpx;
@@ -160,7 +151,6 @@
       }
     }
   }
-
   .tuijian {
     background: #efeff4;
     .title {
@@ -169,9 +159,6 @@
       line-height: 100rpx;
     }
   }
-
-
-
 </style>
 <template>
   <view id="yaoqing">
@@ -190,7 +177,7 @@
           <view class="flexRow flex-jcenter pin-avatar">
             <text class="bubble">{{collage_detail.nickName}}</text>
             <image src="{{collage_detail.avatarUrl}}" mode="aspectFill" />
-                    <span class="public_icon1_wait_pin"></span>
+            <span class="public_icon1_wait_pin"></span>
           </view>
           <view class="btn mt30">点击抢购</view>
         </view>
@@ -200,8 +187,8 @@
     <!-- 倒计时部分 S -->
     <view class="flexCol time-part bg_fff">
       <button class="btn" open-type="share">
-        <span class="public_icon1_white_weixin mr20"></span> 分享给您的好友
-      </button>
+          <span class="public_icon1_white_weixin mr20"></span> 分享给您的好友
+        </button>
       <view class="tips">
         分享到3个群后，组成率高达98%
       </view>
@@ -234,84 +221,91 @@
     </view>
     <!-- 相似的列表 E -->
     <view class="flexCol tuijian">
-            <recommend tilte='精品推荐' :type="3"></recommend>
-        </view>
+      <recommend tilte='精品推荐' :type="3"></recommend>
+    </view>
+    <shareBox />
   </view>
 </template>
 <script>
   import wepy from 'wepy'
   import Mixin from '@/mixins/global'
   import recommend from '@/components/recommend'
+  import shareBox from '@@/shareBox'
   export default class listYaoqing extends wepy.page {
-   config = {}
-        components = {
-            recommend
+    config = {}
+    components = {
+      recommend,
+      shareBox
+    }
+    mixins = [Mixin]
+    data = {
+      order_collage_id: 0,
+      collage_detail: {},
+      order_id: 0,
+      detail: 0,
+    }
+    methods = {}
+    onLoad(options) {
+      if (!options) {
+        return
+      }
+      if (!options.order_id) {
+        return
+      }
+      this.order_id = options.order_id
+      wepy.request({
+        url: "api/order/detail",
+        method: 'POST',
+        data: {
+          order_id: this.order_id
+        },
+      }).then(res => {
+        if (res.code != "1") {
+          this.showAlert({
+            content: res.msg
+          });
+          return
         }
-        mixins = [Mixin]
-        data = {
-          order_collage_id:0,
-          collage_detail:{},
-          order_id:0,
-          detail:0,
-        }
-        methods = {}
-        onLoad(options) {
-           if (!options){
-             return
-           }
-           if (!options.order_id){
-             return
-           }
-           this.order_id=options.order_id
-          wepy.request({
-            url: "api/order/detail",
-            method: 'POST',
-            data: {
-              order_id: this.order_id
-            },
-          }).then(res => {
-            if (res.code != "1") {
-              this.showAlert({
-                content: res.msg
-              });
-              return
-            }
-            this.order_collage_id=res.data.order_collage_id;
-            this.detail=res.data;
-            this.$apply();
-            wepy.request({
-              url: "api/order/collagedetail",
-              method: 'POST',
-              data: {
-                order_collage_id: this.order_collage_id
-              },
-            }).then(res => {
-              if (res.code != "1") {
-                this.showAlert({
-                  content: res.msg
-                });
-                return
-              }
-              this.collage_detail=res.data.collage_detail;
-              this.$apply();
-            })
-
-          })
-
-          this.$invoke('recommend','getlist')
-        }
-
-        pageInit(){
-
-        }
-
-        onShareAppMessage(obj){
-          var re={
-            title:this.detail.goods[0].goods_name,
-            path:"/pages/join?order_collage_id="+this.order_collage_id,
-            imageUrl:this.collage_detail.image,
+        this.order_collage_id = res.data.order_collage_id;
+        this.detail = res.data;
+        this.$apply();
+        wepy.request({
+          url: "api/order/collagedetail",
+          method: 'POST',
+          data: {
+            order_collage_id: this.order_collage_id
+          },
+        }).then(res => {
+          if (res.code != "1") {
+            this.showAlert({
+              content: res.msg
+            });
+            return
           }
-          return re
-        }
+          this.collage_detail = res.data.collage_detail;
+          this.$apply();
+        })
+      })
+      this.$invoke('recommend', 'getlist')
+      wepy.removeStorage({
+        key: 'payflag'
+      })
+    }
+    pageInit() {
+    }
+    onShareAppMessage(obj) {
+      var re = {
+        title: this.detail.goods[0].goods_name,
+        path: "/pages/join?order_collage_id=" + this.order_collage_id,
+        imageUrl: this.collage_detail.image,
+      }
+      return re
+    }
+    onHide() {
+      this.$invoke('shareBox', 'clearThisTimer')
+    }
+    onUnload() {
+      this.$invoke('shareBox', 'clearThisTimer')
+    }
   }
 </script>

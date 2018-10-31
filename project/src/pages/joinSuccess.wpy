@@ -169,10 +169,12 @@
     import wepy from 'wepy'
     import Mixin from '@/mixins/global'
     import recommend from '@/components/recommend'
+    import shareBox from '@@/shareBox'
     export default class joinSuccess extends wepy.page {
         config = {}
         components = {
-            recommend
+            recommend,
+            shareBox
         }
         mixins = [Mixin]
         data = {
@@ -228,6 +230,14 @@
             this.collage_detail = res.data.collage_detail;
             this.$apply();
           })
+        }
+        onShareAppMessage(obj){
+          var re={
+            title:this.collage_detail.goods_name,
+            path:"/pages/join?order_collage_id="+this.order_collage_id,
+            imageUrl:this.collage_detail.image,
+          }
+          return re
         }
     }
 </script>

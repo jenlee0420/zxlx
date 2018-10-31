@@ -369,6 +369,7 @@
       showPopup:false,
       order_id:0,
       order_collage_id:0,
+      options:{}
     };
     components = {
       notice
@@ -443,6 +444,9 @@
           order_collage_id:this.order_collage_id,
         };
         console.log('buy_type:',this.buy_type,this.order_collage_id)
+        wepy.removeStorage({
+                key: 'payflag'
+            })
         wepy.request({
           url: "api/order/paynow",
           method: 'POST',
@@ -476,7 +480,7 @@
 
               }else{
                 wepy.navigateTo({
-                  url: '/pages/mycenter/orderlist?type=1',
+                  url: '/pages/mycenter/orderlist?type=2&isshow=show',
                 })
               }
             },
@@ -567,6 +571,34 @@
       return re
     };
 
+    getbuyInfo(){
+      this.buy_type=this.options.buy_type;
+      this.goods_sku_id=this.options.goods_sku_id;
+      this.order_collage_id=this.options.order_collage_id;
+      var data={
+        goods_id:this.options.goods_id,
+        goods_num:this.options.good_number,
+        goods_sku_id:this.options.goods_sku_id,
+        buy_type:this.options.buy_type,
+        order_collage_id:this.options.order_collage_id,
+      };
+
+      wepy.request({
+        url: "api/order/buynow",
+        method: 'POST',
+        data: data,
+      }).then(res => {
+        if(res.code != "1"){
+          this.showAlert({ content: res.msg});
+          return
+        }
+        if(res.data.error_msg){
+          this.showAlert({ content: res.data.error_msg});
+        }
+        this.detail=res.data;
+        this.$apply();
+      })
+    }
     onLoad(options){
       if(!options){
         return;
@@ -589,42 +621,19 @@
         return;
       }
 
-      this.buy_type=options.buy_type;
-      this.goods_sku_id=options.goods_sku_id;
-      this.order_collage_id=options.order_collage_id;
-      var data={
-        goods_id:options.goods_id,
-        goods_num:options.good_number,
-        goods_sku_id:options.goods_sku_id,
-        buy_type:options.buy_type,
-        order_collage_id:options.order_collage_id,
-      };
+      this.options = options;
 
-      wepy.request({
-        url: "api/order/buynow",
-        method: 'POST',
-        data: data,
-      }).then(res => {
-        if(res.code != "1"){
-          this.showAlert({ content: res.msg});
-          return
-        }
-        this.detail=res.data;
-        this.$apply();
-      })
-      wx.setStorageSync("payflag",'true');
-    };
+      this.getbuyInfo()
+      wx.setStorageSync("payflag",'true'); 
+    }
 
     onShow(){
       if(wx.getStorageSync("address")!=""){
         var obj=JSON.parse(wx.getStorageSync("address"));
-        // console.log(obj,this.detail.address.address_id)
         this.detail.address=obj;
-        // this.detail.address.address_id=obj.address_id;
-        // this.detail.address.name=obj.name;
-        // this.detail.address.phone=obj.phone;
-        // this.detail.address.region=obj.region;
-        // this.detail.address.detail=obj.detail;
+      }
+      else{
+        this.getbuyInfo()
       }
       this.$apply();
     }

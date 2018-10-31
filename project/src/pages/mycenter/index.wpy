@@ -204,6 +204,9 @@
             this.getuserinfo()
             // this.showSuccess('需求已成功提交')
         }
+        onShow(){
+            this.getuserinfo()
+        }
         //下拉刷新 
         onPullDownRefresh(e) {
             this.getuserinfo()

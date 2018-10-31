@@ -85,7 +85,7 @@
       <myradio class="refund_view_view_radio_group" :syncList.sync="refund_reson" vbind="getradiodata"></myradio>
     </view>
     <view class="refund_view_view flex flex-between mr30">
-      <text class="refund_view_text">申请金额</text>
+      <text class="refund_view_text req">申请金额</text>
       <input class="refund_input" placeholder="按照须知需求处理" type="digit" value="{{money}}" @input="input_money" />
       <text class="c929292">最高￥{{order_detail.pay_price}}</text>
     </view>
@@ -96,7 +96,7 @@
       </view>
     </view>
     <view class="refund_view_view">
-      <text class="refund_view_text">联系电话</text>
+      <text class="refund_view_text req">联系电话</text>
       <input class="refund_input" placeholder="电话号码" type="number" vale="{{phone}}" @input="input_phone" />
     </view>
     <view class="refund_view_border">

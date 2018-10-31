@@ -687,6 +687,7 @@
         <!-- 查看更多组团 e-->
         <notice />
         <backtoHome />
+        <shareBox />
         <span class="public_icon1_to_top" @tap="scrollTo(0)"></span>
     </view>
 </template>
@@ -698,6 +699,7 @@
     import notice from '@/components/notice'
     import popWin from '@/components/popWin'
     import backtoHome from '@@/backtoHome'
+    import shareBox from '@@/shareBox'
     export default class goods_detail extends wepy.page {
         config = {}
         mixins = [Mixin]
@@ -757,12 +759,16 @@
             comments,
             notice,
             popWin,
-            backtoHome
+            backtoHome,
+            shareBox
         }
         events = {
             changeactiveIndex(index) {
                 this.activeIndex = index;
                 this.toView = 'scroll' + index;
+            },
+            sharefun(){
+                
             }
         }
         computed = {
@@ -1151,6 +1157,12 @@
                     console.log('暂时放弃')
                 },
             })
+        }
+        onHide(){
+            this.$invoke('shareBox','clearThisTimer')
+        }
+        onUnload(){
+            this.$invoke('shareBox','clearThisTimer')
         }
     }
     //  PageInit(){

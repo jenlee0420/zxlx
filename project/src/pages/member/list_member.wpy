@@ -1,6 +1,7 @@
 <style lang="less">
   #memberlist{
     border-top: 1rpx solid @bColor;
+    padding-bottom:100rpx;
   }
   .list_menber_view_view_btn{
     border-radius: 10rpx;

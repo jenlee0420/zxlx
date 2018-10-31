@@ -64,10 +64,10 @@
 <template>
     <view class="container" id="dingzhi">
         <view class="itemlable"><text>定制描述</text></view>
-        <view class="inputview m0"><textarea placeholder-style="color:#bbb" placeholder="请在此定制您想要定制的活动或行程" @input="getVal('describe')" /></view>
+        <view class="inputview m0"><textarea placeholder-style="color:#bbb" placeholder="请在此定制您想要定制的活动或行程" value="{{describe}}" @input="getVal('describe')" /></view>
         <view class="itemlable"><text>人数及往返时间</text></view>
         <view class="inputview">
-            <span>参与人数</span><input type="number" @input="getVal('number')" />
+            <span>参与人数</span><input type="number" @input="getVal('number')" value="{{number}}"/>
         </view>
         <view class="inputview">
             <span>出发日期</span>
@@ -87,10 +87,10 @@
         </view>
         <view class="itemlable"><text>联系人信息</text></view>
         <view class="inputview">
-            <span>联系人姓名</span><input type="text" @input="getVal('contacts')" />
+            <span class="req ml10">联系人姓名</span><input type="text" value="{{contacts}}" @input="getVal('contacts')" maxlength="10" />
         </view>
         <view class="inputview">
-            <span>手机号</span><input type="number" @input="getVal('mobile')" />
+            <span class="req ml10">手机号</span><input type="number" value="{{mobile}}" @input="getVal('mobile')" maxlength="20" />
         </view>
         <button class="fullbtn btn mb30" @tap="submit">提交定制需求</button>
         <notice />
@@ -131,10 +131,10 @@
                 wepy.request({
                     url: 'api/customized/add',
                     method: 'POST',
-                    data:{
+                    data: {
                         start_time: this.transdate2Time(this.sdate),
                         return_time: this.transdate2Time(this.edate),
-                        contacts:this.contacts,
+                        contacts: this.contacts,
                         mobile: this.mobile,
                         describe: this.describe,
                         number: this.number
@@ -142,12 +142,12 @@
                 }).then(res => {
                     if (res.code == 1) {
                         this.showSuccess(res.msg);
-                         this.sdate =''
-                        this.edate =''
-                        this.contacts =''
-                       this.mobile =''
-                         this.describe =''
-                        this.number =''
+                        this.sdate = ''
+                        this.edate = ''
+                        this.contacts = ''
+                        this.mobile = ''
+                        this.describe = ''
+                        this.number = ''
                     } else {
                         wepy.showModal({
                             content: res.msg,

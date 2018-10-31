@@ -74,6 +74,7 @@
 .mt50{margin-top: 50rpx}
 .mt60{margin-top: 60rpx}
 .ml12{margin-left: 12rpx}
+.ml10{margin-left: 10rpx}
 .ml20{margin-left: 20rpx}
 .ml30{margin-left: 30rpx}
 .ml32{margin-left: 32rpx}
@@ -159,6 +160,15 @@
     line-height: 78rpx;
     padding: 0 25rpx;
     color:#333;
+}
+
+.req{
+    &:before{
+        content:'*';
+        color: #ff0000;
+        margin-left: -20rpx;
+        padding-right: 10rpx;
+    }
 }
 
 /* 富文本样式　*/

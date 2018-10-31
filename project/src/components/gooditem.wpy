@@ -1,44 +1,61 @@
 <style lang="less">
-  #proditem{
+  #proditem {
     // padding: 20rpx;
     background-color: #fff;
     border-radius: 10rpx;
     margin-bottom: 20rpx;
-    .photoview{
-       width: 100%;
-       height: 370rpx;
-       position: relative;
-       border-radius:10rpx 10rpx 0 0;
-       image{
-         border-radius:10rpx 10rpx 0 0;
-       }
-       .toptext{
-         color:#fff;
-         font-size: 22rpx;
-         left:12rpx;
-         top:3rpx;
-       }
-       .public_icon1_hot_sale{
-         left:10rpx;
-         bottom:55rpx
-       }
-       .bottomtext{
-         left:-7rpx;bottom:0;
-         font-size: 22rpx;
-         color: #fff;
-         display: flex;
-         >span{display: inline-block;}
+    .photoview {
+      width: 100%;
+      height: 370rpx;
+      position: relative;
+      border-radius: 10rpx 10rpx 0 0;
+      image {
+        border-radius: 10rpx 10rpx 0 0;
+      }
+      .toptext {
+        color: #fff;
+        font-size: 22rpx;
+        left: 12rpx;
+        top: 3rpx;
+      }
+      .propaganda {
+        position: absolute;
+        left: 10rpx;
+        bottom: 55rpx;
+        display: flex;
+        flex-direction: column;
+        .public_icon1_hot_sale {}
+        .jingpin {}
+      }
+      .bottomtext {
+        left: -7rpx;
+        bottom: 0;
+        font-size: 22rpx;
+        color: #fff;
+        display: flex;
+        >span {
+          display: inline-block;
         }
+      }
     }
-    .itemcontent{
-      padding:20rpx;
-      .itemdesc{display: flex;line-height: 28rpx;word-break: break-all}
-      .itemprice{letter-spacing: 2rpx;}
+    .itemcontent {
+      padding: 20rpx;
+      .itemdesc {
+        display: flex;
+        line-height: 28rpx;
+        word-break: break-all
+      }
+      .itemprice {
+        letter-spacing: 2rpx;
+      }
     }
-    .itemlabel{
-        display:flex;
-        flex-flow:wrap;
-        text{white-space: nowrap;margin-top: 10rpx}
+    .itemlabel {
+      display: flex;
+      flex-flow: wrap;
+      text {
+        white-space: nowrap;
+        margin-top: 10rpx
+      }
     }
   }
 </style>
@@ -46,43 +63,45 @@
 <template>
   <view id="proditem" bindtap="navDetail({{goodsitem.goods_id}})">
     <view class="photoview defaultImg">
-        <text class="toptext abs">{{goodsitem.subtitle_goods_name}}</text>
-        <span class="public_icon1_hot_sale abs" wx:if="{{goodsitem.propaganda == 1}}"></span>
-        <view class="bottomtext abs" wx:if="{{goodsitem.play_day}}">
-          <span class="public_icon1_play_day1"></span>
-          <span class="public_icon1_play_day2">{{goodsitem.play_day}}</span>
-          <span class="public_icon1_play_day3"></span>
-          </view>
-        <!-- <view class="photo"> -->
-          <image src="{{goodsitem.image.length>0?goodsitem.image[0].file_path:baseServerImg}}" mode="aspectFill"/>
-          <!-- </view> -->
+      <text class="toptext abs">{{goodsitem.subtitle_goods_name}}</text>
+      <view class="propaganda">
+        <span class="public_icon1_hot_sale" wx:if="{{goodsitem.propaganda == 1}}"></span>
+        <span class="jingpin" wx:if="{{goodsitem.propaganda == 2}}"></span>
+      </view>
+      <view class="bottomtext abs" wx:if="{{goodsitem.play_day}}">
+        <span class="public_icon1_play_day1"></span>
+        <span class="public_icon1_play_day2">{{goodsitem.play_day}}</span>
+        <span class="public_icon1_play_day3"></span>
+      </view>
+      <!-- <view class="photo"> -->
+      <image src="{{goodsitem.image.length>0?goodsitem.image[0].file_path:baseServerImg}}" mode="aspectFill" />
+      <!-- </view> -->
     </view>
     <view class="itemcontent">
-        <text class="itemtitle fs26 c333">{{goodsitem.goods_name}}</text>
-        <view class="itemprice"><span class="fs30 cf71414 mr20">￥{{goodsitem.goods_min_price}}起</span><span class="fs22 cb4b4b4">已售{{goodsitem.goods_sales}}人次</span></view>
-        <text class="itemdesc fs22 cb4b4b4">{{goodsitem.describe}}</text>
-        <text class="itemdesc fs22 cb4b4b4">供应商：{{goodsitem.source_name}}</text>
-        <view class="itemlabel">
-            <text class="redlabel" wx:if="{{goodsitem.introduction}}">{{goodsitem.introduction}}</text>
-            <text class="redlabel" wx:if="{{goodsitem.is_own_business == 1}}">知兮乐兮自营</text>
-            <text class="redlabel">{{goodsitem.category.name}}</text>
-            <repeat for="{{goodsitem.label_name}}" index="index" item="item" key="key">
-              <text class="greenlabel">{{item.name}}</text>
-            </repeat>
-        </view>
+      <text class="itemtitle fs26 c333">{{goodsitem.goods_name}}</text>
+      <view class="itemprice"><span class="fs30 cf71414 mr20">￥{{goodsitem.goods_min_price}}起</span><span class="fs22 cb4b4b4">已售{{goodsitem.goods_sales}}人次</span></view>
+      <text class="itemdesc fs22 cb4b4b4">{{goodsitem.describe}}</text>
+      <text class="itemdesc fs22 cb4b4b4">供应商：{{goodsitem.source_name}}</text>
+      <view class="itemlabel">
+        <text class="redlabel" wx:if="{{goodsitem.introduction}}">{{goodsitem.introduction}}</text>
+        <text class="redlabel" wx:if="{{goodsitem.is_own_business == 1}}">知兮乐兮自营</text>
+        <text class="redlabel">{{goodsitem.category.name}}</text>
+        <repeat for="{{goodsitem.label_name}}" index="index" item="item" key="key">
+          <text class="greenlabel">{{item.name}}</text>
+        </repeat>
+      </view>
     </view>
   </view>
 </template>
 
 <script>
-import wepy from 'wepy'
-import Mixin from '@/mixins/global'
-export default class gooditem extends wepy.component {
-  config = {
-  }
-  components = {}
-  mixins = [Mixin]
-  props = {
+  import wepy from 'wepy'
+  import Mixin from '@/mixins/global'
+  export default class gooditem extends wepy.component {
+    config = {}
+    components = {}
+    mixins = [Mixin]
+    props = {
       goodsitem: {
         type: Object,
         default: () => {
@@ -90,14 +109,14 @@ export default class gooditem extends wepy.component {
         }
       }
     }
-  data = {
-  }
-  methods = {
-    navDetail(id){
-      wepy.navigateTo({url:'/pages/goods_detail?id='+id})
+    data = {}
+    methods = {
+      navDetail(id) {
+        wepy.navigateTo({
+          url: '/pages/goods_detail?id=' + id
+        })
+      }
     }
+    onLoad() {}
   }
-  onLoad() {
-  }
-}
 </script>

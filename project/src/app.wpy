@@ -23,12 +23,12 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
-        'pages/friendpay',
+        
         'pages/index',
         'pages/yaoqing', 
         'pages/wxlogin',
         'pages/search_page',
-        
+        'pages/friendpay',
         'pages/sharefriend',
         'pages/join',
         'pages/joinSuccess',
