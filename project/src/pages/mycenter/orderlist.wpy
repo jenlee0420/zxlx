@@ -177,7 +177,8 @@
             page_size: 10,
         }
         events = {
-            flush() {
+            delrefresh() {
+                //删除后更新当前列表
                 console.log(this.TypeList[this.currentIndex].key),
                 this.TypeList[this.currentIndex].current_page = 1
                     this.loadorderlist({
@@ -186,6 +187,13 @@
                         data_type: this.TypeList[this.currentIndex].key,
                     }, this.currentIndex);
             },
+            cancelrefresh(){
+                //取消订单，跳到取消列表
+                var index = 4
+                this.TypeList[index].current_page = 1;
+                this.currentIndex = index;
+                this.currType = this.TypeList[index].key;
+            }
         }
         methods = {
             changeType(index) {

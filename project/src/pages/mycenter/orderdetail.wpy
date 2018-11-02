@@ -162,6 +162,7 @@
             <text wx:if="{{order_status=='20'}}">订单已取消</text>
             <text wx:if="{{order_status=='30'}}">买家已完成</text>
             <text wx:if="{{order_status=='40'}}">等待买家使用</text>
+            <text wx:if="{{order_status=='90' || order_status=='60'}}">退款中</text>
             <span class="public_icon_order_wait_pay" wx:if="{{order_status=='10'}}"></span>
             <span class="public_icon_order_cancel" wx:if="{{order_status=='20'}}"></span>
             <span class="public_icon4_complete_buy" wx:if="{{order_status=='30'}}"></span>
@@ -287,12 +288,16 @@
             comment_list:[],
         }
         events = {
-            flush() {
+            delrefresh() {
                 //删除订单后跳转到已取消列表
-                wepy.navigateTo({
+                wepy.refresh({
                   url: '/pages/mycenter/orderlist?type=4&isshow=show"',
                 })
             },
+            cancelrefresh(){
+                //刷新当前页面
+                this.getDetail()
+            }
         }
         methods = {
             navDetail(id) {
@@ -311,26 +316,8 @@
                 this.$apply();
             }
         }
-        onLoad(options) {
-            if (options.order_id == undefined) {
-                this.showAlert({
-                    title: "错误"
-                });
-                return
-            }
-            this.order_id = options.order_id;
-        }
-        PageInit() {
-        }
-
-        onShow(){
-          if (!this.order_id) {
-            this.showAlert({
-              title: "错误 order_id"
-            });
-            return
-          }
-          wepy.request({
+        getDetail(){
+            wepy.request({
             url: "api/order/detail",
             method: 'POST',
             data: {
@@ -368,6 +355,27 @@
               })
             }
           })
+        }
+        onLoad(options) {
+            if (options.order_id == undefined) {
+                this.showAlert({
+                    title: "错误"
+                });
+                return
+            }
+            this.order_id = options.order_id;
+        }
+        PageInit() {
+        }
+
+        onShow(){
+          if (!this.order_id) {
+            this.showAlert({
+              title: "错误 order_id"
+            });
+            return
+          }
+          this.getDetail()
         }
     }
 </script>
