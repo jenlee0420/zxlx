@@ -44,7 +44,7 @@
 </style>
 
 <template>
-    <view class="container" id="collectionItem">
+    <view class="container" id="collectionItem" bindtap="navDetail({{goodsitem.goods_id}}})">
         <view class="imgbox">
             <image src="{{goodsitem.image.length>0?goodsitem.image[0].file_path:baseServerImg}}" mode="aspectFill" />
         </view>
@@ -60,7 +60,7 @@
             </view>
             <view class="flex flex-between flex-algin-center">
                 <text class="maincolor fs30">￥{{goodsitem.goods_min_price}}起</text>
-                <button class="btn h60" bindtap="navDetail({{goodsitem.goods_id}}})">发起组团</button>
+                <button class="btn h60" >发起组团</button>
             </view>
         </view>
     </view>

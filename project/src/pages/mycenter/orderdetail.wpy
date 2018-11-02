@@ -167,6 +167,7 @@
             <span class="public_icon_order_cancel" wx:if="{{order_status=='20'}}"></span>
             <span class="public_icon4_complete_buy" wx:if="{{order_status=='30'}}"></span>
             <span class="public_icon_order_nouse" wx:if="{{order_status=='40'}}"></span>
+            <span class="public_icon_refund" wx:if="{{order_status=='90' || order_status=='60'}}"></span>
         </view>
         <view class="address" wx:if="{{order_status=='10'||order_status=='20'}}">
             <span class="public_icon2_location2"></span>

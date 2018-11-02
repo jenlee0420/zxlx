@@ -592,6 +592,7 @@
           this.showAlert({ content: res.msg});
           return
         }
+        console.log(res.data)
         if(res.data.error_msg){
           this.showAlert({ content: res.data.error_msg});
         }
@@ -631,6 +632,7 @@
       if(wx.getStorageSync("address")!=""){
         var obj=JSON.parse(wx.getStorageSync("address"));
         this.detail.address=obj;
+        console.log(obj)
       }
       else{
         this.getbuyInfo()

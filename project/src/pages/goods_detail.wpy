@@ -508,7 +508,7 @@
 <template>
     <view class="{{modalIsShow ? 'modalShow' : ''}}">
         <TopNav :activeIndex.sync="activeIndex" :words.sync="good_detail"></TopNav>
-        <scroll-view scroll-y style="height: calc(100% - 188rpx);" class="scrollView" @scroll="thisScroll" scroll-into-view="{{toView}}" scroll-top="{{thisTop}}">
+        <scroll-view scroll-y style="height: calc(100% - 188rpx);" class="scrollView" @scroll="thisScroll" scroll-into-view="{{toView}}" scroll-top="{{thisTop}}" scroll-with-animation="{{true}}">
             <!-- 介绍卡部分 S -->
             <view class="content" id="scroll0">
                 <view class="video-container">

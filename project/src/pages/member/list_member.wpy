@@ -265,7 +265,7 @@
       var re={
         title:"填写地址",
         path:"/pages/member/add_member?user_id="+wx.getStorageSync("userid"),
-        imageUrl:"",
+        imageUrl:this.imgBaseUrl + 'membershare.png',
       }
       return re
     };

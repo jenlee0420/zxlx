@@ -215,7 +215,7 @@
             var re = {
                 title: '爆款产品限时抢购',
                 path: "/pages/index",
-                imageUrl: this.imgBaseUrl + 'logo.png',
+                imageUrl: this.imgBaseUrl + 'indexshare.png',
             }
             return re
         };
