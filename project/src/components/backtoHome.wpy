@@ -1,12 +1,5 @@
 <style lang="less">
-  #homebtn{
-    position: fixed;
-    top:30rpx;
-    left:-59rpx;
-    span{
-      display: inline-block
-    }
-  }
+
 </style>
 
 <template>

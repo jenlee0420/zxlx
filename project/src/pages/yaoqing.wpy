@@ -224,6 +224,9 @@
       <recommend tilte='精品推荐' :type="3"></recommend>
     </view>
     <shareBox />
+      <view id="homebtn">
+    <span class="public_icon1_to_home" @tap="backHome"></span>
+  </view>
   </view>
 </template>
 <script>
@@ -244,7 +247,11 @@
       order_id: 0,
       detail: 0,
     }
-    methods = {}
+    methods = {
+      backHome(){
+        wepy.reLaunch({url:'/pages/index'})
+      }
+    }
     onLoad(options) {
       if (!options) {
         return

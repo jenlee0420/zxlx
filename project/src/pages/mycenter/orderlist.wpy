@@ -73,7 +73,9 @@
                 <block wx:for="{{TypeList}}" wx:for-item="itemb" wx:key="indexa" wx:for-index="indexa">
                     <!-- <repeat for="{{TypeList}}" index="indexa" item="itemb" key="indexa"> -->
                     <swiper-item>
-                        <scroll-view scroll-y @scrolltolower="nextpage({{indexa}})" style="height:100%">
+                        <scroll-view scroll-y @scrolltolower="nextpage({{indexa}})" style="height:100%" scroll-with-animation="{{true}}" 
+                        scroll-top="{{thisScrollIndex}}"
+                        @scroll="thisScroll" >
                             <view class="main-scroll" wx:if="{{currType == itemb.key}}">
                                 <repeat for="{{itemb.list}}" index="index" item="item" key="key">
                                     <!-- 订单内容 -->
@@ -100,8 +102,17 @@
                                                 </view>
                                             </view>
                                         </block>
-                                        <view class="itempay">
-                                            实付：￥{{item.total_price}}
+                                        <view class="itempay flex flex-between">
+                                            <view class="flexRow" wx:if="{{data_type == 'noused' }}">
+                                                <view class="collageImage">
+                                                    <block wx:for="{{item.collage_list}}" wx:for-index="index2" wx:for-item="item2" wx:key="{{index2}}">
+                                                        <image src="{{item2.avatarUrl}}" wx:if="{{index2 < 6}}" />
+                                                    </block>
+                                                    <text wx:if="{{item.collage_list.lenght > 6}}">....</text>
+                                                </view>
+                                                <text>还差{{item.lack_num}}人成团</text>
+                                            </view>
+                                            <text>实付：￥{{item.total_price}}</text>
                                         </view>
                                         <orderBtn :orderitem="item" />
                                     </view>
@@ -121,7 +132,7 @@
                 </block>
             </swiper>
         </view>
-        <span class="public_icon1_to_top" @tap="scrollTop"></span>
+        <span class="public_icon1_to_top" @tap="scrollTo(0)"></span>
     </view>
 </template>
 
@@ -139,7 +150,8 @@
         }
         mixins = [Mixin]
         data = {
-            isshow:"",
+            thisScrollIndex: 0,
+            isshow: "",
             loading: true,
             TypeList: [{
                 name: '全部',
@@ -180,14 +192,14 @@
             delrefresh() {
                 //删除后更新当前列表
                 console.log(this.TypeList[this.currentIndex].key),
-                this.TypeList[this.currentIndex].current_page = 1
-                    this.loadorderlist({
-                        per_page: this.page_size,
-                        page: 1,
-                        data_type: this.TypeList[this.currentIndex].key,
-                    }, this.currentIndex);
+                    this.TypeList[this.currentIndex].current_page = 1
+                this.loadorderlist({
+                    per_page: this.page_size,
+                    page: 1,
+                    data_type: this.TypeList[this.currentIndex].key,
+                }, this.currentIndex);
             },
-            cancelrefresh(){
+            cancelrefresh() {
                 //取消订单，跳到取消列表
                 var index = 4
                 this.TypeList[index].current_page = 1;
@@ -196,6 +208,18 @@
             }
         }
         methods = {
+            scrollTo() {
+                
+                this.thisScrollIndex = 0
+                this.$apply()
+                
+            },
+            thisScroll(e){
+                this.thisTop = e.detail.scrollTop
+                if(this.thisTop >0 &&  this.thisScrollIndex == 0 ){
+                    this.thisScrollIndex = this.thisTop
+                }
+            },
             changeType(index) {
                 this.TypeList[index].current_page = 1;
                 this.currentIndex = index;
@@ -211,12 +235,12 @@
             },
             to_detail(order_id) {
                 console.log(order_id)
-                 wx.navigateTo({
-                     url: "orderdetail?order_id=" + order_id
-                 })
+                wx.navigateTo({
+                    url: "orderdetail?order_id=" + order_id
+                })
             },
             nextpage(index) {
-                if(this.TypeList[index].list.length >= this.TypeList[index].totalCount){
+                if (this.TypeList[index].list.length >= this.TypeList[index].totalCount) {
                     return
                 }
                 this.loadorderlist({
@@ -256,8 +280,7 @@
                 this.TypeList[index].total_page = res.data.list.last_page;
                 this.TypeList[index].totalCount = res.data.list.total
                 //last page
-                if (this.TypeList[index].current_page == res.data.list.last_page) {
-                }
+                if (this.TypeList[index].current_page == res.data.list.last_page) {}
                 // res = res.data.list;
                 this.TypeList[index].list = this.TypeList[index].list.concat(res.data.list.data)
                 // for (var i = 0; i < res.data.length; i++) {
@@ -270,32 +293,28 @@
                 this.$apply();
             })
         }
-        getTypeIndex() {
-        }
+        getTypeIndex() {}
         onLoad(option) {
-            if(option && option.type){
+            if (option && option.type) {
                 this.currentIndex = option.type
             }
-
-            if(option&&option.isshow){
-              this.isshow=option.isshow;
+            if (option && option.isshow) {
+                this.isshow = option.isshow;
             }
         }
-//        PageInit(opation) {
-//
-//        }
-
-        onShow(){
-          if(this.isshow!=""){
-            return;
-          }
-          this.loadorderlist({
-            per_page: this.page_size,
-            page: 1,
-            data_type:this.TypeList[this.currentIndex].key,
-          }, this.currentIndex);
+        //        PageInit(opation) {
+        //
+        //        }
+        onShow() {
+            if (this.isshow != "") {
+                return;
+            }
+            this.loadorderlist({
+                per_page: this.page_size,
+                page: 1,
+                data_type: this.TypeList[this.currentIndex].key,
+            }, this.currentIndex);
         }
-
         onPullDownRefresh(e) {
             this.loadorderlist({
                 per_page: this.page_size,

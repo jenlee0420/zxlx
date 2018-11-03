@@ -23,7 +23,6 @@
       pages: [
         // 'pages/icon',
         //'pages/test',
-        
         'pages/index',
         'pages/yaoqing', 
         'pages/wxlogin',
