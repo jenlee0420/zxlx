@@ -224,9 +224,7 @@
       <recommend tilte='精品推荐' :type="3"></recommend>
     </view>
     <shareBox />
-      <view id="homebtn">
-    <span class="public_icon1_to_home" @tap="backHome"></span>
-  </view>
+      <backHome />
   </view>
 </template>
 <script>
@@ -234,11 +232,13 @@
   import Mixin from '@/mixins/global'
   import recommend from '@/components/recommend'
   import shareBox from '@@/shareBox'
+  import backHome from '@@/backtoHome1'
   export default class listYaoqing extends wepy.page {
     config = {}
     components = {
       recommend,
-      shareBox
+      shareBox,
+      backHome
     }
     mixins = [Mixin]
     data = {

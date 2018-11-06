@@ -47,7 +47,8 @@
         'pages/mycenter/about',
         'pages/goods_detail',
         'pages/custom',
-        'pages/refund'
+        'pages/refund',
+        'pages/instructions'
       ],
       tabBar: {
         color: '#949393',

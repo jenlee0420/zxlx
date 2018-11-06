@@ -913,7 +913,7 @@
                 if (res) {
                     if(!this.goods_sku_id){
                         this.showAlert({
-                            content: '请选择商品规格'
+                            content: '请选择'+this.good_detail.combination_one+'商品规格'
                         });
                     }else{
                         this.open_class = false

@@ -213,7 +213,7 @@
         }
         onShareAppMessage() {
             var re = {
-                title: '爆款产品限时抢购',
+                title: '快乐游学就用知兮乐兮',
                 path: "/pages/index",
                 imageUrl: this.imgBaseUrl + 'indexshare.png',
             }

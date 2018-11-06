@@ -75,10 +75,17 @@
     margin-right: 35rpx;
     color: #f8280d;
   }
+  .topword{
+    background-color: #ce4031;
+    padding: 25rpx 35rpx;
+    font-size: 24rpx;
+    color: #fff;
+  }
 </style>
 
 <template>
   <view class="container" id="memberlist">
+    <view class="topword">点击选择出行人，方便联系哦</view>
     <view class="list_menber_view_view">
       <view class="list_menber_view_view_btn_self" @tap="go_to_add">
         <icon class="public_icon_add_traveller"></icon>

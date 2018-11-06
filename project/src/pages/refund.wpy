@@ -267,6 +267,7 @@
           });
         }
         this.order_detail = res.data
+        this.money = this.order_detail.pay_price
         this.$apply()
       })
     }

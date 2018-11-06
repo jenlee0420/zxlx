@@ -163,6 +163,7 @@
         <view class="flexCol tuijian">
             <recommend tilte='精品推荐' :type="3"></recommend>
         </view>
+        <backHome />
     </view>
 </template>
 <script>
@@ -170,11 +171,13 @@
     import Mixin from '@/mixins/global'
     import recommend from '@/components/recommend'
     import shareBox from '@@/shareBox'
+    import backHome from '@@/backtoHome1'
     export default class joinSuccess extends wepy.page {
         config = {}
         components = {
             recommend,
-            shareBox
+            shareBox,
+            backHome
         }
         mixins = [Mixin]
         data = {

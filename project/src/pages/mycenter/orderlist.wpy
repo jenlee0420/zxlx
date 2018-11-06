@@ -103,7 +103,7 @@
                                             </view>
                                         </block>
                                         <view class="itempay flex flex-between">
-                                            <view class="flexRow" wx:if="{{data_type == 'noused' }}">
+                                            <view class="flexRow" wx:if="{{currType == 'noused' }}">
                                                 <view class="collageImage">
                                                     <block wx:for="{{item.collage_list}}" wx:for-index="index2" wx:for-item="item2" wx:key="{{index2}}">
                                                         <image src="{{item2.avatarUrl}}" wx:if="{{index2 < 6}}" />
@@ -307,6 +307,7 @@
         //        }
         onShow() {
             if (this.isshow != "") {
+                this.isshow = ''
                 return;
             }
             this.loadorderlist({

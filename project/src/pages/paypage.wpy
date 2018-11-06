@@ -324,10 +324,10 @@
     </view>
     <!-- 支付方式 E -->
     <!-- 确认协议按钮 S -->
-    <view class="x-btns flexRow" @tap="do_user_term">
-      <span wx:if="{{!user_term}}" class="public_icon_user_term"></span>
-      <span wx:if="{{user_term}}" class="public_icon_user_term_select"></span>
-      <view>我已阅读并同意用户条款</view>
+    <view class="x-btns flexRow">
+      <span wx:if="{{!user_term}}" @tap="do_user_term" class="public_icon_user_term"></span>
+      <span wx:if="{{user_term}}"  @tap="do_user_term" class="public_icon_user_term_select"></span>
+      <view class="flex"><text @tap="do_user_term">我已阅读并同意 </text><navigator url="/pages/instructions" class="maincolor" hover-class="none">《用户条款》</navigator></view>
     </view>
     <!-- 确认协议按钮 E -->
     <!-- 底部按钮 S -->

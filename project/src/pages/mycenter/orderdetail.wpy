@@ -105,9 +105,9 @@
             .commentimgs {
                 padding: 30rpx;
                 image {
-                    width: 106rpx;
-                    height: 106rpx;
-                    margin-right: 10rpx;
+                    width: 166rpx;
+                    height: 166rpx;
+                    margin-right: 20rpx;
                     margin-bottom: 10rpx;
                 }
                 display: flex;
@@ -235,11 +235,13 @@
                     <Star total="5" num="{{item.score}}">
                   </view>
                   <view class="commContent">{{item.comment}}</view>
-                  <block wx:for="{{item.pic}}" wx:for-item="itema" wx:key="index1">
+                  
                     <view class="commentimgs">
+                        <block wx:for="{{item.pic}}" wx:for-item="itema" wx:key="index1">
                         <image src="{{itema}}" mode="aspectFill" />
+                        </block>
                     </view>
-                  </block>
+                  
                 </block>
 
                 <view class="noComments" wx:if="{{detail.is_comment!=1}}">
@@ -291,7 +293,7 @@
         events = {
             delrefresh() {
                 //删除订单后跳转到已取消列表
-                wepy.refresh({
+                wepy.reLaunch({
                   url: '/pages/mycenter/orderlist?type=4&isshow=show"',
                 })
             },
