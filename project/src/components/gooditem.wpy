@@ -89,6 +89,10 @@
         <repeat for="{{goodsitem.label_name}}" index="index" item="item" key="key">
           <text class="greenlabel">{{item.name}}</text>
         </repeat>
+        <repeat for="{{goodsitem.custom}}" index="index" item="item" key="key">
+          <text class="greenlabel">{{item}}</text>
+          <text class="greenlabel">{{item}}</text>
+        </repeat>
       </view>
     </view>
   </view>

@@ -193,6 +193,7 @@
         <view class="itemContent">
             <view class="itemtop">
                 <image src="{{detail.source_image}}" mode="aspectFill" /><span class="fs25 c333 flex-1 ml20">{{detail.source_name}}</span>
+                <button open-type="share" class="public_icon1_share"> </button>
             </view>
             <block wx:for="{{detail.goods}}" wx:key="{{index}}">
                 <view class="itemdetail"  bindtap="navDetail({{item.goods_id}})">
@@ -379,6 +380,14 @@
             return
           }
           this.getDetail()
+        }
+        onShareAppMessage(obj) {
+            var re = {
+                title: this.detail.goods[0].goods_name,
+                path: "/pages/goods_detail?id=" + this.detail.goods[0].goods_id,
+                imageUrl: this.detail.goods[0].image.file_path,
+            }
+            return re
         }
     }
 </script>

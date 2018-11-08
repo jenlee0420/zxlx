@@ -208,7 +208,7 @@
       </view>
       <view class="flexRow flex-jbetween item2">
         <view class="title">组团时间</view>
-        <view class="time">2018/08/24 14:49:24</view>
+        <view class="time">{{collage_detail.create_time}}</view>
       </view>
       <view class="flexRow flex-jbetween item2">
         <view class="title">组团须知</view>

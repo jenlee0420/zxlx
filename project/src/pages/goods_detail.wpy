@@ -16,8 +16,8 @@
         padding-bottom: @nav-bottom-h;
         height: 100%
     }
-    .zan-icon-arrow{
-        margin-top:-2rpx;
+    .zan-icon-arrow {
+        margin-top: -2rpx;
         color: #adaaaa;
     }
     .des {
@@ -398,7 +398,6 @@
                     flex-direction: column;
                     justify-content: flex-start;
                     align-items: flex-start;
-                    
                     .btn {
                         flex-grow: 0;
                         padding: 0 18rpx;
@@ -409,7 +408,7 @@
                         border-radius: 8rpx;
                         background: #efefef;
                         min-width: 200rpx;
-                        color:#333;
+                        color: #333;
                         &.picked {
                             color: #fff;
                             background: @btn-primary;
@@ -501,8 +500,8 @@
             margin-right: 20rpx;
         }
     }
-    .public_icon1_to_top{
-        bottom:115rpx;
+    .public_icon1_to_top {
+        bottom: 115rpx;
     }
 </style>
 <template>
@@ -515,7 +514,7 @@
                     <swiper style="height:572rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
                         <!-- <block > -->
                         <swiper-item wx:for="{{good_detail.image}}" wx:key="{{index}}">
-                            <image src="{{item.file_path}}" class="slide-image"  mode="aspectFill" />
+                            <image src="{{item.file_path}}" class="slide-image" mode="aspectFill" />
                         </swiper-item>
                         <!-- </block> -->
                     </swiper>
@@ -606,15 +605,15 @@
         <!-- 底部导航 E -->
         <!-- 返回顶部 S -->
         <!-- <view class="backTop">
-                                <image src="../resource/img/backTop.png"></image>
-                              </view> -->
+                                    <image src="../resource/img/backTop.png"></image>
+                                  </view> -->
         <!-- 返回顶部 E -->
         <!-- 邀请分享 S -->
         <!-- <view class="share-box">
-                                <view class="close"><image src="../resource/img/close.png"></image></view>
-                                <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
-                                <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
-                              </view> -->
+                                    <view class="close"><image src="../resource/img/close.png"></image></view>
+                                    <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
+                                    <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
+                                  </view> -->
         <!-- 邀请分享 E -->
         <!-- 购买选择 S -->
         <view class="modal" wx:if="{{open_class}}" @tap="close_good_class">
@@ -629,7 +628,6 @@
                     <view class="goods-picked">
                         <text class="price" wx:if="{{buy_type == 1}}">￥{{pin_price ? pin_price : good_detail.goods_min_price}}</text>
                         <text class="price" wx:else>￥{{total_price ? total_price : good_detail.goods_max_line_price}}</text>
-                        
                         <text class="picked-text">已选择：{{class_group}}</text>
                     </view>
                 </view>
@@ -728,7 +726,7 @@
             }, ],
             spec: [],
             good_number: 1,
-            max_good_number: 9,
+            max_good_number: 99,
             min_good_number: 1,
             plus_max: false,
             sub_min: true,
@@ -751,8 +749,8 @@
             order_collage_id: 0,
             collage_detail: {},
             nowTime: 0,
-            thisTop:0,
-            scrollflag:false
+            thisTop: 0,
+            scrollflag: false
         }
         components = {
             TopNav,
@@ -767,8 +765,7 @@
                 this.activeIndex = index;
                 this.toView = 'scroll' + index;
             },
-            sharefun(){
-                
+            sharefun() {
             }
         }
         computed = {
@@ -780,13 +777,13 @@
             // }
         }
         methods = {
-            thisScroll(e){
-                if(!this.scrollflag){
+            thisScroll(e) {
+                if (!this.scrollflag) {
                     this.thisTop = e.detail.scrollTop
                     this.scrollflag = true
                 }
             },
-            scrollTo(index){
+            scrollTo(index) {
                 this.activeIndex = index;
                 this.toView = 'scroll' + index;
                 this.thisTop = 0
@@ -911,11 +908,11 @@
             //判断是否有授权
             this.getLocalSetting().then(res => {
                 if (res) {
-                    if(!this.goods_sku_id){
+                    if (!this.goods_sku_id) {
                         this.showAlert({
-                            content: '请选择'+this.good_detail.combination_one+'商品规格'
+                            content: '请选择' + this.good_detail.combination_one + '商品规格'
                         });
-                    }else{
+                    } else {
                         this.open_class = false
                         wepy.navigateTo({
                             url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
@@ -1022,6 +1019,18 @@
                     });
                     return
                 }
+                if (res.data.error_msg) {
+                    this.showAlert({
+                        content: res.data.error_msg,
+                        confirm: function() {
+                            wepy.navigateBack()
+                        },
+                        cancel: function() {
+                            wepy.navigateBack()
+                        },
+                    });
+                    return
+                }
                 this.good_detail = res.data.detail;
                 this.good_detail.content = this.transContent(this.good_detail.content)
                 this.good_detail.notice = this.transContent(this.good_detail.notice)
@@ -1051,7 +1060,6 @@
                         }
                         var p = false;
                         for (var n = 0; n < res.data.specData.spec_attr[i].spec_items.length; n++) {
-                            
                             tmp.data.push({
                                 "name": res.data.specData.spec_attr[i].spec_items[n].spec_value,
                                 "pick": false,
@@ -1103,9 +1111,21 @@
                 },
             }).then(res => {
                 if (res.code != "1") {
-                    this.showAlert({
-                        content: res.msg
-                    });
+                    if (res.msg.indexOf('商品不存在') > -1) {
+                        this.showAlert({
+                            content: res.msg,
+                            confirm: function() {
+                                wepy.navigateBack()
+                            },
+                            cancel: function() {
+                                wepy.navigateBack()
+                            },
+                        });
+                    } else {
+                        this.showAlert({
+                            content: res.msg
+                        });
+                    }
                     return
                 }
                 if (res.data.list.total < 10) {
@@ -1158,11 +1178,11 @@
                 },
             })
         }
-        onHide(){
-            this.$invoke('shareBox','clearThisTimer')
+        onHide() {
+            this.$invoke('shareBox', 'clearThisTimer')
         }
-        onUnload(){
-            this.$invoke('shareBox','clearThisTimer')
+        onUnload() {
+            this.$invoke('shareBox', 'clearThisTimer')
         }
     }
     //  PageInit(){
