@@ -726,7 +726,7 @@
             }, ],
             spec: [],
             good_number: 1,
-            max_good_number: 99,
+            max_good_number: 999,
             min_good_number: 1,
             plus_max: false,
             sub_min: true,

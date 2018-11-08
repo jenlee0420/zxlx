@@ -91,7 +91,6 @@
         </repeat>
         <repeat for="{{goodsitem.custom}}" index="index" item="item" key="key">
           <text class="greenlabel">{{item}}</text>
-          <text class="greenlabel">{{item}}</text>
         </repeat>
       </view>
     </view>
