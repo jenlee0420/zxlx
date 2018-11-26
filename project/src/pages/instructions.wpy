@@ -1,0 +1,58 @@
+<style lang="less">
+.container{
+    background:#fff;
+    width: 100%;
+    height: 100%;
+    padding: 20rpx;
+    font-size: 25rpx;
+}
+</style>
+
+<template>
+    <view class="container">
+        <rich-text type='text' nodes="{{intro}}" attrs="{{style}}" bindtap="tap"></rich-text>
+        <span class="public_icon1_to_top" @tap="scrollTop"></span>
+    </view>
+</template>
+
+<script> 
+    import wepy from 'wepy'
+    import Mixin from '@/mixins/global'
+    export default class instructions extends wepy.page {
+        config = {
+            navigationBarTitleText: '用户须知',
+        }
+        components = {}
+        mixins = [Mixin]
+        data = {
+            intro: '',
+            style: {
+                class: 'rich-text',
+                style: 'width: 100%; height: 100%;'
+            },
+        }
+        methods = {}
+        getInfo() {
+            wepy.request({
+                url: 'api/about/index',
+                method: 'POST',
+                data:{
+                    type:4
+                }
+            }).then(res => {
+                if (res.code == 1) {
+                    this.intro = this.transContent(res.data.info.content)
+                } else {
+                    wepy.showModal({
+                        content: res.msg,
+                        showCancel: false
+                    })
+                }
+                this.$apply()
+            })
+        }
+        onLoad() {
+            this.getInfo()
+        }
+    }
+</script>

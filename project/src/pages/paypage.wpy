@@ -339,7 +339,7 @@
       <view class="pay-btn {{user_term? '' : 'disable'}}" wx:if="{{pay_type==2}}" @tap="pay_friend">找好友代付</view>
     </view>
     <!-- 底部按钮 E -->
-    <notice />
+    <notice :goodsid.sync="good_id"/>
     <view class="container" id="shareBox" wx:if="{{showPopup}}">
       <view class="content">邀请好友支付？点击
         <font class="maincolor">按钮</font>即可分享</view>
@@ -361,7 +361,7 @@
       pay_type:1,
       goods_sku_id:"",
 
-      max_good_number: 9,
+      max_good_number: 999,
       min_good_number: 1,
       plus_max: false,
       sub_min: true,
@@ -369,7 +369,8 @@
       showPopup:false,
       order_id:0,
       order_collage_id:0,
-      options:{}
+      options:{},
+      good_id:''
     };
     components = {
       notice
@@ -597,6 +598,7 @@
           this.showAlert({ content: res.data.error_msg});
         }
         this.detail=res.data;
+        this.good_id = this.detail.goods_list[0].good_id
         this.$apply();
       })
     }

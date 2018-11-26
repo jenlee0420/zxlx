@@ -683,7 +683,7 @@
             </view>
         </popWin>
         <!-- 查看更多组团 e-->
-        <notice />
+        <notice :goodsid.sync="good_id"/>
         <backtoHome />
         <shareBox />
         <span class="public_icon1_to_top" @tap="scrollTo(0)"></span>
@@ -739,7 +739,7 @@
             open_class: false,
             total_price: 0,
             pin_price: 0,
-            goods_sku_id: "",
+            goods_sku_id: [],
             buy_type: 1,
             class_group: "",
             toView: 'scroll0',
@@ -908,7 +908,19 @@
             //判断是否有授权
             this.getLocalSetting().then(res => {
                 if (res) {
-                    if (!this.goods_sku_id) {
+                    this.goods_sku_id = String(this.goods_sku_id)
+                    var len =  this.goods_detal.length
+                    var arr = this.goods_sku_id.split('_')
+                    var len2=[]
+                    for(var i =0; i<arr.length;i++){
+                        if(arr[i]!=''){
+                            len2.push(true)
+                        }
+                    }
+                    console.log(len2,len)
+                    // return
+                    if(len2.length < len) {
+                    // if (!this.goods_sku_id) {
                         this.showAlert({
                             content: '请选择' + this.good_detail.combination_one + '商品规格'
                         });
@@ -969,6 +981,11 @@
                         } else {
                             id = id + "_" + this.goods_detal[i].data[n].item_id;
                         }
+                        // if(this.goods_sku_id[i]){
+                        //     this.goods_sku_id[i] = this.goods_detal[i].data[n].item_id;
+                        // } else{
+                        //     this.goods_sku_id.push(this.goods_detal[i].data[n].item_id)
+                        // }
                     }
                 }
             }

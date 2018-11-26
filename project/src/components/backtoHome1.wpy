@@ -1,0 +1,27 @@
+<style lang="less">
+
+</style>
+
+<template>
+  <view id="homebtn">
+    <span class="public_icon1_to_home" @tap="backHome"></span>
+  </view>
+</template>
+
+<script>
+import wepy from 'wepy'
+export default class backtoHome extends wepy.component {
+  config = {
+  }
+  components = {}
+  data = {
+  } 
+  methods = {
+    backHome(){
+      wepy.reLaunch({url:'/pages/index'})
+    },
+  }
+  onLoad() {
+  }
+}
+</script>

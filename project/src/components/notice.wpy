@@ -45,7 +45,7 @@
         config = {}
         components = {}
         props = {
-            goods_id: {
+            goodsid: {
                 type: String,
                 default: ''
             }
@@ -75,7 +75,7 @@
                 url: 'api/message/getmessage',
                 method: 'POST',
                 data: {
-                    goods_id: this.goods_id
+                    goods_id: this.goodsid
                 }
             }).then(res => {
                 if (res.code == 1) {
