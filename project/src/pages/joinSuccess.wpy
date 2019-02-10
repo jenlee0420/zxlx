@@ -156,23 +156,28 @@
             <view class="title">订单信息</view>
             <view class="flexRow reverse flex-1 des">
                 <view class="flexRow"><text>·</text>联系信息</view>
-                <view class="flexRow"><text>·</text>拼成时间</view>
+                <view class="flexRow"><text>·</text>组成时间</view>
             </view>
         </view>
         <!-- 相似的列表 E -->
         <view class="flexCol tuijian">
             <recommend tilte='精品推荐' :type="3"></recommend>
         </view>
+        <backHome />
     </view>
 </template>
 <script>
     import wepy from 'wepy'
     import Mixin from '@/mixins/global'
     import recommend from '@/components/recommend'
+    import shareBox from '@@/shareBox'
+    import backHome from '@@/backtoHome1'
     export default class joinSuccess extends wepy.page {
         config = {}
         components = {
-            recommend
+            recommend,
+            shareBox,
+            backHome
         }
         mixins = [Mixin]
         data = {
@@ -220,7 +225,6 @@
           }).then(res => {
             if (res.code != "1") {
               this.showAlert({
-                title: "警告",
                 content: res.msg
               });
               return
@@ -229,6 +233,14 @@
             this.collage_detail = res.data.collage_detail;
             this.$apply();
           })
+        }
+        onShareAppMessage(obj){
+          var re={
+            title:this.collage_detail.goods_name,
+            path:"/pages/join?order_collage_id="+this.order_collage_id,
+            imageUrl:this.collage_detail.image,
+          }
+          return re
         }
     }
 </script>

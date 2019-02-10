@@ -16,6 +16,10 @@
         padding-bottom: @nav-bottom-h;
         height: 100%
     }
+    .zan-icon-arrow {
+        margin-top: -2rpx;
+        color: #adaaaa;
+    }
     .des {
         font-size: 22rpx;
         color: @des-color;
@@ -394,7 +398,6 @@
                     flex-direction: column;
                     justify-content: flex-start;
                     align-items: flex-start;
-                    
                     .btn {
                         flex-grow: 0;
                         padding: 0 18rpx;
@@ -405,7 +408,7 @@
                         border-radius: 8rpx;
                         background: #efefef;
                         min-width: 200rpx;
-                        color:#333;
+                        color: #333;
                         &.picked {
                             color: #fff;
                             background: @btn-primary;
@@ -497,21 +500,21 @@
             margin-right: 20rpx;
         }
     }
-    .public_icon1_to_top{
-        bottom:115rpx;
+    .public_icon1_to_top {
+        bottom: 115rpx;
     }
 </style>
 <template>
     <view class="{{modalIsShow ? 'modalShow' : ''}}">
-        <TopNav :activeIndex.sync="activeIndex"></TopNav>
-        <scroll-view scroll-y style="height: calc(100% - 188rpx);" class="scrollView" @scroll="thisScroll" scroll-into-view="{{toView}}" scroll-top="{{thisTop}}">
+        <TopNav :activeIndex.sync="activeIndex" :words.sync="good_detail"></TopNav>
+        <scroll-view scroll-y style="height: calc(100% - 188rpx);" class="scrollView" @scroll="thisScroll" scroll-into-view="{{toView}}" scroll-top="{{thisTop}}" scroll-with-animation="{{true}}">
             <!-- 介绍卡部分 S -->
             <view class="content" id="scroll0">
                 <view class="video-container">
                     <swiper style="height:572rpx" indicator-dots="{{true}}" autoplay="{{true}}" indicator-color="#ffffff" indicator-active-color="rgb(246,17,17)">
                         <!-- <block > -->
                         <swiper-item wx:for="{{good_detail.image}}" wx:key="{{index}}">
-                            <image src="{{item.file_path}}" class="slide-image"  mode="aspectFill" />
+                            <image src="{{item.file_path}}" class="slide-image" mode="aspectFill" />
                         </swiper-item>
                         <!-- </block> -->
                     </swiper>
@@ -546,7 +549,7 @@
                     <view class="header">
                         <text>{{pin_num}}人在组团，直接参与</text>
                         <view @tap="pin_more">更多
-                            <image src="../resource/img/right_arrow.png"></image>
+                            <text class="zan-icon zan-icon-arrow"></text>
                         </view>
                     </view>
                     <block wx:for="{{pin_list}}" wx:key="index" wx:for-index="index">
@@ -557,7 +560,7 @@
                             </view>
                             <view class="right">
                                 <view class="status">
-                                    <view class="m-nums">还差<text>{{item.lack_num}}人</text>拼成</view>
+                                    <view class="m-nums">还差<text>{{item.lack_num}}人</text>组成</view>
                                     <text class="t-nums">剩余{{item.surplus_time1}}</text>
                                 </view>
                                 <view @tap="join_pin({{index}})" class="btn bg-primary">
@@ -593,8 +596,8 @@
             </view>
             <view class="flex1">
                 <button class="public_icon1_custom" open-type="contact" hover-class="none"></button><text>客服</text></view>
-            <view wx:if="{{order_collage_id==0}}" class="flex2" @tap="open_good_class(2)"><text>￥{{total_price?total_price:good_detail.}}</text><text>单独购买</text></view>
-            <view wx:if="{{order_collage_id==0}}" class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price}}</text><text>发起组团</text></view>
+            <view wx:if="{{order_collage_id==0}}" class="flex2" @tap="open_good_class(2)"><text>￥{{total_price?total_price:good_detail.goods_max_line_price}}</text><text>单独购买</text></view>
+            <view wx:if="{{order_collage_id==0}}" class="flex3" @tap="open_good_class(1)"><text>￥{{pin_price?pin_price:good_detail.goods_min_price}}</text><text>发起组团</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime>0}}" class="flex3" @tap="open_good_class(1)"><text>加入组团</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num==0}}" class="flex5"><text>报名已满</text></view>
             <view wx:if="{{order_collage_id!=0&&collage_detail.meed_num-collage_detail.join_num!=0&&collage_detail.over_time-nowTime<=0}}" class="flex5"><text>活动已结束</text></view>
@@ -602,15 +605,15 @@
         <!-- 底部导航 E -->
         <!-- 返回顶部 S -->
         <!-- <view class="backTop">
-                                <image src="../resource/img/backTop.png"></image>
-                              </view> -->
+                                    <image src="../resource/img/backTop.png"></image>
+                                  </view> -->
         <!-- 返回顶部 E -->
         <!-- 邀请分享 S -->
         <!-- <view class="share-box">
-                                <view class="close"><image src="../resource/img/close.png"></image></view>
-                                <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
-                                <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
-                              </view> -->
+                                    <view class="close"><image src="../resource/img/close.png"></image></view>
+                                    <view class="qipao"><image src="../resource/img/qipao.png"></image></view>
+                                    <view class="btn"><image src="../resource/img/wx.png"></image>分享给您的好友</view>
+                                  </view> -->
         <!-- 邀请分享 E -->
         <!-- 购买选择 S -->
         <view class="modal" wx:if="{{open_class}}" @tap="close_good_class">
@@ -623,8 +626,9 @@
                         <image src="{{good_detail.image[0].file_path}}"></image>
                     </view>
                     <view class="goods-picked">
-                        <text class="price">￥{{buy_type == 1 ? pin_price : total_price}}</text>
-                        <text class="picked-text">已选择：{{class_group ? class_group : goods_detal[0].data[0].name}}</text>
+                        <text class="price" wx:if="{{buy_type == 1}}">￥{{pin_price ? pin_price : good_detail.goods_min_price}}</text>
+                        <text class="price" wx:else>￥{{total_price ? total_price : good_detail.goods_max_line_price}}</text>
+                        <text class="picked-text">已选择：{{class_group}}</text>
                     </view>
                 </view>
                 <scroll-view scroll-y="{{true}}" class="scroll-h flex-1">
@@ -664,12 +668,12 @@
                                 <image src="{{item.avatarUrl}}" class="avator" />
                             </view>
                             <view class="flex-1 flex-column">
-                                <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>拼成</view>
+                                <view>{{item.nickName}} 还差<text class="mainColor">{{item.lack_num}}人</text>组成</view>
                                 <view>剩余{{item.surplus_time1}}</view>
                             </view>
                             <view>
                                 <view @tap="join_pin({{index}})" class="btn bg-primary">
-                                    去组团
+                                    去参团
                                 </view>
                             </view>
                         </view>
@@ -679,8 +683,9 @@
             </view>
         </popWin>
         <!-- 查看更多组团 e-->
-        <notice />
+        <notice :goodsid.sync="good_id"/>
         <backtoHome />
+        <shareBox />
         <span class="public_icon1_to_top" @tap="scrollTo(0)"></span>
     </view>
 </template>
@@ -692,6 +697,7 @@
     import notice from '@/components/notice'
     import popWin from '@/components/popWin'
     import backtoHome from '@@/backtoHome'
+    import shareBox from '@@/shareBox'
     export default class goods_detail extends wepy.page {
         config = {}
         mixins = [Mixin]
@@ -720,7 +726,7 @@
             }, ],
             spec: [],
             good_number: 1,
-            max_good_number: 9,
+            max_good_number: 999,
             min_good_number: 1,
             plus_max: false,
             sub_min: true,
@@ -733,7 +739,7 @@
             open_class: false,
             total_price: 0,
             pin_price: 0,
-            goods_sku_id: "",
+            goods_sku_id: [],
             buy_type: 1,
             class_group: "",
             toView: 'scroll0',
@@ -743,20 +749,23 @@
             order_collage_id: 0,
             collage_detail: {},
             nowTime: 0,
-            thisTop:0,
-            scrollflag:false
+            thisTop: 0,
+            scrollflag: false
         }
         components = {
             TopNav,
             comments,
             notice,
             popWin,
-            backtoHome
+            backtoHome,
+            shareBox
         }
         events = {
             changeactiveIndex(index) {
                 this.activeIndex = index;
                 this.toView = 'scroll' + index;
+            },
+            sharefun() {
             }
         }
         computed = {
@@ -768,13 +777,13 @@
             // }
         }
         methods = {
-            thisScroll(e){
-                if(!this.scrollflag){
+            thisScroll(e) {
+                if (!this.scrollflag) {
                     this.thisTop = e.detail.scrollTop
                     this.scrollflag = true
                 }
             },
-            scrollTo(index){
+            scrollTo(index) {
                 this.activeIndex = index;
                 this.toView = 'scroll' + index;
                 this.thisTop = 0
@@ -849,7 +858,6 @@
                     }).then(res => {
                         if (res.code != "1") {
                             this.showAlert({
-                                title: "警告",
                                 content: res.msg
                             });
                             return
@@ -868,7 +876,6 @@
                     }).then(res => {
                         if (res.code != "1") {
                             this.showAlert({
-                                title: "警告",
                                 content: res.msg
                             });
                             return
@@ -891,7 +898,6 @@
             tmp() {},
             buynow() {
                 this.buynowFun()
-                this.open_class = false
             },
             pin_more() {
                 // 显示正在拼单列表
@@ -902,13 +908,32 @@
             //判断是否有授权
             this.getLocalSetting().then(res => {
                 if (res) {
-                    wepy.navigateTo({
-                        url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
-                            '&good_number=' + this.good_number +
-                            '&goods_sku_id=' + this.goods_sku_id +
-                            '&buy_type=' + this.buy_type +
-                            '&order_collage_id=' + this.order_collage_id
-                    })
+                    this.goods_sku_id = String(this.goods_sku_id)
+                    var len =  this.goods_detal.length
+                    var arr = this.goods_sku_id.split('_')
+                    var len2=[]
+                    for(var i =0; i<arr.length;i++){
+                        if(arr[i]!=''){
+                            len2.push(true)
+                        }
+                    }
+                    console.log(len2,len)
+                    // return
+                    if(len2.length < len) {
+                    // if (!this.goods_sku_id) {
+                        this.showAlert({
+                            content: '请选择' + this.good_detail.combination_one + '商品规格'
+                        });
+                    } else {
+                        this.open_class = false
+                        wepy.navigateTo({
+                            url: '/pages/paypage?goods_id=' + this.good_detail.goods_id +
+                                '&good_number=' + this.good_number +
+                                '&goods_sku_id=' + this.goods_sku_id +
+                                '&buy_type=' + this.buy_type +
+                                '&order_collage_id=' + this.order_collage_id
+                        })
+                    }
                 } else {
                     wepy.navigateTo({
                         url: '/pages/wxlogin'
@@ -956,6 +981,11 @@
                         } else {
                             id = id + "_" + this.goods_detal[i].data[n].item_id;
                         }
+                        // if(this.goods_sku_id[i]){
+                        //     this.goods_sku_id[i] = this.goods_detal[i].data[n].item_id;
+                        // } else{
+                        //     this.goods_sku_id.push(this.goods_detal[i].data[n].item_id)
+                        // }
                     }
                 }
             }
@@ -986,7 +1016,6 @@
                 }).then(res => {
                     if (res.code != "1") {
                         this.showAlert({
-                            title: "警告",
                             content: res.msg
                         });
                         return
@@ -1003,8 +1032,19 @@
             }).then(res => {
                 if (res.code != "1") {
                     this.showAlert({
-                        title: "警告",
                         content: res.msg
+                    });
+                    return
+                }
+                if (res.data.error_msg) {
+                    this.showAlert({
+                        content: res.data.error_msg,
+                        confirm: function() {
+                            wepy.navigateBack()
+                        },
+                        cancel: function() {
+                            wepy.navigateBack()
+                        },
                     });
                     return
                 }
@@ -1019,7 +1059,7 @@
                         "name": res.data.detail.goods_name,
                         "data": [{
                             "name": res.data.detail.goods_name,
-                            "pick": true,
+                            "pick": false,
                             "goods_id": res.data.detail.goods_id,
                             "item_id": res.data.detail.goods_id,
                         }],
@@ -1037,14 +1077,9 @@
                         }
                         var p = false;
                         for (var n = 0; n < res.data.specData.spec_attr[i].spec_items.length; n++) {
-                            if (n == 0) {
-                                p = true;
-                            } else {
-                                p = false;
-                            };
                             tmp.data.push({
                                 "name": res.data.specData.spec_attr[i].spec_items[n].spec_value,
-                                "pick": p,
+                                "pick": false,
                                 "item_id": res.data.specData.spec_attr[i].spec_items[n].item_id,
                             })
                         }
@@ -1071,7 +1106,6 @@
                     this.loading = false;
                     if (res.code != "1") {
                         this.showAlert({
-                            title: "警告",
                             content: res.msg
                         });
                         return
@@ -1094,10 +1128,21 @@
                 },
             }).then(res => {
                 if (res.code != "1") {
-                    this.showAlert({
-                        title: "警告",
-                        content: res.msg
-                    });
+                    if (res.msg.indexOf('商品不存在') > -1) {
+                        this.showAlert({
+                            content: res.msg,
+                            confirm: function() {
+                                wepy.navigateBack()
+                            },
+                            cancel: function() {
+                                wepy.navigateBack()
+                            },
+                        });
+                    } else {
+                        this.showAlert({
+                            content: res.msg
+                        });
+                    }
                     return
                 }
                 if (res.data.list.total < 10) {
@@ -1149,6 +1194,12 @@
                     console.log('暂时放弃')
                 },
             })
+        }
+        onHide() {
+            this.$invoke('shareBox', 'clearThisTimer')
+        }
+        onUnload() {
+            this.$invoke('shareBox', 'clearThisTimer')
         }
     }
     //  PageInit(){

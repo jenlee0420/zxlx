@@ -1,6 +1,7 @@
 <style lang="less">
   #memberlist{
     border-top: 1rpx solid @bColor;
+    padding-bottom:100rpx;
   }
   .list_menber_view_view_btn{
     border-radius: 10rpx;
@@ -27,7 +28,7 @@
   }
 
   .list_menber_view_view{
-    bottom: 148rpx;
+    bottom: 20rpx;
     display: flex;
     font-size: 30rpx;
     font-family: 'microsoft yahei', '-apple-system', "Helvetica Neue", "Roboto", "Segoe UI", sans-serif;
@@ -88,8 +89,6 @@
     margin-right: 35rpx;
     color: #f8280d;
   }
-
-
 
 </style>
 
@@ -164,10 +163,11 @@
       choice_address:"",
 
       order_id:0,
+      from:''
     }
     methods = {
       choice_address(index){
-        if(this.choice_address){
+        if(this.choice_address || this.from =='pay'){
           if(this.order_id){
             wepy.request({
               url: "api/order/editorderaddress",
@@ -178,32 +178,31 @@
               },
             }).then(res => {
               if(res.code!="1"){
-                this.showAlert({title:"警告",content:res.msg});
+                this.showAlert({content:res.msg});
               }
 
               wx.navigateBack();
             })
           }else {
             wx.setStorageSync("address",JSON.stringify({
-              address_id:this.data.list[index].address_id,
-              name:this.data.list[index].name,
-              user_id:this.data.list[index].user_id,
-              detail:this.data.list[index].detail,
-              phone:this.data.list[index].phone,
+              address_id:this.list[index].address_id,
+              name:this.list[index].name,
+              user_id:this.list[index].user_id,
+              detail:this.list[index].detail,
+              phone:this.list[index].phone,
               region:{
-                province:this.data.list[index].region.province,
-                city:this.data.list[index].region.city,
-                region:this.data.list[index].region.region,
+                province:this.list[index].region.province,
+                city:this.list[index].region.city,
+                region:this.list[index].region.region,
               },
             }))
             wx.navigateBack();
           }
+        } else {
+          console.log(index)
         }
-
-
-
       },
-
+      
       go_to_add(){
         wx.navigateTo({
           url:"add_member"
@@ -222,14 +221,14 @@
           address_id:this.list[index].address_id,
         };
         var that=this;
-        this.showAlert({title:"警告",content:"确认要删除吗？",confirm:function(){
+        this.showAlert({title:"提示",content:"确认要删除吗？",confirm:function(){
             wepy.request({
               url: "api/address/delete",
               method: 'POST',
               data: data,
             }).then(res => {
               if(res.code!="1"){
-                that.showAlert({title:"警告",content:res.msg});
+                that.showAlert({content:res.msg});
               }else {
                 that.list.splice(index,1);
                 that.$apply();
@@ -251,7 +250,7 @@
           data: data,
         }).then(res => {
           if(res.code!="1"){
-            this.showAlert({title:"警告",content:res.msg});
+            this.showAlert({content:res.msg});
           }else {
             this.default_addree=index;
             this.$apply();
@@ -264,30 +263,19 @@
       var re={
         title:"填写地址",
         path:"/pages/member/add_member?user_id="+wx.getStorageSync("userid"),
-        imageUrl:"",
+        imageUrl:this.imgBaseUrl + 'membershare.png',
       }
       return re
     };
 
-    onLoad(options) {
-      console.log(options)
-        if(options){
-          if(options.address_id){
-            this.choice_address=options.address_id;
-          }
-
-          if(options.order_id){
-            this.order_id=options.order_id;
-          }
-        }
-
-        wepy.request({
+    getlist(){
+      wepy.request({
           url: "api/address/lists",
           method: 'POST',
           data: {},
         }).then(res => {
           if(res.code!="1"){
-          this.showAlert({title:"警告",content:res.msg});
+          this.showAlert({content:res.msg});
         }else {
           var index=0;
           this.list=[];
@@ -316,7 +304,23 @@
           this.$apply();
         }
       })
+    }
+    onLoad(options) {
+      console.log(options)
+        if(options){
+          if(options.address_id){
+            this.choice_address=options.address_id;
+          }
 
+          if(options.order_id){
+            this.order_id=options.order_id;
+          }
+
+          if(options.from){this.from = options.from}
+        }
+    }
+    onShow(){
+      this.getlist()
     }
 
   }

@@ -1,5 +1,5 @@
 <style lang="less">
-  .refund_view{
+  .refund_view {
     /*height: 95rpx;*/
     /*border-top:1rpx solid #d8d6d6;*/
     /*line-height:95rpx;*/
@@ -7,126 +7,114 @@
     font-size: 30rpx;
     /*display: flex;*/
   }
-
-  .refund_view_view{
+  .refund_view_view {
     display: flex;
-    border-top:1rpx solid #d8d6d6;
+    border-top: 1rpx solid #d8d6d6;
     height: 95rpx;
-    line-height:95rpx;
-    >text{
+    line-height: 95rpx;
+    >text {
       white-space: nowrap;
     }
   }
-
-  .refund_view_border{
-    border-top:1rpx solid #d8d6d6;
-    padding-top:30rpx;
+  .refund_view_border {
+    border-top: 1rpx solid #d8d6d6;
+    padding-top: 30rpx;
   }
-
-  .refund_view_view_radio{
+  .refund_view_view_radio {
     height: 401rpx;
-    line-height:72rpx;
+    line-height: 72rpx;
   }
-
-  .refund_view_view_radio_group{
+  .refund_view_view_radio_group {
     margin-left: 31rpx;
-    >.my_picker{
-        display: flex;
-        flex-direction: column;
+    >.my_picker {
+      display: flex;
+      flex-direction: column;
     }
   }
-
-  .refund_input{
+  .refund_input {
     height: 95rpx;
     margin-left: 31rpx;
     font-size: 25rpx;
   }
-
-  .refund_view_text{
+  .refund_view_text {
     margin-left: 79rpx;
     margin-right: 30rpx;
     font-size: 30rpx;
+    width: 103rpx;
   }
-  .ml79{
-      margin-left: 79rpx;
+  .refund_view_border {
+    .refund_view_text {
+      width: 300rpx;
+    }
   }
-  textarea{
+  .ml79 {
+    margin-left: 79rpx;
+  }
+  textarea {
     height: 324rpx;
   }
-
-  .refund_view_image{
+  .refund_view_image {
     width: 110rpx;
     height: 110rpx;
     padding-left: 10%;
-    position: relative;
-    //width: 100%;
+    position: relative; //width: 100%;
     display: flex;
     justify-content: center;
     align-items: center;
   }
-
-  .refund_image{
-    line-height:100%;
+  .refund_image {
+    line-height: 100%;
     width: 55%;
     height: 55%;
   }
-
   .refund_btn_view {
     margin-top: 88rpx;
     width: 100%;
     display: flex;
     justify-content: center;
   }
-
-  .refund_btn{
+  .refund_btn {
     width: 587rpx;
   }
 </style>
 
 <template>
-  <view   class="refund_view">
+  <view class="refund_view">
     <view class="refund_view_view refund_view_view_radio">
       <text class="refund_view_text">退款原因</text>
       <myradio class="refund_view_view_radio_group" :syncList.sync="refund_reson" vbind="getradiodata"></myradio>
     </view>
-
-
-      <view class="refund_view_view flex flex-between mr30">
-        <text class="refund_view_text">申请金额</text>
-        <input class="refund_input" placeholder="按照须知需求处理" type="digit" value="{{money}}" @input="input_money"/>
-        <text class="c929292">最高￥300</text>
-      </view>
-
+    <view class="refund_view_view flex flex-between mr30">
+      <text class="refund_view_text req">申请金额</text>
+      <input class="refund_input" placeholder="按照须知需求处理" type="digit" value="{{money}}" @input="input_money" />
+      <text class="c929292">最高￥{{order_detail.pay_price}}</text>
+    </view>
     <view class="refund_view_border">
       <text class="refund_view_text">退款说明</text>
       <view class="ml79 mt30">
-        <textarea class="fs25" placeholder="请您详细填写退款说明（最多500字）" value="{{desc}}" @input="input_desc"/>
+        <textarea class="fs25" placeholder="请您详细填写退款说明（最多500字）" value="{{desc}}" @input="input_desc" />
       </view>
     </view>
-
     <view class="refund_view_view">
-      <text class="refund_view_text">联系电话</text>
-      <input class="refund_input" placeholder="电话号码" type="number" vale="{{phone}}" @input="input_phone"/>
+      <text class="refund_view_text req">联系电话</text>
+      <input class="refund_input" placeholder="电话号码" type="number" vale="{{phone}}" @input="input_phone" />
     </view>
-
     <view class="refund_view_border">
       <view class="refund_view_text flex flex-between"><text>上传证据</text><text class="c929292">(最多3张)</text></view>
-      <view class="ml79 mt30  flex">
+      <view class="ml79 mt30 flex">
         <icon class="public_icon4_upload_picture" @tap="choice_pic" hidden="{{image_index >= image_index_max}}"></icon>
         <block wx:for="{{image_data}}" wx:key="{{index}}">
-          <view  class="refund_view_image">
+          <view class="refund_view_image">
             <icon class="public_icon4_cancel_upload Topcorner" @tap="cancle_upload({{index}})"></icon>
             <image class="refund_image" src="{{item.url}}"></image>
           </view>
         </block>
       </view>
     </view>
-
     <view class="refund_btn_view">
       <button class="btn refund_btn" @tap="save">保存</button>
     </view>
   </view>
-
 </template>
 
 <script>
@@ -135,54 +123,66 @@
   import myradio from '@@/myradio'
   export default class Index extends wepy.page {
     config = {
-        navigationBarTitleText: '申请售后'
+      navigationBarTitleText: '申请售后'
     }
-    components = {myradio}
+    components = {
+      myradio
+    }
     mixins = [Mixin]
-    events={
-      getradiodata(index){
-        this.reason=this.refund_reson[index-1].value;
+    events = {
+      getradiodata(index) {
+        this.reason = this.refund_reson[index - 1].value;
         this.$apply();
       }
     }
     data = {
-      imgUrls:[],
-      refund_reson: [
-        {name: '1', value: '多拍、错拍、不想要', checked: 'true'},
-        {name: '2', value: '档期冲突'},
-        {name: '3', value: '临时改变主意'},
-        {name: '4', value: '不可抗力因素'},
-        {name: '5', value: '其他'},
+      imgUrls: [],
+      refund_reson: [{
+          name: '1',
+          value: '多拍、错拍、不想要',
+          checked: 'true'
+        },
+        {
+          name: '2',
+          value: '档期冲突'
+        },
+        {
+          name: '3',
+          value: '临时改变主意'
+        },
+        {
+          name: '4',
+          value: '不可抗力因素'
+        },
+        {
+          name: '5',
+          value: '其他'
+        },
       ],
-
-      phone:"",
-      money:"",
-      desc:"",
-      order_id:"",
-
-      image_data:[
+      phone: "",
+      money: "",
+      desc: "",
+      order_id: "",
+      image_data: [
         // {url:"",have:false},{url:"",have:false},{url:"",have:false}
       ],
-      image_index:0,
-      image_index_max:3,
-
-      reason:'多拍、错拍、不想要',
+      image_index: 0,
+      image_index_max: 3,
+      reason: '多拍、错拍、不想要',
+      order_detail: {}
     }
     methods = {
-      input_money(e){
-        this.money= e.detail.value;
+      input_money(e) {
+        this.money = e.detail.value;
       },
-
-      input_phone(e){
-        this.phone= e.detail.value;
+      input_phone(e) {
+        this.phone = e.detail.value;
       },
-
-      input_desc(e){
-        this.desc= e.detail.value;
+      input_desc(e) {
+        this.desc = e.detail.value;
       },
-
-      choice_pic(e){
-        var that=this;
+      choice_pic(e) {
+        var that = this;
         let v = this.image_data.length
         let count = this.image_index_max - v
         this.chooseImage({
@@ -194,73 +194,88 @@
           this.$apply()
         })
       },
-//        console.log(that.image_data)
-//        wx.chooseImage({
-//          count: 3,
-//          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
-//          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
-//          success: function (res) {
-//            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
-//            if(that.image_index>=that.image_index_max){
-//              return
-//            }
-//
-//            that.image_data.push({url:res.tempFilePaths,have:true});
-//            that.image_index++;
-//            that.$apply();
-//          }
-//        })
-
-
-      cancle_upload(i){
-        this.image_data.splice(i,1)
+      //        console.log(that.image_data)
+      //        wx.chooseImage({
+      //          count: 3,
+      //          sizeType: ['original', 'compressed'], // 可以指定是原图还是压缩图，默认二者都有
+      //          sourceType: ['album', 'camera'], // 可以指定来源是相册还是相机，默认二者都有
+      //          success: function (res) {
+      //            // 返回选定照片的本地文件路径列表，tempFilePath可以作为img标签的src属性显示图片
+      //            if(that.image_index>=that.image_index_max){
+      //              return
+      //            }
+      //
+      //            that.image_data.push({url:res.tempFilePaths,have:true});
+      //            that.image_index++;
+      //            that.$apply();
+      //          }
+      //        })
+      cancle_upload(i) {
+        this.image_data.splice(i, 1)
         this.$apply();
       },
-
-      save(e){
-        var pic="";
+      save(e) {
+        if (parseFloat(this.money) > this.order_detail.pay_price) {
+          this.showAlert({
+            content: '金额有误，请重输入'
+          });
+          return
+        }
+        var pic = "";
         var t = []
-        for(var i=0;i<this.image_data.length-1;i++){
-            // pic=pic+this.image_data[i].id+",";
-            t.push(this.image_data[i].id)
+        for (var i = 0; i < this.image_data.length - 1; i++) {
+          // pic=pic+this.image_data[i].id+",";
+          t.push(this.image_data[i].id)
         }
         // pic=pic+this.image_data[this.image_data.length-1].id
         pic = t.join(',')
-
-        var req={
-          order_id:this.order_id,
-          refund_fee:this.money,
-          reason:this.reason,
-          refund_desc:this.desc,
-          pic:pic,
-          mobile:this.phone,
+        var req = {
+          order_id: this.order_id,
+          refund_fee: this.money,
+          reason: this.reason,
+          refund_desc: this.desc,
+          pic: pic,
+          mobile: this.phone,
         };
         console.log(req)
-
         wepy.request({
           url: "api/order/orderrefund",
           method: 'POST',
           data: req,
         }).then(res => {
           if (res.code != "1") {
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({
+              content: res.msg
+            });
           } else {
-             wx.navigateBack();
+            wx.navigateBack();
           }
         })
       },
-
+    }
+    getdetail() {
+      wepy.request({
+        url: "api/order/detail",
+        method: 'POST',
+        data: {
+          order_id: this.order_id
+        },
+      }).then(res => {
+        if (res.code != "1") {
+          this.showAlert({
+            content: res.msg
+          });
+        }
+        this.order_detail = res.data
+        this.money = this.order_detail.pay_price
+        this.$apply()
+      })
     }
     onLoad(options) {
-      if(!options){
-        return
+      if (options && options.order_id) {
+        this.order_id = options.order_id;
+        this.getdetail()
       }
-
-      if(!options.order_id){
-        return
-      }
-
-      this.order_id=options.order_id;
     }
   }
 </script>

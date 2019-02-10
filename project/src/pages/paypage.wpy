@@ -271,7 +271,7 @@
       <view class="flexRow" @tap="to_addresslist('')">
         <span class="public_icon_manual_add_address"></span>
         <text>手动添加联系信息</text>
-        <image class="right_arrow" src="../resource/img/right_arrow.png"></image>
+        <span class="cb4b4b4 zan-icon zan-icon-arrow"></span>
       </view>
       <!-- <view class="flexRow">
         <span class="public_icon2_weixin"></span>
@@ -324,10 +324,10 @@
     </view>
     <!-- 支付方式 E -->
     <!-- 确认协议按钮 S -->
-    <view class="x-btns flexRow" @tap="do_user_term">
-      <span wx:if="{{!user_term}}" class="public_icon_user_term"></span>
-      <span wx:if="{{user_term}}" class="public_icon_user_term_select"></span>
-      <view>我已阅读并同意用户条款</view>
+    <view class="x-btns flexRow">
+      <span wx:if="{{!user_term}}" @tap="do_user_term" class="public_icon_user_term"></span>
+      <span wx:if="{{user_term}}"  @tap="do_user_term" class="public_icon_user_term_select"></span>
+      <view class="flex"><text @tap="do_user_term">我已阅读并同意 </text><navigator url="/pages/instructions" class="maincolor" hover-class="none">《用户条款》</navigator></view>
     </view>
     <!-- 确认协议按钮 E -->
     <!-- 底部按钮 S -->
@@ -339,7 +339,7 @@
       <view class="pay-btn {{user_term? '' : 'disable'}}" wx:if="{{pay_type==2}}" @tap="pay_friend">找好友代付</view>
     </view>
     <!-- 底部按钮 E -->
-    <notice />
+    <notice :goodsid.sync="good_id"/>
     <view class="container" id="shareBox" wx:if="{{showPopup}}">
       <view class="content">邀请好友支付？点击
         <font class="maincolor">按钮</font>即可分享</view>
@@ -361,7 +361,7 @@
       pay_type:1,
       goods_sku_id:"",
 
-      max_good_number: 9,
+      max_good_number: 999,
       min_good_number: 1,
       plus_max: false,
       sub_min: true,
@@ -369,6 +369,8 @@
       showPopup:false,
       order_id:0,
       order_collage_id:0,
+      options:{},
+      good_id:''
     };
     components = {
       notice
@@ -403,7 +405,7 @@
           data: data,
         }).then(res => {
           if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({ content: res.msg});
             return
           }
           //this.showPopup=true;
@@ -442,18 +444,21 @@
           pay_type:this.pay_type,
           order_collage_id:this.order_collage_id,
         };
-
+        console.log('buy_type:',this.buy_type,this.order_collage_id)
+        wepy.removeStorage({
+                key: 'payflag'
+            })
         wepy.request({
           url: "api/order/paynow",
           method: 'POST',
           data: data,
         }).then(res => {
           if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({content: res.msg});
             return
           }
           this.order_id=res.data.order_id;
-
+          
           var that = this ;
           wx.requestPayment({
             timeStamp:res.data.timeStamp,
@@ -462,7 +467,8 @@
             signType:res.data.signType,
             paySign:res.data.paySign,
             success:function(e){
-              if(that.buy_type==1){
+              
+              if(that.buy_type == 1){
                 if(that.order_collage_id==0){
                   wepy.navigateTo({
                     url: '/pages/yaoqing?order_id='+that.order_id,
@@ -475,7 +481,7 @@
 
               }else{
                 wepy.navigateTo({
-                  url: '/pages/mycenter/orderlist?type=1',
+                  url: '/pages/mycenter/orderlist?type=2&isshow=show',
                 })
               }
             },
@@ -493,7 +499,7 @@
       to_addresslist(address_id){
         if(address_id==""){
           wx.navigateTo({
-            url:"/pages/member/list_member"
+            url:"/pages/member/list_member?from=pay"
           })
         }else{
           wx.navigateTo({
@@ -566,8 +572,36 @@
       return re
     };
 
+    getbuyInfo(){
+      this.buy_type=this.options.buy_type;
+      this.goods_sku_id=this.options.goods_sku_id;
+      this.order_collage_id=this.options.order_collage_id;
+      var data={
+        goods_id:this.options.goods_id,
+        goods_num:this.options.good_number,
+        goods_sku_id:this.options.goods_sku_id,
+        buy_type:this.options.buy_type,
+        order_collage_id:this.options.order_collage_id,
+      };
 
-
+      wepy.request({
+        url: "api/order/buynow",
+        method: 'POST',
+        data: data,
+      }).then(res => {
+        if(res.code != "1"){
+          this.showAlert({ content: res.msg});
+          return
+        }
+        console.log(res.data)
+        if(res.data.error_msg){
+          this.showAlert({ content: res.data.error_msg});
+        }
+        this.detail=res.data;
+        this.good_id = this.detail.goods_list[0].good_id
+        this.$apply();
+      })
+    }
     onLoad(options){
       if(!options){
         return;
@@ -590,41 +624,20 @@
         return;
       }
 
-      this.buy_type=options.buy_type;
-      this.goods_sku_id=options.goods_sku_id;
-      this.order_collage_id=options.order_collage_id;
-      var data={
-        goods_id:options.goods_id,
-        goods_num:options.good_number,
-        goods_sku_id:options.goods_sku_id,
-        buy_type:options.buy_type,
-        order_collage_id:options.order_collage_id,
-      };
+      this.options = options;
 
-      wepy.request({
-        url: "api/order/buynow",
-        method: 'POST',
-        data: data,
-      }).then(res => {
-        if(res.code != "1"){
-          this.showAlert({title: "警告", content: res.msg});
-          return
-        }
-        this.detail=res.data;
-        this.$apply();
-      })
-
-      wx.setStorageSync("payflag",'true');
-    };
+      this.getbuyInfo()
+      wx.setStorageSync("payflag",'true'); 
+    }
 
     onShow(){
       if(wx.getStorageSync("address")!=""){
         var obj=JSON.parse(wx.getStorageSync("address"));
-        this.detail.address.address_id=obj.address_id;
-        this.detail.address.name=obj.name;
-        this.detail.address.phone=obj.phone;
-        this.detail.address.region=obj.region;
-        this.detail.address.detail=obj.detail;
+        this.detail.address=obj;
+        console.log(obj)
+      }
+      else{
+        this.getbuyInfo()
       }
       this.$apply();
     }

@@ -3,29 +3,23 @@
 </style>
 
 <template>
-  <view id="homebtn" wx:if="{{!showBtn}}">
+  <view id="homebtn">
     <span class="public_icon1_to_home" @tap="backHome"></span>
   </view>
 </template>
 
 <script>
 import wepy from 'wepy'
-import Mixin from '@/mixins/global'
 export default class backtoHome extends wepy.component {
   config = {
   }
   components = {}
-  mixins = [Mixin]
   data = {
-    showBtn:false
   } 
   methods = {
     backHome(){
       wepy.reLaunch({url:'/pages/index'})
     },
-    showHome(bool){
-      this.showBtn = bool
-    }
   }
   onLoad() {
   }

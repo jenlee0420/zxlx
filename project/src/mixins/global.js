@@ -214,7 +214,7 @@ export default class Global extends wepy.mixin {
     imgupfile(file){
         return new Promise((resolve, reject) => {
             let data = {
-                url: 'http://wxapi.zxlx123.com/api/upload/image',
+                url: 'https://wxapi.zxlx123.com/api/upload/image',
                 filePath: file.filePath,
                 name: 'iFile'
             }
@@ -449,7 +449,7 @@ export default class Global extends wepy.mixin {
         })
         return bool
     }
-   
+    
     //格式化内容中的图片/richtext适用
     transContent(content){
         if(!content) return
@@ -472,7 +472,7 @@ export default class Global extends wepy.mixin {
     }
     onHide(){
         if(this.$com.notice){
-            console.log('onHide')
+            console.log('onhide')
             this.$invoke('notice','clearTimerMeth')
         }
     }

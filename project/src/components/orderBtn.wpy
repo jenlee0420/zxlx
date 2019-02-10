@@ -57,7 +57,6 @@
           this.loading = false;
           if (res.code != "1") {
             this.showAlert({
-              title: "警告",
               content: res.msg
             });
           } else {
@@ -101,6 +100,7 @@
         })
       },
       cancle_order(order) {
+        var that=this
         this.showAlert({
           content: '确定取消订单',
           confirm: function() {
@@ -111,23 +111,25 @@
                 order_id: order.order_id
               },
             }).then(res => {
-              this.loading = false;
+              that.loading = false;
               if (res.code != "1") {
-                this.showAlert({
-                  title: "警告",
+                that.showAlert({
                   content: res.msg
                 });
               } else {
-                //this.$emit('flush')
-                wepy.navigateTo({
-                  url: '/pages/mycenter/orderlist?type=1',
-                })
+                //回调父级刷新 
+                that.showSuccess('操作成功')
+                that.$emit('cancelrefresh') 
+                // wepy.navigateTo({
+                //   url: '/pages/mycenter/orderlist?type=1',
+                // })
               }
             })
           }
         })
       },
       del_order(order) {
+        var that=this
         this.showAlert({
           content: '确定删除订单',
           confirm: function() {
@@ -138,17 +140,17 @@
                 order_id: order.order_id
               },
             }).then(res => {
-              this.loading = false;
+              that.loading = false;
               if (res.code != "1") {
-                this.showAlert({
-                  title: "警告",
+                that.showAlert({
                   content: res.msg
                 });
               } else {
-                //this.$emit('flush');
-                wepy.navigateTo({
-                  url: '/pages/mycenter/orderlist?type=1',
-                })
+                that.showSuccess('操作成功')
+                that.$emit('delrefresh');
+                // wepy.navigateTo({
+                //   url: '/pages/mycenter/orderlist?type=1',
+                // })
               }
             })
           }

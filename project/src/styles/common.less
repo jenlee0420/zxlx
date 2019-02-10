@@ -14,6 +14,7 @@
 .cf71414{color: #f71414}
 .ce02e24{color:#e02e24}
 .cc0bebe{color:#c0bebe}
+.cadaaaa{color: #adaaaa}
 .c5ad{
     color:#5ada78;
 }
@@ -50,7 +51,7 @@
 
 .fs18{font-size: 18rpx;}
 .fs20{font-size: 20rpx;line-height: 20rpx}
-.fs22{font-size: 22rpx;line-height: 22rpx}
+.fs22{font-size: 22rpx;line-height: 25rpx}
 .fs23{font-size: 23rpx;line-height: 23rpx}
 .fs24{font-size: 24rpx;line-height: 24rpx}
 .fs25{font-size: 25rpx;}
@@ -73,6 +74,7 @@
 .mt50{margin-top: 50rpx}
 .mt60{margin-top: 60rpx}
 .ml12{margin-left: 12rpx}
+.ml10{margin-left: 10rpx}
 .ml20{margin-left: 20rpx}
 .ml30{margin-left: 30rpx}
 .ml32{margin-left: 32rpx}
@@ -158,6 +160,15 @@
     line-height: 78rpx;
     padding: 0 25rpx;
     color:#333;
+}
+
+.req{
+    &:before{
+        content:'*';
+        color: #ff0000;
+        margin-left: -20rpx;
+        padding-right: 10rpx;
+    }
 }
 
 /* 富文本样式　*/
@@ -304,6 +315,27 @@ button{}
         border-bottom: 1rpx solid @bColor;
         color: #333;
         text-align: right;
-        padding-right: 20rpx
+        padding-right: 20rpx;
+        padding-left:30rpx;
+}
+.collageImage{
+    display: flex;
+    padding-right:20rpx;
+    image{
+        margin-left: -10rpx;
+        border-radius: 50%;
+        width: 50rpx;
+        height: 50rpx;
+    }
 }
 /* 订单列表  订单详情 卡片样式 end*/
+
+
+#homebtn{
+    position: fixed;
+    top:30rpx;
+    left:-59rpx;
+    span{
+      display: inline-block
+    }
+  }

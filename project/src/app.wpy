@@ -30,6 +30,7 @@
         'pages/friendpay',
         'pages/sharefriend',
         'pages/join',
+        'pages/joinSuccess',
         'pages/mycenter/dianpin',
         'pages/mycenter/list_member',
         'pages/search',
@@ -46,7 +47,8 @@
         'pages/mycenter/about',
         'pages/goods_detail',
         'pages/custom',
-        'pages/refund'
+        'pages/refund',
+        'pages/instructions'
       ],
       tabBar: {
         color: '#949393',

@@ -54,7 +54,7 @@
     <repeat for="{{tab}}" key="index" index="index" item="item">
       <view class="{{index == activeIndex ? 'active' : ''}}" bindtap="changeindex({{index}})">
           <span wx:if="{{index == activeIndex}}" class="public_icon2_location" ></span>
-          {{item}}</view>
+          {{index == 0 ? words.combination_one : item}}</view>
     </repeat>
     <view class="zhuanfa">
       <button open-type="share" class="public_icon1_share"> </button>
@@ -72,7 +72,8 @@
     };
 
     props = {
-      activeIndex: String
+      activeIndex: String,
+      words:Object,
     };
     methods = {
         changeindex(index){

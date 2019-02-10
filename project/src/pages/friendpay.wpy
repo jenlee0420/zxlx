@@ -82,7 +82,7 @@
           <image src="{{avatarUrl}}" mode="aspectFill">
         </view>
         <view class="graybox">
-          <text>{{this_user_name}},我在知兮乐兮上找到了很赞的游学，快来帮我付款吧~</text>
+          <text>{{this_user_name}},我在知兮乐兮上找到了很赞的{{detail.combination_one}}，快来帮我付款吧~</text>
           <view class="goodsinfo">
             <view class="imgbox">
               <image src="{{detail.goods[0].image.file_path}}" mode="aspectFill" />
@@ -95,6 +95,7 @@
         </view>
       </view>
       <!--{{limitTime.date}}天{{limitTime.hour}}:{{limitTime.min}}:{{limitTime.sec}}-->
+      <block wx:if="{{!paysuccess}}">
       <view class="price {{detail.order_status.value != '10'?'cb4b4b4':''}}">￥{{detail.total_price}}</view>
       <view class="t_c fs22" wx:if="{{detail.order_status.value == '10'}}">
         <text class="mr16">剩余支付时间</text>
@@ -103,6 +104,10 @@
       <view class="t_c mt40 mb40" wx:if="{{detail.order_status.value == '10'}}">
         <button class="btn w600" @tap="pay">立即支付</button>
       </view>
+      </block>
+      <block wx:else>
+        <view class="t_c">付款成功，谢谢！</view>
+      </block>
       <text class="paycancel flexCol mb40" wx:if="{{detail.order_status.value == '20'}}">好友已取消订单，或者超时未支付
       </text>
       <view class="waring" wx:if="{{detail.order_status.value == '10'}}">
@@ -138,7 +143,8 @@
 
       this_user_name:"",
       payloop:null,
-      limitTime:{}
+      limitTime:{},
+      paysuccess:false
     }
     methods = {
       pay(){
@@ -148,7 +154,7 @@
           data: {order_id:this.order_id},
         }).then(res => {
           if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({ content: res.msg});
             return
           }
           var that=this;
@@ -161,11 +167,13 @@
             paySign:res.data.paySign,
             success:function(e){
               that.showSuccess("支付成功")
-              setTimeout(() => {
-                wx.switchTab({
-                  url: "/pages/index"
-                })
-              }, 100);
+              that.paysuccess = false
+              that.$apply()
+              // setTimeout(() => {
+              //   wx.switchTab({
+              //     url: "/pages/index"
+              //   })
+              // }, 100);
             },
             fail:function(e){
               that.showToast("支付失败")
@@ -191,12 +199,12 @@
       }
 
       if(!options.user_id) {
-        this.showAlert({title: "警告", content: "user_id为空"});
+        this.showAlert({content: "user_id为空"});
         return
       }
 
       if(!options.order_id){
-        this.showAlert({title: "警告", content: "order_id为空"});
+        this.showAlert({ content: "order_id为空"});
         return
       }
 
@@ -210,7 +218,7 @@
 
     PageInit() {
       if(!this.user_id||!this.order_id){
-        this.showAlert({title: "警告", content: "分享错误"});
+        this.showAlert({ content: "分享错误"});
       }
 
       wepy.request({
@@ -219,7 +227,7 @@
         data: {user_id:this.user_id},
       }).then(res => {
         if(res.code != "1"){
-          this.showAlert({title: "警告", content: res.msg});
+          this.showAlert({ content: res.msg});
           return
         }
 
@@ -231,7 +239,7 @@
           data: {order_id:this.order_id},
         }).then(res => {
           if(res.code != "1"){
-            this.showAlert({title: "警告", content: res.msg});
+            this.showAlert({ content: res.msg});
             return
           }
           this.detail=res.data;

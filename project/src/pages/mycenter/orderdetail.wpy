@@ -105,9 +105,9 @@
             .commentimgs {
                 padding: 30rpx;
                 image {
-                    width: 106rpx;
-                    height: 106rpx;
-                    margin-right: 10rpx;
+                    width: 166rpx;
+                    height: 166rpx;
+                    margin-right: 20rpx;
                     margin-bottom: 10rpx;
                 }
                 display: flex;
@@ -162,10 +162,12 @@
             <text wx:if="{{order_status=='20'}}">订单已取消</text>
             <text wx:if="{{order_status=='30'}}">买家已完成</text>
             <text wx:if="{{order_status=='40'}}">等待买家使用</text>
+            <text wx:if="{{order_status=='90' || order_status=='60'}}">退款中</text>
             <span class="public_icon_order_wait_pay" wx:if="{{order_status=='10'}}"></span>
             <span class="public_icon_order_cancel" wx:if="{{order_status=='20'}}"></span>
             <span class="public_icon4_complete_buy" wx:if="{{order_status=='30'}}"></span>
             <span class="public_icon_order_nouse" wx:if="{{order_status=='40'}}"></span>
+            <span class="public_icon_refund" wx:if="{{order_status=='90' || order_status=='60'}}"></span>
         </view>
         <view class="address" wx:if="{{order_status=='10'||order_status=='20'}}">
             <span class="public_icon2_location2"></span>
@@ -191,6 +193,7 @@
         <view class="itemContent">
             <view class="itemtop">
                 <image src="{{detail.source_image}}" mode="aspectFill" /><span class="fs25 c333 flex-1 ml20">{{detail.source_name}}</span>
+                <button open-type="share" class="public_icon1_share"> </button>
             </view>
             <block wx:for="{{detail.goods}}" wx:key="{{index}}">
                 <view class="itemdetail"  bindtap="navDetail({{item.goods_id}})">
@@ -228,16 +231,18 @@
             <!-- 出行人信息 end-->
             <!-- 评价信息 -->
             <view class="comments" wx:if="{{order_status=='30'}}">
-                <block wx:for="{{comment_list}}">
+                <block wx:for="{{comment_list}}" wx:for-item="item" wx:key="index" >
                   <view class="commlabel"><text>评价信息</text>
                     <Star total="5" num="{{item.score}}">
                   </view>
                   <view class="commContent">{{item.comment}}</view>
-                  <block wx:for="item.pic">
+                  
                     <view class="commentimgs">
-                        <image src="{{item}}" mode="aspectFill" />
+                        <block wx:for="{{item.pic}}" wx:for-item="itema" wx:key="index1">
+                        <image src="{{itema}}" mode="aspectFill" />
+                        </block>
                     </view>
-                  </block>
+                  
                 </block>
 
                 <view class="noComments" wx:if="{{detail.is_comment!=1}}">
@@ -246,7 +251,7 @@
                 </view>
             </view>
             <!-- 评价信息 end -->
-            <button class="contact" hover-class="none"><span class="public_icon4_contact mr10" open-type="contact" ></span>联系客服</button>
+            <button class="contact" hover-class="none" open-type="contact" ><span class="public_icon4_contact mr10"></span>联系客服</button>
         </view>
         {{this.detail.pay_type}}
         <view class="orderinfo" wx:if="{{order_status=='10'||order_status=='20'||order_status=='40'}}">
@@ -287,27 +292,16 @@
             comment_list:[],
         }
         events = {
-            flush() {
-                wepy.request({
-                    url: "api/order/detail",
-                    method: 'POST',
-                    data: {
-                        order_id: this.order_id
-                    },
-                }).then(res => {
-                    this.loading = false;
-                    if (res.code != "1") {
-                        this.showAlert({
-                            title: "警告",
-                            content: res.msg
-                        });
-                    } else {
-                        this.order_status = res.data.order_status.value;
-                        this.detail = res.data
-                    }
-                    this.$apply();
+            delrefresh() {
+                //删除订单后跳转到已取消列表
+                wepy.reLaunch({
+                  url: '/pages/mycenter/orderlist?type=4&isshow=show"',
                 })
             },
+            cancelrefresh(){
+                //刷新当前页面
+                this.getDetail()
+            }
         }
         methods = {
             navDetail(id) {
@@ -326,6 +320,46 @@
                 this.$apply();
             }
         }
+        getDetail(){
+            wepy.request({
+            url: "api/order/detail",
+            method: 'POST',
+            data: {
+              order_id: this.order_id
+            },
+          }).then(res => {
+            this.loading = false;
+            if (res.code != "1") {
+              this.showAlert({
+                content: res.msg
+              });
+            } else {
+              this.order_status = res.data.order_status.value;
+              this.detail = res.data
+            }
+            this.$apply();
+
+            if(this.order_status == '30'){
+
+              wepy.request({
+                url: "api/order/getcomment",
+                method: 'POST',
+                data: {
+                  order_id: this.order_id
+                },
+              }).then(res => {
+                if (res.code != "1") {
+                  this.showAlert({
+                    content: res.msg
+                  });
+                  return
+                }
+                this.comment_list=res.data.list;
+                this.$apply();
+              })
+            }
+          })
+        }
         onLoad(options) {
             if (options.order_id == undefined) {
                 this.showAlert({
@@ -334,7 +368,6 @@
                 return
             }
             this.order_id = options.order_id;
-
         }
         PageInit() {
         }
@@ -346,46 +379,15 @@
             });
             return
           }
-          wepy.request({
-            url: "api/order/detail",
-            method: 'POST',
-            data: {
-              order_id: this.order_id
-            },
-          }).then(res => {
-            this.loading = false;
-            if (res.code != "1") {
-              this.showAlert({
-                title: "警告",
-                content: res.msg
-              });
-            } else {
-              this.order_status = res.data.order_status.value;
-              this.detail = res.data
+          this.getDetail()
+        }
+        onShareAppMessage(obj) {
+            var re = {
+                title: this.detail.goods[0].goods_name,
+                path: "/pages/goods_detail?id=" + this.detail.goods[0].goods_id,
+                imageUrl: this.detail.goods[0].image.file_path,
             }
-            this.$apply();
-
-            if(this.order_status=='30'){
-
-              wepy.request({
-                url: "api/order/getcomment",
-                method: 'POST',
-                data: {
-                  order_id: options.order_id
-                },
-              }).then(res => {
-                if (res.code != "1") {
-                  this.showAlert({
-                    title: "警告",
-                    content: res.msg
-                  });
-                  return
-                }
-                this.comment_list=res.data.list;
-                this.$apply();
-              })
-            }
-          })
+            return re
         }
     }
 </script>

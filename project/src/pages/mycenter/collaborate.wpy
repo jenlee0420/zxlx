@@ -28,12 +28,16 @@
                     height: 380rpx;
                     align-items: flex-start;
                     textarea {
+                        margin: 0;
+                        padding: 0;
                         margin-top: 30rpx;
                         flex: 1
                     }
                 }
                 >text {
-                    width: 140rpx;
+                    width: 170rpx;
+                    white-space: nowrap;
+                    margin-right: 10rpx;
                 }
             }
         }
@@ -48,8 +52,8 @@
         </view>
         <view class="forminfo">
             <ul>
-                <li><text>联系人</text><input placeholder="姓名" @input="getVal('contacts')" /></li>
-                <li><text>手机号码</text><input placeholder="电话" @input="getVal('mobile')" /></li>
+                <li><text class="req">联系人</text><input placeholder="姓名" @input="getVal('contacts')" /></li>
+                <li><text class="req">手机号码</text><input placeholder="电话" @input="getVal('mobile')" /></li>
                 <li><text>所在城市</text><input placeholder="您的业务所在城市" @input="getVal('city')" /></li>
                 <li><text>合作意向</text><textarea placeholder="介绍您的亲子产品以及希望的合作方式（最多500字）" @input="getVal('describe')"></textarea></li>
             </ul>
@@ -93,6 +97,8 @@
                         setTimeout(() => {
                             wepy.navigateBack()
                         }, 500);
+                    }else{
+                        this.showAlert({content: res.msg});
                     }
                 })
             }
