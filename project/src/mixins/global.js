@@ -449,10 +449,7 @@ export default class Global extends wepy.mixin {
         })
         return bool
     }
-    // 定时取组团或评论成功消息
-    getMessage(){
-        this.$invoke('notice','getNotice')
-    }
+   
     //格式化内容中的图片/richtext适用
     transContent(content){
         if(!content) return
@@ -475,17 +472,20 @@ export default class Global extends wepy.mixin {
     }
     onHide(){
         if(this.$com.notice){
+            console.log('onHide')
             this.$invoke('notice','clearTimerMeth')
         }
     }
-    onUnLoad(){
+    onUnload(){
         if(this.$com.notice){
+            console.log('onUnload')
             this.$invoke('notice','clearTimerMeth')
         }
     }
     onShow(opation) {
         if(this.$com.notice){
-            this.getMessage()
+            // 定时取组团或评论成功消息
+            this.$invoke('notice','getNotice')
         }
         // if(this.__route__ === 'pages/index'){
         //     return
